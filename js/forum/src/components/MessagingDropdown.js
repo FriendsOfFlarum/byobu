@@ -1,4 +1,5 @@
 import NotificationsDropdown from "flarum/components/NotificationsDropdown";
+import MessageList from "flagrow/messaging/components/MessageList";
 
 export default class MessagingDropdown extends NotificationsDropdown {
     static initProps(props) {
@@ -10,6 +11,8 @@ export default class MessagingDropdown extends NotificationsDropdown {
 
     init() {
         super.init();
+
+        this.list = new MessageList();
     }
 
     goToRoute() {
@@ -17,7 +20,6 @@ export default class MessagingDropdown extends NotificationsDropdown {
     }
 
     /**
-     *
      * @returns {number}
      */
     getUnreadCount() {
@@ -25,7 +27,6 @@ export default class MessagingDropdown extends NotificationsDropdown {
     }
 
     /**
-     *
      * @returns {number}
      */
     getNewCount() {
