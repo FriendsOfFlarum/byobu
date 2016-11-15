@@ -1,0 +1,10 @@
+flagrow-messaging:
+    forum:
+        labels:
+            pm_dropdown: Show messages
+        buttons:
+            pm: Send a message
+            send: Send
+    admin:
+        permissions:
+            messaging_label: Messaging
