@@ -3,6 +3,7 @@
 
 namespace Flagrow\Messaging\Listeners;
 
+use Flagrow\Messaging\Controllers\MessageNotificationController;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Event\ConfigureApiRoutes;
 use Flarum\Event\PrepareApiAttributes;
@@ -28,6 +29,7 @@ class AddUploadsApi
      */
     public function configureApiRoutes(ConfigureApiRoutes $event)
     {
+        $event->get('/messages/notifications', 'flagrow.messages.notifications', MessageNotificationController::class);
     }
 
     /**
