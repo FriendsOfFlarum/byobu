@@ -25,8 +25,7 @@ export default class MessageList extends Component {
                 </div>
                 <div className="NotificationList-content">
                     <ul className="NotificationGroup-content">
-                        {messages.length
-                            ? messages.map(message => {
+                        {messages.length ? messages.map(message => {
                             const from = message.from();
 
                             return (
@@ -37,10 +36,9 @@ export default class MessageList extends Component {
                                         {avatar(from.user())}
                                         {icon('comments-o', {className: 'Message-icon'})}
                                         <span className="Message-content">
-                        {app.translator.trans('flagrow-messaging.forum.dropdown.message_received_from', {
-                            username: username(from()),
-                            em: <em/>
-                        })}
+                                            {app.translator.trans('flagrow-messaging.forum.dropdown.message_received_from', {
+                                                username: username(from()), em: <em/>
+                                            })}
                                         </span>
                                         {humanTime(message.sendAt())}
                                         <div className="Message-excerpt">
@@ -49,8 +47,7 @@ export default class MessageList extends Component {
                                     </a>
                                 </li>
                             );
-                        })
-                            : !this.loading
+                        }) : !this.loading
                             ? <div
                             className="Message-empty">{app.translator.trans('flagrow-messaging.forum.dropdown.no_messages')}</div>
                             : LoadingIndicator.component({className: 'LoadingIndicator--block'})}

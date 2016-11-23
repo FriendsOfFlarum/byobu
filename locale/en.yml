@@ -5,6 +5,9 @@ flagrow-messaging:
         buttons:
             pm: Send a message
             send: Send
+        dropdown:
+            title: Recent messages
+            no_messages: These are not the messages you're looking for..
     admin:
         permissions:
             messaging_label: Messaging

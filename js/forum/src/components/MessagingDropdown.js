@@ -16,7 +16,7 @@ export default class MessagingDropdown extends NotificationsDropdown {
     }
 
     goToRoute() {
-        m.route(app.route('flagrow.messages.notifications'));
+        m.route(app.route('flagrow.messaging.notifications'));
     }
 
     /**

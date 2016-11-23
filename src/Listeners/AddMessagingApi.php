@@ -9,7 +9,7 @@ use Flarum\Event\ConfigureApiRoutes;
 use Flarum\Event\PrepareApiAttributes;
 use Illuminate\Events\Dispatcher;
 
-class AddUploadsApi
+class AddMessagingApi
 {
     /**
      * Subscribes to the Flarum api routes configuration event.
@@ -29,7 +29,7 @@ class AddUploadsApi
      */
     public function configureApiRoutes(ConfigureApiRoutes $event)
     {
-        $event->get('/messages/notifications', 'flagrow.messages.notifications', MessageNotificationController::class);
+        $event->get('/messages/notifications', 'flagrow.messaging.notifications', MessageNotificationController::class);
     }
 
     /**
