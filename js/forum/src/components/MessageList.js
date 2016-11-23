@@ -69,7 +69,7 @@ export default class MessageList extends Component {
         this.loading = true;
         m.redraw();
 
-        app.store.find('messages')
+        app.store.find('messaging/notifications')
             .then(messages => {
                 app.session.user.pushAttributes({newMessagesCount: 0});
                 app.cache.messages = messages.sort((a, b) => b.sendAt() - a.sendAt());
