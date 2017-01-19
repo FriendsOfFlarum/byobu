@@ -4,6 +4,7 @@ import avatar from "flarum/helpers/avatar";
 import username from "flarum/helpers/username";
 import icon from "flarum/helpers/icon";
 import humanTime from "flarum/helpers/humanTime";
+import Button from 'flarum/components/Button';
 
 export default class MessageList extends Component {
     init() {
@@ -19,9 +20,18 @@ export default class MessageList extends Component {
         const messages = app.cache.userMessages || [];
 
         return (
-            <div className="NotificationList FlagList">
+            <div className="NotificationList MessageList">
                 <div className="NotificationList-header">
-                    <h4 className="App-titleControl App-titleControl--text">{app.translator.trans('flagrow-messaging.forum.dropdown.title')}</h4>
+                    <div className="App-primaryControl">
+                        {Button.component({
+                            className: 'Button Button--icon Button--link',
+                            icon: 'pencil-square-o',
+                            title: app.translator.trans('flagrow-messaging.forum.dropdown.write_message'),
+                        })}
+                    </div>
+                    <h4 className="App-titleControl App-titleControl--text">
+                        {app.translator.trans('flagrow-messaging.forum.dropdown.title')}
+                    </h4>
                 </div>
                 <div className="NotificationList-content">
                     <ul className="NotificationGroup-content">
@@ -47,10 +57,12 @@ export default class MessageList extends Component {
                                     </a>
                                 </li>
                             );
-                        }) : !this.loading
-                            ? <div
-                            className="Message-empty">{app.translator.trans('flagrow-messaging.forum.dropdown.no_messages')}</div>
-                            : LoadingIndicator.component({className: 'LoadingIndicator--block'})}
+                        }) : !this.loading ?
+                                <div className="Message-empty">
+                                    <span>{app.translator.trans('flagrow-messaging.forum.dropdown.no_messages')}</span>
+                                    {icon('inbox', {className: 'fa-5x'})}
+                                </div> :
+                                LoadingIndicator.component({className: 'LoadingIndicator--block'})}
                     </ul>
                 </div>
             </div>

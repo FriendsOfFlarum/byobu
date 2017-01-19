@@ -29,7 +29,7 @@
         "flarum-extension": {
             "title": "Flagrow Messaging",
             "icon": {
-                "name": "comments-o",
+                "name": "inbox",
                 "backgroundColor": "#000",
                 "color": "#87d37c"
             }

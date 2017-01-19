@@ -4,7 +4,7 @@ import MessageList from "flagrow/messaging/components/MessageList";
 export default class MessagingDropdown extends NotificationsDropdown {
     static initProps(props) {
         props.label = props.label || app.translator.trans('flagrow-messaging.forum.labels.pm_dropdown');
-        props.icon = props.icon || 'comments-o';
+        props.icon = props.icon || 'inbox';
 
         super.initProps(props);
     }

@@ -32,7 +32,7 @@ class AddClientAssets
     {
         if ($event->isForum()) {
             $event->addAssets([
-//                __DIR__ . '/../../less/forum/upload.less',
+                __DIR__ . '/../../less/forum/extension.less',
                 __DIR__ . '/../../js/forum/dist/extension.js'
             ]);
             $event->addBootstrapper('flagrow/messaging/main');

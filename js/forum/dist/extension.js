@@ -28,10 +28,10 @@ System.register("flagrow/messaging/addMessagingDropdown", ["flarum/extend", "fla
 });;
 "use strict";
 
-System.register("flagrow/messaging/components/MessageList", ["flarum/Component", "flarum/components/LoadingIndicator", "flarum/helpers/avatar", "flarum/helpers/username", "flarum/helpers/icon", "flarum/helpers/humanTime"], function (_export, _context) {
+System.register("flagrow/messaging/components/MessageList", ["flarum/Component", "flarum/components/LoadingIndicator", "flarum/helpers/avatar", "flarum/helpers/username", "flarum/helpers/icon", "flarum/helpers/humanTime", "flarum/components/Button"], function (_export, _context) {
     "use strict";
 
-    var Component, LoadingIndicator, avatar, username, icon, humanTime, MessageList;
+    var Component, LoadingIndicator, avatar, username, icon, humanTime, Button, MessageList;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -45,6 +45,8 @@ System.register("flagrow/messaging/components/MessageList", ["flarum/Component",
             icon = _flarumHelpersIcon.default;
         }, function (_flarumHelpersHumanTime) {
             humanTime = _flarumHelpersHumanTime.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
         }],
         execute: function () {
             MessageList = function (_Component) {
@@ -72,10 +74,19 @@ System.register("flagrow/messaging/components/MessageList", ["flarum/Component",
 
                         return m(
                             "div",
-                            { className: "NotificationList FlagList" },
+                            { className: "NotificationList MessageList" },
                             m(
                                 "div",
                                 { className: "NotificationList-header" },
+                                m(
+                                    "div",
+                                    { className: "App-primaryControl" },
+                                    Button.component({
+                                        className: 'Button Button--icon Button--link',
+                                        icon: 'pencil-square-o',
+                                        title: app.translator.trans('flagrow-messaging.forum.dropdown.write_message')
+                                    })
+                                ),
                                 m(
                                     "h4",
                                     { className: "App-titleControl App-titleControl--text" },
@@ -118,9 +129,13 @@ System.register("flagrow/messaging/components/MessageList", ["flarum/Component",
                                         );
                                     }) : !this.loading ? m(
                                         "div",
-                                        {
-                                            className: "Message-empty" },
-                                        app.translator.trans('flagrow-messaging.forum.dropdown.no_messages')
+                                        { className: "Message-empty" },
+                                        m(
+                                            "span",
+                                            null,
+                                            app.translator.trans('flagrow-messaging.forum.dropdown.no_messages')
+                                        ),
+                                        icon('inbox', { className: 'fa-5x' })
                                     ) : LoadingIndicator.component({ className: 'LoadingIndicator--block' })
                                 )
                             )
@@ -203,7 +218,7 @@ System.register("flagrow/messaging/components/MessagingDropdown", ["flarum/compo
                     key: "initProps",
                     value: function initProps(props) {
                         props.label = props.label || app.translator.trans('flagrow-messaging.forum.labels.pm_dropdown');
-                        props.icon = props.icon || 'comments-o';
+                        props.icon = props.icon || 'inbox';
 
                         babelHelpers.get(MessagingDropdown.__proto__ || Object.getPrototypeOf(MessagingDropdown), "initProps", this).call(this, props);
                     }
