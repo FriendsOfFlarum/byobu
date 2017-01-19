@@ -4,11 +4,11 @@ namespace Flagrow\Messaging\Models;
 
 use Carbon\Carbon;
 use Flarum\Core\User;
-use Illuminate\Database\Eloquent\Model;
+use Flarum\Database\AbstractModel;
 
 /**
  * @property int $id
- * @property text $content
+ * @property string $content
  * @property int $to_id
  * @property int $from_id
  * @property User $to
@@ -17,8 +17,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $read_at
  * @property Carbon $updated_at
  */
-class Message extends Model
+class Message extends AbstractModel
 {
+    protected $table = 'flagrow_messages';
+
+    protected $dates = [
+        'read_at'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
