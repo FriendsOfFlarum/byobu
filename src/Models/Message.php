@@ -20,11 +20,17 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function to()
     {
         return $this->belongsTo(User::class, 'to_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function from()
     {
         return $this->belongsTo(User::class, 'from_id');
