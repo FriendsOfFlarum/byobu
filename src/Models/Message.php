@@ -14,15 +14,15 @@ use Flarum\Database\AbstractModel;
  * @property User $to
  * @property User $from
  * @property Carbon $created_at
- * @property Carbon $read_at
  * @property Carbon $updated_at
+ * @property array $read_registration
  */
 class Message extends AbstractModel
 {
     protected $table = 'flagrow_messages';
 
-    protected $dates = [
-        'read_at'
+    protected $casts = [
+        'read_registration' => 'json'
     ];
 
     /**

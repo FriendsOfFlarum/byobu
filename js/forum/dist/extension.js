@@ -28,10 +28,10 @@ System.register("flagrow/messaging/addMessagingDropdown", ["flarum/extend", "fla
 });;
 "use strict";
 
-System.register("flagrow/messaging/components/MessageList", ["flarum/Component", "flarum/components/LoadingIndicator", "flarum/helpers/avatar", "flarum/helpers/username", "flarum/helpers/icon", "flarum/helpers/humanTime", "flarum/components/Button"], function (_export, _context) {
+System.register("flagrow/messaging/components/MessageList", ["flarum/Component", "flarum/components/LoadingIndicator", "flarum/helpers/avatar", "flarum/helpers/username", "flarum/helpers/icon", "flarum/helpers/humanTime", "flarum/components/Button", "flagrow/messaging/components/RecipientSelectModal"], function (_export, _context) {
     "use strict";
 
-    var Component, LoadingIndicator, avatar, username, icon, humanTime, Button, MessageList;
+    var Component, LoadingIndicator, avatar, username, icon, humanTime, Button, RecipientSelectModal, MessageList;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -47,6 +47,8 @@ System.register("flagrow/messaging/components/MessageList", ["flarum/Component",
             humanTime = _flarumHelpersHumanTime.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
+        }, function (_flagrowMessagingComponentsRecipientSelectModal) {
+            RecipientSelectModal = _flagrowMessagingComponentsRecipientSelectModal.default;
         }],
         execute: function () {
             MessageList = function (_Component) {
@@ -84,7 +86,8 @@ System.register("flagrow/messaging/components/MessageList", ["flarum/Component",
                                     Button.component({
                                         className: 'Button Button--icon Button--link',
                                         icon: 'pencil-square-o',
-                                        title: app.translator.trans('flagrow-messaging.forum.dropdown.write_message')
+                                        title: app.translator.trans('flagrow-messaging.forum.dropdown.write_message'),
+                                        onclick: this.popRecipientModal.bind(this)
                                     })
                                 ),
                                 m(
@@ -140,6 +143,11 @@ System.register("flagrow/messaging/components/MessageList", ["flarum/Component",
                                 )
                             )
                         );
+                    }
+                }, {
+                    key: "popRecipientModal",
+                    value: function popRecipientModal() {
+                        app.modal.show(new RecipientSelectModal());
                     }
                 }, {
                     key: "load",
@@ -284,6 +292,79 @@ System.register('flagrow/messaging/models/Message', ['flarum/Model'], function (
             });
 
             _export('default', Message);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button'], function (_export, _context) {
+    "use strict";
+
+    var Modal, Button, RecipientSelectModal;
+    return {
+        setters: [function (_flarumComponentsModal) {
+            Modal = _flarumComponentsModal.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }],
+        execute: function () {
+            RecipientSelectModal = function (_Modal) {
+                babelHelpers.inherits(RecipientSelectModal, _Modal);
+
+                function RecipientSelectModal() {
+                    babelHelpers.classCallCheck(this, RecipientSelectModal);
+                    return babelHelpers.possibleConstructorReturn(this, (RecipientSelectModal.__proto__ || Object.getPrototypeOf(RecipientSelectModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(RecipientSelectModal, [{
+                    key: 'className',
+                    value: function className() {
+                        return 'RecipientSelectModal Modal--small';
+                    }
+                }, {
+                    key: 'title',
+                    value: function title() {
+                        return app.translator.trans('flagrow-messaging.forum.recipient-modal.title');
+                    }
+                }, {
+                    key: 'content',
+                    value: function content() {
+                        return m(
+                            'div',
+                            { className: 'Modal-body' },
+                            m(
+                                'div',
+                                { className: 'Form Form--centered' },
+                                m(
+                                    'p',
+                                    { className: 'helpText' },
+                                    app.translator.trans('flagrow-messaging.forum.recipient-modal.help')
+                                ),
+                                m(
+                                    'div',
+                                    { className: 'Form-group' },
+                                    Button.component({
+                                        className: 'Button Button--primary Button--block',
+                                        type: 'submit',
+                                        loading: this.loading,
+                                        children: app.translator.trans('flagrow-messaging.forum.recipient-modal.submit')
+                                    })
+                                )
+                            )
+                        );
+                    }
+                }, {
+                    key: 'onsubmit',
+                    value: function onsubmit(e) {
+                        e.preventDefault();
+
+                        this.loading = true;
+                    }
+                }]);
+                return RecipientSelectModal;
+            }(Modal);
+
+            _export('default', RecipientSelectModal);
         }
     };
 });

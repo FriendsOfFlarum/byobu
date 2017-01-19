@@ -9,6 +9,10 @@ flagrow-messaging:
             title: Recent messages
             no_messages: No messages here yet..
             write_message: Write a message
+        recipient-modal:
+            title: Select recipient
+            help: Choose the recipient of your private message.
+            submit: Continue
     admin:
         permissions:
             messaging_label: Messaging

@@ -4,6 +4,7 @@
 namespace Flagrow\Messaging\Listeners;
 
 use Flagrow\Messaging\Api\Controllers\MessageNotificationController;
+use Flagrow\Messaging\Repositories\MessagesRepository;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Event\ConfigureApiRoutes;
 use Flarum\Event\PrepareApiAttributes;
@@ -11,6 +12,15 @@ use Illuminate\Events\Dispatcher;
 
 class AddMessagingApi
 {
+    /**
+     * @var MessagesRepository
+     */
+    protected $messages;
+
+    public function __construct(MessagesRepository $messages)
+    {
+        $this->messages = $messages;
+    }
     /**
      * Subscribes to the Flarum api routes configuration event.
      *
@@ -41,6 +51,10 @@ class AddMessagingApi
     {
         if ($event->isSerializer(ForumSerializer::class)) {
             $event->attributes['canMessage'] = $event->actor->can('flagrow.message');
+
+            if ($event->attributes['canMessage']) {
+                $event->attributes['flagrow.userMessages'] = $this->messages->findByUser($event->actor)->count();
+            }
         }
     }
 }

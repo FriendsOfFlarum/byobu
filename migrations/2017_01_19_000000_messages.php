@@ -11,7 +11,7 @@ return [
             $table->integer('to_id')->unsigned();
             $table->integer('from_id')->unsigned();
             $table->timestamps();
-            $table->timestamp('read_at')->nullable();
+            $table->json('read_registration')->nullable();
         });
     },
     'down' => function(Builder $schema) {

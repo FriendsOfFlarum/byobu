@@ -5,6 +5,7 @@ import username from "flarum/helpers/username";
 import icon from "flarum/helpers/icon";
 import humanTime from "flarum/helpers/humanTime";
 import Button from 'flarum/components/Button';
+import RecipientSelectModal from 'flagrow/messaging/components/RecipientSelectModal';
 
 export default class MessageList extends Component {
     init() {
@@ -27,6 +28,7 @@ export default class MessageList extends Component {
                             className: 'Button Button--icon Button--link',
                             icon: 'pencil-square-o',
                             title: app.translator.trans('flagrow-messaging.forum.dropdown.write_message'),
+                            onclick: this.popRecipientModal.bind(this)
                         })}
                     </div>
                     <h4 className="App-titleControl App-titleControl--text">
@@ -67,6 +69,10 @@ export default class MessageList extends Component {
                 </div>
             </div>
         );
+    }
+
+    popRecipientModal() {
+        app.modal.show(new RecipientSelectModal);
     }
 
     /**

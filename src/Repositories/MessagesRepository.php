@@ -23,4 +23,9 @@ class MessagesRepository
             ->skip($offset)
             ->take($limit);
     }
+
+    public function findUnreadByUser(User $user, $limit = null, $offset = 0): Builder
+    {
+//        return $this->findByUser($user, $limit, $offset)->where()
+    }
 }
