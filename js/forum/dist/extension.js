@@ -240,17 +240,17 @@ System.register("flagrow/messaging/components/MessagingDropdown", ["flarum/compo
 });;
 'use strict';
 
-System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/messaging/components/RecipientSearch'], function (_export, _context) {
+System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/messaging/components/Selectize'], function (_export, _context) {
     "use strict";
 
-    var Modal, Button, RecipientSearch, RecipientSelectModal;
+    var Modal, Button, Selectize, RecipientSelectModal;
     return {
         setters: [function (_flarumComponentsModal) {
             Modal = _flarumComponentsModal.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
-        }, function (_flagrowMessagingComponentsRecipientSearch) {
-            RecipientSearch = _flagrowMessagingComponentsRecipientSearch.default;
+        }, function (_flagrowMessagingComponentsSelectize) {
+            Selectize = _flagrowMessagingComponentsSelectize.default;
         }],
         execute: function () {
             RecipientSelectModal = function (_Modal) {
@@ -285,7 +285,11 @@ System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/co
                                     { className: 'helpText' },
                                     app.translator.trans('flagrow-messaging.forum.recipient_modal.help')
                                 ),
-                                RecipientSearch.component(),
+                                m(
+                                    'div',
+                                    { className: 'Search-input' },
+                                    Selectize.component()
+                                ),
                                 m(
                                     'div',
                                     { className: 'Form-group' },
@@ -373,21 +377,23 @@ System.register('flagrow/messaging/models/Message', ['flarum/Model'], function (
 });;
 'use strict';
 
-System.register('flagrow/messaging/components/RecipientSearch', ['flarum/components/Search', 'flarum/components/UsersSearchSource', 'flarum/utils/ItemList', 'flarum/utils/classList', 'flarum/utils/extractText'], function (_export, _context) {
+System.register('flagrow/messaging/components/RecipientSearch', ['flarum/components/Search', 'flagrow/messaging/components/RecipientSearchSource', 'flarum/utils/ItemList', 'flarum/utils/classList', 'flarum/utils/extractText', 'flarum/components/LoadingIndicator'], function (_export, _context) {
     "use strict";
 
-    var Search, UsersSearchSource, ItemList, classList, extractText, RecipientSearch;
+    var Search, RecipientSearchSource, ItemList, classList, extractText, LoadingIndicator, RecipientSearch;
     return {
         setters: [function (_flarumComponentsSearch) {
             Search = _flarumComponentsSearch.default;
-        }, function (_flarumComponentsUsersSearchSource) {
-            UsersSearchSource = _flarumComponentsUsersSearchSource.default;
+        }, function (_flagrowMessagingComponentsRecipientSearchSource) {
+            RecipientSearchSource = _flagrowMessagingComponentsRecipientSearchSource.default;
         }, function (_flarumUtilsItemList) {
             ItemList = _flarumUtilsItemList.default;
         }, function (_flarumUtilsClassList) {
             classList = _flarumUtilsClassList.default;
         }, function (_flarumUtilsExtractText) {
             extractText = _flarumUtilsExtractText.default;
+        }, function (_flarumComponentsLoadingIndicator) {
+            LoadingIndicator = _flarumComponentsLoadingIndicator.default;
         }],
         execute: function () {
             RecipientSearch = function (_Search) {
@@ -453,13 +459,16 @@ System.register('flagrow/messaging/components/RecipientSearch', ['flarum/compone
                     value: function sourceItems() {
                         var items = new ItemList();
 
-                        items.add('users', new UsersSearchSource());
+                        items.add('recipients', new RecipientSearchSource());
 
                         return items;
                     }
                 }, {
                     key: 'selectResult',
                     value: function selectResult() {
+
+                        console.error('foo');
+
                         if (this.value()) {
                             console.log(this.getItem(this.index));
                         } else {
@@ -473,6 +482,112 @@ System.register('flagrow/messaging/components/RecipientSearch', ['flarum/compone
             }(Search);
 
             _export('default', RecipientSearch);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/messaging/components/RecipientSearchSource', ['flarum/helpers/highlight', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
+    "use strict";
+
+    var highlight, avatar, username, RecipientSearchSource;
+    return {
+        setters: [function (_flarumHelpersHighlight) {
+            highlight = _flarumHelpersHighlight.default;
+        }, function (_flarumHelpersAvatar) {
+            avatar = _flarumHelpersAvatar.default;
+        }, function (_flarumHelpersUsername) {
+            username = _flarumHelpersUsername.default;
+        }],
+        execute: function () {
+            RecipientSearchSource = function () {
+                function RecipientSearchSource() {
+                    babelHelpers.classCallCheck(this, RecipientSearchSource);
+                }
+
+                babelHelpers.createClass(RecipientSearchSource, [{
+                    key: 'search',
+                    value: function search(query) {
+                        return app.store.find('users', {
+                            filter: { q: query },
+                            page: { limit: 5 }
+                        });
+                    }
+                }, {
+                    key: 'view',
+                    value: function view(query) {
+                        query = query.toLowerCase();
+
+                        var results = app.store.all('users').filter(function (user) {
+                            return user.username().toLowerCase().substr(0, query.length) === query;
+                        });
+
+                        if (!results.length) return '';
+
+                        return [m(
+                            'li',
+                            { className: 'Dropdown-header' },
+                            app.translator.trans('core.forum.search.users_heading')
+                        ), results.map(function (user) {
+                            var name = username(user);
+                            name.children[0] = highlight(name.children[0], query);
+
+                            return m(
+                                'li',
+                                { className: 'UserSearchResult', 'data-index': 'users' + user.id() },
+                                m(
+                                    'a',
+                                    null,
+                                    avatar(user),
+                                    name
+                                )
+                            );
+                        })];
+                    }
+                }]);
+                return RecipientSearchSource;
+            }();
+
+            _export('default', RecipientSearchSource);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/messaging/components/Selectize', ['flarum/components/Component'], function (_export, _context) {
+    "use strict";
+
+    var Component, Selectize;
+    return {
+        setters: [function (_flarumComponentsComponent) {
+            Component = _flarumComponentsComponent.default;
+        }],
+        execute: function () {
+            Selectize = function (_Component) {
+                babelHelpers.inherits(Selectize, _Component);
+
+                function Selectize() {
+                    babelHelpers.classCallCheck(this, Selectize);
+                    return babelHelpers.possibleConstructorReturn(this, (Selectize.__proto__ || Object.getPrototypeOf(Selectize)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(Selectize, [{
+                    key: 'init',
+                    value: function init() {}
+                }, {
+                    key: 'view',
+                    value: function view() {
+                        return [m(
+                            'select',
+                            { placeholder: '' },
+                            app.translator.trans('flagrow-messaging.forum.recipient_modal.search_placeholder')
+                        )];
+                    }
+                }]);
+                return Selectize;
+            }(Component);
+
+            _export('default', Selectize);
         }
     };
 });

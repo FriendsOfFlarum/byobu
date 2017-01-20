@@ -1,8 +1,9 @@
 import Search from 'flarum/components/Search';
-import UsersSearchSource from 'flarum/components/UsersSearchSource';
+import RecipientSearchSource from 'flagrow/messaging/components/RecipientSearchSource';
 import ItemList from 'flarum/utils/ItemList';
 import classList from 'flarum/utils/classList';
 import extractText from 'flarum/utils/extractText';
+import LoadingIndicator from 'flarum/components/LoadingIndicator';
 
 export default class RecipientSearch extends Search
 {
@@ -53,7 +54,7 @@ export default class RecipientSearch extends Search
     sourceItems() {
         const items = new ItemList();
 
-        items.add('users', new UsersSearchSource());
+        items.add('recipients', new RecipientSearchSource());
 
         return items;
     }
@@ -62,6 +63,9 @@ export default class RecipientSearch extends Search
      * Navigate to the currently selected search result and close the list.
      */
     selectResult() {
+
+        console.error('foo');
+
         if (this.value()) {
             console.log(this.getItem(this.index));
         } else {

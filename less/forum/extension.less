@@ -10,7 +10,18 @@
 }
 
 .RecipientSelectModal {
-    .Modal-body .Search.focused {
-        margin-left: 0px !important;
+    .Modal-body .Search {
+        padding: 0 .1em;
+        .FormControl {
+            width: 100% !important;
+        }
+        .Search-results {
+            position: relative;
+            width: 100%;
+        }
+        &.focused {
+            margin-left: 0px !important;
+        }
     }
+
 }
