@@ -240,17 +240,17 @@ System.register("flagrow/messaging/components/MessagingDropdown", ["flarum/compo
 });;
 'use strict';
 
-System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/messaging/components/Selectize'], function (_export, _context) {
+System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/messaging/components/RecipientSearch'], function (_export, _context) {
     "use strict";
 
-    var Modal, Button, Selectize, RecipientSelectModal;
+    var Modal, Button, RecipientSearch, RecipientSelectModal;
     return {
         setters: [function (_flarumComponentsModal) {
             Modal = _flarumComponentsModal.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
-        }, function (_flagrowMessagingComponentsSelectize) {
-            Selectize = _flagrowMessagingComponentsSelectize.default;
+        }, function (_flagrowMessagingComponentsRecipientSearch) {
+            RecipientSearch = _flagrowMessagingComponentsRecipientSearch.default;
         }],
         execute: function () {
             RecipientSelectModal = function (_Modal) {
@@ -288,7 +288,7 @@ System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/co
                                 m(
                                     'div',
                                     { className: 'Search-input' },
-                                    Selectize.component()
+                                    RecipientSearch.component()
                                 ),
                                 m(
                                     'div',
@@ -552,15 +552,15 @@ System.register('flagrow/messaging/components/RecipientSearchSource', ['flarum/h
         }
     };
 });;
-'use strict';
+"use strict";
 
-System.register('flagrow/messaging/components/Selectize', ['flarum/components/Component'], function (_export, _context) {
+System.register("flagrow/messaging/components/Selectize", ["flarum/Component"], function (_export, _context) {
     "use strict";
 
     var Component, Selectize;
     return {
-        setters: [function (_flarumComponentsComponent) {
-            Component = _flarumComponentsComponent.default;
+        setters: [function (_flarumComponent) {
+            Component = _flarumComponent.default;
         }],
         execute: function () {
             Selectize = function (_Component) {
@@ -572,22 +572,41 @@ System.register('flagrow/messaging/components/Selectize', ['flarum/components/Co
                 }
 
                 babelHelpers.createClass(Selectize, [{
-                    key: 'init',
-                    value: function init() {}
+                    key: "init",
+                    value: function init() {
+                        var that = this;
+                        var $select = $(".selectize-search").selectize({
+                            load: function load(query, callback) {
+                                that.loadRemote(query, callback);
+                            }
+                        });
+                    }
                 }, {
-                    key: 'view',
+                    key: "view",
                     value: function view() {
-                        return [m(
-                            'select',
-                            { placeholder: '' },
-                            app.translator.trans('flagrow-messaging.forum.recipient_modal.search_placeholder')
-                        )];
+                        return m("input", {
+                            type: "text",
+                            className: "FormControl selectize-search",
+                            placeholder: app.translator.trans('flagrow-messaging.forum.recipient_modal.search_placeholder')
+                        });
+                    }
+                }, {
+                    key: "loadRemote",
+                    value: function loadRemote(query, callback) {
+                        query = query.toLowerCase();
+                        console.log(query);
+
+                        var results = app.store.all('users').filter(function (user) {
+                            return user.username().toLowerCase().substr(0, query.length) === query;
+                        });
+
+                        callback(results);
                     }
                 }]);
                 return Selectize;
             }(Component);
 
-            _export('default', Selectize);
+            _export("default", Selectize);
         }
     };
 });

@@ -7,6 +7,12 @@ import LoadingIndicator from 'flarum/components/LoadingIndicator';
 
 export default class RecipientSearch extends Search
 {
+    init() {
+        super.init();
+
+
+    }
+
     view() {
         const currentSearch = this.getCurrentSearch();
 

@@ -1,6 +1,6 @@
 import Modal from 'flarum/components/Modal';
 import Button from 'flarum/components/Button';
-import Selectize from 'flagrow/messaging/components/Selectize';
+import RecipientSearch from 'flagrow/messaging/components/RecipientSearch';
 
 export default class RecipientSelectModal extends Modal
 {
@@ -17,7 +17,7 @@ export default class RecipientSelectModal extends Modal
                 <div className="Form Form--centered">
                     <p className="helpText">{app.translator.trans('flagrow-messaging.forum.recipient_modal.help')}</p>
                     <div className="Search-input">
-                        {Selectize.component()}
+                        {RecipientSearch.component()}
                     </div>
                     <div className="Form-group">
                         {Button.component({
