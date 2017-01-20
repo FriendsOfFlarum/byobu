@@ -238,6 +238,143 @@ System.register("flagrow/messaging/components/MessagingDropdown", ["flarum/compo
         }
     };
 });;
+"use strict";
+
+System.register("flagrow/messaging/main", ["flarum/extend", "flagrow/messaging/models/Message", "flagrow/messaging/addMessagingDropdown"], function (_export, _context) {
+    "use strict";
+
+    var extend, Message, addMessagingDropdown;
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flagrowMessagingModelsMessage) {
+            Message = _flagrowMessagingModelsMessage.default;
+        }, function (_flagrowMessagingAddMessagingDropdown) {
+            addMessagingDropdown = _flagrowMessagingAddMessagingDropdown.default;
+        }],
+        execute: function () {
+
+            app.initializers.add('flagrow-messaging', function () {
+                app.store.models.messages = Message;
+
+                addMessagingDropdown();
+            });
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/messaging/models/Message', ['flarum/Model'], function (_export, _context) {
+    "use strict";
+
+    var Model, Message;
+    return {
+        setters: [function (_flarumModel) {
+            Model = _flarumModel.default;
+        }],
+        execute: function () {
+            Message = function (_Model) {
+                babelHelpers.inherits(Message, _Model);
+
+                function Message() {
+                    babelHelpers.classCallCheck(this, Message);
+                    return babelHelpers.possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).apply(this, arguments));
+                }
+
+                return Message;
+            }(Model);
+
+            babelHelpers.extends(Message.prototype, {
+                content: Model.attribute('content'),
+                from: Model.hasOne('from'),
+                sendAt: Model.attribute('createdAt', Model.transformDate),
+                readAt: Model.attribute('readAt', Model.transformDate)
+            });
+
+            _export('default', Message);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/messaging/components/RecipientSearch'], function (_export, _context) {
+    "use strict";
+
+    var Modal, Button, RecipientSearch, RecipientSelectModal;
+    return {
+        setters: [function (_flarumComponentsModal) {
+            Modal = _flarumComponentsModal.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flagrowMessagingComponentsRecipientSearch) {
+            RecipientSearch = _flagrowMessagingComponentsRecipientSearch.default;
+        }],
+        execute: function () {
+            RecipientSelectModal = function (_Modal) {
+                babelHelpers.inherits(RecipientSelectModal, _Modal);
+
+                function RecipientSelectModal() {
+                    babelHelpers.classCallCheck(this, RecipientSelectModal);
+                    return babelHelpers.possibleConstructorReturn(this, (RecipientSelectModal.__proto__ || Object.getPrototypeOf(RecipientSelectModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(RecipientSelectModal, [{
+                    key: 'className',
+                    value: function className() {
+                        return 'RecipientSelectModal Modal--large';
+                    }
+                }, {
+                    key: 'title',
+                    value: function title() {
+                        return app.translator.trans('flagrow-messaging.forum.recipient_modal.title');
+                    }
+                }, {
+                    key: 'content',
+                    value: function content() {
+                        return m(
+                            'div',
+                            { className: 'Modal-body' },
+                            m(
+                                'div',
+                                { className: 'Form Form--centered' },
+                                m(
+                                    'p',
+                                    { className: 'helpText' },
+                                    app.translator.trans('flagrow-messaging.forum.recipient_modal.help')
+                                ),
+                                m(
+                                    'div',
+                                    { className: 'Search-input' },
+                                    RecipientSearch.component()
+                                ),
+                                m(
+                                    'div',
+                                    { className: 'Form-group' },
+                                    Button.component({
+                                        className: 'Button Button--primary Button--block',
+                                        type: 'submit',
+                                        loading: this.loading,
+                                        children: app.translator.trans('flagrow-messaging.forum.recipient_modal.submit')
+                                    })
+                                )
+                            )
+                        );
+                    }
+                }, {
+                    key: 'onsubmit',
+                    value: function onsubmit(e) {
+                        e.preventDefault();
+
+                        this.loading = true;
+                    }
+                }]);
+                return RecipientSelectModal;
+            }(Modal);
+
+            _export('default', RecipientSelectModal);
+        }
+    };
+});;
 'use strict';
 
 System.register('flagrow/messaging/components/RecipientSearch', ['flarum/components/Search', 'flagrow/messaging/components/RecipientSearchSource', 'flarum/utils/ItemList', 'flarum/utils/classList', 'flarum/utils/extractText', 'flarum/components/LoadingIndicator'], function (_export, _context) {
@@ -419,143 +556,6 @@ System.register('flagrow/messaging/components/RecipientSearchSource', ['flarum/h
             }();
 
             _export('default', RecipientSearchSource);
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/messaging/components/RecipientSearch'], function (_export, _context) {
-    "use strict";
-
-    var Modal, Button, RecipientSearch, RecipientSelectModal;
-    return {
-        setters: [function (_flarumComponentsModal) {
-            Modal = _flarumComponentsModal.default;
-        }, function (_flarumComponentsButton) {
-            Button = _flarumComponentsButton.default;
-        }, function (_flagrowMessagingComponentsRecipientSearch) {
-            RecipientSearch = _flagrowMessagingComponentsRecipientSearch.default;
-        }],
-        execute: function () {
-            RecipientSelectModal = function (_Modal) {
-                babelHelpers.inherits(RecipientSelectModal, _Modal);
-
-                function RecipientSelectModal() {
-                    babelHelpers.classCallCheck(this, RecipientSelectModal);
-                    return babelHelpers.possibleConstructorReturn(this, (RecipientSelectModal.__proto__ || Object.getPrototypeOf(RecipientSelectModal)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(RecipientSelectModal, [{
-                    key: 'className',
-                    value: function className() {
-                        return 'RecipientSelectModal Modal--large';
-                    }
-                }, {
-                    key: 'title',
-                    value: function title() {
-                        return app.translator.trans('flagrow-messaging.forum.recipient_modal.title');
-                    }
-                }, {
-                    key: 'content',
-                    value: function content() {
-                        return m(
-                            'div',
-                            { className: 'Modal-body' },
-                            m(
-                                'div',
-                                { className: 'Form Form--centered' },
-                                m(
-                                    'p',
-                                    { className: 'helpText' },
-                                    app.translator.trans('flagrow-messaging.forum.recipient_modal.help')
-                                ),
-                                m(
-                                    'div',
-                                    { className: 'Search-input' },
-                                    RecipientSearch.component()
-                                ),
-                                m(
-                                    'div',
-                                    { className: 'Form-group' },
-                                    Button.component({
-                                        className: 'Button Button--primary Button--block',
-                                        type: 'submit',
-                                        loading: this.loading,
-                                        children: app.translator.trans('flagrow-messaging.forum.recipient_modal.submit')
-                                    })
-                                )
-                            )
-                        );
-                    }
-                }, {
-                    key: 'onsubmit',
-                    value: function onsubmit(e) {
-                        e.preventDefault();
-
-                        this.loading = true;
-                    }
-                }]);
-                return RecipientSelectModal;
-            }(Modal);
-
-            _export('default', RecipientSelectModal);
-        }
-    };
-});;
-"use strict";
-
-System.register("flagrow/messaging/main", ["flarum/extend", "flagrow/messaging/models/Message", "flagrow/messaging/addMessagingDropdown"], function (_export, _context) {
-    "use strict";
-
-    var extend, Message, addMessagingDropdown;
-    return {
-        setters: [function (_flarumExtend) {
-            extend = _flarumExtend.extend;
-        }, function (_flagrowMessagingModelsMessage) {
-            Message = _flagrowMessagingModelsMessage.default;
-        }, function (_flagrowMessagingAddMessagingDropdown) {
-            addMessagingDropdown = _flagrowMessagingAddMessagingDropdown.default;
-        }],
-        execute: function () {
-
-            app.initializers.add('flagrow-messaging', function () {
-                app.store.models.messages = Message;
-
-                addMessagingDropdown();
-            });
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/messaging/models/Message', ['flarum/Model'], function (_export, _context) {
-    "use strict";
-
-    var Model, Message;
-    return {
-        setters: [function (_flarumModel) {
-            Model = _flarumModel.default;
-        }],
-        execute: function () {
-            Message = function (_Model) {
-                babelHelpers.inherits(Message, _Model);
-
-                function Message() {
-                    babelHelpers.classCallCheck(this, Message);
-                    return babelHelpers.possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).apply(this, arguments));
-                }
-
-                return Message;
-            }(Model);
-
-            babelHelpers.extends(Message.prototype, {
-                content: Model.attribute('content'),
-                from: Model.hasOne('from'),
-                sendAt: Model.attribute('createdAt', Model.transformDate),
-                readAt: Model.attribute('readAt', Model.transformDate)
-            });
-
-            _export('default', Message);
         }
     };
 });
