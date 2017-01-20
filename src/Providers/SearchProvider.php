@@ -4,7 +4,7 @@ namespace Flagrow\Messaging\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class MessagingServiceProvider extends ServiceProvider
+class SearchProvider extends ServiceProvider
 {
 
     /**
@@ -14,6 +14,6 @@ class MessagingServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // TODO: Implement register() method.
+
     }
 }
