@@ -240,143 +240,6 @@ System.register("flagrow/messaging/components/MessagingDropdown", ["flarum/compo
 });;
 'use strict';
 
-System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/messaging/components/RecipientSearch'], function (_export, _context) {
-    "use strict";
-
-    var Modal, Button, RecipientSearch, RecipientSelectModal;
-    return {
-        setters: [function (_flarumComponentsModal) {
-            Modal = _flarumComponentsModal.default;
-        }, function (_flarumComponentsButton) {
-            Button = _flarumComponentsButton.default;
-        }, function (_flagrowMessagingComponentsRecipientSearch) {
-            RecipientSearch = _flagrowMessagingComponentsRecipientSearch.default;
-        }],
-        execute: function () {
-            RecipientSelectModal = function (_Modal) {
-                babelHelpers.inherits(RecipientSelectModal, _Modal);
-
-                function RecipientSelectModal() {
-                    babelHelpers.classCallCheck(this, RecipientSelectModal);
-                    return babelHelpers.possibleConstructorReturn(this, (RecipientSelectModal.__proto__ || Object.getPrototypeOf(RecipientSelectModal)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(RecipientSelectModal, [{
-                    key: 'className',
-                    value: function className() {
-                        return 'RecipientSelectModal Modal--large';
-                    }
-                }, {
-                    key: 'title',
-                    value: function title() {
-                        return app.translator.trans('flagrow-messaging.forum.recipient_modal.title');
-                    }
-                }, {
-                    key: 'content',
-                    value: function content() {
-                        return m(
-                            'div',
-                            { className: 'Modal-body' },
-                            m(
-                                'div',
-                                { className: 'Form Form--centered' },
-                                m(
-                                    'p',
-                                    { className: 'helpText' },
-                                    app.translator.trans('flagrow-messaging.forum.recipient_modal.help')
-                                ),
-                                m(
-                                    'div',
-                                    { className: 'Search-input' },
-                                    RecipientSearch.component()
-                                ),
-                                m(
-                                    'div',
-                                    { className: 'Form-group' },
-                                    Button.component({
-                                        className: 'Button Button--primary Button--block',
-                                        type: 'submit',
-                                        loading: this.loading,
-                                        children: app.translator.trans('flagrow-messaging.forum.recipient_modal.submit')
-                                    })
-                                )
-                            )
-                        );
-                    }
-                }, {
-                    key: 'onsubmit',
-                    value: function onsubmit(e) {
-                        e.preventDefault();
-
-                        this.loading = true;
-                    }
-                }]);
-                return RecipientSelectModal;
-            }(Modal);
-
-            _export('default', RecipientSelectModal);
-        }
-    };
-});;
-"use strict";
-
-System.register("flagrow/messaging/main", ["flarum/extend", "flagrow/messaging/models/Message", "flagrow/messaging/addMessagingDropdown"], function (_export, _context) {
-    "use strict";
-
-    var extend, Message, addMessagingDropdown;
-    return {
-        setters: [function (_flarumExtend) {
-            extend = _flarumExtend.extend;
-        }, function (_flagrowMessagingModelsMessage) {
-            Message = _flagrowMessagingModelsMessage.default;
-        }, function (_flagrowMessagingAddMessagingDropdown) {
-            addMessagingDropdown = _flagrowMessagingAddMessagingDropdown.default;
-        }],
-        execute: function () {
-
-            app.initializers.add('flagrow-messaging', function () {
-                app.store.models.messages = Message;
-
-                addMessagingDropdown();
-            });
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/messaging/models/Message', ['flarum/Model'], function (_export, _context) {
-    "use strict";
-
-    var Model, Message;
-    return {
-        setters: [function (_flarumModel) {
-            Model = _flarumModel.default;
-        }],
-        execute: function () {
-            Message = function (_Model) {
-                babelHelpers.inherits(Message, _Model);
-
-                function Message() {
-                    babelHelpers.classCallCheck(this, Message);
-                    return babelHelpers.possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).apply(this, arguments));
-                }
-
-                return Message;
-            }(Model);
-
-            babelHelpers.extends(Message.prototype, {
-                content: Model.attribute('content'),
-                from: Model.hasOne('from'),
-                sendAt: Model.attribute('createdAt', Model.transformDate),
-                readAt: Model.attribute('readAt', Model.transformDate)
-            });
-
-            _export('default', Message);
-        }
-    };
-});;
-'use strict';
-
 System.register('flagrow/messaging/components/RecipientSearch', ['flarum/components/Search', 'flagrow/messaging/components/RecipientSearchSource', 'flarum/utils/ItemList', 'flarum/utils/classList', 'flarum/utils/extractText', 'flarum/components/LoadingIndicator'], function (_export, _context) {
     "use strict";
 
@@ -405,6 +268,13 @@ System.register('flagrow/messaging/components/RecipientSearch', ['flarum/compone
                 }
 
                 babelHelpers.createClass(RecipientSearch, [{
+                    key: 'init',
+                    value: function init() {
+                        babelHelpers.get(RecipientSearch.prototype.__proto__ || Object.getPrototypeOf(RecipientSearch.prototype), 'init', this).call(this);
+
+                        this.recipients = new ItemList();
+                    }
+                }, {
                     key: 'view',
                     value: function view() {
                         var _this2 = this;
@@ -552,61 +422,140 @@ System.register('flagrow/messaging/components/RecipientSearchSource', ['flarum/h
         }
     };
 });;
-"use strict";
+'use strict';
 
-System.register("flagrow/messaging/components/Selectize", ["flarum/Component"], function (_export, _context) {
+System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/messaging/components/RecipientSearch'], function (_export, _context) {
     "use strict";
 
-    var Component, Selectize;
+    var Modal, Button, RecipientSearch, RecipientSelectModal;
     return {
-        setters: [function (_flarumComponent) {
-            Component = _flarumComponent.default;
+        setters: [function (_flarumComponentsModal) {
+            Modal = _flarumComponentsModal.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flagrowMessagingComponentsRecipientSearch) {
+            RecipientSearch = _flagrowMessagingComponentsRecipientSearch.default;
         }],
         execute: function () {
-            Selectize = function (_Component) {
-                babelHelpers.inherits(Selectize, _Component);
+            RecipientSelectModal = function (_Modal) {
+                babelHelpers.inherits(RecipientSelectModal, _Modal);
 
-                function Selectize() {
-                    babelHelpers.classCallCheck(this, Selectize);
-                    return babelHelpers.possibleConstructorReturn(this, (Selectize.__proto__ || Object.getPrototypeOf(Selectize)).apply(this, arguments));
+                function RecipientSelectModal() {
+                    babelHelpers.classCallCheck(this, RecipientSelectModal);
+                    return babelHelpers.possibleConstructorReturn(this, (RecipientSelectModal.__proto__ || Object.getPrototypeOf(RecipientSelectModal)).apply(this, arguments));
                 }
 
-                babelHelpers.createClass(Selectize, [{
-                    key: "init",
-                    value: function init() {
-                        var that = this;
-                        var $select = $(".selectize-search").selectize({
-                            load: function load(query, callback) {
-                                that.loadRemote(query, callback);
-                            }
-                        });
+                babelHelpers.createClass(RecipientSelectModal, [{
+                    key: 'className',
+                    value: function className() {
+                        return 'RecipientSelectModal Modal--large';
                     }
                 }, {
-                    key: "view",
-                    value: function view() {
-                        return m("input", {
-                            type: "text",
-                            className: "FormControl selectize-search",
-                            placeholder: app.translator.trans('flagrow-messaging.forum.recipient_modal.search_placeholder')
-                        });
+                    key: 'title',
+                    value: function title() {
+                        return app.translator.trans('flagrow-messaging.forum.recipient_modal.title');
                     }
                 }, {
-                    key: "loadRemote",
-                    value: function loadRemote(query, callback) {
-                        query = query.toLowerCase();
-                        console.log(query);
+                    key: 'content',
+                    value: function content() {
+                        return m(
+                            'div',
+                            { className: 'Modal-body' },
+                            m(
+                                'div',
+                                { className: 'Form Form--centered' },
+                                m(
+                                    'p',
+                                    { className: 'helpText' },
+                                    app.translator.trans('flagrow-messaging.forum.recipient_modal.help')
+                                ),
+                                m(
+                                    'div',
+                                    { className: 'Search-input' },
+                                    RecipientSearch.component()
+                                ),
+                                m(
+                                    'div',
+                                    { className: 'Form-group' },
+                                    Button.component({
+                                        className: 'Button Button--primary Button--block',
+                                        type: 'submit',
+                                        loading: this.loading,
+                                        children: app.translator.trans('flagrow-messaging.forum.recipient_modal.submit')
+                                    })
+                                )
+                            )
+                        );
+                    }
+                }, {
+                    key: 'onsubmit',
+                    value: function onsubmit(e) {
+                        e.preventDefault();
 
-                        var results = app.store.all('users').filter(function (user) {
-                            return user.username().toLowerCase().substr(0, query.length) === query;
-                        });
-
-                        callback(results);
+                        this.loading = true;
                     }
                 }]);
-                return Selectize;
-            }(Component);
+                return RecipientSelectModal;
+            }(Modal);
 
-            _export("default", Selectize);
+            _export('default', RecipientSelectModal);
+        }
+    };
+});;
+"use strict";
+
+System.register("flagrow/messaging/main", ["flarum/extend", "flagrow/messaging/models/Message", "flagrow/messaging/addMessagingDropdown"], function (_export, _context) {
+    "use strict";
+
+    var extend, Message, addMessagingDropdown;
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flagrowMessagingModelsMessage) {
+            Message = _flagrowMessagingModelsMessage.default;
+        }, function (_flagrowMessagingAddMessagingDropdown) {
+            addMessagingDropdown = _flagrowMessagingAddMessagingDropdown.default;
+        }],
+        execute: function () {
+
+            app.initializers.add('flagrow-messaging', function () {
+                app.store.models.messages = Message;
+
+                addMessagingDropdown();
+            });
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/messaging/models/Message', ['flarum/Model'], function (_export, _context) {
+    "use strict";
+
+    var Model, Message;
+    return {
+        setters: [function (_flarumModel) {
+            Model = _flarumModel.default;
+        }],
+        execute: function () {
+            Message = function (_Model) {
+                babelHelpers.inherits(Message, _Model);
+
+                function Message() {
+                    babelHelpers.classCallCheck(this, Message);
+                    return babelHelpers.possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).apply(this, arguments));
+                }
+
+                return Message;
+            }(Model);
+
+            babelHelpers.extends(Message.prototype, {
+                content: Model.attribute('content'),
+                from: Model.hasOne('from'),
+                sendAt: Model.attribute('createdAt', Model.transformDate),
+                readAt: Model.attribute('readAt', Model.transformDate)
+            });
+
+            _export('default', Message);
         }
     };
 });

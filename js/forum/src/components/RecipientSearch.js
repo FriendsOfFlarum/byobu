@@ -10,7 +10,7 @@ export default class RecipientSearch extends Search
     init() {
         super.init();
 
-
+        this.recipients = new ItemList();
     }
 
     view() {
