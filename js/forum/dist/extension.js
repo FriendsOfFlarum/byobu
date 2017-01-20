@@ -269,7 +269,7 @@ System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/co
                 }, {
                     key: 'title',
                     value: function title() {
-                        return app.translator.trans('flagrow-messaging.forum.recipient-modal.title');
+                        return app.translator.trans('flagrow-messaging.forum.recipient_modal.title');
                     }
                 }, {
                     key: 'content',
@@ -283,7 +283,7 @@ System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/co
                                 m(
                                     'p',
                                     { className: 'helpText' },
-                                    app.translator.trans('flagrow-messaging.forum.recipient-modal.help')
+                                    app.translator.trans('flagrow-messaging.forum.recipient_modal.help')
                                 ),
                                 RecipientSearch.component(),
                                 m(
@@ -293,7 +293,7 @@ System.register('flagrow/messaging/components/RecipientSelectModal', ['flarum/co
                                         className: 'Button Button--primary Button--block',
                                         type: 'submit',
                                         loading: this.loading,
-                                        children: app.translator.trans('flagrow-messaging.forum.recipient-modal.submit')
+                                        children: app.translator.trans('flagrow-messaging.forum.recipient_modal.submit')
                                     })
                                 )
                             )
@@ -373,10 +373,10 @@ System.register('flagrow/messaging/models/Message', ['flarum/Model'], function (
 });;
 'use strict';
 
-System.register('flagrow/messaging/components/RecipientSearch', ['flarum/components/Search', 'flarum/components/UsersSearchSource', 'flarum/utils/ItemList'], function (_export, _context) {
+System.register('flagrow/messaging/components/RecipientSearch', ['flarum/components/Search', 'flarum/components/UsersSearchSource', 'flarum/utils/ItemList', 'flarum/utils/classList', 'flarum/utils/extractText'], function (_export, _context) {
     "use strict";
 
-    var Search, UsersSearchSource, ItemList, RecipientSearch;
+    var Search, UsersSearchSource, ItemList, classList, extractText, RecipientSearch;
     return {
         setters: [function (_flarumComponentsSearch) {
             Search = _flarumComponentsSearch.default;
@@ -384,6 +384,10 @@ System.register('flagrow/messaging/components/RecipientSearch', ['flarum/compone
             UsersSearchSource = _flarumComponentsUsersSearchSource.default;
         }, function (_flarumUtilsItemList) {
             ItemList = _flarumUtilsItemList.default;
+        }, function (_flarumUtilsClassList) {
+            classList = _flarumUtilsClassList.default;
+        }, function (_flarumUtilsExtractText) {
+            extractText = _flarumUtilsExtractText.default;
         }],
         execute: function () {
             RecipientSearch = function (_Search) {
@@ -395,6 +399,56 @@ System.register('flagrow/messaging/components/RecipientSearch', ['flarum/compone
                 }
 
                 babelHelpers.createClass(RecipientSearch, [{
+                    key: 'view',
+                    value: function view() {
+                        var _this2 = this;
+
+                        var currentSearch = this.getCurrentSearch();
+
+                        // Initialize search input value in the view rather than the constructor so
+                        // that we have access to app.current.
+                        if (typeof this.value() === 'undefined') {
+                            this.value(currentSearch || '');
+                        }
+
+                        return m(
+                            'div',
+                            { className: 'Search ' + classList({
+                                    open: this.value() && this.hasFocus,
+                                    focused: this.hasFocus,
+                                    active: !!currentSearch,
+                                    loading: !!this.loadingSources
+                                }) },
+                            m(
+                                'div',
+                                { className: 'Search-input' },
+                                m('input', { className: 'FormControl',
+                                    type: 'search',
+                                    placeholder: extractText(app.translator.trans('flagrow-messaging.forum.recipient_modal.search_placeholder')),
+                                    value: this.value(),
+                                    oninput: m.withAttr('value', this.value),
+                                    onfocus: function onfocus() {
+                                        return _this2.hasFocus = true;
+                                    },
+                                    onblur: function onblur() {
+                                        return _this2.hasFocus = false;
+                                    } }),
+                                this.loadingSources ? LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' }) : currentSearch ? m(
+                                    'button',
+                                    { className: 'Search-clear Button Button--icon Button--link', onclick: this.clear.bind(this) },
+                                    icon('times-circle')
+                                ) : ''
+                            ),
+                            m(
+                                'ul',
+                                { className: 'Dropdown-menu Search-results' },
+                                this.value() && this.hasFocus ? this.sources.map(function (source) {
+                                    return source.view(_this2.value());
+                                }) : ''
+                            )
+                        );
+                    }
+                }, {
                     key: 'sourceItems',
                     value: function sourceItems() {
                         var items = new ItemList();
@@ -407,7 +461,7 @@ System.register('flagrow/messaging/components/RecipientSearch', ['flarum/compone
                     key: 'selectResult',
                     value: function selectResult() {
                         if (this.value()) {
-                            console.log(this.value());
+                            console.log(this.getItem(this.index));
                         } else {
                             this.clear();
                         }
