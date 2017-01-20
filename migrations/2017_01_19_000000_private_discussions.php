@@ -7,7 +7,9 @@ return [
     'up' => function(Builder $schema) {
         $schema->create('flagrow_private_discussions', function(Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('owner_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
         });
     },
     'down' => function(Builder $schema) {

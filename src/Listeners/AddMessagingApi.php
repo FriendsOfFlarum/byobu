@@ -53,7 +53,7 @@ class AddMessagingApi
             $event->attributes['canMessage'] = $event->actor->can('flagrow.message');
 
             if ($event->attributes['canMessage']) {
-                $event->attributes['flagrow.userMessages'] = $this->messages->findByUser($event->actor)->count();
+//                $event->attributes['flagrow.userMessages'] = $this->messages->findByUser($event->actor)->count();
             }
         }
     }

@@ -8,8 +8,8 @@ return [
         $schema->create('flagrow_private_recipients', function(Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('discussion_id')->unsigned();
-            $table->integer('recipient_id')->unsigned();
-            $table->timestamp('read_at')->nullable();
+            $table->integer('user_id')->unsigned();
+            $table->timestamp('last_message_read_at')->nullable();
         });
     },
     'down' => function(Builder $schema) {

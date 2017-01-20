@@ -9,19 +9,8 @@ return [
             $table->bigIncrements('id');
             $table->bigInteger('discussion_id')->unsigned();
             $table->integer('author_id')->unsigned();
+            $table->longText('message');
             $table->timestamps();
-
-            $table
-                ->foreign('discussion_id')
-                ->references('id')
-                ->on('flagrow_private_discussions')
-                ->onDelete('cascade');
-
-            $table
-                ->foreign('author_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('set null');
         });
     },
     'down' => function(Builder $schema) {

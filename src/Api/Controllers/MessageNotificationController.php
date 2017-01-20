@@ -44,7 +44,9 @@ class MessageNotificationController extends AbstractCollectionController
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
 
-        return $this->messages->findByUser($actor, $limit, $offset)
+        return $this->messages->findDiscussionsByUser($actor)
+            ->skip($offset)
+            ->limit($limit)
             ->with($this->extractInclude($request))
             ->get();
     }

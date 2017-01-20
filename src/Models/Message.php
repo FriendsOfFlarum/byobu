@@ -8,36 +8,31 @@ use Flarum\Database\AbstractModel;
 
 /**
  * @property int $id
- * @property string $content
- * @property int $to_id
- * @property int $from_id
- * @property User $to
- * @property User $from
+ * @property int $discussion_id
+ * @property int $author_id
+ * @property string $message
+ * @property Discussion $discussion
+ * @property User $author
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property array $read_registration
  */
 class Message extends AbstractModel
 {
-    protected $table = 'flagrow_messages';
-
-    protected $casts = [
-        'read_registration' => 'json'
-    ];
+    protected $table = 'flagrow_private_messages';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function to()
+    public function discussion()
     {
-        return $this->belongsTo(User::class, 'to_id');
+        return $this->belongsTo(Discussion::class);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function from()
+    public function author()
     {
-        return $this->belongsTo(User::class, 'from_id');
+        return $this->belongsTo(User::class, 'author_id');
     }
 }

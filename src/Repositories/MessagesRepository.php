@@ -2,30 +2,47 @@
 
 namespace Flagrow\Messaging\Repositories;
 
-use Flagrow\Messaging\Models\Message;
+use Flagrow\Messaging\Models\Discussion;
 use Flarum\Core\User;
 use Illuminate\Database\Eloquent\Builder;
 
 class MessagesRepository
 {
     /**
-     * Find a user's notifications.
+     * Find a users' private discussions.
      *
      * @param User $user
-     * @param int|null $limit
-     * @param int $offset
      * @return Builder
      */
-    public function findByUser(User $user, $limit = null, $offset = 0): Builder
+    public function findDiscussionsByUser(User $user): Builder
     {
-        return Message::query()->where('to_id', $user->id)
-            ->latest('created_at')
-            ->skip($offset)
-            ->take($limit);
+        return Discussion::query()
+            ->with('messages')
+            ->whereHas('recipients', function (Builder $q) use ($user) {
+                $q->where('users.id', $user->id);
+            })
+            ->latest('updated_at');
     }
 
-    public function findUnreadByUser(User $user, $limit = null, $offset = 0): Builder
+    /**
+     * Find a users' unread private discussions.
+     *
+     * @param User $user
+     * @return Builder
+     */
+    public function findUnreadDiscussionsByUser(User $user): Builder
     {
-//        return $this->findByUser($user, $limit, $offset)->where()
+        return Discussion::query()
+            ->with('messages')
+            ->whereHas('recipients', function (Builder $q) use ($user) {
+                $q
+                    ->where('users.id', $user->id)
+                    ->where(
+                        'flagrow_private_recipients.last_message_read_at',
+                        '<=',
+                        'flagrow_private_discussions.updated_at'
+                    );
+            })
+            ->latest('updated_at');
     }
 }
