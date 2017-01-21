@@ -5,6 +5,8 @@ namespace Flagrow\Messaging\Gambits\Discussion;
 use Flarum\Core\Search\AbstractRegexGambit;
 use Flarum\Core\Search\AbstractSearch;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Expression;
+use Illuminate\Database\Query\JoinClause;
 
 class PrivacyGambit extends AbstractRegexGambit
 {
@@ -12,6 +14,23 @@ class PrivacyGambit extends AbstractRegexGambit
      * {@inheritdoc}
      */
     protected $pattern = 'is:private';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function apply(AbstractSearch $search, $bit)
+    {
+        if ($matches = $this->match($bit)) {
+            list($negate) = array_splice($matches, 1, 1);
+        } else {
+            $matches = [];
+            $negate = false;
+        }
+
+        $this->conditions($search, $matches, (bool)$negate);
+
+        return true;
+    }
 
     /**
      * Apply conditions to the search, given that the gambit was matched.
@@ -26,17 +45,18 @@ class PrivacyGambit extends AbstractRegexGambit
     {
         $actor = $search->getActor();
 
-        if (!$actor->exists || $negate) {
-            $search->getQuery()->where(function (Builder $query) {
-                $query->doesntHave('recipients');
-            });
-        } else {
-            $search->getQuery()->where(function (Builder $query) use ($actor) {
-                $query->join('recipients', function($join) use ($actor) {
-                    $join->on('discussions.id', '=', 'recipients.discussion_id')
-                        ->where('recipients.user_id', $actor->id);
-                });
-            });
-        }
+        // Show only public messages.
+        $public = empty($matches) || $negate;
+
+        $method = $actor->exists && !$public ? 'whereExists' : 'whereNotExists';
+
+        $search->getQuery()->$method(function (Builder $query) use ($public, $actor) {
+            $query->select(app('flarum.db')->raw(1))
+                ->from('recipients')
+                ->where('discussions.id', new Expression('discussion_id'));
+            if (!$public) {
+                $query->where('user_id', $actor->id);
+            }
+        });
     }
 }
