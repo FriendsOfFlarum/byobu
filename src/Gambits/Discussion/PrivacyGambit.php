@@ -6,7 +6,6 @@ use Flarum\Core\Search\AbstractRegexGambit;
 use Flarum\Core\Search\AbstractSearch;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Query\JoinClause;
 
 class PrivacyGambit extends AbstractRegexGambit
 {
