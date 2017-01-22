@@ -2,7 +2,7 @@ import { extend, override } from 'flarum/extend';
 import IndexPage from 'flarum/components/IndexPage';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 
-import TagDiscussionModal from 'flarum/tags/components/TagDiscussionModal';
+import AddRecipientModal from 'flagrow/messaging/components/AddRecipientModal';
 import recipientsLabel from 'flagrow/messaging/helpers/recipientsLabel';
 
 export default function() {
@@ -34,8 +34,8 @@ export default function() {
     // title.
     extend(DiscussionComposer.prototype, 'headerItems', function(items) {
         items.add('recipients', (
-            <a className="DiscussionComposer-changeRecipients" onclick={this.chooseTags.bind(this)}>
-                {this.tags.length
+            <a className="DiscussionComposer-changeRecipients" onclick={this.chooseRecipients.bind(this)}>
+                {this.recipients.length
                     ? recipientsLabel(this.recipients)
                     : <span className="RecipientLabel none">{app.translator.trans('flagrow-messaging.forum.buttons.add_recipients')}</span>}
             </a>

@@ -4,3 +4,5 @@ flagrow-messaging:
             add_recipients: Add Recipients
         labels:
             user_deleted: -deleted-
+        input:
+            search_recipients: Search recipient..
