@@ -45,8 +45,8 @@ export default class AddRecipientModal extends Modal {
 
     title() {
         return this.props.discussion
-            ? app.translator.trans('flarum-tags.forum.choose_tags.edit_title', {title: <em>{this.props.discussion.title()}</em>})
-            : app.translator.trans('flarum-tags.forum.choose_tags.title');
+            ? app.translator.trans('flagrow-messaging.forum.modal.titles.update_recipients', {title: <em>{this.props.discussion.title()}</em>})
+            : app.translator.trans('flagrow-messaging.forum.modal.titles.add_recipients');
     }
 
     content() {

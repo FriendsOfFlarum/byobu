@@ -1,8 +1,12 @@
 flagrow-messaging:
     forum:
         buttons:
-            add_recipients: Add Recipients
+            add_recipients: Recipients
         labels:
             user_deleted: -deleted-
         input:
             search_recipients: Search recipient..
+        modal:
+            titles:
+                update_recipients: Update recipients of {title}
+                add_recipients: Add recipients to your discussion
