@@ -1,10 +1,10 @@
 import Search from "flarum/components/Search";
-import RecipientSearchSource from "flagrow/messaging/components/RecipientSearchSource";
+import RecipientSearchSource from "flagrow/byobu/components/RecipientSearchSource";
 import ItemList from "flarum/utils/ItemList";
 import classList from "flarum/utils/classList";
 import extractText from "flarum/utils/extractText";
 import LoadingIndicator from "flarum/components/LoadingIndicator";
-import recipientLabel from "flagrow/messaging/helpers/recipientLabel";
+import recipientLabel from "flagrow/byobu/helpers/recipientLabel";
 import icon from 'flarum/helpers/icon';
 
 export default class RecipientSearch extends Search {
@@ -51,7 +51,7 @@ export default class RecipientSearch extends Search {
                     loading: !!this.loadingSources
                 })}
                        type="search"
-                       placeholder={extractText(app.translator.trans('flagrow-messaging.forum.input.search_recipients'))}
+                       placeholder={extractText(app.translator.trans('flagrow-byobu.forum.input.search_recipients'))}
                        value={this.value()}
                        oninput={m.withAttr('value', this.value)}
                        onfocus={() => this.hasFocus = true}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Messaging\Listeners;
+namespace Flagrow\Byobu\Listeners;
 
 use Illuminate\Contracts\Events\Dispatcher;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Messaging\Listeners;
+namespace Flagrow\Byobu\Listeners;
 
-use Flagrow\Messaging\Gambits\Discussion\PrivacyGambit;
+use Flagrow\Byobu\Gambits\Discussion\PrivacyGambit;
 use Flarum\Event\ConfigureDiscussionGambits;
 use Illuminate\Contracts\Events\Dispatcher;
 

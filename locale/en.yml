@@ -1,10 +1,12 @@
-flagrow-messaging:
+flagrow-byobu:
     forum:
         buttons:
             add_recipients: Recipients
             submit: OK
         labels:
             user_deleted: -deleted-
+        nav:
+            private_discussions: Private discussion
         input:
             search_recipients: Search recipient..
         modal:

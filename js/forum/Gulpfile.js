@@ -2,7 +2,7 @@ var gulp = require('flarum-gulp');
 
 gulp({
     modules: {
-        'flagrow/messaging': [
+        'flagrow/byobu': [
             '../lib/**/*.js',
             'src/**/*.js'
         ]

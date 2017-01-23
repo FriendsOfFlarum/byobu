@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Messaging;
+namespace Flagrow\Byobu;
 
 use Flarum\Foundation\Application;
 use Illuminate\Contracts\Events\Dispatcher;

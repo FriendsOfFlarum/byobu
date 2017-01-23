@@ -1,6 +1,6 @@
 {
-    "name": "flagrow/messaging",
-    "description": "The messaging extension for the Flarum forum to annoy your fellow forum participants.",
+    "name": "flagrow/byobu",
+    "description": "Well integrated, advanced private discussions.",
     "keywords": [
         "pm",
         "flarum",
@@ -17,8 +17,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/flagrow/messaging/issues",
-        "source": "https://github.com/flagrow/messaging"
+        "issues": "https://github.com/flagrow/byobu/issues",
+        "source": "https://github.com/flagrow/byobu"
     },
     "require": {
         "flarum/core": "^0.1.0-beta.6",
@@ -27,9 +27,9 @@
     },
     "extra": {
         "flarum-extension": {
-            "title": "Flagrow Messaging",
+            "title": "Flagrow Byōbu",
             "icon": {
-                "name": "inbox",
+                "name": "group",
                 "backgroundColor": "#000",
                 "color": "#87d37c"
             }
@@ -37,7 +37,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Flagrow\\Messaging\\": "src/"
+            "Flagrow\\Byobu\\": "src/"
         }
     }
 }

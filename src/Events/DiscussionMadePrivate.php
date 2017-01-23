@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Messaging\Events;
+namespace Flagrow\Byobu\Events;
 
 use Flarum\Core\Discussion;
 use Flarum\Core\User;

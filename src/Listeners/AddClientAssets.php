@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Messaging\Listeners;
+namespace Flagrow\Byobu\Listeners;
 
 use DirectoryIterator;
 use Flarum\Event\ConfigureLocales;
@@ -25,7 +25,7 @@ class AddClientAssets
                 __DIR__.'/../../js/forum/dist/extension.js',
                 __DIR__.'/../../less/forum/extension.less'
             ]);
-            $app->addBootstrapper('flagrow/messaging/main');
+            $app->addBootstrapper('flagrow/byobu/main');
         }
     }
 

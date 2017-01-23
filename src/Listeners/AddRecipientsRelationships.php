@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Messaging\Listeners;
+namespace Flagrow\Byobu\Listeners;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer\DiscussionSerializer;

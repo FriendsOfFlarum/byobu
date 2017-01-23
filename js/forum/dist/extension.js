@@ -1,6 +1,6 @@
 'use strict';
 
-System.register('flagrow/messaging/addRecipientComposer', ['flarum/extend', 'flarum/components/DiscussionComposer', 'flagrow/messaging/components/AddRecipientModal', 'flagrow/messaging/helpers/recipientsLabel'], function (_export, _context) {
+System.register('flagrow/byobu/addRecipientComposer', ['flarum/extend', 'flarum/components/DiscussionComposer', 'flagrow/byobu/components/AddRecipientModal', 'flagrow/byobu/helpers/recipientsLabel'], function (_export, _context) {
     "use strict";
 
     var extend, override, DiscussionComposer, AddRecipientModal, recipientsLabel;
@@ -29,7 +29,7 @@ System.register('flagrow/messaging/addRecipientComposer', ['flarum/extend', 'fla
                 this.recipients.length ? recipientsLabel(this.recipients) : m(
                     'span',
                     { className: 'RecipientLabel none' },
-                    app.translator.trans('flagrow-messaging.forum.buttons.add_recipients')
+                    app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')
                 )
             ), 5);
         });
@@ -47,17 +47,72 @@ System.register('flagrow/messaging/addRecipientComposer', ['flarum/extend', 'fla
             override = _flarumExtend.override;
         }, function (_flarumComponentsDiscussionComposer) {
             DiscussionComposer = _flarumComponentsDiscussionComposer.default;
-        }, function (_flagrowMessagingComponentsAddRecipientModal) {
-            AddRecipientModal = _flagrowMessagingComponentsAddRecipientModal.default;
-        }, function (_flagrowMessagingHelpersRecipientsLabel) {
-            recipientsLabel = _flagrowMessagingHelpersRecipientsLabel.default;
+        }, function (_flagrowByobuComponentsAddRecipientModal) {
+            AddRecipientModal = _flagrowByobuComponentsAddRecipientModal.default;
+        }, function (_flagrowByobuHelpersRecipientsLabel) {
+            recipientsLabel = _flagrowByobuHelpersRecipientsLabel.default;
         }],
         execute: function () {}
     };
 });;
 'use strict';
 
-System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/components/Modal', 'flarum/components/DiscussionPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flagrow/messaging/components/RecipientSearch'], function (_export, _context) {
+System.register('flagrow/byobu/addRecipientLabels', ['flarum/extend', 'flarum/components/DiscussionListItem', 'flarum/components/DiscussionPage', 'flarum/components/DiscussionHero', 'flagrow/byobu/helpers/recipientsLabel'], function (_export, _context) {
+    "use strict";
+
+    var extend, DiscussionListItem, DiscussionPage, DiscussionHero, recipientsLabel;
+
+    _export('default', function () {
+
+        /**
+         * Adds User labels on the discussion index page.
+         */
+        extend(DiscussionListItem.prototype, 'infoItems', function (items) {
+            var recipients = this.props.discussion.recipients();
+
+            if (recipients && recipients.length) {
+                items.add('recipients', recipientsLabel(recipients), 20);
+            }
+        });
+
+        /**
+         * Require recipients from the API whenever we're loading a Discussion page.
+         */
+        extend(DiscussionPage.prototype, 'params', function (params) {
+            params.include.push('recipients');
+        });
+
+        /**
+         * Adds User labels on the discussion Hero.
+         */
+        extend(DiscussionHero.prototype, 'items', function (items) {
+            var recipients = this.props.discussion.recipients();
+
+            if (recipients && recipients.length) {
+                items.remove('tags');
+                items.add('recipients', recipientsLabel(recipients, { link: true }), 4);
+            }
+        });
+    });
+
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumComponentsDiscussionListItem) {
+            DiscussionListItem = _flarumComponentsDiscussionListItem.default;
+        }, function (_flarumComponentsDiscussionPage) {
+            DiscussionPage = _flarumComponentsDiscussionPage.default;
+        }, function (_flarumComponentsDiscussionHero) {
+            DiscussionHero = _flarumComponentsDiscussionHero.default;
+        }, function (_flagrowByobuHelpersRecipientsLabel) {
+            recipientsLabel = _flagrowByobuHelpersRecipientsLabel.default;
+        }],
+        execute: function () {}
+    };
+});;
+'use strict';
+
+System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/components/Modal', 'flarum/components/DiscussionPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flagrow/byobu/components/RecipientSearch'], function (_export, _context) {
     "use strict";
 
     var Modal, DiscussionPage, Button, ItemList, RecipientSearch, AddRecipientModal;
@@ -70,8 +125,8 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
             Button = _flarumComponentsButton.default;
         }, function (_flarumUtilsItemList) {
             ItemList = _flarumUtilsItemList.default;
-        }, function (_flagrowMessagingComponentsRecipientSearch) {
-            RecipientSearch = _flagrowMessagingComponentsRecipientSearch.default;
+        }, function (_flagrowByobuComponentsRecipientSearch) {
+            RecipientSearch = _flagrowByobuComponentsRecipientSearch.default;
         }],
         execute: function () {
             AddRecipientModal = function (_Modal) {
@@ -113,11 +168,11 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
                 }, {
                     key: 'title',
                     value: function title() {
-                        return this.props.discussion ? app.translator.trans('flagrow-messaging.forum.modal.titles.update_recipients', { title: m(
+                        return this.props.discussion ? app.translator.trans('flagrow-byobu.forum.modal.titles.update_recipients', { title: m(
                                 'em',
                                 null,
                                 this.props.discussion.title()
-                            ) }) : app.translator.trans('flagrow-messaging.forum.modal.titles.add_recipients');
+                            ) }) : app.translator.trans('flagrow-byobu.forum.modal.titles.add_recipients');
                     }
                 }, {
                     key: 'content',
@@ -138,7 +193,7 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
                                         className: 'Button Button--primary',
                                         disabled: false,
                                         icon: 'check',
-                                        children: app.translator.trans('flagrow-messaging.forum.buttons.submit')
+                                        children: app.translator.trans('flagrow-byobu.forum.buttons.submit')
                                     })
                                 )
                             )
@@ -185,17 +240,376 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
         }
     };
 });;
+'use strict';
+
+System.register('flagrow/byobu/components/PrivateDiscussionIndex', ['flarum/extend', 'flarum/components/Page', 'flarum/utils/ItemList', 'flarum/helpers/listItems', 'flarum/helpers/icon', 'flagrow/byobu/components/PrivateDiscussionList', 'flarum/components/WelcomeHero', 'flarum/components/DiscussionComposer', 'flarum/components/LogInModal', 'flarum/components/DiscussionPage', 'flarum/components/Select', 'flarum/components/Button', 'flarum/components/LinkButton', 'flarum/components/SelectDropdown'], function (_export, _context) {
+    "use strict";
+
+    var extend, Page, ItemList, listItems, icon, PrivateDiscussionList, WelcomeHero, DiscussionComposer, LogInModal, DiscussionPage, Select, Button, LinkButton, SelectDropdown, PrivateDiscussionIndex;
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumComponentsPage) {
+            Page = _flarumComponentsPage.default;
+        }, function (_flarumUtilsItemList) {
+            ItemList = _flarumUtilsItemList.default;
+        }, function (_flarumHelpersListItems) {
+            listItems = _flarumHelpersListItems.default;
+        }, function (_flarumHelpersIcon) {
+            icon = _flarumHelpersIcon.default;
+        }, function (_flagrowByobuComponentsPrivateDiscussionList) {
+            PrivateDiscussionList = _flagrowByobuComponentsPrivateDiscussionList.default;
+        }, function (_flarumComponentsWelcomeHero) {
+            WelcomeHero = _flarumComponentsWelcomeHero.default;
+        }, function (_flarumComponentsDiscussionComposer) {
+            DiscussionComposer = _flarumComponentsDiscussionComposer.default;
+        }, function (_flarumComponentsLogInModal) {
+            LogInModal = _flarumComponentsLogInModal.default;
+        }, function (_flarumComponentsDiscussionPage) {
+            DiscussionPage = _flarumComponentsDiscussionPage.default;
+        }, function (_flarumComponentsSelect) {
+            Select = _flarumComponentsSelect.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flarumComponentsLinkButton) {
+            LinkButton = _flarumComponentsLinkButton.default;
+        }, function (_flarumComponentsSelectDropdown) {
+            SelectDropdown = _flarumComponentsSelectDropdown.default;
+        }],
+        execute: function () {
+            PrivateDiscussionIndex = function (_Page) {
+                babelHelpers.inherits(PrivateDiscussionIndex, _Page);
+
+                function PrivateDiscussionIndex() {
+                    babelHelpers.classCallCheck(this, PrivateDiscussionIndex);
+                    return babelHelpers.possibleConstructorReturn(this, (PrivateDiscussionIndex.__proto__ || Object.getPrototypeOf(PrivateDiscussionIndex)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(PrivateDiscussionIndex, [{
+                    key: 'init',
+                    value: function init() {
+                        babelHelpers.get(PrivateDiscussionIndex.prototype.__proto__ || Object.getPrototypeOf(PrivateDiscussionIndex.prototype), 'init', this).call(this);
+
+                        // If the user is returning from a discussion page, then take note of which
+                        // discussion they have just visited. After the view is rendered, we will
+                        // scroll down so that this discussion is in view.
+                        if (app.previous instanceof DiscussionPage) {
+                            this.lastDiscussion = app.previous.discussion;
+                        }
+
+                        // If the user is coming from the discussion list, then they have either
+                        // just switched one of the parameters (filter, sort, search) or they
+                        // probably want to refresh the results. We will clear the discussion list
+                        // cache so that results are reloaded.
+                        if (app.previous instanceof PrivateDiscussionIndex) {
+                            app.cache.privateDiscussionList = null;
+                        }
+
+                        var params = this.params();
+
+                        if (app.cache.privateDiscussionList) {
+                            // Compare the requested parameters (sort, search query) to the ones that
+                            // are currently present in the cached discussion list. If they differ, we
+                            // will clear the cache and set up a new discussion list component with
+                            // the new parameters.
+                            Object.keys(params).some(function (key) {
+                                if (app.cache.privateDiscussionList.props.params[key] !== params[key]) {
+                                    app.cache.privateDiscussionList = null;
+                                    return true;
+                                }
+                            });
+                        }
+
+                        if (!app.cache.privateDiscussionList) {
+                            app.cache.privateDiscussionList = new PrivateDiscussionList({ params: params });
+                        }
+
+                        app.history.push('private-index', icon('group'));
+
+                        this.bodyClass = 'App--index';
+                    }
+                }, {
+                    key: 'onunload',
+                    value: function onunload() {
+                        // Save the scroll position so we can restore it when we return to the
+                        // discussion list.
+                        app.cache.scrollTop = $(window).scrollTop();
+                    }
+                }, {
+                    key: 'view',
+                    value: function view() {
+                        return m(
+                            'div',
+                            { className: 'IndexPage' },
+                            this.hero(),
+                            m(
+                                'div',
+                                { className: 'container' },
+                                m(
+                                    'nav',
+                                    { className: 'IndexPage-nav sideNav' },
+                                    m(
+                                        'ul',
+                                        null,
+                                        listItems(this.sidebarItems().toArray())
+                                    )
+                                ),
+                                m(
+                                    'div',
+                                    { className: 'IndexPage-results sideNavOffset' },
+                                    m(
+                                        'div',
+                                        { className: 'IndexPage-toolbar' },
+                                        m(
+                                            'ul',
+                                            { className: 'IndexPage-toolbar-view' },
+                                            listItems(this.viewItems().toArray())
+                                        ),
+                                        m(
+                                            'ul',
+                                            { className: 'IndexPage-toolbar-action' },
+                                            listItems(this.actionItems().toArray())
+                                        )
+                                    ),
+                                    app.cache.discussionList.render()
+                                )
+                            )
+                        );
+                    }
+                }, {
+                    key: 'config',
+                    value: function config(isInitialized, context) {
+                        babelHelpers.get(PrivateDiscussionIndex.prototype.__proto__ || Object.getPrototypeOf(PrivateDiscussionIndex.prototype), 'config', this).apply(this, arguments);
+
+                        if (isInitialized) return;
+
+                        extend(context, 'onunload', function () {
+                            return $('#app').css('min-height', '');
+                        });
+
+                        app.setTitle('');
+                        app.setTitleCount(0);
+
+                        // Work out the difference between the height of this hero and that of the
+                        // previous hero. Maintain the same scroll position relative to the bottom
+                        // of the hero so that the sidebar doesn't jump around.
+                        var oldHeroHeight = app.cache.heroHeight;
+                        var heroHeight = app.cache.heroHeight = this.$('.Hero').outerHeight();
+                        var scrollTop = app.cache.scrollTop;
+
+                        $('#app').css('min-height', $(window).height() + heroHeight);
+
+                        // Scroll to the remembered position. We do this after a short delay so that
+                        // it happens after the browser has done its own "back button" scrolling,
+                        // which isn't right. https://github.com/flarum/core/issues/835
+                        var scroll = function scroll() {
+                            return $(window).scrollTop(scrollTop - oldHeroHeight + heroHeight);
+                        };
+                        scroll();
+                        setTimeout(scroll, 1);
+
+                        // If we've just returned from a discussion page, then the constructor will
+                        // have set the `lastDiscussion` property. If this is the case, we want to
+                        // scroll down to that discussion so that it's in view.
+                        if (this.lastDiscussion) {
+                            var $discussion = this.$('.DiscussionListItem[data-id="' + this.lastDiscussion.id() + '"]');
+
+                            if ($discussion.length) {
+                                var indexTop = $('#header').outerHeight();
+                                var indexBottom = $(window).height();
+                                var discussionTop = $discussion.offset().top;
+                                var discussionBottom = discussionTop + $discussion.outerHeight();
+
+                                if (discussionTop < scrollTop + indexTop || discussionBottom > scrollTop + indexBottom) {
+                                    $(window).scrollTop(discussionTop - indexTop);
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    key: 'hero',
+                    value: function hero() {
+                        return WelcomeHero.component();
+                    }
+                }, {
+                    key: 'sidebarItems',
+                    value: function sidebarItems() {
+                        var items = new ItemList();
+                        var canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
+
+                        items.add('newDiscussion', Button.component({
+                            children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
+                            icon: 'edit',
+                            className: 'Button Button--primary IndexPage-newDiscussion',
+                            itemClassName: 'App-primaryControl',
+                            onclick: this.newDiscussion.bind(this),
+                            disabled: !canStartDiscussion
+                        }));
+
+                        items.add('nav', SelectDropdown.component({
+                            children: this.navItems(this).toArray(),
+                            buttonClassName: 'Button',
+                            className: 'App-titleControl'
+                        }));
+
+                        return items;
+                    }
+                }, {
+                    key: 'navItems',
+                    value: function navItems() {
+                        var items = new ItemList();
+                        var params = this.stickyParams();
+
+                        items.add('allDiscussions', LinkButton.component({
+                            href: app.route('index', params),
+                            children: app.translator.trans('core.forum.index.all_discussions_link'),
+                            icon: 'comments-o'
+                        }), 100);
+
+                        return items;
+                    }
+                }, {
+                    key: 'viewItems',
+                    value: function viewItems() {
+                        var items = new ItemList();
+                        var sortMap = app.cache.discussionList.sortMap();
+
+                        var sortOptions = {};
+                        for (var i in sortMap) {
+                            sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
+                        }
+
+                        items.add('sort', Select.component({
+                            options: sortOptions,
+                            value: this.params().sort || Object.keys(sortMap)[0],
+                            onchange: this.changeSort.bind(this)
+                        }));
+
+                        return items;
+                    }
+                }, {
+                    key: 'actionItems',
+                    value: function actionItems() {
+                        var items = new ItemList();
+
+                        items.add('refresh', Button.component({
+                            title: app.translator.trans('core.forum.index.refresh_tooltip'),
+                            icon: 'refresh',
+                            className: 'Button Button--icon',
+                            onclick: function onclick() {
+                                return app.cache.discussionList.refresh();
+                            }
+                        }));
+
+                        if (app.session.user) {
+                            items.add('markAllAsRead', Button.component({
+                                title: app.translator.trans('core.forum.index.mark_all_as_read_tooltip'),
+                                icon: 'check',
+                                className: 'Button Button--icon',
+                                onclick: this.markAllAsRead.bind(this)
+                            }));
+                        }
+
+                        return items;
+                    }
+                }, {
+                    key: 'searching',
+                    value: function searching() {
+                        return this.params().q;
+                    }
+                }, {
+                    key: 'clearSearch',
+                    value: function clearSearch() {
+                        var params = this.params();
+                        delete params.q;
+
+                        m.route(app.route(this.props.routeName, params));
+                    }
+                }, {
+                    key: 'changeSort',
+                    value: function changeSort(sort) {
+                        var params = this.params();
+
+                        if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
+                            delete params.sort;
+                        } else {
+                            params.sort = sort;
+                        }
+
+                        m.route(app.route(this.props.routeName, params));
+                    }
+                }, {
+                    key: 'stickyParams',
+                    value: function stickyParams() {
+                        return {
+                            sort: m.route.param('sort'),
+                            q: m.route.param('q')
+                        };
+                    }
+                }, {
+                    key: 'params',
+                    value: function params() {
+                        var params = this.stickyParams();
+
+                        params.filter = m.route.param('filter');
+
+                        return params;
+                    }
+                }, {
+                    key: 'newDiscussion',
+                    value: function newDiscussion() {
+                        var deferred = m.deferred();
+
+                        if (app.session.user) {
+                            this.composeNewDiscussion(deferred);
+                        } else {
+                            app.modal.show(new LogInModal({
+                                onlogin: this.composeNewDiscussion.bind(this, deferred)
+                            }));
+                        }
+
+                        return deferred.promise;
+                    }
+                }, {
+                    key: 'composeNewDiscussion',
+                    value: function composeNewDiscussion(deferred) {
+                        var component = new DiscussionComposer({ user: app.session.user });
+
+                        app.composer.load(component);
+                        app.composer.show();
+
+                        deferred.resolve(component);
+
+                        return deferred.promise;
+                    }
+                }, {
+                    key: 'markAllAsRead',
+                    value: function markAllAsRead() {
+                        var confirmation = confirm(app.translator.trans('core.forum.index.mark_all_as_read_confirmation'));
+
+                        if (confirmation) {
+                            app.session.user.save({ readTime: new Date() });
+                        }
+                    }
+                }]);
+                return PrivateDiscussionIndex;
+            }(Page);
+
+            _export('default', PrivateDiscussionIndex);
+        }
+    };
+});;
 "use strict";
 
-System.register("flagrow/messaging/components/RecipientSearch", ["flarum/components/Search", "flagrow/messaging/components/RecipientSearchSource", "flarum/utils/ItemList", "flarum/utils/classList", "flarum/utils/extractText", "flarum/components/LoadingIndicator", "flagrow/messaging/helpers/recipientLabel", "flarum/helpers/icon"], function (_export, _context) {
+System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/Search", "flagrow/byobu/components/RecipientSearchSource", "flarum/utils/ItemList", "flarum/utils/classList", "flarum/utils/extractText", "flarum/components/LoadingIndicator", "flagrow/byobu/helpers/recipientLabel", "flarum/helpers/icon"], function (_export, _context) {
     "use strict";
 
     var Search, RecipientSearchSource, ItemList, classList, extractText, LoadingIndicator, recipientLabel, icon, RecipientSearch;
     return {
         setters: [function (_flarumComponentsSearch) {
             Search = _flarumComponentsSearch.default;
-        }, function (_flagrowMessagingComponentsRecipientSearchSource) {
-            RecipientSearchSource = _flagrowMessagingComponentsRecipientSearchSource.default;
+        }, function (_flagrowByobuComponentsRecipientSearchSource) {
+            RecipientSearchSource = _flagrowByobuComponentsRecipientSearchSource.default;
         }, function (_flarumUtilsItemList) {
             ItemList = _flarumUtilsItemList.default;
         }, function (_flarumUtilsClassList) {
@@ -204,8 +618,8 @@ System.register("flagrow/messaging/components/RecipientSearch", ["flarum/compone
             extractText = _flarumUtilsExtractText.default;
         }, function (_flarumComponentsLoadingIndicator) {
             LoadingIndicator = _flarumComponentsLoadingIndicator.default;
-        }, function (_flagrowMessagingHelpersRecipientLabel) {
-            recipientLabel = _flagrowMessagingHelpersRecipientLabel.default;
+        }, function (_flagrowByobuHelpersRecipientLabel) {
+            recipientLabel = _flagrowByobuHelpersRecipientLabel.default;
         }, function (_flarumHelpersIcon) {
             icon = _flarumHelpersIcon.default;
         }],
@@ -273,7 +687,7 @@ System.register("flagrow/messaging/components/RecipientSearch", ["flarum/compone
                                     loading: !!this.loadingSources
                                 }),
                                 type: "search",
-                                placeholder: extractText(app.translator.trans('flagrow-messaging.forum.input.search_recipients')),
+                                placeholder: extractText(app.translator.trans('flagrow-byobu.forum.input.search_recipients')),
                                 value: this.value(),
                                 oninput: m.withAttr('value', this.value),
                                 onfocus: function onfocus() {
@@ -355,7 +769,7 @@ System.register("flagrow/messaging/components/RecipientSearch", ["flarum/compone
 });;
 'use strict';
 
-System.register('flagrow/messaging/components/RecipientSearchSource', ['flarum/helpers/highlight', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
+System.register('flagrow/byobu/components/RecipientSearchSource', ['flarum/helpers/highlight', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
     "use strict";
 
     var highlight, avatar, username, RecipientSearchSource;
@@ -422,7 +836,7 @@ System.register('flagrow/messaging/components/RecipientSearchSource', ['flarum/h
 });;
 'use strict';
 
-System.register('flagrow/messaging/helpers/recipientLabel', ['flarum/utils/extract', 'flarum/helpers/username'], function (_export, _context) {
+System.register('flagrow/byobu/helpers/recipientLabel', ['flarum/utils/extract', 'flarum/helpers/username'], function (_export, _context) {
   "use strict";
 
   var extract, username;
@@ -448,7 +862,7 @@ System.register('flagrow/messaging/helpers/recipientLabel', ['flarum/utils/extra
     return m(link ? 'a' : 'span', attrs, m(
       'span',
       { className: 'RecipientLabel-text' },
-      user ? username(user) : app.translator.trans('flagrow-messaging.forum.labels.lib.user_deleted')
+      user ? username(user) : app.translator.trans('flagrow-byobu.forum.labels.lib.user_deleted')
     ));
   }
 
@@ -465,7 +879,7 @@ System.register('flagrow/messaging/helpers/recipientLabel', ['flarum/utils/extra
 });;
 'use strict';
 
-System.register('flagrow/messaging/helpers/recipientsLabel', ['flarum/utils/extract', 'flagrow/messaging/helpers/recipientLabel'], function (_export, _context) {
+System.register('flagrow/byobu/helpers/recipientsLabel', ['flarum/utils/extract', 'flagrow/byobu/helpers/recipientLabel'], function (_export, _context) {
   "use strict";
 
   var extract, recipientLabel;
@@ -497,31 +911,35 @@ System.register('flagrow/messaging/helpers/recipientsLabel', ['flarum/utils/extr
   return {
     setters: [function (_flarumUtilsExtract) {
       extract = _flarumUtilsExtract.default;
-    }, function (_flagrowMessagingHelpersRecipientLabel) {
-      recipientLabel = _flagrowMessagingHelpersRecipientLabel.default;
+    }, function (_flagrowByobuHelpersRecipientLabel) {
+      recipientLabel = _flagrowByobuHelpersRecipientLabel.default;
     }],
     execute: function () {}
   };
 });;
 'use strict';
 
-System.register('flagrow/messaging/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/messaging/addRecipientComposer', 'flagrow/messaging/addRecipientLabels'], function (_export, _context) {
+System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/byobu/addRecipientComposer', 'flagrow/byobu/addRecipientLabels', 'flagrow/byobu/components/PrivateDiscussionIndex'], function (_export, _context) {
     "use strict";
 
-    var Model, Discussion, addRecipientComposer, addRecipientLabels;
+    var Model, Discussion, addRecipientComposer, addRecipientLabels, PrivateDiscussionIndex;
     return {
         setters: [function (_flarumModel) {
             Model = _flarumModel.default;
         }, function (_flarumModelsDiscussion) {
             Discussion = _flarumModelsDiscussion.default;
-        }, function (_flagrowMessagingAddRecipientComposer) {
-            addRecipientComposer = _flagrowMessagingAddRecipientComposer.default;
-        }, function (_flagrowMessagingAddRecipientLabels) {
-            addRecipientLabels = _flagrowMessagingAddRecipientLabels.default;
+        }, function (_flagrowByobuAddRecipientComposer) {
+            addRecipientComposer = _flagrowByobuAddRecipientComposer.default;
+        }, function (_flagrowByobuAddRecipientLabels) {
+            addRecipientLabels = _flagrowByobuAddRecipientLabels.default;
+        }, function (_flagrowByobuComponentsPrivateDiscussionIndex) {
+            PrivateDiscussionIndex = _flagrowByobuComponentsPrivateDiscussionIndex.default;
         }],
         execute: function () {
 
-            app.initializers.add('flagrow-messaging', function (app) {
+            app.initializers.add('flagrow-byobu', function (app) {
+                app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
+
                 Discussion.prototype.recipients = Model.hasMany('recipients');
 
                 addRecipientComposer();
@@ -532,46 +950,44 @@ System.register('flagrow/messaging/main', ['flarum/Model', 'flarum/models/Discus
 });;
 'use strict';
 
-System.register('flagrow/messaging/addRecipientLabels', ['flarum/extend', 'flarum/components/DiscussionListItem', 'flarum/components/DiscussionPage', 'flarum/components/DiscussionHero', 'flagrow/messaging/helpers/recipientsLabel'], function (_export, _context) {
+System.register('flagrow/byobu/components/PrivateDiscussionList', ['flarum/components/DiscussionList'], function (_export, _context) {
     "use strict";
 
-    var extend, DiscussionListItem, DiscussionPage, DiscussionHero, recipientsLabel;
-
-    _export('default', function () {
-
-        extend(DiscussionListItem.prototype, 'infoItems', function (items) {
-            var recipients = this.props.discussion.recipients();
-
-            if (recipients && recipients.length) {
-                items.add('recipients', recipientsLabel(recipients), 20);
-            }
-        });
-
-        extend(DiscussionPage.prototype, 'params', function (params) {
-            params.include.push('recipients');
-        });
-
-        extend(DiscussionHero.prototype, 'items', function (items) {
-            var recipients = this.props.discussion.recipients();
-
-            if (recipients && recipients.length) {
-                items.add('recipients', recipientsLabel(recipients, { link: true }), 4);
-            }
-        });
-    });
-
+    var DiscussionList, PrivateDiscussionList;
     return {
-        setters: [function (_flarumExtend) {
-            extend = _flarumExtend.extend;
-        }, function (_flarumComponentsDiscussionListItem) {
-            DiscussionListItem = _flarumComponentsDiscussionListItem.default;
-        }, function (_flarumComponentsDiscussionPage) {
-            DiscussionPage = _flarumComponentsDiscussionPage.default;
-        }, function (_flarumComponentsDiscussionHero) {
-            DiscussionHero = _flarumComponentsDiscussionHero.default;
-        }, function (_flagrowMessagingHelpersRecipientsLabel) {
-            recipientsLabel = _flagrowMessagingHelpersRecipientsLabel.default;
+        setters: [function (_flarumComponentsDiscussionList) {
+            DiscussionList = _flarumComponentsDiscussionList.default;
         }],
-        execute: function () {}
+        execute: function () {
+            PrivateDiscussionList = function (_DiscussionList) {
+                babelHelpers.inherits(PrivateDiscussionList, _DiscussionList);
+
+                function PrivateDiscussionList() {
+                    babelHelpers.classCallCheck(this, PrivateDiscussionList);
+                    return babelHelpers.possibleConstructorReturn(this, (PrivateDiscussionList.__proto__ || Object.getPrototypeOf(PrivateDiscussionList)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(PrivateDiscussionList, [{
+                    key: 'loadResults',
+                    value: function loadResults(offset) {
+                        var preloadedDiscussions = app.preloadedDocument();
+
+                        if (preloadedDiscussions) {
+                            return m.deferred().resolve(preloadedDiscussions).promise;
+                        }
+
+                        var params = this.requestParams();
+                        params.q = 'q=is:private';
+                        params.page = { offset: offset };
+                        params.include = params.include.join(',');
+
+                        return app.store.find('discussions', params);
+                    }
+                }]);
+                return PrivateDiscussionList;
+            }(DiscussionList);
+
+            _export('default', PrivateDiscussionList);
+        }
     };
 });

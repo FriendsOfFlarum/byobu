@@ -2,7 +2,7 @@ import Modal from 'flarum/components/Modal';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 import Button from 'flarum/components/Button';
 import ItemList from "flarum/utils/ItemList";
-import RecipientSearch from 'flagrow/messaging/components/RecipientSearch';
+import RecipientSearch from 'flagrow/byobu/components/RecipientSearch';
 
 export default class AddRecipientModal extends Modal {
     init() {
@@ -31,8 +31,8 @@ export default class AddRecipientModal extends Modal {
 
     title() {
         return this.props.discussion
-            ? app.translator.trans('flagrow-messaging.forum.modal.titles.update_recipients', {title: <em>{this.props.discussion.title()}</em>})
-            : app.translator.trans('flagrow-messaging.forum.modal.titles.add_recipients');
+            ? app.translator.trans('flagrow-byobu.forum.modal.titles.update_recipients', {title: <em>{this.props.discussion.title()}</em>})
+            : app.translator.trans('flagrow-byobu.forum.modal.titles.add_recipients');
     }
 
     content() {
@@ -47,7 +47,7 @@ export default class AddRecipientModal extends Modal {
                             className: 'Button Button--primary',
                             disabled: false,
                             icon: 'check',
-                            children: app.translator.trans('flagrow-messaging.forum.buttons.submit')
+                            children: app.translator.trans('flagrow-byobu.forum.buttons.submit')
                         })}
                     </div>
                 </div>

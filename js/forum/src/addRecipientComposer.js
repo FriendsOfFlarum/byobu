@@ -1,8 +1,8 @@
 import { extend, override } from 'flarum/extend';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 
-import AddRecipientModal from 'flagrow/messaging/components/AddRecipientModal';
-import recipientsLabel from 'flagrow/messaging/helpers/recipientsLabel';
+import AddRecipientModal from 'flagrow/byobu/components/AddRecipientModal';
+import recipientsLabel from 'flagrow/byobu/helpers/recipientsLabel';
 
 export default function() {
     // Add recipient-selection abilities to the discussion composer.
@@ -26,7 +26,7 @@ export default function() {
             <a className="DiscussionComposer-changeRecipients" onclick={this.chooseRecipients.bind(this)}>
                 {this.recipients.length
                     ? recipientsLabel(this.recipients)
-                    : <span className="RecipientLabel none">{app.translator.trans('flagrow-messaging.forum.buttons.add_recipients')}</span>}
+                    : <span className="RecipientLabel none">{app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')}</span>}
             </a>
         ), 5);
     });

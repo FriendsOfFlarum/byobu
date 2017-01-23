@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Messaging\Providers;
+namespace Flagrow\Byobu\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

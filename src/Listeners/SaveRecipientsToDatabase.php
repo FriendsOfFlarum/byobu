@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Messaging\Listeners;
+namespace Flagrow\Byobu\Listeners;
 
-use Flagrow\Messaging\Events\DiscussionMadePrivate;
+use Flagrow\Byobu\Events\DiscussionMadePrivate;
 use Flarum\Core\Exception\PermissionDeniedException;
 use Flarum\Core\Exception\ValidationException;
 use Flarum\Core\User;
