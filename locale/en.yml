@@ -8,7 +8,7 @@ flagrow-byobu:
         nav:
             private_discussions: Private discussion
         input:
-            search_recipients: Search recipient..
+            search_recipients: Search recipient by typing first three characters..
         modal:
             titles:
                 update_recipients: Update recipients of {title}

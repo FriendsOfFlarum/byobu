@@ -669,15 +669,13 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                             { className: "AddRecipientModal-form-input" },
                             m(
                                 "div",
-                                { className: "RecipientsInput-selected" },
+                                { className: "RecipientsInput-selected RecipientsLabel" },
                                 this.props.selected().toArray().map(function (recipient) {
-                                    return m(
-                                        "span",
-                                        { className: "RecipientsInput-tag", onclick: function onclick() {
-                                                _this3.removeRecipient(recipient);
-                                            } },
-                                        recipientLabel(recipient)
-                                    );
+                                    return recipientLabel(recipient, {
+                                        onclick: function onclick() {
+                                            _this3.removeRecipient(recipient);
+                                        }
+                                    });
                                 })
                             ),
                             m("input", { className: 'RecipientsInput FormControl ' + classList({
@@ -696,18 +694,12 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                                 onblur: function onblur() {
                                     return _this3.hasFocus = false;
                                 } }),
-                            this.loadingSources ? LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' }) : this.value() ? m(
-                                "button",
-                                { className: "Search-clear Button Button--icon Button--link",
-                                    onclick: this.clear.bind(this) },
-                                icon('times-circle')
-                            ) : '',
                             m(
                                 "ul",
                                 { className: "Dropdown-menu Search-results" },
-                                this.value() && this.hasFocus ? this.sources.map(function (source) {
+                                this.value() && this.value().length >= 3 ? this.sources.map(function (source) {
                                     return source.view(_this3.value());
-                                }) : ''
+                                }) : LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' })
                             )
                         );
                     }
@@ -719,17 +711,6 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                         items.add('recipients', new RecipientSearchSource());
 
                         return items;
-                    }
-                }, {
-                    key: "selectResult",
-                    value: function selectResult() {
-                        console.log({
-                            selectResult: true,
-                            value: this.value()
-                        });
-                        if (this.value()) {
-                            this.addRecipient(this.getItem(this.index));
-                        }
                     }
                 }, {
                     key: "clear",
@@ -745,7 +726,7 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
 
                         this.props.selected().add(id, recipient);
 
-                        m.redraw();
+                        this.clear();
                     }
                 }, {
                     key: "removeRecipient",

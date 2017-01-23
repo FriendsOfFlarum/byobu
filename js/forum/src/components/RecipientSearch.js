@@ -35,13 +35,13 @@ export default class RecipientSearch extends Search {
         }
         return (
             <div className="AddRecipientModal-form-input">
-                <div className="RecipientsInput-selected">
+                <div className="RecipientsInput-selected RecipientsLabel">
                     {this.props.selected().toArray().map(recipient =>
-                        <span className="RecipientsInput-tag" onclick={() => {
-                            this.removeRecipient(recipient);
-                        }}>
-                        {recipientLabel(recipient)}
-                      </span>
+                        recipientLabel(recipient, {
+                            onclick: () => {
+                                this.removeRecipient(recipient);
+                            }
+                        })
                     )}
                 </div>
                 <input className={'RecipientsInput FormControl ' + classList({
@@ -56,17 +56,11 @@ export default class RecipientSearch extends Search {
                        oninput={m.withAttr('value', this.value)}
                        onfocus={() => this.hasFocus = true}
                        onblur={() => this.hasFocus = false}/>
-                {this.loadingSources
-                    ? LoadingIndicator.component({size: 'tiny', className: 'Button Button--icon Button--link'})
-                    : this.value()
-                        ? <button className="Search-clear Button Button--icon Button--link"
-                                  onclick={this.clear.bind(this)}>{icon('times-circle')}</button>
-                        : ''}
 
                 <ul className="Dropdown-menu Search-results">
-                    {this.value() && this.hasFocus
+                    {this.value() && this.value().length >= 3
                         ? this.sources.map(source => source.view(this.value()))
-                        : ''}
+                        : LoadingIndicator.component({size: 'tiny', className: 'Button Button--icon Button--link'})}
                 </ul>
             </div>
         );
@@ -85,19 +79,6 @@ export default class RecipientSearch extends Search {
         return items;
     }
 
-    /**
-     * Navigate to the currently selected search result and close the list.
-     */
-    selectResult() {
-        console.log({
-            selectResult: true,
-            value: this.value()
-        });
-        if (this.value()) {
-            this.addRecipient(this.getItem(this.index));
-        }
-    }
-
 
     /**
      * Clear the search input and the current controller's active search.
@@ -113,7 +94,7 @@ export default class RecipientSearch extends Search {
 
         this.props.selected().add(id, recipient);
 
-        m.redraw();
+        this.clear();
     }
     removeRecipient(recipient) {
         this.props.selected().remove(recipient.id());
