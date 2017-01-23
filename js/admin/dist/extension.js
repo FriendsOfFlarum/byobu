@@ -9,7 +9,7 @@ System.register('flagrow/byobu/addPrivateDiscussionPermission', ['flarum/extend'
     extend(PermissionGrid.prototype, 'moderateItems', function (items) {
       items.add('recipients', {
         icon: 'user-secret',
-        label: app.translator.trans('flarum-tags.admin.permissions.tag_discussions_label'),
+        label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions'),
         permission: 'discussion.private'
       }, 95);
     });
