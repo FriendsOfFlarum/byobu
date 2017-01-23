@@ -1,43 +1,28 @@
 import Modal from 'flarum/components/Modal';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 import Button from 'flarum/components/Button';
-import highlight from 'flarum/helpers/highlight';
-import classList from 'flarum/utils/classList';
-import KeyboardNavigatable from 'flarum/utils/KeyboardNavigatable';
+import ItemList from "flarum/utils/ItemList";
 import RecipientSearch from 'flagrow/messaging/components/RecipientSearch';
-import recipientLabel from 'flagrow/messaging/helpers/recipientLabel';
 
 export default class AddRecipientModal extends Modal {
     init() {
         super.init();
 
-        this.selected = [];
-        this.filter = m.prop('');
-        this.index = null;
-        this.focused = false;
-        this.recipients = [];
+        this.selected = m.prop(new ItemList);
 
         if (this.props.selectedRecipients) {
-            this.props.selectedRecipients.map(this.addRecipient.bind(this));
+            this.props.selectedRecipients.map(recipient => {
+                this.selected().add(recipient.id, recipient);
+            });
         } else if (this.props.discussion) {
-            this.props.discussion.recipients().map(this.addRecipient.bind(this));
+            this.props.discussion.recipients().map(recipient => {
+                this.selected().add(recipient.id, recipient);
+            });
         }
 
-        this.navigator = new KeyboardNavigatable();
-        this.navigator
-            .onUp(() => this.setIndex(this.getCurrentNumericIndex() - 1, true))
-            .onDown(() => this.setIndex(this.getCurrentNumericIndex() + 1, true))
-            .onSelect(this.select.bind(this))
-            .onRemove(() => this.selected.splice(this.selected.length - 1, 1));
-    }
-
-    addRecipient(recipient) {
-        console.log(recipient);
-        this.selected.push(recipient);
-    }
-    removeRecipient(recipient) {
-        console.log(recipient);
-        const index = this.selected.indexOf(recipient);
+        this.recipientSearch = RecipientSearch.component({
+            selected: this.selected
+        });
     }
 
     className() {
@@ -51,29 +36,11 @@ export default class AddRecipientModal extends Modal {
     }
 
     content() {
-        let recipients = this.recipients;
-        const filter = this.filter().toLowerCase();
-
-        // Filter out all child tags whose parents have not been selected. This
-        // makes it impossible to select a child if its parent hasn't been selected.
-        // tags = tags.filter(tag => {
-        //     const parent = tag.parent();
-        //     return parent === false || this.selected.indexOf(parent) !== -1;
-        // });
-
-
-        // If the user has entered text in the filter input, then filter by tags
-        // whose name matches what they've entered.
-        if (filter) {
-            recipients = recipients.filter(recipient => recipient.name().substr(0, filter.length).toLowerCase() === filter);
-        }
-
-        if (recipients.indexOf(this.index) === -1) this.index = recipients[0];
 
         return [
             <div className="Modal-body">
                 <div className="AddRecipientModal-form">
-                    {RecipientSearch.component()}
+                    {this.recipientSearch}
                     <div className="AddRecipientModal-form-submit App-primaryControl">
                         {Button.component({
                             type: 'submit',
@@ -88,80 +55,11 @@ export default class AddRecipientModal extends Modal {
         ];
     }
 
-    toggleRecipient(recipient) {
-        const index = this.selected.indexOf(recipient);
-
-        if (index !== -1) {
-            this.removeRecipient(recipient);
-        } else {
-            this.addRecipient(recipient);
-        }
-
-        if (this.filter()) {
-            this.filter('');
-            this.index = this.recipients[0];
-        }
-
-        this.onready();
-    }
-
     select(e) {
         // Ctrl + Enter submits the selection, just Enter completes the current entry
         if (e.metaKey || e.ctrlKey || this.selected.indexOf(this.index) !== -1) {
             if (this.selected.length) {
                 this.$('form').submit();
-            }
-        } else {
-            this.getItem(this.index)[0].dispatchEvent(new Event('click'));
-        }
-    }
-
-    selectableItems() {
-        return this.$('.AddRecipientModal-list > li');
-    }
-
-    getCurrentNumericIndex() {
-        return this.selectableItems().index(
-            this.getItem(this.index)
-        );
-    }
-
-    getItem(index) {
-        return this.selectableItems().filter(`[data-index="${index.id()}"]`);
-    }
-
-    setIndex(index, scrollToItem) {
-        const $items = this.selectableItems();
-        const $dropdown = $items.parent();
-
-        if (index < 0) {
-            index = $items.length - 1;
-        } else if (index >= $items.length) {
-            index = 0;
-        }
-
-        const $item = $items.eq(index);
-
-        this.index = app.store.getById('tags', $item.attr('data-index'));
-
-        m.redraw();
-
-        if (scrollToItem) {
-            const dropdownScroll = $dropdown.scrollTop();
-            const dropdownTop = $dropdown.offset().top;
-            const dropdownBottom = dropdownTop + $dropdown.outerHeight();
-            const itemTop = $item.offset().top;
-            const itemBottom = itemTop + $item.outerHeight();
-
-            let scrollTop;
-            if (itemTop < dropdownTop) {
-                scrollTop = dropdownScroll - dropdownTop + itemTop - parseInt($dropdown.css('padding-top'), 10);
-            } else if (itemBottom > dropdownBottom) {
-                scrollTop = dropdownScroll - dropdownBottom + itemBottom + parseInt($dropdown.css('padding-bottom'), 10);
-            }
-
-            if (typeof scrollTop !== 'undefined') {
-                $dropdown.stop(true).animate({scrollTop}, 100);
             }
         }
     }
@@ -170,7 +68,7 @@ export default class AddRecipientModal extends Modal {
         e.preventDefault();
 
         const discussion = this.props.discussion;
-        const recipients = this.selected;
+        const recipients = this.selected().toArray();
 
         if (discussion) {
             discussion.save({relationships: {recipients}})

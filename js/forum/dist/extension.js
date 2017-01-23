@@ -1,28 +1,18 @@
 'use strict';
 
-System.register('flagrow/messaging/addRecipientComposer', ['flarum/extend', 'flarum/components/IndexPage', 'flarum/components/DiscussionComposer', 'flagrow/messaging/components/AddRecipientModal', 'flagrow/messaging/helpers/recipientsLabel'], function (_export, _context) {
+System.register('flagrow/messaging/addRecipientComposer', ['flarum/extend', 'flarum/components/DiscussionComposer', 'flagrow/messaging/components/AddRecipientModal', 'flagrow/messaging/helpers/recipientsLabel'], function (_export, _context) {
     "use strict";
 
-    var extend, override, IndexPage, DiscussionComposer, AddRecipientModal, recipientsLabel;
+    var extend, override, DiscussionComposer, AddRecipientModal, recipientsLabel;
 
     _export('default', function () {
-        extend(IndexPage.prototype, 'composeNewDiscussion', function (promise) {
-            // const tag = app.store.getBy('tags', 'slug', this.params().tags);
-
-            // if (tag) {
-            //     const parent = tag.parent();
-            //     const tags = parent ? [parent, tag] : [tag];
-            //     promise.then(component => component.tags = tags);
-            // }
-        });
-
-        // Add tag-selection abilities to the discussion composer.
+        // Add recipient-selection abilities to the discussion composer.
         DiscussionComposer.prototype.recipients = [];
         DiscussionComposer.prototype.chooseRecipients = function () {
             var _this = this;
 
             app.modal.show(new AddRecipientModal({
-                selectedRecipients: this.recipients.slice(0),
+                selectedRecipients: this.recipients,
                 onsubmit: function onsubmit(recipients) {
                     _this.recipients = recipients;
                     _this.$('textarea').focus();
@@ -44,14 +34,6 @@ System.register('flagrow/messaging/addRecipientComposer', ['flarum/extend', 'fla
             ), 5);
         });
 
-        override(DiscussionComposer.prototype, 'onsubmit', function (original) {
-            if (!this.recipients.length) {
-                app.modal.show();
-            } else {
-                original();
-            }
-        });
-
         // Add the selected tags as data to submit to the server.
         extend(DiscussionComposer.prototype, 'data', function (data) {
             data.relationships = data.relationships || {};
@@ -63,8 +45,6 @@ System.register('flagrow/messaging/addRecipientComposer', ['flarum/extend', 'fla
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
             override = _flarumExtend.override;
-        }, function (_flarumComponentsIndexPage) {
-            IndexPage = _flarumComponentsIndexPage.default;
         }, function (_flarumComponentsDiscussionComposer) {
             DiscussionComposer = _flarumComponentsDiscussionComposer.default;
         }, function (_flagrowMessagingComponentsAddRecipientModal) {
@@ -77,10 +57,10 @@ System.register('flagrow/messaging/addRecipientComposer', ['flarum/extend', 'fla
 });;
 'use strict';
 
-System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/components/Modal', 'flarum/components/DiscussionPage', 'flarum/components/Button', 'flarum/helpers/highlight', 'flarum/utils/classList', 'flarum/utils/KeyboardNavigatable', 'flagrow/messaging/components/RecipientSearch', 'flagrow/messaging/helpers/recipientLabel'], function (_export, _context) {
+System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/components/Modal', 'flarum/components/DiscussionPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flagrow/messaging/components/RecipientSearch'], function (_export, _context) {
     "use strict";
 
-    var Modal, DiscussionPage, Button, highlight, classList, KeyboardNavigatable, RecipientSearch, recipientLabel, AddRecipientModal;
+    var Modal, DiscussionPage, Button, ItemList, RecipientSearch, AddRecipientModal;
     return {
         setters: [function (_flarumComponentsModal) {
             Modal = _flarumComponentsModal.default;
@@ -88,16 +68,10 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
             DiscussionPage = _flarumComponentsDiscussionPage.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
-        }, function (_flarumHelpersHighlight) {
-            highlight = _flarumHelpersHighlight.default;
-        }, function (_flarumUtilsClassList) {
-            classList = _flarumUtilsClassList.default;
-        }, function (_flarumUtilsKeyboardNavigatable) {
-            KeyboardNavigatable = _flarumUtilsKeyboardNavigatable.default;
+        }, function (_flarumUtilsItemList) {
+            ItemList = _flarumUtilsItemList.default;
         }, function (_flagrowMessagingComponentsRecipientSearch) {
             RecipientSearch = _flagrowMessagingComponentsRecipientSearch.default;
-        }, function (_flagrowMessagingHelpersRecipientLabel) {
-            recipientLabel = _flagrowMessagingHelpersRecipientLabel.default;
         }],
         execute: function () {
             AddRecipientModal = function (_Modal) {
@@ -115,38 +89,21 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
 
                         babelHelpers.get(AddRecipientModal.prototype.__proto__ || Object.getPrototypeOf(AddRecipientModal.prototype), 'init', this).call(this);
 
-                        this.selected = [];
-                        this.filter = m.prop('');
-                        this.index = null;
-                        this.focused = false;
-                        this.recipients = [];
+                        this.selected = m.prop(new ItemList());
 
                         if (this.props.selectedRecipients) {
-                            this.props.selectedRecipients.map(this.addRecipient.bind(this));
+                            this.props.selectedRecipients.map(function (recipient) {
+                                _this2.selected().add(recipient.id, recipient);
+                            });
                         } else if (this.props.discussion) {
-                            this.props.discussion.recipients().map(this.addRecipient.bind(this));
+                            this.props.discussion.recipients().map(function (recipient) {
+                                _this2.selected().add(recipient.id, recipient);
+                            });
                         }
 
-                        this.navigator = new KeyboardNavigatable();
-                        this.navigator.onUp(function () {
-                            return _this2.setIndex(_this2.getCurrentNumericIndex() - 1, true);
-                        }).onDown(function () {
-                            return _this2.setIndex(_this2.getCurrentNumericIndex() + 1, true);
-                        }).onSelect(this.select.bind(this)).onRemove(function () {
-                            return _this2.selected.splice(_this2.selected.length - 1, 1);
+                        this.recipientSearch = RecipientSearch.component({
+                            selected: this.selected
                         });
-                    }
-                }, {
-                    key: 'addRecipient',
-                    value: function addRecipient(recipient) {
-                        console.log(recipient);
-                        this.selected.push(recipient);
-                    }
-                }, {
-                    key: 'removeRecipient',
-                    value: function removeRecipient(recipient) {
-                        console.log(recipient);
-                        var index = this.selected.indexOf(recipient);
                     }
                 }, {
                     key: 'className',
@@ -165,26 +122,6 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
                 }, {
                     key: 'content',
                     value: function content() {
-                        var recipients = this.recipients;
-                        var filter = this.filter().toLowerCase();
-
-                        // Filter out all child tags whose parents have not been selected. This
-                        // makes it impossible to select a child if its parent hasn't been selected.
-                        // tags = tags.filter(tag => {
-                        //     const parent = tag.parent();
-                        //     return parent === false || this.selected.indexOf(parent) !== -1;
-                        // });
-
-
-                        // If the user has entered text in the filter input, then filter by tags
-                        // whose name matches what they've entered.
-                        if (filter) {
-                            recipients = recipients.filter(function (recipient) {
-                                return recipient.name().substr(0, filter.length).toLowerCase() === filter;
-                            });
-                        }
-
-                        if (recipients.indexOf(this.index) === -1) this.index = recipients[0];
 
                         return [m(
                             'div',
@@ -192,7 +129,7 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
                             m(
                                 'div',
                                 { className: 'AddRecipientModal-form' },
-                                RecipientSearch.component(),
+                                this.recipientSearch,
                                 m(
                                     'div',
                                     { className: 'AddRecipientModal-form-submit App-primaryControl' },
@@ -208,84 +145,12 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
                         )];
                     }
                 }, {
-                    key: 'toggleRecipient',
-                    value: function toggleRecipient(recipient) {
-                        var index = this.selected.indexOf(recipient);
-
-                        if (index !== -1) {
-                            this.removeRecipient(recipient);
-                        } else {
-                            this.addRecipient(recipient);
-                        }
-
-                        if (this.filter()) {
-                            this.filter('');
-                            this.index = this.recipients[0];
-                        }
-
-                        this.onready();
-                    }
-                }, {
                     key: 'select',
                     value: function select(e) {
                         // Ctrl + Enter submits the selection, just Enter completes the current entry
                         if (e.metaKey || e.ctrlKey || this.selected.indexOf(this.index) !== -1) {
                             if (this.selected.length) {
                                 this.$('form').submit();
-                            }
-                        } else {
-                            this.getItem(this.index)[0].dispatchEvent(new Event('click'));
-                        }
-                    }
-                }, {
-                    key: 'selectableItems',
-                    value: function selectableItems() {
-                        return this.$('.AddRecipientModal-list > li');
-                    }
-                }, {
-                    key: 'getCurrentNumericIndex',
-                    value: function getCurrentNumericIndex() {
-                        return this.selectableItems().index(this.getItem(this.index));
-                    }
-                }, {
-                    key: 'getItem',
-                    value: function getItem(index) {
-                        return this.selectableItems().filter('[data-index="' + index.id() + '"]');
-                    }
-                }, {
-                    key: 'setIndex',
-                    value: function setIndex(index, scrollToItem) {
-                        var $items = this.selectableItems();
-                        var $dropdown = $items.parent();
-
-                        if (index < 0) {
-                            index = $items.length - 1;
-                        } else if (index >= $items.length) {
-                            index = 0;
-                        }
-
-                        var $item = $items.eq(index);
-
-                        this.index = app.store.getById('tags', $item.attr('data-index'));
-
-                        m.redraw();
-
-                        if (scrollToItem) {
-                            var dropdownScroll = $dropdown.scrollTop();
-                            var dropdownTop = $dropdown.offset().top;
-                            var dropdownBottom = dropdownTop + $dropdown.outerHeight();
-                            var itemTop = $item.offset().top;
-                            var itemBottom = itemTop + $item.outerHeight();
-
-                            var scrollTop = void 0;
-                            if (itemTop < dropdownTop) {
-                                scrollTop = dropdownScroll - dropdownTop + itemTop - parseInt($dropdown.css('padding-top'), 10);
-                            } else if (itemBottom > dropdownBottom) {
-                                scrollTop = dropdownScroll - dropdownBottom + itemBottom + parseInt($dropdown.css('padding-bottom'), 10);
-                            }
-
-                            if (typeof scrollTop !== 'undefined') {
-                                $dropdown.stop(true).animate({ scrollTop: scrollTop }, 100);
                             }
                         }
                     }
@@ -295,7 +160,7 @@ System.register('flagrow/messaging/components/AddRecipientModal', ['flarum/compo
                         e.preventDefault();
 
                         var discussion = this.props.discussion;
-                        var recipients = this.selected;
+                        var recipients = this.selected().toArray();
 
                         if (discussion) {
                             discussion.save({ relationships: { recipients: recipients } }).then(function () {
@@ -357,22 +222,22 @@ System.register("flagrow/messaging/components/RecipientSearch", ["flarum/compone
                     key: "init",
                     value: function init() {
                         babelHelpers.get(RecipientSearch.prototype.__proto__ || Object.getPrototypeOf(RecipientSearch.prototype), "init", this).call(this);
-                        this.selected = new ItemList();
+
+                        console.log(this.props);
                     }
                 }, {
                     key: "config",
                     value: function config(isInitialized) {
                         var _this2 = this;
 
-                        // Highlight the item that is currently selected.
-                        this.setIndex(this.getCurrentNumericIndex());
-
                         if (isInitialized) return;
 
-                        this.$('.Search-results').on('click', function (e) {
-                            var target = _this2.$(e.target);
+                        var $search = this;
 
-                            _this2.addRecipient(target.parents('.UserSearchResult').data('data-index')).bind(_this2);
+                        this.$('.Search-results').on('click', function (e) {
+                            var target = _this2.$('.UserSearchResult.active');
+
+                            $search.addRecipient(target.data('index'));
                         });
 
                         babelHelpers.get(RecipientSearch.prototype.__proto__ || Object.getPrototypeOf(RecipientSearch.prototype), "config", this).call(this, isInitialized);
@@ -391,12 +256,11 @@ System.register("flagrow/messaging/components/RecipientSearch", ["flarum/compone
                             m(
                                 "div",
                                 { className: "RecipientsInput-selected" },
-                                this.selected.toArray().map(function (recipient) {
+                                this.props.selected().toArray().map(function (recipient) {
                                     return m(
                                         "span",
                                         { className: "RecipientsInput-tag", onclick: function onclick() {
                                                 _this3.removeRecipient(recipient);
-                                                _this3.onready();
                                             } },
                                         recipientLabel(recipient)
                                     );
@@ -462,19 +326,24 @@ System.register("flagrow/messaging/components/RecipientSearch", ["flarum/compone
                     }
                 }, {
                     key: "addRecipient",
-                    value: function addRecipient(recipient) {
-                        console.log({
-                            add: recipient
-                        });
-                        this.selected.push(recipient);
+                    value: function addRecipient(id) {
+                        var recipient = this.findRecipient(id);
+
+                        this.props.selected().add(id, recipient);
+
+                        m.redraw();
                     }
                 }, {
                     key: "removeRecipient",
                     value: function removeRecipient(recipient) {
-                        console.log({
-                            remove: recipient
-                        });
-                        this.selected.remove(recipient);
+                        this.props.selected().remove(recipient.id());
+
+                        m.redraw();
+                    }
+                }, {
+                    key: "findRecipient",
+                    value: function findRecipient(id) {
+                        return app.store.getById('users', id);
                     }
                 }]);
                 return RecipientSearch;
@@ -553,11 +422,11 @@ System.register('flagrow/messaging/components/RecipientSearchSource', ['flarum/h
 });;
 'use strict';
 
-System.register('flagrow/messaging/helpers/recipientLabel', ['flarum/utils/extract'], function (_export, _context) {
+System.register('flagrow/messaging/helpers/recipientLabel', ['flarum/utils/extract', 'flarum/helpers/username'], function (_export, _context) {
   "use strict";
 
-  var extract;
-  function recipientLabel(tag) {
+  var extract, username;
+  function recipientLabel(user) {
     var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     attrs.style = attrs.style || {};
@@ -565,16 +434,11 @@ System.register('flagrow/messaging/helpers/recipientLabel', ['flarum/utils/extra
 
     var link = extract(attrs, 'link');
 
-    if (tag) {
-      var color = tag.color();
-      if (color) {
-        attrs.style.backgroundColor = attrs.style.color = color;
-        attrs.className += ' colored';
-      }
+    if (user) {
 
       if (link) {
-        attrs.title = tag.description() || '';
-        attrs.href = app.route('user', { user: user.slug() });
+        attrs.title = user.username() || '';
+        attrs.href = app.route.user(user);
         attrs.config = m.route;
       }
     } else {
@@ -584,7 +448,7 @@ System.register('flagrow/messaging/helpers/recipientLabel', ['flarum/utils/extra
     return m(link ? 'a' : 'span', attrs, m(
       'span',
       { className: 'RecipientLabel-text' },
-      user ? user.username() : app.translator.trans('flagrow-messaging.forum.labels.lib.user_deleted')
+      user ? username(user) : app.translator.trans('flagrow-messaging.forum.labels.lib.user_deleted')
     ));
   }
 
@@ -593,6 +457,8 @@ System.register('flagrow/messaging/helpers/recipientLabel', ['flarum/utils/extra
   return {
     setters: [function (_flarumUtilsExtract) {
       extract = _flarumUtilsExtract.default;
+    }, function (_flarumHelpersUsername) {
+      username = _flarumHelpersUsername.default;
     }],
     execute: function () {}
   };
@@ -611,7 +477,11 @@ System.register('flagrow/messaging/helpers/recipientsLabel', ['flarum/utils/extr
 
     attrs.className = 'RecipientsLabel ' + (attrs.className || '');
 
-    if (recipients) {} else {
+    if (recipients) {
+      recipients.forEach(function (recipient) {
+        children.push(recipientLabel(recipient, { link: link }));
+      });
+    } else {
       children.push(recipientLabel());
     }
 
@@ -635,10 +505,10 @@ System.register('flagrow/messaging/helpers/recipientsLabel', ['flarum/utils/extr
 });;
 'use strict';
 
-System.register('flagrow/messaging/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/messaging/addRecipientComposer'], function (_export, _context) {
+System.register('flagrow/messaging/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/messaging/addRecipientComposer', 'flagrow/messaging/addRecipientLabels'], function (_export, _context) {
     "use strict";
 
-    var Model, Discussion, addRecipientComposer;
+    var Model, Discussion, addRecipientComposer, addRecipientLabels;
     return {
         setters: [function (_flarumModel) {
             Model = _flarumModel.default;
@@ -646,6 +516,8 @@ System.register('flagrow/messaging/main', ['flarum/Model', 'flarum/models/Discus
             Discussion = _flarumModelsDiscussion.default;
         }, function (_flagrowMessagingAddRecipientComposer) {
             addRecipientComposer = _flagrowMessagingAddRecipientComposer.default;
+        }, function (_flagrowMessagingAddRecipientLabels) {
+            addRecipientLabels = _flagrowMessagingAddRecipientLabels.default;
         }],
         execute: function () {
 
@@ -653,7 +525,53 @@ System.register('flagrow/messaging/main', ['flarum/Model', 'flarum/models/Discus
                 Discussion.prototype.recipients = Model.hasMany('recipients');
 
                 addRecipientComposer();
+                addRecipientLabels();
             });
         }
+    };
+});;
+'use strict';
+
+System.register('flagrow/messaging/addRecipientLabels', ['flarum/extend', 'flarum/components/DiscussionListItem', 'flarum/components/DiscussionPage', 'flarum/components/DiscussionHero', 'flagrow/messaging/helpers/recipientsLabel'], function (_export, _context) {
+    "use strict";
+
+    var extend, DiscussionListItem, DiscussionPage, DiscussionHero, recipientsLabel;
+
+    _export('default', function () {
+
+        extend(DiscussionListItem.prototype, 'infoItems', function (items) {
+            var recipients = this.props.discussion.recipients();
+
+            if (recipients && recipients.length) {
+                items.add('recipients', recipientsLabel(recipients), 20);
+            }
+        });
+
+        extend(DiscussionPage.prototype, 'params', function (params) {
+            params.include.push('recipients');
+        });
+
+        extend(DiscussionHero.prototype, 'items', function (items) {
+            var recipients = this.props.discussion.recipients();
+
+            if (recipients && recipients.length) {
+                items.add('recipients', recipientsLabel(recipients, { link: true }), 4);
+            }
+        });
+    });
+
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumComponentsDiscussionListItem) {
+            DiscussionListItem = _flarumComponentsDiscussionListItem.default;
+        }, function (_flarumComponentsDiscussionPage) {
+            DiscussionPage = _flarumComponentsDiscussionPage.default;
+        }, function (_flarumComponentsDiscussionHero) {
+            DiscussionHero = _flarumComponentsDiscussionHero.default;
+        }, function (_flagrowMessagingHelpersRecipientsLabel) {
+            recipientsLabel = _flagrowMessagingHelpersRecipientsLabel.default;
+        }],
+        execute: function () {}
     };
 });

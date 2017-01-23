@@ -1,27 +1,16 @@
 import { extend, override } from 'flarum/extend';
-import IndexPage from 'flarum/components/IndexPage';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 
 import AddRecipientModal from 'flagrow/messaging/components/AddRecipientModal';
 import recipientsLabel from 'flagrow/messaging/helpers/recipientsLabel';
 
 export default function() {
-    extend(IndexPage.prototype, 'composeNewDiscussion', function(promise) {
-        // const tag = app.store.getBy('tags', 'slug', this.params().tags);
-
-        // if (tag) {
-        //     const parent = tag.parent();
-        //     const tags = parent ? [parent, tag] : [tag];
-        //     promise.then(component => component.tags = tags);
-        // }
-    });
-
-    // Add tag-selection abilities to the discussion composer.
+    // Add recipient-selection abilities to the discussion composer.
     DiscussionComposer.prototype.recipients = [];
     DiscussionComposer.prototype.chooseRecipients = function() {
         app.modal.show(
             new AddRecipientModal({
-                selectedRecipients: this.recipients.slice(0),
+                selectedRecipients: this.recipients,
                 onsubmit: recipients => {
                     this.recipients = recipients;
                     this.$('textarea').focus();
@@ -40,22 +29,6 @@ export default function() {
                     : <span className="RecipientLabel none">{app.translator.trans('flagrow-messaging.forum.buttons.add_recipients')}</span>}
             </a>
         ), 5);
-    });
-
-    override(DiscussionComposer.prototype, 'onsubmit', function(original) {
-        if (!this.recipients.length) {
-            app.modal.show(
-                // new TagDiscussionModal({
-                //     selectedTags: [],
-                //     onsubmit: tags => {
-                //         this.tags = tags;
-                //         original();
-                //     }
-                // })
-            );
-        } else {
-            original();
-        }
     });
 
     // Add the selected tags as data to submit to the server.

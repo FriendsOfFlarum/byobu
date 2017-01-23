@@ -8,6 +8,9 @@ export default function recipientsLabel(recipients, attrs = {}) {
   attrs.className = 'RecipientsLabel ' + (attrs.className || '');
 
   if (recipients) {
+      recipients.forEach(recipient => {
+          children.push(recipientLabel(recipient, {link}));
+      });
   } else {
     children.push(recipientLabel());
   }

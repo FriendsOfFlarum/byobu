@@ -1,21 +1,17 @@
 import extract from 'flarum/utils/extract';
+import username from 'flarum/helpers/username';
 
-export default function recipientLabel(tag, attrs = {}) {
+export default function recipientLabel(user, attrs = {}) {
   attrs.style = attrs.style || {};
   attrs.className = 'RecipientLabel ' + (attrs.className || '');
 
   const link = extract(attrs, 'link');
 
-  if (tag) {
-    const color = tag.color();
-    if (color) {
-      attrs.style.backgroundColor = attrs.style.color = color;
-      attrs.className += ' colored';
-    }
+  if (user) {
 
     if (link) {
-      attrs.title = tag.description() || '';
-      attrs.href = app.route('user', {user: user.slug()});
+      attrs.title = user.username() || '';
+      attrs.href = app.route.user(user);
       attrs.config = m.route;
     }
   } else {
@@ -25,7 +21,7 @@ export default function recipientLabel(tag, attrs = {}) {
   return (
     m((link ? 'a' : 'span'), attrs,
       <span className="RecipientLabel-text">
-        {user ? user.username() : app.translator.trans('flagrow-messaging.forum.labels.lib.user_deleted')}
+        {user ? username(user) : app.translator.trans('flagrow-messaging.forum.labels.lib.user_deleted')}
       </span>
     )
   );

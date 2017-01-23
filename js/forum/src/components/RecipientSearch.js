@@ -8,21 +8,22 @@ import recipientLabel from "flagrow/messaging/helpers/recipientLabel";
 import icon from 'flarum/helpers/icon';
 
 export default class RecipientSearch extends Search {
+
     init() {
         super.init();
-        this.selected = new ItemList();
+
+        console.log(this.props);
     }
 
     config(isInitialized) {
-        // Highlight the item that is currently selected.
-        this.setIndex(this.getCurrentNumericIndex());
-
         if (isInitialized) return;
 
-        this.$('.Search-results').on('click', (e) => {
-            var target = this.$(e.target);
+        const $search = this;
 
-            this.addRecipient(target.parents('.UserSearchResult').data('data-index')).bind(this);
+        this.$('.Search-results').on('click', (e) => {
+            var target = this.$('.UserSearchResult.active');
+
+            $search.addRecipient(target.data('index'));
         });
 
         super.config(isInitialized);
@@ -33,15 +34,11 @@ export default class RecipientSearch extends Search {
             this.value('');
         }
         return (
-
-
             <div className="AddRecipientModal-form-input">
-
                 <div className="RecipientsInput-selected">
-                    {this.selected.toArray().map(recipient =>
+                    {this.props.selected().toArray().map(recipient =>
                         <span className="RecipientsInput-tag" onclick={() => {
                             this.removeRecipient(recipient);
-                            this.onready();
                         }}>
                         {recipientLabel(recipient)}
                       </span>
@@ -111,16 +108,20 @@ export default class RecipientSearch extends Search {
         m.redraw();
     }
 
-    addRecipient(recipient) {
-        console.log({
-            add: recipient
-        });
-        this.selected.push(recipient);
+    addRecipient(id) {
+        var recipient = this.findRecipient(id);
+
+        this.props.selected().add(id, recipient);
+
+        m.redraw();
     }
     removeRecipient(recipient) {
-        console.log({
-            remove: recipient
-        });
-        this.selected.remove(recipient);
+        this.props.selected().remove(recipient.id());
+
+        m.redraw();
+    }
+
+    findRecipient(id) {
+        return app.store.getById('users', id);
     }
 }
