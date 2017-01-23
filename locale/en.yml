@@ -2,6 +2,7 @@ flagrow-messaging:
     forum:
         buttons:
             add_recipients: Recipients
+            submit: OK
         labels:
             user_deleted: -deleted-
         input:

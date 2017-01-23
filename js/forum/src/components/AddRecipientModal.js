@@ -32,10 +32,11 @@ export default class AddRecipientModal extends Modal {
     }
 
     addRecipient(recipient) {
-
+        console.log(recipient);
         this.selected.push(recipient);
     }
     removeRecipient(recipient) {
+        console.log(recipient);
         const index = this.selected.indexOf(recipient);
     }
 
@@ -72,58 +73,17 @@ export default class AddRecipientModal extends Modal {
         return [
             <div className="Modal-body">
                 <div className="AddRecipientModal-form">
-                    <div className="AddRecipientModal-form-input">
-                        <div className={'TagsInput FormControl ' + (this.focused ? 'focus' : '')}>
-              <span className="TagsInput-selected">
-                {this.selected.map(recipient =>
-                    <span className="TagsInput-tag" onclick={() => {
-                        this.removeRecipient(recipient);
-                        this.onready();
-                    }}>
-                    {recipientLabel(recipient)}
-                  </span>
-                )}
-              </span>
-                            {RecipientSearch.component()}
-                        </div>
-                    </div>
+                    {RecipientSearch.component()}
                     <div className="AddRecipientModal-form-submit App-primaryControl">
                         {Button.component({
                             type: 'submit',
                             className: 'Button Button--primary',
                             disabled: false,
                             icon: 'check',
-                            children: app.translator.trans('flarum-tags.forum.choose_tags.submit_button')
+                            children: app.translator.trans('flagrow-messaging.forum.buttons.submit')
                         })}
                     </div>
                 </div>
-            </div>,
-
-            <div className="Modal-footer">
-                <ul className="AddRecipientModal-list SelectTagList">
-                    {recipients
-                        .map(recipient => (
-                            <li data-index={recipient.id()}
-                                className={classList({
-                                    selected: this.selected.indexOf(recipient) !== -1,
-                                    active: this.index === recipient
-                                })}
-                                onmouseover={() => this.index = recipient}
-                                onclick={this.toggleRecipient.bind(this, recipient)}
-                            >
-                                {tagIcon(tag)}
-                                <span className="SelectTagListItem-name">
-                  {highlight(tag.name(), filter)}
-                </span>
-                                {tag.description()
-                                    ? (
-                                        <span className="SelectTagListItem-description">
-                      {tag.description()}
-                    </span>
-                                    ) : ''}
-                            </li>
-                        ))}
-                </ul>
             </div>
         ];
     }
@@ -222,7 +182,7 @@ export default class AddRecipientModal extends Modal {
                 });
         }
 
-        if (this.props.onsubmit) this.props.onsubmit(tags);
+        if (this.props.onsubmit) this.props.onsubmit(recipients);
 
         app.modal.close();
 
