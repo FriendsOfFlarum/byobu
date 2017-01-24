@@ -52,7 +52,7 @@ export default class PrivateDiscussionIndex extends Page
             app.cache.privateDiscussionList = new PrivateDiscussionList({params});
         }
 
-        app.history.push('private-index', icon('group'));
+        app.history.push('private-index', icon('map-o'));
 
         this.bodyClass = 'App--index';
     }

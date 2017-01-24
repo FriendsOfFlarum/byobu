@@ -324,7 +324,7 @@ System.register('flagrow/byobu/components/PrivateDiscussionIndex', ['flarum/exte
                             app.cache.privateDiscussionList = new PrivateDiscussionList({ params: params });
                         }
 
-                        app.history.push('private-index', icon('group'));
+                        app.history.push('private-index', icon('map-o'));
 
                         this.bodyClass = 'App--index';
                     }
@@ -596,6 +596,49 @@ System.register('flagrow/byobu/components/PrivateDiscussionIndex', ['flarum/exte
             }(Page);
 
             _export('default', PrivateDiscussionIndex);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/byobu/components/PrivateDiscussionList', ['flarum/components/DiscussionList'], function (_export, _context) {
+    "use strict";
+
+    var DiscussionList, PrivateDiscussionList;
+    return {
+        setters: [function (_flarumComponentsDiscussionList) {
+            DiscussionList = _flarumComponentsDiscussionList.default;
+        }],
+        execute: function () {
+            PrivateDiscussionList = function (_DiscussionList) {
+                babelHelpers.inherits(PrivateDiscussionList, _DiscussionList);
+
+                function PrivateDiscussionList() {
+                    babelHelpers.classCallCheck(this, PrivateDiscussionList);
+                    return babelHelpers.possibleConstructorReturn(this, (PrivateDiscussionList.__proto__ || Object.getPrototypeOf(PrivateDiscussionList)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(PrivateDiscussionList, [{
+                    key: 'loadResults',
+                    value: function loadResults(offset) {
+                        var preloadedDiscussions = app.preloadedDocument();
+
+                        if (preloadedDiscussions) {
+                            return m.deferred().resolve(preloadedDiscussions).promise;
+                        }
+
+                        var params = this.requestParams();
+                        params.q = 'q=is:private';
+                        params.page = { offset: offset };
+                        params.include = params.include.join(',');
+
+                        return app.store.find('discussions', params);
+                    }
+                }]);
+                return PrivateDiscussionList;
+            }(DiscussionList);
+
+            _export('default', PrivateDiscussionList);
         }
     };
 });;
@@ -926,49 +969,6 @@ System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion
                 addRecipientComposer();
                 addRecipientLabels();
             });
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/byobu/components/PrivateDiscussionList', ['flarum/components/DiscussionList'], function (_export, _context) {
-    "use strict";
-
-    var DiscussionList, PrivateDiscussionList;
-    return {
-        setters: [function (_flarumComponentsDiscussionList) {
-            DiscussionList = _flarumComponentsDiscussionList.default;
-        }],
-        execute: function () {
-            PrivateDiscussionList = function (_DiscussionList) {
-                babelHelpers.inherits(PrivateDiscussionList, _DiscussionList);
-
-                function PrivateDiscussionList() {
-                    babelHelpers.classCallCheck(this, PrivateDiscussionList);
-                    return babelHelpers.possibleConstructorReturn(this, (PrivateDiscussionList.__proto__ || Object.getPrototypeOf(PrivateDiscussionList)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(PrivateDiscussionList, [{
-                    key: 'loadResults',
-                    value: function loadResults(offset) {
-                        var preloadedDiscussions = app.preloadedDocument();
-
-                        if (preloadedDiscussions) {
-                            return m.deferred().resolve(preloadedDiscussions).promise;
-                        }
-
-                        var params = this.requestParams();
-                        params.q = 'q=is:private';
-                        params.page = { offset: offset };
-                        params.include = params.include.join(',');
-
-                        return app.store.find('discussions', params);
-                    }
-                }]);
-                return PrivateDiscussionList;
-            }(DiscussionList);
-
-            _export('default', PrivateDiscussionList);
         }
     };
 });

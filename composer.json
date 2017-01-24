@@ -29,7 +29,7 @@
         "flarum-extension": {
             "title": "Flagrow Byōbu",
             "icon": {
-                "name": "group",
+                "name": "map-o",
                 "backgroundColor": "#000",
                 "color": "#87d37c"
             }
