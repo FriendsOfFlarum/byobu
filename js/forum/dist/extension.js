@@ -23,7 +23,6 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
             // Add a tag-selection menu to the discussion composer's header, after the
             // title.
             extend(DiscussionComposer.prototype, 'headerItems', function (items) {
-                console.log(app.forum);
                 if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
                     items.add('recipients', m(
                         "a",
@@ -116,6 +115,41 @@ System.register('flagrow/byobu/addRecipientLabels', ['flarum/extend', 'flarum/co
 });;
 'use strict';
 
+System.register('flagrow/byobu/addRecipientsControl', ['flarum/extend', 'flarum/utils/DiscussionControls', 'flarum/components/Button', 'flagrow/byobu/components/AddRecipientModal'], function (_export, _context) {
+    "use strict";
+
+    var extend, DiscussionControls, Button, AddRecipientModal;
+
+    _export('default', function () {
+        // Add a control allowing the discussion to be moved to another category.
+        extend(DiscussionControls, 'moderationControls', function (items, discussion) {
+            if (discussion.canEditRecipients()) {
+                items.add('recipients', Button.component({
+                    children: app.translator.trans('flagrow-byobu.forum.buttons.edit_recipients'),
+                    icon: 'map-o',
+                    onclick: function onclick() {
+                        return app.modal.show(new AddRecipientModal({ discussion: discussion }));
+                    }
+                }));
+            }
+        });
+    });
+
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumUtilsDiscussionControls) {
+            DiscussionControls = _flarumUtilsDiscussionControls.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flagrowByobuComponentsAddRecipientModal) {
+            AddRecipientModal = _flagrowByobuComponentsAddRecipientModal.default;
+        }],
+        execute: function () {}
+    };
+});;
+'use strict';
+
 System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/components/Modal', 'flarum/components/DiscussionPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flagrow/byobu/components/RecipientSearch'], function (_export, _context) {
     "use strict";
 
@@ -156,9 +190,11 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
                             });
                         } else if (this.props.discussion) {
                             this.props.discussion.recipients().map(function (recipient) {
-                                _this2.selected().add(recipient.id, recipient);
+                                _this2.selected().add(recipient.id(), recipient);
                             });
                         }
+
+                        console.log(this.selected().toArray());
 
                         this.recipientSearch = RecipientSearch.component({
                             selected: this.selected
@@ -680,13 +716,6 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                 }
 
                 babelHelpers.createClass(RecipientSearch, [{
-                    key: "init",
-                    value: function init() {
-                        babelHelpers.get(RecipientSearch.prototype.__proto__ || Object.getPrototypeOf(RecipientSearch.prototype), "init", this).call(this);
-
-                        console.log(this.props);
-                    }
-                }, {
                     key: "config",
                     value: function config(isInitialized) {
                         var _this2 = this;
@@ -864,6 +893,90 @@ System.register('flagrow/byobu/components/RecipientSearchSource', ['flarum/helpe
 });;
 'use strict';
 
+System.register('flagrow/byobu/components/RecipientsModified', ['flarum/components/EventPost', 'flagrow/byobu/helpers/recipientsLabel'], function (_export, _context) {
+    "use strict";
+
+    var EventPost, recipientsLabel, RecipientsModified;
+    return {
+        setters: [function (_flarumComponentsEventPost) {
+            EventPost = _flarumComponentsEventPost.default;
+        }, function (_flagrowByobuHelpersRecipientsLabel) {
+            recipientsLabel = _flagrowByobuHelpersRecipientsLabel.default;
+        }],
+        execute: function () {
+            RecipientsModified = function (_EventPost) {
+                babelHelpers.inherits(RecipientsModified, _EventPost);
+
+                function RecipientsModified() {
+                    babelHelpers.classCallCheck(this, RecipientsModified);
+                    return babelHelpers.possibleConstructorReturn(this, (RecipientsModified.__proto__ || Object.getPrototypeOf(RecipientsModified)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(RecipientsModified, [{
+                    key: 'icon',
+                    value: function icon() {
+                        return 'map-o';
+                    }
+                }, {
+                    key: 'descriptionKey',
+                    value: function descriptionKey() {
+
+                        var localeBase = 'flagrow-byobu.forum.post.recipients_modified.';
+
+                        if (this.props.added.length) {
+                            if (this.props.removed.length) {
+                                return localeBase + 'added_and_removed';
+                            }
+
+                            return localeBase + 'added';
+                        }
+
+                        return localeBase + 'removed';
+                    }
+                }, {
+                    key: 'descriptionData',
+                    value: function descriptionData() {
+                        var data = {};
+
+                        if (this.props.added.length) {
+                            data.added = recipientsLabel(this.props.added, { link: true });
+                        }
+
+                        if (this.props.removed.length) {
+                            data.removed = recipientsLabel(this.props.removed, { link: true });
+                        }
+
+                        return data;
+                    }
+                }], [{
+                    key: 'initProps',
+                    value: function initProps(props) {
+                        babelHelpers.get(RecipientsModified.__proto__ || Object.getPrototypeOf(RecipientsModified), 'initProps', this).call(this, props);
+
+                        var oldRecipients = props.post.content()[0];
+                        var newRecipients = props.post.content()[1];
+
+                        function diffTags(diff1, diff2) {
+                            return diff1.filter(function (item) {
+                                return diff2.indexOf(item) === -1;
+                            }).map(function (id) {
+                                return app.store.getById('users', id);
+                            });
+                        }
+
+                        props.added = diffTags(newRecipients, oldRecipients);
+                        props.removed = diffTags(oldRecipients, newRecipients);
+                    }
+                }]);
+                return RecipientsModified;
+            }(EventPost);
+
+            _export('default', RecipientsModified);
+        }
+    };
+});;
+'use strict';
+
 System.register('flagrow/byobu/helpers/recipientLabel', ['flarum/utils/extract', 'flarum/helpers/username'], function (_export, _context) {
   "use strict";
 
@@ -947,10 +1060,10 @@ System.register('flagrow/byobu/helpers/recipientsLabel', ['flarum/utils/extract'
 });;
 'use strict';
 
-System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/byobu/addRecipientComposer', 'flagrow/byobu/addRecipientLabels', 'flagrow/byobu/addRecipientsControl', 'flagrow/byobu/components/PrivateDiscussionIndex'], function (_export, _context) {
+System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/byobu/addRecipientComposer', 'flagrow/byobu/addRecipientLabels', 'flagrow/byobu/addRecipientsControl', 'flagrow/byobu/components/PrivateDiscussionIndex', 'flagrow/byobu/components/RecipientsModified'], function (_export, _context) {
     "use strict";
 
-    var Model, Discussion, addRecipientComposer, addRecipientLabels, addRecipientsControl, PrivateDiscussionIndex;
+    var Model, Discussion, addRecipientComposer, addRecipientLabels, addRecipientsControl, PrivateDiscussionIndex, RecipientsModified;
     return {
         setters: [function (_flarumModel) {
             Model = _flarumModel.default;
@@ -964,6 +1077,8 @@ System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion
             addRecipientsControl = _flagrowByobuAddRecipientsControl.default;
         }, function (_flagrowByobuComponentsPrivateDiscussionIndex) {
             PrivateDiscussionIndex = _flagrowByobuComponentsPrivateDiscussionIndex.default;
+        }, function (_flagrowByobuComponentsRecipientsModified) {
+            RecipientsModified = _flagrowByobuComponentsRecipientsModified.default;
         }],
         execute: function () {
 
@@ -973,45 +1088,12 @@ System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion
                 Discussion.prototype.recipients = Model.hasMany('recipients');
                 Discussion.prototype.canEditRecipients = Model.attribute('canEditRecipients');
 
+                app.postComponents.recipientsModified = RecipientsModified;
+
                 addRecipientComposer(app);
                 addRecipientLabels();
                 addRecipientsControl();
             });
         }
-    };
-});;
-'use strict';
-
-System.register('flagrow/byobu/addRecipientsControl', ['flarum/extend', 'flarum/utils/DiscussionControls', 'flarum/components/Button', 'flagrow/byobu/components/AddRecipientModal'], function (_export, _context) {
-    "use strict";
-
-    var extend, DiscussionControls, Button, AddRecipientModal;
-
-    _export('default', function () {
-        // Add a control allowing the discussion to be moved to another category.
-        extend(DiscussionControls, 'moderationControls', function (items, discussion) {
-            if (discussion.canEditRecipients()) {
-                items.add('recipients', Button.component({
-                    children: app.translator.trans('flagrow-byobu.forum.buttons.edit_recipients'),
-                    icon: 'map-o',
-                    onclick: function onclick() {
-                        return app.modal.show(new AddRecipientModal({ discussion: discussion }));
-                    }
-                }));
-            }
-        });
-    });
-
-    return {
-        setters: [function (_flarumExtend) {
-            extend = _flarumExtend.extend;
-        }, function (_flarumUtilsDiscussionControls) {
-            DiscussionControls = _flarumUtilsDiscussionControls.default;
-        }, function (_flarumComponentsButton) {
-            Button = _flarumComponentsButton.default;
-        }, function (_flagrowByobuComponentsAddRecipientModal) {
-            AddRecipientModal = _flagrowByobuComponentsAddRecipientModal.default;
-        }],
-        execute: function () {}
     };
 });

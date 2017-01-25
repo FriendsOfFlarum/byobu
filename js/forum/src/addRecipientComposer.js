@@ -21,7 +21,6 @@ export default function (app) {
         // Add a tag-selection menu to the discussion composer's header, after the
         // title.
         extend(DiscussionComposer.prototype, 'headerItems', function (items) {
-            console.log(app.forum);
             if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
                 items.add('recipients', (
                     <a className="DiscussionComposer-changeRecipients" onclick={this.chooseRecipients.bind(this)}>

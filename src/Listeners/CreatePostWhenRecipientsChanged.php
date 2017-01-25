@@ -35,7 +35,7 @@ class CreatePostWhenRecipientsChanged
             $event->discussion->id,
             $event->actor->id,
             $event->oldRecipients->lists('id')->all(),
-            $event->discussion->recipients()->lists('id')->all()
+            $event->discussion->recipients()->lists('users.id')->all()
         );
 
         $event->discussion->mergePost($post);

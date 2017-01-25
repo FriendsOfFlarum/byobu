@@ -14,6 +14,11 @@ flagrow-byobu:
             titles:
                 update_recipients: Update recipients of {title}
                 add_recipients: Add recipients to your discussion
+        post:
+            recipients_modified:
+                added_and_removed: "{username} added recipients {added} and removed {removed}."
+                added: "{username} added recipients {added}."
+                removed: "{username} removed recipients {added}."
     admin:
         permission:
             create_private_discussions: Create private discussions

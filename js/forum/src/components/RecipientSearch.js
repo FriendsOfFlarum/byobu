@@ -9,12 +9,6 @@ import icon from 'flarum/helpers/icon';
 
 export default class RecipientSearch extends Search {
 
-    init() {
-        super.init();
-
-        console.log(this.props);
-    }
-
     config(isInitialized) {
         if (isInitialized) return;
 
