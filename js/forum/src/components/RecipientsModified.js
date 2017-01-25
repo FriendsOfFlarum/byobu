@@ -6,17 +6,19 @@ export default class RecipientsModified extends EventPost {
     static initProps(props) {
         super.initProps(props);
 
+        console.log(props);
+
         const oldRecipients = props.post.content()[0];
         const newRecipients = props.post.content()[1];
 
-        function diffTags(diff1, diff2) {
+        function diff(diff1, diff2) {
             return diff1
                 .filter(item => diff2.indexOf(item) === -1)
                 .map(id => app.store.getById('users', id));
         }
 
-        props.added = diffTags(newRecipients, oldRecipients);
-        props.removed = diffTags(oldRecipients, newRecipients);
+        props.added = diff(newRecipients, oldRecipients);
+        props.removed = diff(oldRecipients, newRecipients);
     }
 
     icon() {

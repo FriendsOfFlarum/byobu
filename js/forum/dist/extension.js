@@ -952,10 +952,12 @@ System.register('flagrow/byobu/components/RecipientsModified', ['flarum/componen
                     value: function initProps(props) {
                         babelHelpers.get(RecipientsModified.__proto__ || Object.getPrototypeOf(RecipientsModified), 'initProps', this).call(this, props);
 
+                        console.log(props);
+
                         var oldRecipients = props.post.content()[0];
                         var newRecipients = props.post.content()[1];
 
-                        function diffTags(diff1, diff2) {
+                        function diff(diff1, diff2) {
                             return diff1.filter(function (item) {
                                 return diff2.indexOf(item) === -1;
                             }).map(function (id) {
@@ -963,8 +965,8 @@ System.register('flagrow/byobu/components/RecipientsModified', ['flarum/componen
                             });
                         }
 
-                        props.added = diffTags(newRecipients, oldRecipients);
-                        props.removed = diffTags(oldRecipients, newRecipients);
+                        props.added = diff(newRecipients, oldRecipients);
+                        props.removed = diff(oldRecipients, newRecipients);
                     }
                 }]);
                 return RecipientsModified;

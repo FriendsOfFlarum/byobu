@@ -2,9 +2,11 @@
 
 namespace Flagrow\Byobu\Listeners;
 
+use Flagrow\Byobu\Posts\RecipientsModified;
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
+use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Core\Discussion;
 use Flarum\Core\User;
@@ -13,6 +15,8 @@ use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
 use Flarum\Event\PrepareApiAttributes;
 use Illuminate\Contracts\Events\Dispatcher;
+use Tobscure\JsonApi\Collection;
+use Tobscure\JsonApi\Relationship;
 
 class AddRecipientsRelationships
 {
@@ -84,6 +88,14 @@ class AddRecipientsRelationships
         }
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canEditRecipients'] = $event->actor->can('editRecipients', $event->model);
+        }
+        if ($event->isSerializer(PostSerializer::class) && $event->model instanceof RecipientsModified) {
+            list($removed, $added) = $event->model->content;
+
+            $event->attributes['oldRecipients'] = new Relationship(new Collection(
+                User::query()->whereIn('id', $removed)->get(),
+                new UserSerializer(app('flarum.gate'))
+            ));
         }
     }
 }
