@@ -195,8 +195,6 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
                             });
                         }
 
-                        console.log(this.selected().toArray());
-
                         this.recipientSearch = RecipientSearch.component({
                             selected: this.selected
                         });

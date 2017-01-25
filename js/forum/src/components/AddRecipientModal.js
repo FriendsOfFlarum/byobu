@@ -20,8 +20,6 @@ export default class AddRecipientModal extends Modal {
             });
         }
 
-        console.log(this.selected().toArray());
-
         this.recipientSearch = RecipientSearch.component({
             selected: this.selected
         });
