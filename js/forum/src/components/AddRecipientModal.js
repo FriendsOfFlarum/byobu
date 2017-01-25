@@ -16,9 +16,11 @@ export default class AddRecipientModal extends Modal {
             });
         } else if (this.props.discussion) {
             this.props.discussion.recipients().map(recipient => {
-                this.selected().add(recipient.id, recipient);
+                this.selected().add(recipient.id(), recipient);
             });
         }
+
+        console.log(this.selected().toArray());
 
         this.recipientSearch = RecipientSearch.component({
             selected: this.selected
