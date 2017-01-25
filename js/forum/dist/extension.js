@@ -727,6 +727,8 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                             var target = _this2.$('.UserSearchResult.active');
 
                             $search.addRecipient(target.data('index'));
+
+                            $search.$('.RecipientsInput').focus();
                         });
 
                         babelHelpers.get(RecipientSearch.prototype.__proto__ || Object.getPrototypeOf(RecipientSearch.prototype), "config", this).call(this, isInitialized);
@@ -739,44 +741,42 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                         if (typeof this.value() === 'undefined') {
                             this.value('');
                         }
-                        return m(
-                            "div",
-                            { className: "AddRecipientModal-form-input" },
-                            m(
-                                "div",
-                                { className: "RecipientsInput-selected RecipientsLabel" },
-                                this.props.selected().toArray().map(function (recipient) {
-                                    return recipientLabel(recipient, {
-                                        onclick: function onclick() {
-                                            _this3.removeRecipient(recipient);
-                                        }
-                                    });
-                                })
-                            ),
-                            m("input", { className: 'RecipientsInput FormControl ' + classList({
-                                    open: !!this.value(),
-                                    focused: !!this.value(),
-                                    active: !!this.value(),
-                                    loading: !!this.loadingSources
-                                }),
-                                type: "search",
-                                placeholder: extractText(app.translator.trans('flagrow-byobu.forum.input.search_recipients')),
-                                value: this.value(),
-                                oninput: m.withAttr('value', this.value),
-                                onfocus: function onfocus() {
-                                    return _this3.hasFocus = true;
-                                },
-                                onblur: function onblur() {
-                                    return _this3.hasFocus = false;
-                                } }),
-                            m(
-                                "ul",
-                                { className: "Dropdown-menu Search-results" },
-                                this.value() && this.value().length >= 3 ? this.sources.map(function (source) {
-                                    return source.view(_this3.value());
-                                }) : LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' })
-                            )
-                        );
+
+                        return m('div', {
+                            className: 'AddRecipientModal-form-input'
+                        }, [m('div', {
+                            className: 'RecipientsInput-selected RecipientsLabel'
+                        }, this.props.selected().toArray().map(function (recipient) {
+                            return recipientLabel(recipient, {
+                                onclick: function onclick() {
+                                    _this3.removeRecipient(recipient);
+                                }
+                            });
+                        })), m('input', {
+                            className: 'RecipientsInput FormControl ' + classList({
+                                open: !!this.value(),
+                                focused: !!this.value(),
+                                active: !!this.value(),
+                                loading: !!this.loadingSources
+                            }),
+                            config: function config(element) {
+                                element.focus();
+                            },
+                            type: 'search',
+                            placeholder: extractText(app.translator.trans('flagrow-byobu.forum.input.search_recipients')),
+                            value: this.value(),
+                            oninput: m.withAttr('value', this.value),
+                            onfocus: function onfocus() {
+                                return _this3.hasFocus = true;
+                            },
+                            onblur: function onblur() {
+                                return _this3.hasFocus = false;
+                            }
+                        }), m('ul', {
+                            className: 'Dropdown-menu Search-results'
+                        }, this.value() && this.value().length >= 3 ? this.sources.map(function (source) {
+                            return source.view(_this3.value());
+                        }) : LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' }))]);
                     }
                 }, {
                     key: "sourceItems",

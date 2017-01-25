@@ -18,6 +18,8 @@ export default class RecipientSearch extends Search {
             var target = this.$('.UserSearchResult.active');
 
             $search.addRecipient(target.data('index'));
+
+            $search.$('.RecipientsInput').focus();
         });
 
         super.config(isInitialized);
@@ -27,37 +29,43 @@ export default class RecipientSearch extends Search {
         if (typeof this.value() === 'undefined') {
             this.value('');
         }
-        return (
-            <div className="AddRecipientModal-form-input">
-                <div className="RecipientsInput-selected RecipientsLabel">
-                    {this.props.selected().toArray().map(recipient =>
-                        recipientLabel(recipient, {
-                            onclick: () => {
-                                this.removeRecipient(recipient);
-                            }
-                        })
-                    )}
-                </div>
-                <input className={'RecipientsInput FormControl ' + classList({
+
+        return m('div', {
+            className: 'AddRecipientModal-form-input'
+        }, [
+            m('div', {
+                className: 'RecipientsInput-selected RecipientsLabel'
+            }, this.props.selected().toArray().map(recipient =>
+                recipientLabel(recipient, {
+                    onclick: () => {
+                        this.removeRecipient(recipient);
+                    }
+                })
+            )),
+            m('input', {
+                className: 'RecipientsInput FormControl ' + classList({
                     open: !!this.value(),
                     focused: !!this.value(),
                     active: !!this.value(),
                     loading: !!this.loadingSources
-                })}
-                       type="search"
-                       placeholder={extractText(app.translator.trans('flagrow-byobu.forum.input.search_recipients'))}
-                       value={this.value()}
-                       oninput={m.withAttr('value', this.value)}
-                       onfocus={() => this.hasFocus = true}
-                       onblur={() => this.hasFocus = false}/>
-
-                <ul className="Dropdown-menu Search-results">
-                    {this.value() && this.value().length >= 3
-                        ? this.sources.map(source => source.view(this.value()))
-                        : LoadingIndicator.component({size: 'tiny', className: 'Button Button--icon Button--link'})}
-                </ul>
-            </div>
-        );
+                }),
+                config: function (element) {
+                    element.focus();
+                },
+                type: 'search',
+                placeholder: extractText(app.translator.trans('flagrow-byobu.forum.input.search_recipients')),
+                value: this.value(),
+                oninput: m.withAttr('value', this.value),
+                onfocus: () => this.hasFocus = true,
+                onblur: () => this.hasFocus = false
+            }),
+            m('ul', {
+                className: 'Dropdown-menu Search-results'
+            }, this.value() && this.value().length >= 3
+                ? this.sources.map(source => source.view(this.value()))
+                : LoadingIndicator.component({size: 'tiny', className: 'Button Button--icon Button--link'})
+            )
+        ]);
     }
 
     /**
