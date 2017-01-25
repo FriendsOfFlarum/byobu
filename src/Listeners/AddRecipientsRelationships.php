@@ -2,11 +2,9 @@
 
 namespace Flagrow\Byobu\Listeners;
 
-use Flagrow\Byobu\Posts\RecipientsModified;
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
-use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Core\Discussion;
 use Flarum\Core\User;
@@ -15,8 +13,6 @@ use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
 use Flarum\Event\PrepareApiAttributes;
 use Illuminate\Contracts\Events\Dispatcher;
-use Tobscure\JsonApi\Collection;
-use Tobscure\JsonApi\Relationship;
 
 class AddRecipientsRelationships
 {
@@ -29,7 +25,7 @@ class AddRecipientsRelationships
         $events->listen(GetModelRelationship::class, [$this, 'getModelRelationship']);
         $events->listen(GetApiRelationship::class, [$this, 'getApiRelationship']);
         $events->listen(PrepareApiAttributes::class, [$this, 'prepareApiAttributes']);
-        $events->listen(ConfigureApiController::class, [$this, 'includeTagsRelationship']);
+        $events->listen(ConfigureApiController::class, [$this, 'includeRecipientsRelationship']);
     }
 
     /**
@@ -55,11 +51,12 @@ class AddRecipientsRelationships
     /**
      * @param ConfigureApiController $event
      */
-    public function includeTagsRelationship(ConfigureApiController $event)
+    public function includeRecipientsRelationship(ConfigureApiController $event)
     {
         if ($event->isController(Controller\ListDiscussionsController::class)
             || $event->isController(Controller\ShowDiscussionController::class)
-            || $event->isController(Controller\CreateDiscussionController::class)) {
+            || $event->isController(Controller\CreateDiscussionController::class)
+        ) {
             $event->addInclude('recipients');
         }
     }
@@ -88,14 +85,6 @@ class AddRecipientsRelationships
         }
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canEditRecipients'] = $event->actor->can('editRecipients', $event->model);
-        }
-        if ($event->isSerializer(PostSerializer::class) && $event->model instanceof RecipientsModified) {
-            list($removed, $added) = $event->model->content;
-
-            $event->attributes['oldRecipients'] = new Relationship(new Collection(
-                User::query()->whereIn('id', $removed)->get(),
-                new UserSerializer(app('flarum.gate'))
-            ));
         }
     }
 }

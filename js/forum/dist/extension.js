@@ -890,9 +890,9 @@ System.register('flagrow/byobu/components/RecipientSearchSource', ['flarum/helpe
         }
     };
 });;
-'use strict';
+"use strict";
 
-System.register('flagrow/byobu/components/RecipientsModified', ['flarum/components/EventPost', 'flagrow/byobu/helpers/recipientsLabel'], function (_export, _context) {
+System.register("flagrow/byobu/components/RecipientsModified", ["flarum/components/EventPost", "flagrow/byobu/helpers/recipientsLabel"], function (_export, _context) {
     "use strict";
 
     var EventPost, recipientsLabel, RecipientsModified;
@@ -912,12 +912,12 @@ System.register('flagrow/byobu/components/RecipientsModified', ['flarum/componen
                 }
 
                 babelHelpers.createClass(RecipientsModified, [{
-                    key: 'icon',
+                    key: "icon",
                     value: function icon() {
                         return 'map-o';
                     }
                 }, {
-                    key: 'descriptionKey',
+                    key: "descriptionKey",
                     value: function descriptionKey() {
 
                         var localeBase = 'flagrow-byobu.forum.post.recipients_modified.';
@@ -933,7 +933,7 @@ System.register('flagrow/byobu/components/RecipientsModified', ['flarum/componen
                         return localeBase + 'removed';
                     }
                 }, {
-                    key: 'descriptionData',
+                    key: "descriptionData",
                     value: function descriptionData() {
                         var data = {};
 
@@ -948,11 +948,9 @@ System.register('flagrow/byobu/components/RecipientsModified', ['flarum/componen
                         return data;
                     }
                 }], [{
-                    key: 'initProps',
+                    key: "initProps",
                     value: function initProps(props) {
-                        babelHelpers.get(RecipientsModified.__proto__ || Object.getPrototypeOf(RecipientsModified), 'initProps', this).call(this, props);
-
-                        console.log(props);
+                        babelHelpers.get(RecipientsModified.__proto__ || Object.getPrototypeOf(RecipientsModified), "initProps", this).call(this, props);
 
                         var oldRecipients = props.post.content()[0];
                         var newRecipients = props.post.content()[1];
@@ -967,12 +965,14 @@ System.register('flagrow/byobu/components/RecipientsModified', ['flarum/componen
 
                         props.added = diff(newRecipients, oldRecipients);
                         props.removed = diff(oldRecipients, newRecipients);
+
+                        console.log(props);
                     }
                 }]);
                 return RecipientsModified;
             }(EventPost);
 
-            _export('default', RecipientsModified);
+            _export("default", RecipientsModified);
         }
     };
 });;

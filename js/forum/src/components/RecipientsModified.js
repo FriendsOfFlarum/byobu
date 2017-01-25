@@ -1,12 +1,9 @@
-import EventPost from 'flarum/components/EventPost';
-
-import recipientsLabel from 'flagrow/byobu/helpers/recipientsLabel';
+import EventPost from "flarum/components/EventPost";
+import recipientsLabel from "flagrow/byobu/helpers/recipientsLabel";
 
 export default class RecipientsModified extends EventPost {
     static initProps(props) {
         super.initProps(props);
-
-        console.log(props);
 
         const oldRecipients = props.post.content()[0];
         const newRecipients = props.post.content()[1];
@@ -19,6 +16,8 @@ export default class RecipientsModified extends EventPost {
 
         props.added = diff(newRecipients, oldRecipients);
         props.removed = diff(oldRecipients, newRecipients);
+
+        console.log(props);
     }
 
     icon() {
