@@ -6,33 +6,40 @@ System.register('flagrow/byobu/addRecipientComposer', ['flarum/extend', 'flarum/
     var extend, override, DiscussionComposer, AddRecipientModal, recipientsLabel;
 
     _export('default', function () {
+
+        var allowed = app.session.user && app.forum.attribute('canStartPrivateDiscussion');
+
         // Add recipient-selection abilities to the discussion composer.
         DiscussionComposer.prototype.recipients = [];
-        DiscussionComposer.prototype.chooseRecipients = function () {
-            var _this = this;
 
-            app.modal.show(new AddRecipientModal({
-                selectedRecipients: this.recipients,
-                onsubmit: function onsubmit(recipients) {
-                    _this.recipients = recipients;
-                    _this.$('textarea').focus();
-                }
-            }));
-        };
+        if (allowed) {
+            DiscussionComposer.prototype.chooseRecipients = function () {
+                var _this = this;
 
-        // Add a tag-selection menu to the discussion composer's header, after the
-        // title.
-        extend(DiscussionComposer.prototype, 'headerItems', function (items) {
-            items.add('recipients', m(
-                'a',
-                { className: 'DiscussionComposer-changeRecipients', onclick: this.chooseRecipients.bind(this) },
-                this.recipients.length ? recipientsLabel(this.recipients) : m(
-                    'span',
-                    { className: 'RecipientLabel none' },
-                    app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')
-                )
-            ), 5);
-        });
+                app.modal.show(new AddRecipientModal({
+                    selectedRecipients: this.recipients,
+                    onsubmit: function onsubmit(recipients) {
+                        _this.recipients = recipients;
+                        _this.$('textarea').focus();
+                    }
+                }));
+            };
+
+            // Add a tag-selection menu to the discussion composer's header, after the
+            // title.
+            extend(DiscussionComposer.prototype, 'headerItems', function (items) {
+                items.add('recipients', m(
+                    'a',
+                    { className: 'DiscussionComposer-changeRecipients', onclick: this.chooseRecipients.bind(this) },
+                    this.recipients.length ? recipientsLabel(this.recipients) : m(
+                        'span',
+                        {
+                            className: 'RecipientLabel none' },
+                        app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')
+                    )
+                ), 5);
+            });
+        }
 
         // Add the selected tags as data to submit to the server.
         extend(DiscussionComposer.prototype, 'data', function (data) {

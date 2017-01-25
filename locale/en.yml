@@ -14,5 +14,5 @@ flagrow-byobu:
                 update_recipients: Update recipients of {title}
                 add_recipients: Add recipients to your discussion
     admin:
-        permissions:
+        permission:
             create_private_discussions: Create private discussions

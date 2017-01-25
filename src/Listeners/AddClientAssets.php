@@ -27,6 +27,13 @@ class AddClientAssets
             ]);
             $app->addBootstrapper('flagrow/byobu/main');
         }
+
+        if ($app->isAdmin()) {
+            $app->addAssets([
+                __DIR__ . '/../../js/admin/dist/extension.js'
+            ]);
+            $app->addBootstrapper('flagrow/byobu/main');
+        }
     }
 
     /**

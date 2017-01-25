@@ -7,7 +7,7 @@ use Flagrow\Byobu\Posts\RecipientsModified;
 use Flarum\Event\ConfigurePostTypes;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class CreatePostWhenTagsAreChanged
+class CreatePostWhenRecipientsChanged
 {
     /**
      * @param Dispatcher $events

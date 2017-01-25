@@ -6,11 +6,11 @@ System.register('flagrow/byobu/addPrivateDiscussionPermission', ['flarum/extend'
   var extend, PermissionGrid;
 
   _export('default', function () {
-    extend(PermissionGrid.prototype, 'moderateItems', function (items) {
-      items.add('recipients', {
-        icon: 'user-secret',
+    extend(PermissionGrid.prototype, 'startItems', function (items) {
+      items.add('startPrivate', {
+        icon: 'map-o',
         label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions'),
-        permission: 'discussion.private'
+        permission: 'startPrivateDiscussion'
       }, 95);
     });
   });
