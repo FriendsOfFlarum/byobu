@@ -38,13 +38,17 @@ class AddRecipientsRelationships
             return $event->model->belongsToMany(
                 User::class,
                 'recipients'
-            );
+            )
+                ->withTimestamps()
+                ->withPivot('deleted_at');
         }
         if ($event->isRelationship(User::class, 'recipients')) {
             return $event->model->belongsToMany(
                 Discussion::class,
                 'recipients'
-            );
+            )
+                ->withTimestamps()
+                ->withPivot('deleted_at');
         }
     }
 
