@@ -19,23 +19,24 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
                     _this.$('textarea').focus();
                 }
             }));
-
-            // Add a tag-selection menu to the discussion composer's header, after the
-            // title.
-            extend(DiscussionComposer.prototype, 'headerItems', function (items) {
-                if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
-                    items.add('recipients', m(
-                        "a",
-                        { className: "DiscussionComposer-changeRecipients", onclick: this.chooseRecipients.bind(this) },
-                        this.recipients.length ? recipientsLabel(this.recipients) : m(
-                            "span",
-                            { className: "RecipientLabel none" },
-                            app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')
-                        )
-                    ), 5);
-                }
-            });
         };
+
+        // Add a tag-selection menu to the discussion composer's header, after the
+        // title.
+        extend(DiscussionComposer.prototype, 'headerItems', function (items) {
+            if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+                items.add('recipients', m(
+                    "a",
+                    { className: "DiscussionComposer-changeRecipients", onclick: this.chooseRecipients.bind(this) },
+                    this.recipients.length ? recipientsLabel(this.recipients) : m(
+                        "span",
+                        {
+                            className: "RecipientLabel none" },
+                        app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')
+                    )
+                ), 5);
+            }
+        });
 
         // Add the selected tags as data to submit to the server.
         extend(DiscussionComposer.prototype, 'data', function (data) {
