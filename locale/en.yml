@@ -18,7 +18,7 @@ flagrow-byobu:
             recipients_modified:
                 added_and_removed: "{username} added recipients {added} and removed {removed}."
                 added: "{username} added recipients {added}."
-                removed: "{username} removed recipients {added}."
+                removed: "{username} removed recipients {removed}."
     admin:
         permission:
             create_private_discussions: Create private discussions

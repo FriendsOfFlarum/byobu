@@ -1004,7 +1004,7 @@ System.register('flagrow/byobu/helpers/recipientLabel', ['flarum/utils/extract',
     return m(link ? 'a' : 'span', attrs, m(
       'span',
       { className: 'RecipientLabel-text' },
-      user ? username(user) : app.translator.trans('flagrow-byobu.forum.labels.lib.user_deleted')
+      user ? username(user) : app.translator.trans('flagrow-byobu.forum.labels.user_deleted')
     ));
   }
 

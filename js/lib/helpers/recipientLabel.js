@@ -21,7 +21,7 @@ export default function recipientLabel(user, attrs = {}) {
   return (
     m((link ? 'a' : 'span'), attrs,
       <span className="RecipientLabel-text">
-        {user ? username(user) : app.translator.trans('flagrow-byobu.forum.labels.lib.user_deleted')}
+        {user ? username(user) : app.translator.trans('flagrow-byobu.forum.labels.user_deleted')}
       </span>
     )
   );
