@@ -1,45 +1,42 @@
-'use strict';
+"use strict";
 
-System.register('flagrow/byobu/addRecipientComposer', ['flarum/extend', 'flarum/components/DiscussionComposer', 'flagrow/byobu/components/AddRecipientModal', 'flagrow/byobu/helpers/recipientsLabel'], function (_export, _context) {
+System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/components/DiscussionComposer", "flagrow/byobu/components/AddRecipientModal", "flagrow/byobu/helpers/recipientsLabel"], function (_export, _context) {
     "use strict";
 
     var extend, override, DiscussionComposer, AddRecipientModal, recipientsLabel;
 
-    _export('default', function () {
-
-        var allowed = app.session.user && app.forum.attribute('canStartPrivateDiscussion');
-
+    _export("default", function (app) {
         // Add recipient-selection abilities to the discussion composer.
         DiscussionComposer.prototype.recipients = [];
 
-        if (allowed) {
-            DiscussionComposer.prototype.chooseRecipients = function () {
-                var _this = this;
+        DiscussionComposer.prototype.chooseRecipients = function () {
+            var _this = this;
 
-                app.modal.show(new AddRecipientModal({
-                    selectedRecipients: this.recipients,
-                    onsubmit: function onsubmit(recipients) {
-                        _this.recipients = recipients;
-                        _this.$('textarea').focus();
-                    }
-                }));
-            };
+            app.modal.show(new AddRecipientModal({
+                selectedRecipients: this.recipients,
+                onsubmit: function onsubmit(recipients) {
+                    _this.recipients = recipients;
+                    _this.$('textarea').focus();
+                }
+            }));
 
             // Add a tag-selection menu to the discussion composer's header, after the
             // title.
             extend(DiscussionComposer.prototype, 'headerItems', function (items) {
-                items.add('recipients', m(
-                    'a',
-                    { className: 'DiscussionComposer-changeRecipients', onclick: this.chooseRecipients.bind(this) },
-                    this.recipients.length ? recipientsLabel(this.recipients) : m(
-                        'span',
-                        {
-                            className: 'RecipientLabel none' },
-                        app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')
-                    )
-                ), 5);
+                console.log(app.forum);
+                if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+                    items.add('recipients', m(
+                        "a",
+                        { className: "DiscussionComposer-changeRecipients", onclick: this.chooseRecipients.bind(this) },
+                        this.recipients.length ? recipientsLabel(this.recipients) : m(
+                            "span",
+                            { className: "RecipientLabel none" },
+                            app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')
+                        )
+                    ), 5);
+                }
             });
-        }
+        };
 
         // Add the selected tags as data to submit to the server.
         extend(DiscussionComposer.prototype, 'data', function (data) {
@@ -950,10 +947,10 @@ System.register('flagrow/byobu/helpers/recipientsLabel', ['flarum/utils/extract'
 });;
 'use strict';
 
-System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/byobu/addRecipientComposer', 'flagrow/byobu/addRecipientLabels', 'flagrow/byobu/components/PrivateDiscussionIndex'], function (_export, _context) {
+System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/byobu/addRecipientComposer', 'flagrow/byobu/addRecipientLabels', 'flagrow/byobu/addRecipientsControl', 'flagrow/byobu/components/PrivateDiscussionIndex'], function (_export, _context) {
     "use strict";
 
-    var Model, Discussion, addRecipientComposer, addRecipientLabels, PrivateDiscussionIndex;
+    var Model, Discussion, addRecipientComposer, addRecipientLabels, addRecipientsControl, PrivateDiscussionIndex;
     return {
         setters: [function (_flarumModel) {
             Model = _flarumModel.default;
@@ -963,6 +960,8 @@ System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion
             addRecipientComposer = _flagrowByobuAddRecipientComposer.default;
         }, function (_flagrowByobuAddRecipientLabels) {
             addRecipientLabels = _flagrowByobuAddRecipientLabels.default;
+        }, function (_flagrowByobuAddRecipientsControl) {
+            addRecipientsControl = _flagrowByobuAddRecipientsControl.default;
         }, function (_flagrowByobuComponentsPrivateDiscussionIndex) {
             PrivateDiscussionIndex = _flagrowByobuComponentsPrivateDiscussionIndex.default;
         }],
@@ -972,10 +971,47 @@ System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion
                 app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
 
                 Discussion.prototype.recipients = Model.hasMany('recipients');
+                Discussion.prototype.canEditRecipients = Model.attribute('canEditRecipients');
 
-                addRecipientComposer();
+                addRecipientComposer(app);
                 addRecipientLabels();
+                addRecipientsControl();
             });
         }
+    };
+});;
+'use strict';
+
+System.register('flagrow/byobu/addRecipientsControl', ['flarum/extend', 'flarum/utils/DiscussionControls', 'flarum/components/Button', 'flagrow/byobu/components/AddRecipientModal'], function (_export, _context) {
+    "use strict";
+
+    var extend, DiscussionControls, Button, AddRecipientModal;
+
+    _export('default', function () {
+        // Add a control allowing the discussion to be moved to another category.
+        extend(DiscussionControls, 'moderationControls', function (items, discussion) {
+            if (discussion.canEditRecipients()) {
+                items.add('recipients', Button.component({
+                    children: app.translator.trans('flagrow-byobu.forum.buttons.edit_recipients'),
+                    icon: 'map-o',
+                    onclick: function onclick() {
+                        return app.modal.show(new AddRecipientModal({ discussion: discussion }));
+                    }
+                }));
+            }
+        });
+    });
+
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumUtilsDiscussionControls) {
+            DiscussionControls = _flarumUtilsDiscussionControls.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flagrowByobuComponentsAddRecipientModal) {
+            AddRecipientModal = _flagrowByobuComponentsAddRecipientModal.default;
+        }],
+        execute: function () {}
     };
 });

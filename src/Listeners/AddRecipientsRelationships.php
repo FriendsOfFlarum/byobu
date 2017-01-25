@@ -4,6 +4,7 @@ namespace Flagrow\Byobu\Listeners;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer\DiscussionSerializer;
+use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Core\Discussion;
 use Flarum\Core\User;
@@ -78,8 +79,11 @@ class AddRecipientsRelationships
      */
     public function prepareApiAttributes(PrepareApiAttributes $event)
     {
+        if ($event->isSerializer(ForumSerializer::class)) {
+            $event->attributes['canStartPrivateDiscussion'] = $event->actor->can('startPrivateDiscussion');
+        }
         if ($event->isSerializer(DiscussionSerializer::class)) {
-            $event->attributes['canStartPrivateDiscussion'] = $event->actor->can('startPrivateDiscussion', $event->model);
+            $event->attributes['canEditRecipients'] = $event->actor->can('editRecipients', $event->model);
         }
     }
 }

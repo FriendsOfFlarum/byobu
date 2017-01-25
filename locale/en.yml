@@ -3,6 +3,7 @@ flagrow-byobu:
         buttons:
             add_recipients: Recipients
             submit: OK
+            edit_recipients: Edit Recipients
         labels:
             user_deleted: -deleted-
         nav:
@@ -16,3 +17,4 @@ flagrow-byobu:
     admin:
         permission:
             create_private_discussions: Create private discussions
+            edit_recipients: Edit recipients of private discussions

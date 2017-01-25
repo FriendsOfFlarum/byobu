@@ -1,28 +1,35 @@
-'use strict';
+"use strict";
 
-System.register('flagrow/byobu/addPrivateDiscussionPermission', ['flarum/extend', 'flarum/components/PermissionGrid'], function (_export, _context) {
-  "use strict";
+System.register("flagrow/byobu/addPrivateDiscussionPermission", ["flarum/extend", "flarum/components/PermissionGrid"], function (_export, _context) {
+    "use strict";
 
-  var extend, PermissionGrid;
+    var extend, PermissionGrid;
 
-  _export('default', function () {
-    extend(PermissionGrid.prototype, 'startItems', function (items) {
-      items.add('startPrivate', {
-        icon: 'map-o',
-        label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions'),
-        permission: 'startPrivateDiscussion'
-      }, 95);
+    _export("default", function () {
+        extend(PermissionGrid.prototype, 'startItems', function (items) {
+            items.add('startPrivate', {
+                icon: 'map-o',
+                label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions'),
+                permission: 'startPrivateDiscussion'
+            }, 95);
+        });
+        extend(PermissionGrid.prototype, 'moderateItems', function (items) {
+            items.add('editRecipients', {
+                icon: 'map-o',
+                label: app.translator.trans('flagrow-byobu.admin.permission.edit_recipients'),
+                permission: 'editRecipients'
+            }, 95);
+        });
     });
-  });
 
-  return {
-    setters: [function (_flarumExtend) {
-      extend = _flarumExtend.extend;
-    }, function (_flarumComponentsPermissionGrid) {
-      PermissionGrid = _flarumComponentsPermissionGrid.default;
-    }],
-    execute: function () {}
-  };
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumComponentsPermissionGrid) {
+            PermissionGrid = _flarumComponentsPermissionGrid.default;
+        }],
+        execute: function () {}
+    };
 });;
 'use strict';
 
