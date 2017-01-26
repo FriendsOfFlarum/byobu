@@ -10,7 +10,7 @@ return [
             $table->integer('discussion_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->timestamps();
-            $table->softDeletes();
+            $table->timestamp('removed_at')->nullable();
 
             $table->foreign('discussion_id')
                 ->references('id')

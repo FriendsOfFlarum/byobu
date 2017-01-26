@@ -40,7 +40,7 @@ class AddRecipientsRelationships
                 'recipients'
             )
                 ->withTimestamps()
-                ->withPivot('deleted_at');
+                ->wherePivot('removed_at', null);
         }
         if ($event->isRelationship(User::class, 'recipients')) {
             return $event->model->belongsToMany(
@@ -48,7 +48,23 @@ class AddRecipientsRelationships
                 'recipients'
             )
                 ->withTimestamps()
-                ->withPivot('deleted_at');
+                ->wherePivot('removed_at', null);
+        }
+        if ($event->isRelationship(Discussion::class, 'oldRecipients')) {
+            return $event->model->belongsToMany(
+                User::class,
+                'recipients'
+            )
+                ->withTimestamps()
+                ->wherePivot('removed_at', '!=', 'null');
+        }
+        if ($event->isRelationship(User::class, 'oldRecipients')) {
+            return $event->model->belongsToMany(
+                Discussion::class,
+                'recipients'
+            )
+                ->withTimestamps()
+                ->wherePivot('removed_at', '!=', 'null');
         }
     }
 
@@ -62,6 +78,7 @@ class AddRecipientsRelationships
             || $event->isController(Controller\CreateDiscussionController::class)
         ) {
             $event->addInclude('recipients');
+            $event->addInclude('oldRecipients');
         }
     }
 
@@ -76,6 +93,12 @@ class AddRecipientsRelationships
         }
         if ($event->isRelationship(UserSerializer::class, 'recipients')) {
             return $event->serializer->hasMany($event->model, DiscussionSerializer::class, 'recipients');
+        }
+        if ($event->isRelationship(DiscussionSerializer::class, 'oldRecipients')) {
+            return $event->serializer->hasMany($event->model, UserSerializer::class, 'oldRecipients');
+        }
+        if ($event->isRelationship(UserSerializer::class, 'oldRecipients')) {
+            return $event->serializer->hasMany($event->model, DiscussionSerializer::class, 'oldRecipients');
         }
     }
 

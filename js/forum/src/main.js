@@ -11,6 +11,7 @@ app.initializers.add('flagrow-byobu', function(app) {
     app.routes.private_discussions = {path: '/private-discussions', component: PrivateDiscussionIndex.component()};
 
     Discussion.prototype.recipients = Model.hasMany('recipients');
+    Discussion.prototype.oldRecipients = Model.hasMany('oldRecipients');
     Discussion.prototype.canEditRecipients = Model.attribute('canEditRecipients');
 
     app.postComponents.recipientsModified = RecipientsModified;

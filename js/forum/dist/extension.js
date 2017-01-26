@@ -1087,6 +1087,7 @@ System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion
                 app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
 
                 Discussion.prototype.recipients = Model.hasMany('recipients');
+                Discussion.prototype.oldRecipients = Model.hasMany('oldRecipients');
                 Discussion.prototype.canEditRecipients = Model.attribute('canEditRecipients');
 
                 app.postComponents.recipientsModified = RecipientsModified;
