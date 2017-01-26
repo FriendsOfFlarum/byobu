@@ -33,7 +33,7 @@ class CreatePostWhenRecipientsChanged
     /**
      * @param DiscussionMadePrivate $event
      */
-    public function whenDiscussionWasTagged(DiscussionMadePrivate $event)
+    public function whenDiscussionWasTagged($event)
     {
         $post = RecipientsModified::reply(
             $event->discussion->id,
