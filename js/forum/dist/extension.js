@@ -965,8 +965,6 @@ System.register("flagrow/byobu/components/RecipientsModified", ["flarum/componen
 
                         props.added = diff(newRecipients, oldRecipients);
                         props.removed = diff(oldRecipients, newRecipients);
-
-                        console.log(props);
                     }
                 }]);
                 return RecipientsModified;

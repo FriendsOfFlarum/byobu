@@ -16,8 +16,6 @@ export default class RecipientsModified extends EventPost {
 
         props.added = diff(newRecipients, oldRecipients);
         props.removed = diff(oldRecipients, newRecipients);
-
-        console.log(props);
     }
 
     icon() {
