@@ -1,5 +1,8 @@
 flagrow-byobu:
     forum:
+        badges:
+            is_private:
+                tooltip: Private discussion
         buttons:
             add_recipients: Recipients
             submit: OK

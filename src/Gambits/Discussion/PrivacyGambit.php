@@ -44,17 +44,32 @@ class PrivacyGambit extends AbstractRegexGambit
     {
         $actor = $search->getActor();
 
-        // Show only public messages.
-        $public = empty($matches) || $negate;
+        // Flag to indicate whether public discussions should be shown.
+        $showPublic = empty($matches) || $negate;
 
-        $method = $actor->exists && !$public ? 'whereExists' : 'whereNotExists';
+        // Flag to indicate whether to show private discussions.
+        $showPrivate = ($showPublic && empty($matches)) || (count($matches) && !$negate);
 
-        $search->getQuery()->$method(function (Builder $query) use ($public, $actor) {
-            $query->select(app('flarum.db')->raw(1))
-                ->from('recipients')
-                ->where('discussions.id', new Expression('discussion_id'));
-            if (!$public) {
-                $query->where('user_id', $actor->id);
+        $search->getQuery()->where(function (Builder $query) use ($showPublic, $showPrivate, $actor) {
+            if ($showPublic) {
+                $query->whereNotExists(function (Builder $query) {
+                    $query->select(app('flarum.db')->raw(1))
+                        ->from('recipients')
+                        ->where('discussions.id', new Expression('discussion_id'))
+                        ->whereNull('removed_at');
+                });
+            }
+            if ($showPrivate && $actor->exists) {
+                $method = $showPublic ? 'orW' : 'w';
+                $method .= 'hereExists';
+
+                $query->{$method}(function (Builder $query) use ($actor) {
+                    $query->select(app('flarum.db')->raw(1))
+                        ->from('recipients')
+                        ->where('discussions.id', new Expression('discussion_id'))
+                        ->whereNull('removed_at')
+                        ->where('user_id', $actor->id);
+                });
             }
         });
     }

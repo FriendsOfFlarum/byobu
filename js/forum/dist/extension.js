@@ -59,14 +59,14 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
         execute: function () {}
     };
 });;
-'use strict';
+"use strict";
 
-System.register('flagrow/byobu/addRecipientLabels', ['flarum/extend', 'flarum/components/DiscussionListItem', 'flarum/components/DiscussionPage', 'flarum/components/DiscussionHero', 'flagrow/byobu/helpers/recipientsLabel'], function (_export, _context) {
+System.register("flagrow/byobu/addRecipientLabels", ["flarum/extend", "flarum/components/DiscussionListItem", "flarum/components/DiscussionPage", "flarum/components/DiscussionHero", "flagrow/byobu/helpers/recipientsLabel"], function (_export, _context) {
     "use strict";
 
     var extend, DiscussionListItem, DiscussionPage, DiscussionHero, recipientsLabel;
 
-    _export('default', function () {
+    _export("default", function () {
 
         /**
          * Adds User labels on the discussion index page.
@@ -75,7 +75,7 @@ System.register('flagrow/byobu/addRecipientLabels', ['flarum/extend', 'flarum/co
             var recipients = this.props.discussion.recipients();
 
             if (recipients && recipients.length) {
-                items.add('recipients', recipientsLabel(recipients), 20);
+                items.add('recipients', recipientsLabel(recipients), 10);
             }
         });
 
@@ -93,7 +93,6 @@ System.register('flagrow/byobu/addRecipientLabels', ['flarum/extend', 'flarum/co
             var recipients = this.props.discussion.recipients();
 
             if (recipients && recipients.length) {
-                items.remove('tags');
                 items.add('recipients', recipientsLabel(recipients, { link: true }), 4);
             }
         });
@@ -1057,12 +1056,12 @@ System.register('flagrow/byobu/helpers/recipientsLabel', ['flarum/utils/extract'
     execute: function () {}
   };
 });;
-'use strict';
+"use strict";
 
-System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion', 'flagrow/byobu/addRecipientComposer', 'flagrow/byobu/addRecipientLabels', 'flagrow/byobu/addRecipientsControl', 'flagrow/byobu/components/PrivateDiscussionIndex', 'flagrow/byobu/components/RecipientsModified'], function (_export, _context) {
+System.register("flagrow/byobu/main", ["flarum/Model", "flarum/models/Discussion", "flagrow/byobu/addRecipientComposer", "flagrow/byobu/addRecipientLabels", "flagrow/byobu/addRecipientsControl", "flagrow/byobu/addHasRecipientsBadge", "flagrow/byobu/components/PrivateDiscussionIndex", "flagrow/byobu/components/RecipientsModified"], function (_export, _context) {
     "use strict";
 
-    var Model, Discussion, addRecipientComposer, addRecipientLabels, addRecipientsControl, PrivateDiscussionIndex, RecipientsModified;
+    var Model, Discussion, addRecipientComposer, addRecipientLabels, addRecipientsControl, addHasRecipientsBadge, PrivateDiscussionIndex, RecipientsModified;
     return {
         setters: [function (_flarumModel) {
             Model = _flarumModel.default;
@@ -1074,6 +1073,8 @@ System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion
             addRecipientLabels = _flagrowByobuAddRecipientLabels.default;
         }, function (_flagrowByobuAddRecipientsControl) {
             addRecipientsControl = _flagrowByobuAddRecipientsControl.default;
+        }, function (_flagrowByobuAddHasRecipientsBadge) {
+            addHasRecipientsBadge = _flagrowByobuAddHasRecipientsBadge.default;
         }, function (_flagrowByobuComponentsPrivateDiscussionIndex) {
             PrivateDiscussionIndex = _flagrowByobuComponentsPrivateDiscussionIndex.default;
         }, function (_flagrowByobuComponentsRecipientsModified) {
@@ -1093,7 +1094,39 @@ System.register('flagrow/byobu/main', ['flarum/Model', 'flarum/models/Discussion
                 addRecipientComposer(app);
                 addRecipientLabels();
                 addRecipientsControl();
+                addHasRecipientsBadge();
             });
         }
+    };
+});;
+"use strict";
+
+System.register("flagrow/byobu/addHasRecipientsBadge", ["flarum/extend", "flarum/models/Discussion", "flarum/components/Badge"], function (_export, _context) {
+    "use strict";
+
+    var extend, Discussion, Badge;
+    function addHasRecipientsBadge() {
+        extend(Discussion.prototype, 'badges', function (badges) {
+            if (this.recipients().length) {
+                badges.add('private', Badge.component({
+                    type: 'private',
+                    label: app.translator.trans('flagrow-byobu.forum.badges.is_private.tooltip'),
+                    icon: 'map'
+                }), 10);
+            }
+        });
+    }
+
+    _export("default", addHasRecipientsBadge);
+
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumModelsDiscussion) {
+            Discussion = _flarumModelsDiscussion.default;
+        }, function (_flarumComponentsBadge) {
+            Badge = _flarumComponentsBadge.default;
+        }],
+        execute: function () {}
     };
 });

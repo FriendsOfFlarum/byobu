@@ -1,8 +1,7 @@
-import { extend } from 'flarum/extend';
-import DiscussionListItem from 'flarum/components/DiscussionListItem';
-import DiscussionPage from 'flarum/components/DiscussionPage';
-import DiscussionHero from 'flarum/components/DiscussionHero';
-
+import {extend} from "flarum/extend";
+import DiscussionListItem from "flarum/components/DiscussionListItem";
+import DiscussionPage from "flarum/components/DiscussionPage";
+import DiscussionHero from "flarum/components/DiscussionHero";
 import recipientsLabel from "flagrow/byobu/helpers/recipientsLabel";
 
 export default function() {
@@ -14,7 +13,7 @@ export default function() {
         const recipients = this.props.discussion.recipients();
 
         if (recipients && recipients.length) {
-            items.add('recipients', recipientsLabel(recipients), 20);
+            items.add('recipients', recipientsLabel(recipients), 10);
         }
     });
 
@@ -33,7 +32,6 @@ export default function() {
         const recipients = this.props.discussion.recipients();
 
         if (recipients && recipients.length) {
-            items.remove('tags');
             items.add('recipients', recipientsLabel(recipients, {link: true}), 4);
         }
     });

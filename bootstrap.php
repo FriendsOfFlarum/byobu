@@ -10,4 +10,5 @@ return function (Dispatcher $events) {
     $events->subscribe(Listeners\AddRecipientsRelationships::class);
     $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
     $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
+    $events->subscribe(Access\DiscussionPolicy::class);
 };
