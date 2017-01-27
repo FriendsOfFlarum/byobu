@@ -1,11 +1,11 @@
 import Search from "flarum/components/Search";
-import RecipientSearchSource from "flagrow/byobu/components/RecipientSearchSource";
+import UserSearchSource from "flagrow/byobu/components/UserSearchSource";
+import GroupSearchSource from "flagrow/byobu/components/GroupSearchSource";
 import ItemList from "flarum/utils/ItemList";
 import classList from "flarum/utils/classList";
 import extractText from "flarum/utils/extractText";
 import LoadingIndicator from "flarum/components/LoadingIndicator";
 import recipientLabel from "flagrow/byobu/helpers/recipientLabel";
-import icon from 'flarum/helpers/icon';
 
 export default class RecipientSearch extends Search {
 
@@ -76,7 +76,8 @@ export default class RecipientSearch extends Search {
     sourceItems() {
         const items = new ItemList();
 
-        items.add('recipients', new RecipientSearchSource());
+        items.add('users', new UserSearchSource());
+        items.add('groups', new GroupSearchSource());
 
         return items;
     }
@@ -91,10 +92,15 @@ export default class RecipientSearch extends Search {
         m.redraw();
     }
 
-    addRecipient(id) {
-        var recipient = this.findRecipient(id);
+    addRecipient(value) {
 
-        this.props.selected().add(id, recipient);
+        var values = value.split(':'),
+            type = values[0],
+            id = values[1];
+
+        var recipient = this.findRecipient(type, id);
+
+        this.props.selected().add(value, recipient);
 
         this.clear();
     }
@@ -104,7 +110,7 @@ export default class RecipientSearch extends Search {
         m.redraw();
     }
 
-    findRecipient(id) {
-        return app.store.getById('users', id);
+    findRecipient(store, id) {
+        return app.store.getById(store, id);
     }
 }

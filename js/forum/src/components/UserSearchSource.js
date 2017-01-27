@@ -2,7 +2,7 @@ import highlight from 'flarum/helpers/highlight';
 import avatar from 'flarum/helpers/avatar';
 import username from 'flarum/helpers/username';
 
-export default class RecipientSearchSource {
+export default class UserSearchSource {
     search(query) {
         return app.store.find('users', {
             filter: {q: query},
@@ -25,7 +25,7 @@ export default class RecipientSearchSource {
                 name.children[0] = highlight(name.children[0], query);
 
                 return (
-                    <li className="UserSearchResult" data-index={user.id()}>
+                    <li className="UserSearchResult" data-index={'users:' + user.id()}>
                         <a>
                             {avatar(user)}
                             {name}

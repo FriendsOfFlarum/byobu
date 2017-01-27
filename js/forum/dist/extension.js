@@ -1,5 +1,36 @@
 "use strict";
 
+System.register("flagrow/byobu/addHasRecipientsBadge", ["flarum/extend", "flarum/models/Discussion", "flarum/components/Badge"], function (_export, _context) {
+    "use strict";
+
+    var extend, Discussion, Badge;
+    function addHasRecipientsBadge() {
+        extend(Discussion.prototype, 'badges', function (badges) {
+            if (this.recipients().length) {
+                badges.add('private', Badge.component({
+                    type: 'private',
+                    label: app.translator.trans('flagrow-byobu.forum.badges.is_private.tooltip'),
+                    icon: 'map'
+                }), 10);
+            }
+        });
+    }
+
+    _export("default", addHasRecipientsBadge);
+
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumModelsDiscussion) {
+            Discussion = _flarumModelsDiscussion.default;
+        }, function (_flarumComponentsBadge) {
+            Badge = _flarumComponentsBadge.default;
+        }],
+        execute: function () {}
+    };
+});;
+"use strict";
+
 System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/components/DiscussionComposer", "flagrow/byobu/components/AddRecipientModal", "flagrow/byobu/helpers/recipientsLabel"], function (_export, _context) {
     "use strict";
 
@@ -275,6 +306,72 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
             }(Modal);
 
             _export('default', AddRecipientModal);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/byobu/components/GroupSearchSource', ['flarum/helpers/highlight'], function (_export, _context) {
+    "use strict";
+
+    var highlight, GroupSearchSource;
+    return {
+        setters: [function (_flarumHelpersHighlight) {
+            highlight = _flarumHelpersHighlight.default;
+        }],
+        execute: function () {
+            GroupSearchSource = function () {
+                function GroupSearchSource() {
+                    babelHelpers.classCallCheck(this, GroupSearchSource);
+                }
+
+                babelHelpers.createClass(GroupSearchSource, [{
+                    key: 'search',
+                    value: function search(query) {
+                        return app.store.find('groups', {
+                            filter: { q: query },
+                            page: { limit: 5 }
+                        });
+                    }
+                }, {
+                    key: 'view',
+                    value: function view(query) {
+                        query = query.toLowerCase();
+
+                        var results = app.store.all('groups').filter(function (group) {
+                            return group.namePlural().toLowerCase().substr(0, query.length) === query;
+                        });
+
+                        if (!results.length) return '';
+
+                        return [m(
+                            'li',
+                            { className: 'Dropdown-header' },
+                            app.translator.trans('flagrow-byobu.forum.search.headings.groups')
+                        ), results.map(function (group) {
+                            var groupName = group.namePlural();
+                            var name = highlight(groupName, query);
+
+                            return m(
+                                'li',
+                                { className: 'GroupSearchResult', 'data-index': 'groups:' + user.id() },
+                                m(
+                                    'a',
+                                    null,
+                                    m(
+                                        'span',
+                                        { 'class': 'groupName' },
+                                        name
+                                    )
+                                )
+                            );
+                        })];
+                    }
+                }]);
+                return GroupSearchSource;
+            }();
+
+            _export('default', GroupSearchSource);
         }
     };
 });;
@@ -682,15 +779,17 @@ System.register('flagrow/byobu/components/PrivateDiscussionList', ['flarum/compo
 });;
 "use strict";
 
-System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/Search", "flagrow/byobu/components/RecipientSearchSource", "flarum/utils/ItemList", "flarum/utils/classList", "flarum/utils/extractText", "flarum/components/LoadingIndicator", "flagrow/byobu/helpers/recipientLabel", "flarum/helpers/icon"], function (_export, _context) {
+System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/Search", "flagrow/byobu/components/UserSearchSource", "flagrow/byobu/components/GroupSearchSource", "flarum/utils/ItemList", "flarum/utils/classList", "flarum/utils/extractText", "flarum/components/LoadingIndicator", "flagrow/byobu/helpers/recipientLabel"], function (_export, _context) {
     "use strict";
 
-    var Search, RecipientSearchSource, ItemList, classList, extractText, LoadingIndicator, recipientLabel, icon, RecipientSearch;
+    var Search, UserSearchSource, GroupSearchSource, ItemList, classList, extractText, LoadingIndicator, recipientLabel, RecipientSearch;
     return {
         setters: [function (_flarumComponentsSearch) {
             Search = _flarumComponentsSearch.default;
-        }, function (_flagrowByobuComponentsRecipientSearchSource) {
-            RecipientSearchSource = _flagrowByobuComponentsRecipientSearchSource.default;
+        }, function (_flagrowByobuComponentsUserSearchSource) {
+            UserSearchSource = _flagrowByobuComponentsUserSearchSource.default;
+        }, function (_flagrowByobuComponentsGroupSearchSource) {
+            GroupSearchSource = _flagrowByobuComponentsGroupSearchSource.default;
         }, function (_flarumUtilsItemList) {
             ItemList = _flarumUtilsItemList.default;
         }, function (_flarumUtilsClassList) {
@@ -701,8 +800,6 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
             LoadingIndicator = _flarumComponentsLoadingIndicator.default;
         }, function (_flagrowByobuHelpersRecipientLabel) {
             recipientLabel = _flagrowByobuHelpersRecipientLabel.default;
-        }, function (_flarumHelpersIcon) {
-            icon = _flarumHelpersIcon.default;
         }],
         execute: function () {
             RecipientSearch = function (_Search) {
@@ -782,7 +879,8 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                     value: function sourceItems() {
                         var items = new ItemList();
 
-                        items.add('recipients', new RecipientSearchSource());
+                        items.add('users', new UserSearchSource());
+                        items.add('groups', new GroupSearchSource());
 
                         return items;
                     }
@@ -795,10 +893,15 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                     }
                 }, {
                     key: "addRecipient",
-                    value: function addRecipient(id) {
-                        var recipient = this.findRecipient(id);
+                    value: function addRecipient(value) {
 
-                        this.props.selected().add(id, recipient);
+                        var values = value.split(':'),
+                            type = values[0],
+                            id = values[1];
+
+                        var recipient = this.findRecipient(type, id);
+
+                        this.props.selected().add(value, recipient);
 
                         this.clear();
                     }
@@ -811,81 +914,14 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                     }
                 }, {
                     key: "findRecipient",
-                    value: function findRecipient(id) {
-                        return app.store.getById('users', id);
+                    value: function findRecipient(store, id) {
+                        return app.store.getById(store, id);
                     }
                 }]);
                 return RecipientSearch;
             }(Search);
 
             _export("default", RecipientSearch);
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/byobu/components/RecipientSearchSource', ['flarum/helpers/highlight', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
-    "use strict";
-
-    var highlight, avatar, username, RecipientSearchSource;
-    return {
-        setters: [function (_flarumHelpersHighlight) {
-            highlight = _flarumHelpersHighlight.default;
-        }, function (_flarumHelpersAvatar) {
-            avatar = _flarumHelpersAvatar.default;
-        }, function (_flarumHelpersUsername) {
-            username = _flarumHelpersUsername.default;
-        }],
-        execute: function () {
-            RecipientSearchSource = function () {
-                function RecipientSearchSource() {
-                    babelHelpers.classCallCheck(this, RecipientSearchSource);
-                }
-
-                babelHelpers.createClass(RecipientSearchSource, [{
-                    key: 'search',
-                    value: function search(query) {
-                        return app.store.find('users', {
-                            filter: { q: query },
-                            page: { limit: 5 }
-                        });
-                    }
-                }, {
-                    key: 'view',
-                    value: function view(query) {
-                        query = query.toLowerCase();
-
-                        var results = app.store.all('users').filter(function (user) {
-                            return user.username().toLowerCase().substr(0, query.length) === query;
-                        });
-
-                        if (!results.length) return '';
-
-                        return [m(
-                            'li',
-                            { className: 'Dropdown-header' },
-                            app.translator.trans('core.forum.search.users_heading')
-                        ), results.map(function (user) {
-                            var name = username(user);
-                            name.children[0] = highlight(name.children[0], query);
-
-                            return m(
-                                'li',
-                                { className: 'UserSearchResult', 'data-index': user.id() },
-                                m(
-                                    'a',
-                                    null,
-                                    avatar(user),
-                                    name
-                                )
-                            );
-                        })];
-                    }
-                }]);
-                return RecipientSearchSource;
-            }();
-
-            _export('default', RecipientSearchSource);
         }
     };
 });;
@@ -970,6 +1006,73 @@ System.register("flagrow/byobu/components/RecipientsModified", ["flarum/componen
             }(EventPost);
 
             _export("default", RecipientsModified);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/byobu/components/UserSearchSource', ['flarum/helpers/highlight', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
+    "use strict";
+
+    var highlight, avatar, username, UserSearchSource;
+    return {
+        setters: [function (_flarumHelpersHighlight) {
+            highlight = _flarumHelpersHighlight.default;
+        }, function (_flarumHelpersAvatar) {
+            avatar = _flarumHelpersAvatar.default;
+        }, function (_flarumHelpersUsername) {
+            username = _flarumHelpersUsername.default;
+        }],
+        execute: function () {
+            UserSearchSource = function () {
+                function UserSearchSource() {
+                    babelHelpers.classCallCheck(this, UserSearchSource);
+                }
+
+                babelHelpers.createClass(UserSearchSource, [{
+                    key: 'search',
+                    value: function search(query) {
+                        return app.store.find('users', {
+                            filter: { q: query },
+                            page: { limit: 5 }
+                        });
+                    }
+                }, {
+                    key: 'view',
+                    value: function view(query) {
+                        query = query.toLowerCase();
+
+                        var results = app.store.all('users').filter(function (user) {
+                            return user.username().toLowerCase().substr(0, query.length) === query;
+                        });
+
+                        if (!results.length) return '';
+
+                        return [m(
+                            'li',
+                            { className: 'Dropdown-header' },
+                            app.translator.trans('core.forum.search.users_heading')
+                        ), results.map(function (user) {
+                            var name = username(user);
+                            name.children[0] = highlight(name.children[0], query);
+
+                            return m(
+                                'li',
+                                { className: 'UserSearchResult', 'data-index': 'users:' + user.id() },
+                                m(
+                                    'a',
+                                    null,
+                                    avatar(user),
+                                    name
+                                )
+                            );
+                        })];
+                    }
+                }]);
+                return UserSearchSource;
+            }();
+
+            _export('default', UserSearchSource);
         }
     };
 });;
@@ -1097,36 +1200,5 @@ System.register("flagrow/byobu/main", ["flarum/Model", "flarum/models/Discussion
                 addHasRecipientsBadge();
             });
         }
-    };
-});;
-"use strict";
-
-System.register("flagrow/byobu/addHasRecipientsBadge", ["flarum/extend", "flarum/models/Discussion", "flarum/components/Badge"], function (_export, _context) {
-    "use strict";
-
-    var extend, Discussion, Badge;
-    function addHasRecipientsBadge() {
-        extend(Discussion.prototype, 'badges', function (badges) {
-            if (this.recipients().length) {
-                badges.add('private', Badge.component({
-                    type: 'private',
-                    label: app.translator.trans('flagrow-byobu.forum.badges.is_private.tooltip'),
-                    icon: 'map'
-                }), 10);
-            }
-        });
-    }
-
-    _export("default", addHasRecipientsBadge);
-
-    return {
-        setters: [function (_flarumExtend) {
-            extend = _flarumExtend.extend;
-        }, function (_flarumModelsDiscussion) {
-            Discussion = _flarumModelsDiscussion.default;
-        }, function (_flarumComponentsBadge) {
-            Badge = _flarumComponentsBadge.default;
-        }],
-        execute: function () {}
     };
 });
