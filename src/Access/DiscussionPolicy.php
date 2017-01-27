@@ -81,7 +81,7 @@ class DiscussionPolicy extends AbstractPolicy
      */
     public function scopeHiddenDiscussionVisibility(ScopeHiddenDiscussionVisibility $event)
     {
-        $event->query->where(function (Builder $query) use ($event) {
+        $event->query->where(function (EloquentBuilder $query) use ($event) {
 
             $query->whereNotExists(function (Builder $query) {
                 $query->select(app('flarum.db')->raw(1))
