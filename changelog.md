@@ -6,3 +6,5 @@
   - Added badge on discussion if private.
   - Disallowing access to page if not a recipient.
   - Added private discussions to the index by default, will be a setting in the future.
+- 0.1.0-beta.3
+  - Fixes 500 error for guests.
