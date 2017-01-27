@@ -5,7 +5,8 @@
         "pm",
         "flarum",
         "flagrow",
-        "messaging"
+        "messaging",
+        "private discussions"
     ],
     "type": "flarum-extension",
     "license": "MIT",
