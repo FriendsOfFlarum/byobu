@@ -9,7 +9,7 @@ flagrow-byobu:
         nav:
             private_discussions: Discussion Privée
         input:
-            search_recipients: Rechercher un destinataire en tapant les 3 première lettres...
+            search_recipients: Rechercher un destinataire en tapant les 3 premières lettres...
         modal:
             titles:
                 update_recipients: Mettre à jour les destinataires de {title}
