@@ -23,7 +23,7 @@ export default class GroupSearchSource {
                 var name = highlight(groupName, query);
 
                 return (
-                    <li className="GroupSearchResult" data-index={'groups:' + user.id()}>
+                    <li className="SearchResult" data-index={'groups:' + group.id()}>
                         <a>
                             <span class="groupName">{name}</span>
                         </a>

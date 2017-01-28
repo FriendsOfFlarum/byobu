@@ -2,6 +2,7 @@
 
 namespace Flagrow\Byobu\Posts;
 
+use Flarum\Core\Discussion;
 use Flarum\Core\Post;
 use Flarum\Core\Post\AbstractEventPost;
 use Flarum\Core\Post\MergeableInterface;
@@ -43,33 +44,24 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
     /**
      * Create a new instance in reply to a discussion.
      *
-     * @param int $discussionId
+     * @param Discussion $discussion
      * @param int $userId
-     * @param array $oldRecipientIds
-     * @param array $newRecipientIds
+     * @param array $oldRecipientUsers
+     * @param array $oldRecipientGroups
      * @return static
      */
-    public static function reply($discussionId, $userId, array $oldRecipientIds, array $newRecipientIds)
+    public static function reply(Discussion $discussion, $userId, array $oldRecipientUsers, array $oldRecipientGroups)
     {
         $post = new static;
 
-        $post->content = static::buildContent($oldRecipientIds, $newRecipientIds);
+        $post->content = [
+            'users' => $oldRecipientUsers,
+            'groups' => $oldRecipientGroups
+        ];
         $post->time = time();
-        $post->discussion_id = $discussionId;
+        $post->discussion_id = $discussion->id;
         $post->user_id = $userId;
 
         return $post;
-    }
-
-    /**
-     * Build the content attribute.
-     *
-     * @param array $oldRecipientIds
-     * @param array $newRecipientIds
-     * @return array
-     */
-    public static function buildContent(array $oldRecipientIds, array $newRecipientIds)
-    {
-        return [array_map('intval', $oldRecipientIds), array_map('intval', $newRecipientIds)];
     }
 }

@@ -35,11 +35,15 @@ class CreatePostWhenRecipientsChanged
      */
     public function whenDiscussionWasTagged($event)
     {
+        if ($event->oldUsers->isEmpty() && $event->oldGroups->isEmpty()) {
+            return;
+        }
+
         $post = RecipientsModified::reply(
-            $event->discussion->id,
+            $event->discussion,
             $event->actor->id,
-            $event->oldRecipients->lists('id')->all(),
-            $event->discussion->recipients()->lists('users.id')->all()
+            $event->oldUsers->toArray(),
+            $event->oldGroups->toArray()
         );
 
         $event->discussion->mergePost($post);

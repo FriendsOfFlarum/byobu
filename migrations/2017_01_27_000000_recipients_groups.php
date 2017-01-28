@@ -7,7 +7,7 @@ return [
     'up' => function (Builder $schema) {
         $schema->table('recipients', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->nullable()->change();
-            $table->integer('group_id')->unsigned()->nullable();
+            $table->integer('group_id')->unsigned()->nullable()->after('user_id');
 
             $table->foreign('group_id')
                 ->references('id')

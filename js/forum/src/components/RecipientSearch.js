@@ -15,7 +15,7 @@ export default class RecipientSearch extends Search {
         const $search = this;
 
         this.$('.Search-results').on('click', (e) => {
-            var target = this.$('.UserSearchResult.active');
+            var target = this.$('.SearchResult.active');
 
             $search.addRecipient(target.data('index'));
 

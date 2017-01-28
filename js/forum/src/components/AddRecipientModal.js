@@ -10,18 +10,21 @@ export default class AddRecipientModal extends Modal {
 
         this.selected = m.prop(new ItemList);
 
-        if (this.props.selectedRecipients) {
-            this.props.selectedRecipients.map(recipient => {
-                this.selected().add(recipient.id, recipient);
-            });
-        } else if (this.props.discussion) {
-            this.props.discussion.recipients().map(recipient => {
-                this.selected().add(recipient.id(), recipient);
-            });
+        if (this.props.discussion) {
+            this.assignInitialRecipients(this.props.discussion);
         }
 
         this.recipientSearch = RecipientSearch.component({
             selected: this.selected
+        });
+    }
+
+    assignInitialRecipients(discussion) {
+        discussion.recipientUsers().map(user => {
+            this.selected().add("users:" + user.id(), user);
+        });
+        discussion.recipientGroups().map(group => {
+            this.selected().add("groups:" + group.id(), group);
         });
     }
 

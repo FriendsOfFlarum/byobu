@@ -25,7 +25,7 @@ export default class UserSearchSource {
                 name.children[0] = highlight(name.children[0], query);
 
                 return (
-                    <li className="UserSearchResult" data-index={'users:' + user.id()}>
+                    <li className="SearchResult" data-index={'users:' + user.id()}>
                         <a>
                             {avatar(user)}
                             {name}
