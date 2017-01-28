@@ -106,7 +106,8 @@ class SaveRecipientsToDatabase
             ];
 
             // Nothing changed.
-            if ($oldRecipients['groups']->all() == $newGroupIds->all() && $oldRecipients['users']->all() == $newUserIds->all()) {
+            if ($oldRecipients['groups']->pluck('id')->all() == $newGroupIds->all()
+                && $oldRecipients['users']->pluck('id')->all() == $newUserIds->all()) {
                 return;
             }
 
@@ -138,7 +139,7 @@ class SaveRecipientsToDatabase
                     $new = ${$variable};
                     $old = $oldRecipients[$type];
 
-                    $recipients = collect($new->toArray())->merge($old->toArray())->unique();
+                    $recipients = collect($new->toArray())->merge($old->pluck('id')->toArray())->unique();
                     $discussion->{$method}()->sync($recipients->all());
 
                     $recipients->each(function($id) use ($discussion, $method, $new) {

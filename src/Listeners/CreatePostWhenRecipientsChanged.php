@@ -42,8 +42,8 @@ class CreatePostWhenRecipientsChanged
         $post = RecipientsModified::reply(
             $event->discussion,
             $event->actor->id,
-            $event->oldUsers->toArray(),
-            $event->oldGroups->toArray()
+            $event->oldUsers->pluck('id')->all(),
+            $event->oldGroups->pluck('id')->all()
         );
 
         $event->discussion->mergePost($post);

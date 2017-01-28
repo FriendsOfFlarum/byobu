@@ -28,9 +28,9 @@ export default function recipientLabel(recipient, attrs = {}) {
 
   return (
     m((link ? 'a' : 'span'), attrs,
-      <span className="RecipientLabel-text">
-          {label}
-      </span>
+        <span className="RecipientLabel-text">
+            {label}
+        </span>
     )
   );
 }

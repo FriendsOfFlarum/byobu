@@ -804,10 +804,10 @@ System.register('flagrow/byobu/components/PrivateDiscussionList', ['flarum/compo
 });;
 "use strict";
 
-System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/Search", "flagrow/byobu/components/UserSearchSource", "flagrow/byobu/components/GroupSearchSource", "flarum/utils/ItemList", "flarum/utils/classList", "flarum/utils/extractText", "flarum/components/LoadingIndicator", "flagrow/byobu/helpers/recipientLabel"], function (_export, _context) {
+System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/Search", "flagrow/byobu/components/UserSearchSource", "flagrow/byobu/components/GroupSearchSource", "flarum/utils/ItemList", "flarum/utils/classList", "flarum/utils/extractText", "flarum/components/LoadingIndicator", "flagrow/byobu/helpers/recipientLabel", "flarum/models/User", "flarum/models/Group"], function (_export, _context) {
     "use strict";
 
-    var Search, UserSearchSource, GroupSearchSource, ItemList, classList, extractText, LoadingIndicator, recipientLabel, RecipientSearch;
+    var Search, UserSearchSource, GroupSearchSource, ItemList, classList, extractText, LoadingIndicator, recipientLabel, User, Group, RecipientSearch;
     return {
         setters: [function (_flarumComponentsSearch) {
             Search = _flarumComponentsSearch.default;
@@ -825,6 +825,10 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
             LoadingIndicator = _flarumComponentsLoadingIndicator.default;
         }, function (_flagrowByobuHelpersRecipientLabel) {
             recipientLabel = _flagrowByobuHelpersRecipientLabel.default;
+        }, function (_flarumModelsUser) {
+            User = _flarumModelsUser.default;
+        }, function (_flarumModelsGroup) {
+            Group = _flarumModelsGroup.default;
         }],
         execute: function () {
             RecipientSearch = function (_Search) {
@@ -933,7 +937,16 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                 }, {
                     key: "removeRecipient",
                     value: function removeRecipient(recipient) {
-                        this.props.selected().remove(recipient.id());
+                        var type;
+
+                        if (recipient instanceof User) {
+                            type = 'users';
+                        }
+                        if (recipient instanceof Group) {
+                            type = 'groups';
+                        }
+
+                        this.props.selected().remove(type + ":" + recipient.id());
 
                         m.redraw();
                     }

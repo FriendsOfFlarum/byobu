@@ -6,6 +6,8 @@ import classList from "flarum/utils/classList";
 import extractText from "flarum/utils/extractText";
 import LoadingIndicator from "flarum/components/LoadingIndicator";
 import recipientLabel from "flagrow/byobu/helpers/recipientLabel";
+import User from 'flarum/models/User';
+import Group from 'flarum/models/Group';
 
 export default class RecipientSearch extends Search {
 
@@ -105,7 +107,16 @@ export default class RecipientSearch extends Search {
         this.clear();
     }
     removeRecipient(recipient) {
-        this.props.selected().remove(recipient.id());
+        var type;
+
+        if (recipient instanceof User) {
+            type = 'users';
+        }
+        if (recipient instanceof Group) {
+            type = 'groups';
+        }
+
+        this.props.selected().remove(type + ":" + recipient.id());
 
         m.redraw();
     }
