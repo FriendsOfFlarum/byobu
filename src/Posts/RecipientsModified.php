@@ -8,6 +8,9 @@ use Flarum\Core\Post\AbstractEventPost;
 use Flarum\Core\Post\MergeableInterface;
 use Illuminate\Support\Arr;
 
+/**
+ * @property array $content
+ */
 class RecipientsModified extends AbstractEventPost implements MergeableInterface
 {
     /**
@@ -19,12 +22,13 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
     protected $types = ['users', 'groups'];
 
     /**
-     * {@inheritdoc}
+     * @param Post|null|RecipientsModified $previous
+     * @return $this|RecipientsModified|Post
      */
     public function saveAfter(Post $previous = null)
     {
         /** @var RecipientsModified $previous */
-        if ($previous instanceof static && is_array($previous->content)) {
+        if ($previous instanceof static) {
 
             $content = [];
 
@@ -44,7 +48,6 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
             }
 
             $newContent = [];
-
 
             foreach ($this->types as $type) {
                 foreach ($this->states as $state) {
