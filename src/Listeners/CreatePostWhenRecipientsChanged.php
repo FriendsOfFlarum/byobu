@@ -2,6 +2,7 @@
 
 namespace Flagrow\Byobu\Listeners;
 
+use Flagrow\Byobu\Events\AbstractRecipientsEvent;
 use Flagrow\Byobu\Events\DiscussionMadePrivate;
 use Flagrow\Byobu\Events\DiscussionMadePublic;
 use Flagrow\Byobu\Events\DiscussionRecipientsChanged;
@@ -31,20 +32,15 @@ class CreatePostWhenRecipientsChanged
     }
 
     /**
-     * @param DiscussionMadePrivate $event
+     * @param AbstractRecipientsEvent $event
      */
-    public function whenDiscussionWasTagged($event)
+    public function whenDiscussionWasTagged(AbstractRecipientsEvent $event)
     {
         if ($event->oldUsers->isEmpty() && $event->oldGroups->isEmpty()) {
             return;
         }
 
-        $post = RecipientsModified::reply(
-            $event->discussion,
-            $event->actor->id,
-            $event->oldUsers->pluck('id')->all(),
-            $event->oldGroups->pluck('id')->all()
-        );
+        $post = RecipientsModified::reply($event);
 
         $event->discussion->mergePost($post);
     }

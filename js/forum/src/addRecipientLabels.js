@@ -39,7 +39,6 @@ export default function() {
      * Adds User labels on the discussion Hero.
      */
     extend(DiscussionHero.prototype, 'items', function(items) {
-
         const discussion = this.props.discussion;
 
         var recipients = [];

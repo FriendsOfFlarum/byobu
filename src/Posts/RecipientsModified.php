@@ -2,10 +2,11 @@
 
 namespace Flagrow\Byobu\Posts;
 
-use Flarum\Core\Discussion;
+use Flagrow\Byobu\Events\AbstractRecipientsEvent;
 use Flarum\Core\Post;
 use Flarum\Core\Post\AbstractEventPost;
 use Flarum\Core\Post\MergeableInterface;
+use Illuminate\Support\Arr;
 
 class RecipientsModified extends AbstractEventPost implements MergeableInterface
 {
@@ -14,22 +15,66 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
      */
     public static $type = 'recipientsModified';
 
+    protected $states = ['new', 'old'];
+    protected $types = ['users', 'groups'];
+
     /**
      * {@inheritdoc}
      */
     public function saveAfter(Post $previous = null)
     {
-        // If the previous post is another 'discussion tagged' post, and it's
-        // by the same user, then we can merge this post into it. If we find
-        // that we've in fact reverted the tag changes, delete it. Otherwise,
-        // update its content.
-        if ($previous instanceof static) {
-            if ($previous->content[0] == $this->content[1]) {
+        /** @var RecipientsModified $previous */
+        if ($previous instanceof static && is_array($previous->content)) {
+
+            $content = [];
+
+            foreach ($this->states as $state) {
+                foreach ($this->types as $type) {
+                    $values = array_merge(
+                        Arr::get($previous->content, "$state.$type", []),
+                        Arr::get($this->content, "$state.$type", [])
+                    );
+
+                    $values = array_unique($values);
+
+                    if (!empty($values)) {
+                        $content[$state][$type] = $values;
+                    }
+                }
+            }
+
+            $newContent = [];
+
+
+            foreach ($this->types as $type) {
+                foreach ($this->states as $state) {
+
+                    $reverseState = collect($this->states)->filter(function($value) use ($state) {
+                        return $value != $state;
+                    })->first();
+
+                    if (Arr::get($content, "$state.$type")) {
+                        $newContent[$state][$type] = collect(Arr::get($content, "$state.$type", []))->filter(function($id) use ($content, $reverseState, $type) {
+                            return !in_array($id, Arr::get($content, "$reverseState.$type", []));
+                        })->filter()->all();
+
+                        if (empty($newContent[$state][$type])) {
+                            unset($newContent[$state]);
+                        }
+                    }
+                }
+
+                foreach ($this->states as $state) {
+                    if (empty($newContent[$state])) {
+                        unset($newContent[$state]);
+                    }
+                }
+            }
+
+            if (empty($newContent)) {
                 $previous->delete();
             } else {
-                $previous->content = static::buildContent($previous->content[0], $this->content[1]);
-                $previous->time = $this->time;
-
+                $previous->content = $newContent;
                 $previous->save();
             }
 
@@ -43,25 +88,28 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
 
     /**
      * Create a new instance in reply to a discussion.
-     *
-     * @param Discussion $discussion
-     * @param int $userId
-     * @param array $oldRecipientUsers
-     * @param array $oldRecipientGroups
+     * @param AbstractRecipientsEvent $event
      * @return static
      */
-    public static function reply(Discussion $discussion, $userId, array $oldRecipientUsers, array $oldRecipientGroups)
+    public static function reply(AbstractRecipientsEvent $event)
     {
         $post = new static;
 
         $post->content = [
-            'users' => $oldRecipientUsers,
-            'groups' => $oldRecipientGroups
+            'new' => [
+                'users' => $event->newUsers->all(),
+                'groups' => $event->newGroups->all()
+            ],
+            'old' => [
+                'users' => $event->oldUsers->pluck('id')->all(),
+                'groups' => $event->oldGroups->pluck('id')->all()
+            ]
         ];
         $post->time = time();
-        $post->discussion_id = $discussion->id;
-        $post->user_id = $userId;
+        $post->discussion_id = $event->discussion->id;
+        $post->user_id = $event->actor->id;
 
         return $post;
     }
 }
+

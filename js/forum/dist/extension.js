@@ -131,7 +131,6 @@ System.register("flagrow/byobu/addRecipientLabels", ["flarum/extend", "flarum/co
          * Adds User labels on the discussion Hero.
          */
         extend(DiscussionHero.prototype, 'items', function (items) {
-
             var discussion = this.props.discussion;
 
             var recipients = [];
@@ -1025,19 +1024,31 @@ System.register("flagrow/byobu/components/RecipientsModified", ["flarum/componen
                     value: function initProps(props) {
                         babelHelpers.get(RecipientsModified.__proto__ || Object.getPrototypeOf(RecipientsModified), "initProps", this).call(this, props);
 
-                        var oldRecipients = props.post.content()[0];
-                        var newRecipients = props.post.content()[1];
-
-                        function diff(diff1, diff2) {
+                        function diff(diff1, diff2, store) {
                             return diff1.filter(function (item) {
                                 return diff2.indexOf(item) === -1;
                             }).map(function (id) {
-                                return app.store.getById('users', id);
+                                return app.store.getById(store, id);
                             });
                         }
 
-                        props.added = diff(newRecipients, oldRecipients);
-                        props.removed = diff(oldRecipients, newRecipients);
+                        var content = props.post.content();
+
+                        // For event posts existing before groups functionality.
+                        if (!content['new'] && content.length == 2) {
+                            var oldRecipients = props.post.content()[0];
+                            var newRecipients = props.post.content()[1];
+                            props.added = diff(newRecipients, oldRecipients, 'users');
+                            props.removed = diff(oldRecipients, newRecipients, 'users');
+                        } else {
+                            var usersAdded = diff(content['new']['users'], content['old']['users'], 'users');
+                            var usersRemoved = diff(content['old']['users'], content['new']['users'], 'users');
+                            var groupsAdded = diff(content['new']['groups'], content['old']['groups'], 'groups');
+                            var groupsRemoved = diff(content['old']['groups'], content['new']['groups'], 'groups');
+
+                            props.added = usersAdded.concat(groupsAdded);
+                            props.removed = usersRemoved.concat(groupsRemoved);
+                        }
                     }
                 }]);
                 return RecipientsModified;

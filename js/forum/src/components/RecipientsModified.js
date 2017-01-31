@@ -5,17 +5,29 @@ export default class RecipientsModified extends EventPost {
     static initProps(props) {
         super.initProps(props);
 
-        const oldRecipients = props.post.content()[0];
-        const newRecipients = props.post.content()[1];
-
-        function diff(diff1, diff2) {
+        function diff(diff1, diff2, store) {
             return diff1
                 .filter(item => diff2.indexOf(item) === -1)
-                .map(id => app.store.getById('users', id));
+                .map(id => app.store.getById(store, id));
         }
 
-        props.added = diff(newRecipients, oldRecipients);
-        props.removed = diff(oldRecipients, newRecipients);
+        const content = props.post.content();
+
+        // For event posts existing before groups functionality.
+        if (!content['new'] && content.length == 2) {
+            const oldRecipients = props.post.content()[0];
+            const newRecipients = props.post.content()[1];
+            props.added = diff(newRecipients, oldRecipients, 'users');
+            props.removed = diff(oldRecipients, newRecipients, 'users');
+        } else {
+            var usersAdded = diff(content['new']['users'], content['old']['users'], 'users');
+            var usersRemoved = diff(content['old']['users'], content['new']['users'], 'users');
+            var groupsAdded = diff(content['new']['groups'], content['old']['groups'], 'groups');
+            var groupsRemoved = diff(content['old']['groups'], content['new']['groups'], 'groups');
+
+            props.added = usersAdded.concat(groupsAdded);
+            props.removed = usersRemoved.concat(groupsRemoved);
+        }
     }
 
     icon() {

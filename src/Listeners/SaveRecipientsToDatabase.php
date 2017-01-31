@@ -116,18 +116,18 @@ class SaveRecipientsToDatabase
                 && (!$newUserIds->isEmpty() || !$newGroupIds->isEmpty())
             ) {
                 $discussion->raise(
-                    new DiscussionMadePrivate($discussion, $actor, $oldRecipients['users'], $oldRecipients['groups'])
+                    new DiscussionMadePrivate($discussion, $actor, $newUserIds, $newGroupIds, $oldRecipients['users'], $oldRecipients['groups'])
                 );
             // Discussion now public.
             } elseif (!$oldRecipients['users']->isEmpty() && !$oldRecipients['groups']->isEmpty()
                 && ($newUserIds->isEmpty() || $newGroupIds->isEmpty())
             ) {
                 $discussion->raise(
-                    new DiscussionMadePublic($discussion, $actor, $oldRecipients['users'], $oldRecipients['groups'])
+                    new DiscussionMadePublic($discussion, $actor, $newUserIds, $newGroupIds, $oldRecipients['users'], $oldRecipients['groups'])
                 );
             } else {
                 $discussion->raise(
-                    new DiscussionRecipientsChanged($discussion, $actor, $oldRecipients['users'], $oldRecipients['groups'])
+                    new DiscussionRecipientsChanged($discussion, $actor, $newUserIds, $newGroupIds, $oldRecipients['users'], $oldRecipients['groups'])
                 );
             }
 
