@@ -15,23 +15,6 @@ class PrivacyGambit extends AbstractRegexGambit
     protected $pattern = 'is:private';
 
     /**
-     * {@inheritdoc}
-     */
-    public function apply(AbstractSearch $search, $bit)
-    {
-        if ($matches = $this->match($bit)) {
-            list($negate) = array_splice($matches, 1, 1);
-        } else {
-            $matches = [];
-            $negate = false;
-        }
-
-        $this->conditions($search, $matches, (bool)$negate);
-
-        return true;
-    }
-
-    /**
      * Apply conditions to the search, given that the gambit was matched.
      *
      * @param AbstractSearch $search The search object.
