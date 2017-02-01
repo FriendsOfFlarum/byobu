@@ -1,7 +1,7 @@
 import {extend, override} from "flarum/extend";
 import DiscussionComposer from "flarum/components/DiscussionComposer";
 import AddRecipientModal from "flagrow/byobu/components/AddRecipientModal";
-import recipientsLabel from "flagrow/byobu/helpers/recipientsLabel";
+import recipientCountLabel from "flagrow/byobu/helpers/recipientCountLabel";
 
 export default function (app) {
     // Add recipient-selection abilities to the discussion composer.
@@ -11,7 +11,7 @@ export default function (app) {
         app.modal.show(
             new AddRecipientModal({
                 selectedRecipients: this.recipients,
-                onsubmit: recipients => {
+                onsubmit: (recipients) => {
                     this.recipients = recipients;
                     this.$('textarea').focus();
                 }
@@ -23,12 +23,14 @@ export default function (app) {
     // title.
     extend(DiscussionComposer.prototype, 'headerItems', function (items) {
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+
+            const recipients = this.recipients ? this.recipients.toArray() : [];
+
             items.add('recipients', (
                 <a className="DiscussionComposer-changeRecipients" onclick={this.chooseRecipients.bind(this)}>
-                    {this.recipients.length
-                        ? recipientsLabel(this.recipients)
-                        : <span
-                            className="RecipientLabel none">{app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')}</span>}
+                    {recipients.length
+                        ? recipientCountLabel(recipients.length)
+                        : <span className="RecipientLabel none">{app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')}</span>}
                 </a>
             ), 5);
         }

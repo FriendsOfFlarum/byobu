@@ -8,6 +8,7 @@ flagrow-byobu:
             submit: OK
             edit_recipients: Edit Recipients
         labels:
+            recipients: "{count} Recipient|{count} Recipients"
             user_deleted: -deleted-
         nav:
             private_discussions: Private discussion
