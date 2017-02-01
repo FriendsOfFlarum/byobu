@@ -33,46 +33,56 @@ System.register("flagrow/byobu/addPrivateDiscussionPermission", ["flarum/extend"
 });;
 'use strict';
 
-System.register('flagrow/byobu/helpers/recipientLabel', ['flarum/utils/extract', 'flarum/helpers/username'], function (_export, _context) {
-  "use strict";
+System.register('flagrow/byobu/helpers/recipientLabel', ['flarum/utils/extract', 'flarum/helpers/username', 'flarum/models/User', 'flarum/models/Group'], function (_export, _context) {
+    "use strict";
 
-  var extract, username;
-  function recipientLabel(user) {
-    var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var extract, username, User, Group;
+    function recipientLabel(recipient) {
+        var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    attrs.style = attrs.style || {};
-    attrs.className = 'RecipientLabel ' + (attrs.className || '');
+        attrs.style = attrs.style || {};
+        attrs.className = 'RecipientLabel ' + (attrs.className || '');
 
-    var link = extract(attrs, 'link');
+        var link = extract(attrs, 'link');
 
-    if (user) {
+        var label;
 
-      if (link) {
-        attrs.title = user.username() || '';
-        attrs.href = app.route.user(user);
-        attrs.config = m.route;
-      }
-    } else {
-      attrs.className += ' none';
+        if (recipient instanceof User) {
+            label = username(recipient);
+
+            if (link) {
+                attrs.title = recipient.username() || '';
+                attrs.href = app.route.user(recipient);
+                attrs.config = m.route;
+            }
+        } else if (recipient instanceof Group) {
+            label = recipient.namePlural();
+        } else {
+            attrs.className += ' none';
+            label = app.translator.trans('flagrow-byobu.forum.labels.user_deleted');
+        }
+
+        return m(link ? 'a' : 'span', attrs, m(
+            'span',
+            { className: 'RecipientLabel-text' },
+            label
+        ));
     }
 
-    return m(link ? 'a' : 'span', attrs, m(
-      'span',
-      { className: 'RecipientLabel-text' },
-      user ? username(user) : app.translator.trans('flagrow-byobu.forum.labels.user_deleted')
-    ));
-  }
+    _export('default', recipientLabel);
 
-  _export('default', recipientLabel);
-
-  return {
-    setters: [function (_flarumUtilsExtract) {
-      extract = _flarumUtilsExtract.default;
-    }, function (_flarumHelpersUsername) {
-      username = _flarumHelpersUsername.default;
-    }],
-    execute: function () {}
-  };
+    return {
+        setters: [function (_flarumUtilsExtract) {
+            extract = _flarumUtilsExtract.default;
+        }, function (_flarumHelpersUsername) {
+            username = _flarumHelpersUsername.default;
+        }, function (_flarumModelsUser) {
+            User = _flarumModelsUser.default;
+        }, function (_flarumModelsGroup) {
+            Group = _flarumModelsGroup.default;
+        }],
+        execute: function () {}
+    };
 });;
 'use strict';
 
