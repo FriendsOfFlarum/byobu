@@ -91,7 +91,7 @@ class SaveRecipientsToDatabase
 
         if ($discussion->exists && $hasRecipients && !$actor->can('editRecipients', $discussion)) {
             throw new PermissionDeniedException('not allowed to edit recipients');
-        } elseif ($addsRecipients && !$discussion->exist && !$actor->hasPermission('createPrivateDiscussions')) {
+        } elseif ($addsRecipients && !$discussion->exist && !$actor->hasPermission('startPrivateDiscussion')) {
             throw new PermissionDeniedException('not allowed to create private discussion');
         } elseif ($addsRecipients) {
             // Add the creator to the discussion.
