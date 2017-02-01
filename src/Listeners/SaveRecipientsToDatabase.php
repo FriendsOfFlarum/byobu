@@ -106,32 +106,15 @@ class SaveRecipientsToDatabase
 
             // Nothing changed.
             if ($oldRecipients['groups']->pluck('id')->all() == $newGroupIds->all()
-                && $oldRecipients['users']->pluck('id')->all() == $newUserIds->all()) {
+                && $oldRecipients['users']->pluck('id')->all() == $newUserIds->all()
+            ) {
                 return;
             }
 
-            // Discussion was now private.
-            if ($oldRecipients['users']->isEmpty() && $oldRecipients['groups']->isEmpty()
-                && (!$newUserIds->isEmpty() || !$newGroupIds->isEmpty())
-            ) {
-                $discussion->raise(
-                    new DiscussionMadePrivate($discussion, $actor, $newUserIds, $newGroupIds, $oldRecipients['users'], $oldRecipients['groups'])
-                );
-            // Discussion now public.
-            } elseif (!$oldRecipients['users']->isEmpty() && !$oldRecipients['groups']->isEmpty()
-                && ($newUserIds->isEmpty() || $newGroupIds->isEmpty())
-            ) {
-                $discussion->raise(
-                    new DiscussionMadePublic($discussion, $actor, $newUserIds, $newGroupIds, $oldRecipients['users'], $oldRecipients['groups'])
-                );
-            } else {
-                $discussion->raise(
-                    new DiscussionRecipientsChanged($discussion, $actor, $newUserIds, $newGroupIds, $oldRecipients['users'], $oldRecipients['groups'])
-                );
-            }
+            $this->raiseEvent($oldRecipients, $newUserIds, $newGroupIds, $discussion, $actor);
 
             $discussion->afterSave(function (Discussion $discussion) use ($newGroupIds, $newUserIds, $oldRecipients) {
-                foreach(['users', 'groups'] as $type) {
+                foreach (['users', 'groups'] as $type) {
                     $variable = 'new' . Str::ucfirst(Str::singular($type)) . 'Ids';
                     $method = 'recipient' . Str::ucfirst($type);
 
@@ -141,7 +124,7 @@ class SaveRecipientsToDatabase
                     $recipients = collect($new->toArray())->merge($old->pluck('id')->toArray())->unique();
                     $discussion->{$method}()->sync($recipients->all());
 
-                    $recipients->each(function($id) use ($discussion, $method, $new) {
+                    $recipients->each(function ($id) use ($discussion, $method, $new) {
                         if ($new->contains($id)) {
                             $discussion->{$method}()->updateExistingPivot($id, [
                                 'removed_at' => null
@@ -154,6 +137,55 @@ class SaveRecipientsToDatabase
                     });
                 }
             });
+        }
+    }
+
+    /**
+     * @param $oldRecipients
+     * @param $newUserIds
+     * @param $newGroupIds
+     * @param $discussion
+     * @param $actor
+     */
+    protected function raiseEvent($oldRecipients, $newUserIds, $newGroupIds, $discussion, $actor)
+    {
+        if ($oldRecipients['users']->isEmpty() && $oldRecipients['groups']->isEmpty()
+            && (!$newUserIds->isEmpty() || !$newGroupIds->isEmpty())
+        ) {
+            $discussion->raise(
+                new DiscussionMadePrivate(
+                    $discussion,
+                    $actor,
+                    $newUserIds,
+                    $newGroupIds,
+                    $oldRecipients['users'],
+                    $oldRecipients['groups']
+                )
+            );
+        } elseif (!$oldRecipients['users']->isEmpty() && !$oldRecipients['groups']->isEmpty()
+            && ($newUserIds->isEmpty() || $newGroupIds->isEmpty())
+        ) {
+            $discussion->raise(
+                new DiscussionMadePublic(
+                    $discussion,
+                    $actor,
+                    $newUserIds,
+                    $newGroupIds,
+                    $oldRecipients['users'],
+                    $oldRecipients['groups']
+                )
+            );
+        } else {
+            $discussion->raise(
+                new DiscussionRecipientsChanged(
+                    $discussion,
+                    $actor,
+                    $newUserIds,
+                    $newGroupIds,
+                    $oldRecipients['users'],
+                    $oldRecipients['groups']
+                )
+            );
         }
     }
 }
