@@ -77,24 +77,23 @@ class SaveRecipientsToDatabase
         $discussion = $event->discussion;
         $actor = $event->actor;
 
-        $newRecipients = collect(Arr::get($event->data, 'relationships.recipients.data', []))
-            ->map(function ($link) {
-                return [
-                    'type' => $link['type'],
-                    'id' => (int)$link['id']
-                ];
+        $newUserIds = collect(Arr::get($event->data, 'relationships.recipientUsers.data', []))
+            ->map(function ($in) {
+                return (int)$in['id'];
+            });
+        $newGroupIds = collect(Arr::get($event->data, 'relationships.recipientGroups.data', []))
+            ->map(function ($in) {
+                return (int)$in['id'];
             });
 
-        $newUserIds = $newRecipients->where('type', 'users')->pluck('id');
-        $newGroupIds = $newRecipients->where('type', 'groups')->pluck('id');
-
+        $addsRecipients = !$newUserIds->isEmpty() || !$newGroupIds->isEmpty();
         $hasRecipients = ($discussion->recipientUsers->count() + $discussion->recipientGroups->count()) > 0;
 
         if ($discussion->exists && $hasRecipients && !$actor->can('editRecipients', $discussion)) {
             throw new PermissionDeniedException('not allowed to edit recipients');
-        } elseif (!$newRecipients->isEmpty() && !$discussion->exist && !$actor->hasPermission('createPrivateDiscussions')) {
+        } elseif ($addsRecipients && !$discussion->exist && !$actor->hasPermission('createPrivateDiscussions')) {
             throw new PermissionDeniedException('not allowed to create private discussion');
-        } elseif (!$newRecipients->isEmpty()) {
+        } elseif ($addsRecipients) {
             // Add the creator to the discussion.
             if ($newGroupIds->isEmpty() && !in_array($actor->id, $newUserIds->all())) {
                 $newUserIds->push($actor->id);

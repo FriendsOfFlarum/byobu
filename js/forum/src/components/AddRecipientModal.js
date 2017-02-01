@@ -1,8 +1,10 @@
-import Modal from 'flarum/components/Modal';
-import DiscussionPage from 'flarum/components/DiscussionPage';
-import Button from 'flarum/components/Button';
+import Modal from "flarum/components/Modal";
+import DiscussionPage from "flarum/components/DiscussionPage";
+import Button from "flarum/components/Button";
 import ItemList from "flarum/utils/ItemList";
-import RecipientSearch from 'flagrow/byobu/components/RecipientSearch';
+import RecipientSearch from "flagrow/byobu/components/RecipientSearch";
+import User from "flarum/models/User";
+import Group from "flarum/models/Group";
 
 export default class AddRecipientModal extends Modal {
     init() {
@@ -73,9 +75,24 @@ export default class AddRecipientModal extends Modal {
         const discussion = this.props.discussion;
         const recipients = this.selected().toArray();
 
+        var recipientGroups = [];
+        var recipientUsers = [];
+
+        recipients.forEach(recipient => {
+            if (recipient instanceof User) {
+                recipientUsers.push(recipient);
+            }
+            if (recipient instanceof Group) {
+                recipientGroups.push(recipient);
+            }
+        });
+
+        console.log({relationships: {recipientUsers, recipientGroups}});
+
         if (discussion) {
-            discussion.save({relationships: {recipients}})
+            discussion.save({relationships: {recipientUsers, recipientGroups}})
                 .then(() => {
+                    console.log(discussion);
                     if (app.current instanceof DiscussionPage) {
                         app.current.stream.update();
                     }

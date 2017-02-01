@@ -199,12 +199,12 @@ System.register('flagrow/byobu/addRecipientsControl', ['flarum/extend', 'flarum/
         execute: function () {}
     };
 });;
-'use strict';
+"use strict";
 
-System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/components/Modal', 'flarum/components/DiscussionPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flagrow/byobu/components/RecipientSearch'], function (_export, _context) {
+System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/components/Modal", "flarum/components/DiscussionPage", "flarum/components/Button", "flarum/utils/ItemList", "flagrow/byobu/components/RecipientSearch", "flarum/models/User", "flarum/models/Group"], function (_export, _context) {
     "use strict";
 
-    var Modal, DiscussionPage, Button, ItemList, RecipientSearch, AddRecipientModal;
+    var Modal, DiscussionPage, Button, ItemList, RecipientSearch, User, Group, AddRecipientModal;
     return {
         setters: [function (_flarumComponentsModal) {
             Modal = _flarumComponentsModal.default;
@@ -216,6 +216,10 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
             ItemList = _flarumUtilsItemList.default;
         }, function (_flagrowByobuComponentsRecipientSearch) {
             RecipientSearch = _flagrowByobuComponentsRecipientSearch.default;
+        }, function (_flarumModelsUser) {
+            User = _flarumModelsUser.default;
+        }, function (_flarumModelsGroup) {
+            Group = _flarumModelsGroup.default;
         }],
         execute: function () {
             AddRecipientModal = function (_Modal) {
@@ -227,9 +231,9 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
                 }
 
                 babelHelpers.createClass(AddRecipientModal, [{
-                    key: 'init',
+                    key: "init",
                     value: function init() {
-                        babelHelpers.get(AddRecipientModal.prototype.__proto__ || Object.getPrototypeOf(AddRecipientModal.prototype), 'init', this).call(this);
+                        babelHelpers.get(AddRecipientModal.prototype.__proto__ || Object.getPrototypeOf(AddRecipientModal.prototype), "init", this).call(this);
 
                         this.selected = m.prop(new ItemList());
 
@@ -242,7 +246,7 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
                         });
                     }
                 }, {
-                    key: 'assignInitialRecipients',
+                    key: "assignInitialRecipients",
                     value: function assignInitialRecipients(discussion) {
                         var _this2 = this;
 
@@ -254,33 +258,33 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
                         });
                     }
                 }, {
-                    key: 'className',
+                    key: "className",
                     value: function className() {
                         return 'AddRecipientModal';
                     }
                 }, {
-                    key: 'title',
+                    key: "title",
                     value: function title() {
                         return this.props.discussion ? app.translator.trans('flagrow-byobu.forum.modal.titles.update_recipients', { title: m(
-                                'em',
+                                "em",
                                 null,
                                 this.props.discussion.title()
                             ) }) : app.translator.trans('flagrow-byobu.forum.modal.titles.add_recipients');
                     }
                 }, {
-                    key: 'content',
+                    key: "content",
                     value: function content() {
 
                         return [m(
-                            'div',
-                            { className: 'Modal-body' },
+                            "div",
+                            { className: "Modal-body" },
                             m(
-                                'div',
-                                { className: 'AddRecipientModal-form' },
+                                "div",
+                                { className: "AddRecipientModal-form" },
                                 this.recipientSearch,
                                 m(
-                                    'div',
-                                    { className: 'AddRecipientModal-form-submit App-primaryControl' },
+                                    "div",
+                                    { className: "AddRecipientModal-form-submit App-primaryControl" },
                                     Button.component({
                                         type: 'submit',
                                         className: 'Button Button--primary',
@@ -293,7 +297,7 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
                         )];
                     }
                 }, {
-                    key: 'select',
+                    key: "select",
                     value: function select(e) {
                         // Ctrl + Enter submits the selection, just Enter completes the current entry
                         if (e.metaKey || e.ctrlKey || this.selected.indexOf(this.index) !== -1) {
@@ -303,15 +307,30 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
                         }
                     }
                 }, {
-                    key: 'onsubmit',
+                    key: "onsubmit",
                     value: function onsubmit(e) {
                         e.preventDefault();
 
                         var discussion = this.props.discussion;
                         var recipients = this.selected().toArray();
 
+                        var recipientGroups = [];
+                        var recipientUsers = [];
+
+                        recipients.forEach(function (recipient) {
+                            if (recipient instanceof User) {
+                                recipientUsers.push(recipient);
+                            }
+                            if (recipient instanceof Group) {
+                                recipientGroups.push(recipient);
+                            }
+                        });
+
+                        console.log({ relationships: { recipientUsers: recipientUsers, recipientGroups: recipientGroups } });
+
                         if (discussion) {
-                            discussion.save({ relationships: { recipients: recipients } }).then(function () {
+                            discussion.save({ relationships: { recipientUsers: recipientUsers, recipientGroups: recipientGroups } }).then(function () {
+                                console.log(discussion);
                                 if (app.current instanceof DiscussionPage) {
                                     app.current.stream.update();
                                 }
@@ -329,7 +348,7 @@ System.register('flagrow/byobu/components/AddRecipientModal', ['flarum/component
                 return AddRecipientModal;
             }(Modal);
 
-            _export('default', AddRecipientModal);
+            _export("default", AddRecipientModal);
         }
     };
 });;
