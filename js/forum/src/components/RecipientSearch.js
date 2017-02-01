@@ -1,11 +1,13 @@
 import Search from "flarum/components/Search";
-import RecipientSearchSource from "flagrow/byobu/components/RecipientSearchSource";
+import UserSearchSource from "flagrow/byobu/components/UserSearchSource";
+import GroupSearchSource from "flagrow/byobu/components/GroupSearchSource";
 import ItemList from "flarum/utils/ItemList";
 import classList from "flarum/utils/classList";
 import extractText from "flarum/utils/extractText";
 import LoadingIndicator from "flarum/components/LoadingIndicator";
 import recipientLabel from "flagrow/byobu/helpers/recipientLabel";
-import icon from 'flarum/helpers/icon';
+import User from 'flarum/models/User';
+import Group from 'flarum/models/Group';
 
 export default class RecipientSearch extends Search {
 
@@ -15,7 +17,7 @@ export default class RecipientSearch extends Search {
         const $search = this;
 
         this.$('.Search-results').on('click', (e) => {
-            var target = this.$('.UserSearchResult.active');
+            var target = this.$('.SearchResult.active');
 
             $search.addRecipient(target.data('index'));
 
@@ -76,7 +78,8 @@ export default class RecipientSearch extends Search {
     sourceItems() {
         const items = new ItemList();
 
-        items.add('recipients', new RecipientSearchSource());
+        items.add('users', new UserSearchSource());
+        items.add('groups', new GroupSearchSource());
 
         return items;
     }
@@ -91,20 +94,34 @@ export default class RecipientSearch extends Search {
         m.redraw();
     }
 
-    addRecipient(id) {
-        var recipient = this.findRecipient(id);
+    addRecipient(value) {
 
-        this.props.selected().add(id, recipient);
+        var values = value.split(':'),
+            type = values[0],
+            id = values[1];
+
+        var recipient = this.findRecipient(type, id);
+
+        this.props.selected().add(value, recipient);
 
         this.clear();
     }
     removeRecipient(recipient) {
-        this.props.selected().remove(recipient.id());
+        var type;
+
+        if (recipient instanceof User) {
+            type = 'users';
+        }
+        if (recipient instanceof Group) {
+            type = 'groups';
+        }
+
+        this.props.selected().remove(type + ":" + recipient.id());
 
         m.redraw();
     }
 
-    findRecipient(id) {
-        return app.store.getById('users', id);
+    findRecipient(store, id) {
+        return app.store.getById(store, id);
     }
 }

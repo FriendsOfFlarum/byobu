@@ -13,6 +13,9 @@ flagrow-byobu:
             private_discussions: Private discussion
         input:
             search_recipients: Search recipient by typing first three characters..
+        search:
+            headings:
+                groups: Permission Groups
         modal:
             titles:
                 update_recipients: Update recipients of {title}

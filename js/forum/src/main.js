@@ -10,8 +10,11 @@ import RecipientsModified from "flagrow/byobu/components/RecipientsModified";
 app.initializers.add('flagrow-byobu', function(app) {
     app.routes.private_discussions = {path: '/private-discussions', component: PrivateDiscussionIndex.component()};
 
-    Discussion.prototype.recipients = Model.hasMany('recipients');
-    Discussion.prototype.oldRecipients = Model.hasMany('oldRecipients');
+    Discussion.prototype.recipientUsers = Model.hasMany('recipientUsers');
+    Discussion.prototype.oldRecipientUsers = Model.hasMany('oldRecipientUsers');
+    Discussion.prototype.recipientGroups = Model.hasMany('recipientGroups');
+    Discussion.prototype.oldRecipientGroups = Model.hasMany('oldRecipientGroups');
+
     Discussion.prototype.canEditRecipients = Model.attribute('canEditRecipients');
 
     app.postComponents.recipientsModified = RecipientsModified;

@@ -10,7 +10,17 @@ export default function() {
      * Adds User labels on the discussion index page.
      */
     extend(DiscussionListItem.prototype, 'infoItems', function(items) {
-        const recipients = this.props.discussion.recipients();
+        const discussion = this.props.discussion;
+
+        var recipients = [];
+
+        if (discussion.recipientUsers().length) {
+            recipients = recipients.concat(discussion.recipientUsers());
+        }
+
+        if (discussion.recipientGroups().length) {
+            recipients = recipients.concat(discussion.recipientGroups());
+        }
 
         if (recipients && recipients.length) {
             items.add('recipients', recipientsLabel(recipients), 10);
@@ -29,7 +39,17 @@ export default function() {
      * Adds User labels on the discussion Hero.
      */
     extend(DiscussionHero.prototype, 'items', function(items) {
-        const recipients = this.props.discussion.recipients();
+        const discussion = this.props.discussion;
+
+        var recipients = [];
+
+        if (discussion.recipientUsers().length) {
+            recipients = recipients.concat(discussion.recipientUsers());
+        }
+
+        if (discussion.recipientGroups().length) {
+            recipients = recipients.concat(discussion.recipientGroups());
+        }
 
         if (recipients && recipients.length) {
             items.add('recipients', recipientsLabel(recipients, {link: true}), 4);

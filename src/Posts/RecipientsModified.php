@@ -2,10 +2,14 @@
 
 namespace Flagrow\Byobu\Posts;
 
+use Flagrow\Byobu\Events\AbstractRecipientsEvent;
 use Flarum\Core\Post;
 use Flarum\Core\Post\AbstractEventPost;
 use Flarum\Core\Post\MergeableInterface;
 
+/**
+ * @property array $content
+ */
 class RecipientsModified extends AbstractEventPost implements MergeableInterface
 {
     /**
@@ -13,26 +17,18 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
      */
     public static $type = 'recipientsModified';
 
+    protected $states = ['new', 'old'];
+    protected $types = ['users', 'groups'];
+
     /**
-     * {@inheritdoc}
+     * @param Post|null|RecipientsModified $previous
+     * @return $this|RecipientsModified|Post
      */
     public function saveAfter(Post $previous = null)
     {
-        // If the previous post is another 'discussion tagged' post, and it's
-        // by the same user, then we can merge this post into it. If we find
-        // that we've in fact reverted the tag changes, delete it. Otherwise,
-        // update its content.
+        /** @var RecipientsModified $previous */
         if ($previous instanceof static) {
-            if ($previous->content[0] == $this->content[1]) {
-                $previous->delete();
-            } else {
-                $previous->content = static::buildContent($previous->content[0], $this->content[1]);
-                $previous->time = $this->time;
-
-                $previous->save();
-            }
-
-            return $previous;
+            // .. @todo
         }
 
         $this->save();
@@ -42,34 +38,28 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
 
     /**
      * Create a new instance in reply to a discussion.
-     *
-     * @param int $discussionId
-     * @param int $userId
-     * @param array $oldRecipientIds
-     * @param array $newRecipientIds
+     * @param AbstractRecipientsEvent $event
      * @return static
      */
-    public static function reply($discussionId, $userId, array $oldRecipientIds, array $newRecipientIds)
+    public static function reply(AbstractRecipientsEvent $event)
     {
         $post = new static;
 
-        $post->content = static::buildContent($oldRecipientIds, $newRecipientIds);
+        $post->content = [
+            'new' => [
+                'users' => $event->newUsers->all(),
+                'groups' => $event->newGroups->all()
+            ],
+            'old' => [
+                'users' => $event->oldUsers->pluck('id')->all(),
+                'groups' => $event->oldGroups->pluck('id')->all()
+            ]
+        ];
         $post->time = time();
-        $post->discussion_id = $discussionId;
-        $post->user_id = $userId;
+        $post->discussion_id = $event->discussion->id;
+        $post->user_id = $event->actor->id;
 
         return $post;
     }
-
-    /**
-     * Build the content attribute.
-     *
-     * @param array $oldRecipientIds
-     * @param array $newRecipientIds
-     * @return array
-     */
-    public static function buildContent(array $oldRecipientIds, array $newRecipientIds)
-    {
-        return [array_map('intval', $oldRecipientIds), array_map('intval', $newRecipientIds)];
-    }
 }
+

@@ -1,8 +1,10 @@
-import Modal from 'flarum/components/Modal';
-import DiscussionPage from 'flarum/components/DiscussionPage';
-import Button from 'flarum/components/Button';
+import Modal from "flarum/components/Modal";
+import DiscussionPage from "flarum/components/DiscussionPage";
+import Button from "flarum/components/Button";
 import ItemList from "flarum/utils/ItemList";
-import RecipientSearch from 'flagrow/byobu/components/RecipientSearch';
+import RecipientSearch from "flagrow/byobu/components/RecipientSearch";
+import User from "flarum/models/User";
+import Group from "flarum/models/Group";
 
 export default class AddRecipientModal extends Modal {
     init() {
@@ -10,18 +12,21 @@ export default class AddRecipientModal extends Modal {
 
         this.selected = m.prop(new ItemList);
 
-        if (this.props.selectedRecipients) {
-            this.props.selectedRecipients.map(recipient => {
-                this.selected().add(recipient.id, recipient);
-            });
-        } else if (this.props.discussion) {
-            this.props.discussion.recipients().map(recipient => {
-                this.selected().add(recipient.id(), recipient);
-            });
+        if (this.props.discussion) {
+            this.assignInitialRecipients(this.props.discussion);
         }
 
         this.recipientSearch = RecipientSearch.component({
             selected: this.selected
+        });
+    }
+
+    assignInitialRecipients(discussion) {
+        discussion.recipientUsers().map(user => {
+            this.selected().add("users:" + user.id(), user);
+        });
+        discussion.recipientGroups().map(group => {
+            this.selected().add("groups:" + group.id(), group);
         });
     }
 
@@ -70,9 +75,24 @@ export default class AddRecipientModal extends Modal {
         const discussion = this.props.discussion;
         const recipients = this.selected().toArray();
 
+        var recipientGroups = [];
+        var recipientUsers = [];
+
+        recipients.forEach(recipient => {
+            if (recipient instanceof User) {
+                recipientUsers.push(recipient);
+            }
+            if (recipient instanceof Group) {
+                recipientGroups.push(recipient);
+            }
+        });
+
+        console.log({relationships: {recipientUsers, recipientGroups}});
+
         if (discussion) {
-            discussion.save({relationships: {recipients}})
+            discussion.save({relationships: {recipientUsers, recipientGroups}})
                 .then(() => {
+                    console.log(discussion);
                     if (app.current instanceof DiscussionPage) {
                         app.current.stream.update();
                     }

@@ -4,7 +4,7 @@ import Badge from "flarum/components/Badge";
 
 export default function addHasRecipientsBadge() {
     extend(Discussion.prototype, 'badges', function (badges) {
-        if (this.recipients().length) {
+        if (this.recipientUsers().length || this.recipientGroups().length) {
             badges.add('private', Badge.component({
                 type: 'private',
                 label: app.translator.trans('flagrow-byobu.forum.badges.is_private.tooltip'),
