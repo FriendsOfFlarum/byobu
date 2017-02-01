@@ -38,14 +38,18 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
 
     _export("default", function (app) {
         // Add recipient-selection abilities to the discussion composer.
-        DiscussionComposer.prototype.recipients = [];
+        DiscussionComposer.prototype.recipients;
+        DiscussionComposer.prototype.recipientUsers = [];
+        DiscussionComposer.prototype.recipientGroups = [];
 
         DiscussionComposer.prototype.chooseRecipients = function () {
             var _this = this;
 
             app.modal.show(new AddRecipientModal({
                 selectedRecipients: this.recipients,
-                onsubmit: function onsubmit(recipients) {
+                onsubmit: function onsubmit(recipients, recipientUsers, recipientGroups) {
+                    _this.recipientUsers = recipientUsers;
+                    _this.recipientGroups = recipientGroups;
                     _this.recipients = recipients;
                     _this.$('textarea').focus();
                 }
@@ -74,7 +78,8 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
         // Add the selected tags as data to submit to the server.
         extend(DiscussionComposer.prototype, 'data', function (data) {
             data.relationships = data.relationships || {};
-            data.relationships.recipients = this.recipients;
+            data.relationships.recipientUsers = this.recipientUsers;
+            data.relationships.recipientGroups = this.recipientGroups;
         });
     });
 
@@ -243,7 +248,6 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
                             this.assignInitialRecipients(this.props.discussion);
                         } else if (this.props.selectedRecipients) {
                             this.selected().merge(this.props.selectedRecipients);
-                            console.log(this.selected());
                         }
 
                         this.recipientSearch = RecipientSearch.component({
@@ -323,9 +327,11 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
                         var recipientUsers = [];
 
                         recipients.toArray().forEach(function (recipient) {
+
                             if (recipient instanceof User) {
                                 recipientUsers.push(recipient);
                             }
+
                             if (recipient instanceof Group) {
                                 recipientGroups.push(recipient);
                             }
@@ -340,7 +346,7 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
                             });
                         }
 
-                        if (this.props.onsubmit) this.props.onsubmit(recipients);
+                        if (this.props.onsubmit) this.props.onsubmit(recipients, recipientUsers, recipientGroups);
 
                         app.modal.close();
 
@@ -351,72 +357,6 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
             }(Modal);
 
             _export("default", AddRecipientModal);
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/byobu/components/GroupSearchSource', ['flarum/helpers/highlight'], function (_export, _context) {
-    "use strict";
-
-    var highlight, GroupSearchSource;
-    return {
-        setters: [function (_flarumHelpersHighlight) {
-            highlight = _flarumHelpersHighlight.default;
-        }],
-        execute: function () {
-            GroupSearchSource = function () {
-                function GroupSearchSource() {
-                    babelHelpers.classCallCheck(this, GroupSearchSource);
-                }
-
-                babelHelpers.createClass(GroupSearchSource, [{
-                    key: 'search',
-                    value: function search(query) {
-                        return app.store.find('groups', {
-                            filter: { q: query },
-                            page: { limit: 5 }
-                        });
-                    }
-                }, {
-                    key: 'view',
-                    value: function view(query) {
-                        query = query.toLowerCase();
-
-                        var results = app.store.all('groups').filter(function (group) {
-                            return group.namePlural().toLowerCase().substr(0, query.length) === query;
-                        });
-
-                        if (!results.length) return '';
-
-                        return [m(
-                            'li',
-                            { className: 'Dropdown-header' },
-                            app.translator.trans('flagrow-byobu.forum.search.headings.groups')
-                        ), results.map(function (group) {
-                            var groupName = group.namePlural();
-                            var name = highlight(groupName, query);
-
-                            return m(
-                                'li',
-                                { className: 'SearchResult', 'data-index': 'groups:' + group.id() },
-                                m(
-                                    'a',
-                                    null,
-                                    m(
-                                        'span',
-                                        { 'class': 'groupName' },
-                                        name
-                                    )
-                                )
-                            );
-                        })];
-                    }
-                }]);
-                return GroupSearchSource;
-            }();
-
-            _export('default', GroupSearchSource);
         }
     };
 });;
@@ -824,17 +764,17 @@ System.register('flagrow/byobu/components/PrivateDiscussionList', ['flarum/compo
 });;
 "use strict";
 
-System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/Search", "flagrow/byobu/components/UserSearchSource", "flagrow/byobu/components/GroupSearchSource", "flarum/utils/ItemList", "flarum/utils/classList", "flarum/utils/extractText", "flarum/components/LoadingIndicator", "flagrow/byobu/helpers/recipientLabel", "flarum/models/User", "flarum/models/Group"], function (_export, _context) {
+System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/Search", "flagrow/byobu/components/sources/UserSearchSource", "flagrow/byobu/components/sources/GroupSearchSource", "flarum/utils/ItemList", "flarum/utils/classList", "flarum/utils/extractText", "flarum/components/LoadingIndicator", "flagrow/byobu/helpers/recipientLabel", "flarum/models/User", "flarum/models/Group"], function (_export, _context) {
     "use strict";
 
     var Search, UserSearchSource, GroupSearchSource, ItemList, classList, extractText, LoadingIndicator, recipientLabel, User, Group, RecipientSearch;
     return {
         setters: [function (_flarumComponentsSearch) {
             Search = _flarumComponentsSearch.default;
-        }, function (_flagrowByobuComponentsUserSearchSource) {
-            UserSearchSource = _flagrowByobuComponentsUserSearchSource.default;
-        }, function (_flagrowByobuComponentsGroupSearchSource) {
-            GroupSearchSource = _flagrowByobuComponentsGroupSearchSource.default;
+        }, function (_flagrowByobuComponentsSourcesUserSearchSource) {
+            UserSearchSource = _flagrowByobuComponentsSourcesUserSearchSource.default;
+        }, function (_flagrowByobuComponentsSourcesGroupSearchSource) {
+            GroupSearchSource = _flagrowByobuComponentsSourcesGroupSearchSource.default;
         }, function (_flarumUtilsItemList) {
             ItemList = _flarumUtilsItemList.default;
         }, function (_flarumUtilsClassList) {
@@ -1081,7 +1021,73 @@ System.register("flagrow/byobu/components/RecipientsModified", ["flarum/componen
 });;
 'use strict';
 
-System.register('flagrow/byobu/components/UserSearchSource', ['flarum/helpers/highlight', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
+System.register('flagrow/byobu/components/sources/GroupSearchSource', ['flarum/helpers/highlight'], function (_export, _context) {
+    "use strict";
+
+    var highlight, GroupSearchSource;
+    return {
+        setters: [function (_flarumHelpersHighlight) {
+            highlight = _flarumHelpersHighlight.default;
+        }],
+        execute: function () {
+            GroupSearchSource = function () {
+                function GroupSearchSource() {
+                    babelHelpers.classCallCheck(this, GroupSearchSource);
+                }
+
+                babelHelpers.createClass(GroupSearchSource, [{
+                    key: 'search',
+                    value: function search(query) {
+                        return app.store.find('groups', {
+                            filter: { q: query },
+                            page: { limit: 5 }
+                        });
+                    }
+                }, {
+                    key: 'view',
+                    value: function view(query) {
+                        query = query.toLowerCase();
+
+                        var results = app.store.all('groups').filter(function (group) {
+                            return group.namePlural().toLowerCase().substr(0, query.length) === query;
+                        });
+
+                        if (!results.length) return '';
+
+                        return [m(
+                            'li',
+                            { className: 'Dropdown-header' },
+                            app.translator.trans('flagrow-byobu.forum.search.headings.groups')
+                        ), results.map(function (group) {
+                            var groupName = group.namePlural();
+                            var name = highlight(groupName, query);
+
+                            return m(
+                                'li',
+                                { className: 'SearchResult', 'data-index': 'groups:' + group.id() },
+                                m(
+                                    'a',
+                                    null,
+                                    m(
+                                        'span',
+                                        { 'class': 'groupName' },
+                                        name
+                                    )
+                                )
+                            );
+                        })];
+                    }
+                }]);
+                return GroupSearchSource;
+            }();
+
+            _export('default', GroupSearchSource);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/byobu/components/sources/UserSearchSource', ['flarum/helpers/highlight', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
     "use strict";
 
     var highlight, avatar, username, UserSearchSource;
@@ -1145,6 +1151,33 @@ System.register('flagrow/byobu/components/UserSearchSource', ['flarum/helpers/hi
             _export('default', UserSearchSource);
         }
     };
+});;
+'use strict';
+
+System.register('flagrow/byobu/helpers/recipientCountLabel', [], function (_export, _context) {
+  "use strict";
+
+  function recipientCountLabel(count) {
+    var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    attrs.style = attrs.style || {};
+    attrs.className = 'RecipientLabel ' + (attrs.className || '');
+
+    var label = app.translator.transChoice('flagrow-byobu.forum.labels.recipients', count, { count: count });
+
+    return m('span', attrs, m(
+      'span',
+      { className: 'RecipientLabel-text' },
+      label
+    ));
+  }
+
+  _export('default', recipientCountLabel);
+
+  return {
+    setters: [],
+    execute: function () {}
+  };
 });;
 'use strict';
 
@@ -1284,31 +1317,4 @@ System.register("flagrow/byobu/main", ["flarum/Model", "flarum/models/Discussion
             });
         }
     };
-});;
-'use strict';
-
-System.register('flagrow/byobu/helpers/recipientCountLabel', [], function (_export, _context) {
-  "use strict";
-
-  function recipientCountLabel(count) {
-    var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    attrs.style = attrs.style || {};
-    attrs.className = 'RecipientLabel ' + (attrs.className || '');
-
-    var label = app.translator.transChoice('flagrow-byobu.forum.labels.recipients', count, { count: count });
-
-    return m('span', attrs, m(
-      'span',
-      { className: 'RecipientLabel-text' },
-      label
-    ));
-  }
-
-  _export('default', recipientCountLabel);
-
-  return {
-    setters: [],
-    execute: function () {}
-  };
 });

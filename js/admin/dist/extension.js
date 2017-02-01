@@ -33,6 +33,33 @@ System.register("flagrow/byobu/addPrivateDiscussionPermission", ["flarum/extend"
 });;
 'use strict';
 
+System.register('flagrow/byobu/helpers/recipientCountLabel', [], function (_export, _context) {
+  "use strict";
+
+  function recipientCountLabel(count) {
+    var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    attrs.style = attrs.style || {};
+    attrs.className = 'RecipientLabel ' + (attrs.className || '');
+
+    var label = app.translator.transChoice('flagrow-byobu.forum.labels.recipients', count, { count: count });
+
+    return m('span', attrs, m(
+      'span',
+      { className: 'RecipientLabel-text' },
+      label
+    ));
+  }
+
+  _export('default', recipientCountLabel);
+
+  return {
+    setters: [],
+    execute: function () {}
+  };
+});;
+'use strict';
+
 System.register('flagrow/byobu/helpers/recipientLabel', ['flarum/utils/extract', 'flarum/helpers/username', 'flarum/models/User', 'flarum/models/Group'], function (_export, _context) {
     "use strict";
 

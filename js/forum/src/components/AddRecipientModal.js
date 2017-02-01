@@ -16,7 +16,6 @@ export default class AddRecipientModal extends Modal {
             this.assignInitialRecipients(this.props.discussion);
         } else if (this.props.selectedRecipients) {
             this.selected().merge(this.props.selectedRecipients);
-            console.log(this.selected());
         }
 
         this.recipientSearch = RecipientSearch.component({
@@ -82,9 +81,11 @@ export default class AddRecipientModal extends Modal {
         var recipientUsers = [];
 
         recipients.toArray().forEach(recipient => {
+
             if (recipient instanceof User) {
                 recipientUsers.push(recipient);
             }
+
             if (recipient instanceof Group) {
                 recipientGroups.push(recipient);
             }
@@ -100,7 +101,7 @@ export default class AddRecipientModal extends Modal {
                 });
         }
 
-        if (this.props.onsubmit) this.props.onsubmit(recipients);
+        if (this.props.onsubmit) this.props.onsubmit(recipients, recipientUsers, recipientGroups);
 
         app.modal.close();
 

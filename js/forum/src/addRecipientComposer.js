@@ -5,13 +5,17 @@ import recipientCountLabel from "flagrow/byobu/helpers/recipientCountLabel";
 
 export default function (app) {
     // Add recipient-selection abilities to the discussion composer.
-    DiscussionComposer.prototype.recipients = [];
+    DiscussionComposer.prototype.recipients;
+    DiscussionComposer.prototype.recipientUsers = [];
+    DiscussionComposer.prototype.recipientGroups = [];
 
     DiscussionComposer.prototype.chooseRecipients = function () {
         app.modal.show(
             new AddRecipientModal({
                 selectedRecipients: this.recipients,
-                onsubmit: (recipients) => {
+                onsubmit: (recipients, recipientUsers, recipientGroups) => {
+                    this.recipientUsers = recipientUsers;
+                    this.recipientGroups = recipientGroups;
                     this.recipients = recipients;
                     this.$('textarea').focus();
                 }
@@ -39,6 +43,7 @@ export default function (app) {
     // Add the selected tags as data to submit to the server.
     extend(DiscussionComposer.prototype, 'data', function (data) {
         data.relationships = data.relationships || {};
-        data.relationships.recipients = this.recipients;
+        data.relationships.recipientUsers = this.recipientUsers;
+        data.relationships.recipientGroups = this.recipientGroups;
     });
 }
