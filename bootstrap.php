@@ -11,5 +11,7 @@ return function (Dispatcher $events) {
     $events->subscribe(Listeners\AddPermissions::class);
     $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
     $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
+    $events->subscribe(Listeners\ApprovePrivateDiscussion::class);
+
     $events->subscribe(Access\DiscussionPolicy::class);
 };
