@@ -42,21 +42,18 @@ class DiscussionPolicy extends AbstractPolicy
         /** @var Collection $users */
         $users = $discussion->recipientUsers->pluck('id');
 
-        if (!$users->isEmpty() && $users->contains($actor->id)) {
+        if ($users->contains($actor->id)) {
             return true;
         }
 
         /** @var Collection $groups */
         $groups = $discussion->recipientGroups->pluck('id');
 
-        if (!$groups->isEmpty()) {
-            $groups->each(function($requiredGroupId) use ($actor) {
-                if ($actor->groups()->find($requiredGroupId)) {
-                    return true;
-                }
-            });
-
-        }
+        $groups->each(function ($requiredGroupId) use ($actor) {
+            if ($actor->groups()->find($requiredGroupId)) {
+                return true;
+            }
+        });
 
         return false;
     }
@@ -93,7 +90,7 @@ class DiscussionPolicy extends AbstractPolicy
                         ->from('recipients')
                         ->where('discussions.id', new Expression('discussion_id'))
                         ->whereNull('removed_at')
-                        ->where(function(Builder $query) use ($actor) {
+                        ->where(function (Builder $query) use ($actor) {
                             $query
                                 ->where('user_id', $actor->id)
                                 ->orWhereIn('group_id', $actor->groups->pluck('id')->all());
