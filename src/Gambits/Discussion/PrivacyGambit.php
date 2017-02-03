@@ -51,7 +51,11 @@ class PrivacyGambit extends AbstractRegexGambit
                         ->from('recipients')
                         ->where('discussions.id', new Expression('discussion_id'))
                         ->whereNull('removed_at')
-                        ->where('user_id', $actor->id);
+                        ->where(function (Builder $query) use ($actor) {
+                            $query
+                                ->where('user_id', $actor->id)
+                                ->orWhereIn('group_id', $actor->groups->pluck('id')->all());
+                        });
                 });
             }
         });
