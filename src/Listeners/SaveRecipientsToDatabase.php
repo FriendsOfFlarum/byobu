@@ -87,13 +87,25 @@ class SaveRecipientsToDatabase
             });
 
         $addsRecipients = !$newUserIds->isEmpty() || !$newGroupIds->isEmpty();
-        $hasRecipients = ($discussion->recipientUsers->count() + $discussion->recipientGroups->count()) > 0;
 
-        if ($discussion->exists && $hasRecipients && !$actor->can('editRecipients', $discussion)) {
-            throw new PermissionDeniedException('not allowed to edit recipients');
-        } elseif ($addsRecipients && !$discussion->exist && !$actor->hasPermission('startPrivateDiscussion')) {
-            throw new PermissionDeniedException('not allowed to create private discussion');
-        } elseif ($addsRecipients) {
+        // New discussion
+        if ($discussion->exists) {
+            if (!$newUserIds->isEmpty() && !$actor->can('editUserRecipients', $discussion)) {
+                throw new PermissionDeniedException('Not allowed to edit users of a private discussion');
+            }
+            if (!$newGroupIds->isEmpty() && !$actor->can('editGroupRecipients', $discussion)) {
+                throw new PermissionDeniedException('Not allowed to edit groups of a private discussion');
+            }
+        } else {
+            if (!$newUserIds->isEmpty() && !$actor->hasPermission('startPrivateDiscussionWithUsers')) {
+                throw new PermissionDeniedException('Not allowed to add users to a private discussion');
+            }
+            if (!$newGroupIds->isEmpty() && !$actor->hasPermission('startPrivateDiscussionWithGroups')) {
+                throw new PermissionDeniedException('Not allowed to add groups to a private discussion');
+            }
+        }
+
+        if ($addsRecipients) {
             // Add the creator to the discussion.
             if ($newGroupIds->isEmpty() && !in_array($actor->id, $newUserIds->all())) {
                 $newUserIds->push($actor->id);

@@ -869,10 +869,12 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                     value: function sourceItems() {
                         var items = new ItemList();
 
+                        // Add user source based on permissions.
                         if (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithUsers') || this.props.discussion && this.props.discussion.canEditUserRecipients()) {
                             items.add('users', new UserSearchSource());
                         }
 
+                        // Add group source based on permissions.
                         if (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithGroups') || this.props.discussion && this.props.discussion.canEditGroupRecipients()) {
                             items.add('groups', new GroupSearchSource());
                         }

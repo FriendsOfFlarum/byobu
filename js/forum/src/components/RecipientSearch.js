@@ -6,8 +6,8 @@ import classList from "flarum/utils/classList";
 import extractText from "flarum/utils/extractText";
 import LoadingIndicator from "flarum/components/LoadingIndicator";
 import recipientLabel from "flagrow/byobu/helpers/recipientLabel";
-import User from 'flarum/models/User';
-import Group from 'flarum/models/Group';
+import User from "flarum/models/User";
+import Group from "flarum/models/Group";
 
 export default class RecipientSearch extends Search {
 
@@ -78,6 +78,8 @@ export default class RecipientSearch extends Search {
     sourceItems() {
         const items = new ItemList();
 
+
+        // Add user source based on permissions.
         if (
             (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithUsers')) ||
             (this.props.discussion && this.props.discussion.canEditUserRecipients())
@@ -85,7 +87,7 @@ export default class RecipientSearch extends Search {
             items.add('users', new UserSearchSource());
         }
 
-
+        // Add group source based on permissions.
         if (
             (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithGroups')) ||
             (this.props.discussion && this.props.discussion.canEditGroupRecipients())
@@ -106,6 +108,11 @@ export default class RecipientSearch extends Search {
         m.redraw();
     }
 
+    /**
+     * Adds a recipient.
+     *
+     * @param value
+     */
     addRecipient(value) {
 
         var values = value.split(':'),
@@ -118,6 +125,12 @@ export default class RecipientSearch extends Search {
 
         this.clear();
     }
+
+    /**
+     * Removes a recipient.
+     *
+     * @param recipient
+     */
     removeRecipient(recipient) {
         var type;
 
@@ -133,6 +146,13 @@ export default class RecipientSearch extends Search {
         m.redraw();
     }
 
+    /**
+     * Loads a recipient from the global store.
+     *
+     * @param store
+     * @param id
+     * @returns {Model}
+     */
     findRecipient(store, id) {
         return app.store.getById(store, id);
     }
