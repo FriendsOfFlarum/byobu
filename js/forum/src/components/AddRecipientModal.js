@@ -19,7 +19,8 @@ export default class AddRecipientModal extends Modal {
         }
 
         this.recipientSearch = RecipientSearch.component({
-            selected: this.selected
+            selected: this.selected,
+            discussion: this.props.discussion
         });
     }
 

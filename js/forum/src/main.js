@@ -16,6 +16,8 @@ app.initializers.add('flagrow-byobu', function(app) {
     Discussion.prototype.oldRecipientGroups = Model.hasMany('oldRecipientGroups');
 
     Discussion.prototype.canEditRecipients = Model.attribute('canEditRecipients');
+    Discussion.prototype.canEditUserRecipients = Model.attribute('canEditUserRecipients');
+    Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
 
     app.postComponents.recipientsModified = RecipientsModified;
 

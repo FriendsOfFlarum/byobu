@@ -251,7 +251,8 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
                         }
 
                         this.recipientSearch = RecipientSearch.component({
-                            selected: this.selected
+                            selected: this.selected,
+                            discussion: this.props.discussion
                         });
                     }
                 }, {
@@ -868,8 +869,13 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                     value: function sourceItems() {
                         var items = new ItemList();
 
-                        items.add('users', new UserSearchSource());
-                        items.add('groups', new GroupSearchSource());
+                        if (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithUsers') || this.props.discussion && this.props.discussion.canEditUserRecipients()) {
+                            items.add('users', new UserSearchSource());
+                        }
+
+                        if (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithGroups') || this.props.discussion && this.props.discussion.canEditGroupRecipients()) {
+                            items.add('groups', new GroupSearchSource());
+                        }
 
                         return items;
                     }
@@ -1307,6 +1313,8 @@ System.register("flagrow/byobu/main", ["flarum/Model", "flarum/models/Discussion
                 Discussion.prototype.oldRecipientGroups = Model.hasMany('oldRecipientGroups');
 
                 Discussion.prototype.canEditRecipients = Model.attribute('canEditRecipients');
+                Discussion.prototype.canEditUserRecipients = Model.attribute('canEditUserRecipients');
+                Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
 
                 app.postComponents.recipientsModified = RecipientsModified;
 

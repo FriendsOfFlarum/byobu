@@ -28,5 +28,7 @@ flagrow-byobu:
                 removed: "{username} removed recipients {removed}."
     admin:
         permission:
-            create_private_discussions: Create private discussions
-            edit_recipients: Edit recipients of private discussions
+            create_private_discussions_with_users: Create private discussions with users
+            create_private_discussions_with_groups: Create private discussions with groups
+            edit_user_recipients: Edit users partaking in private discussions
+            edit_group_recipients: Edit groups partaking in private discussions

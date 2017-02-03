@@ -78,8 +78,20 @@ export default class RecipientSearch extends Search {
     sourceItems() {
         const items = new ItemList();
 
-        items.add('users', new UserSearchSource());
-        items.add('groups', new GroupSearchSource());
+        if (
+            (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithUsers')) ||
+            (this.props.discussion && this.props.discussion.canEditUserRecipients())
+        ) {
+            items.add('users', new UserSearchSource());
+        }
+
+
+        if (
+            (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithGroups')) ||
+            (this.props.discussion && this.props.discussion.canEditGroupRecipients())
+        ) {
+            items.add('groups', new GroupSearchSource());
+        }
 
         return items;
     }

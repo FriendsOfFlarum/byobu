@@ -26,7 +26,6 @@ class AddRecipientsRelationships
     {
         $events->listen(GetModelRelationship::class, [$this, 'getModelRelationship']);
         $events->listen(GetApiRelationship::class, [$this, 'getApiRelationship']);
-        $events->listen(PrepareApiAttributes::class, [$this, 'prepareApiAttributes']);
         $events->listen(ConfigureApiController::class, [$this, 'includeRecipientsRelationship']);
     }
 
@@ -127,19 +126,6 @@ class AddRecipientsRelationships
 
         if ($event->isRelationship(UserSerializer::class, 'privateDiscussions')) {
             return $event->serializer->hasMany($event->model, DiscussionSerializer::class, 'privateDiscussions');
-        }
-    }
-
-    /**
-     * @param PrepareApiAttributes $event
-     */
-    public function prepareApiAttributes(PrepareApiAttributes $event)
-    {
-        if ($event->isSerializer(ForumSerializer::class)) {
-            $event->attributes['canStartPrivateDiscussion'] = $event->actor->can('startPrivateDiscussion');
-        }
-        if ($event->isSerializer(DiscussionSerializer::class)) {
-            $event->attributes['canEditRecipients'] = $event->actor->can('editRecipients', $event->model);
         }
     }
 }

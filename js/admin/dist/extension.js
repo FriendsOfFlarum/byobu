@@ -7,17 +7,27 @@ System.register("flagrow/byobu/addPrivateDiscussionPermission", ["flarum/extend"
 
     _export("default", function () {
         extend(PermissionGrid.prototype, 'startItems', function (items) {
-            items.add('startPrivate', {
+            items.add('startPrivateUsers', {
                 icon: 'map-o',
-                label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions'),
-                permission: 'startPrivateDiscussion'
+                label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_users'),
+                permission: 'startPrivateDiscussionWithUsers'
+            }, 95);
+            items.add('startPrivateGroups', {
+                icon: 'map-o',
+                label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_groups'),
+                permission: 'startPrivateDiscussionWithGroups'
             }, 95);
         });
         extend(PermissionGrid.prototype, 'moderateItems', function (items) {
-            items.add('editRecipients', {
+            items.add('editUserRecipients', {
                 icon: 'map-o',
-                label: app.translator.trans('flagrow-byobu.admin.permission.edit_recipients'),
-                permission: 'editRecipients'
+                label: app.translator.trans('flagrow-byobu.admin.permission.edit_user_recipients'),
+                permission: 'editUserRecipients'
+            }, 95);
+            items.add('editGroupRecipients', {
+                icon: 'map-o',
+                label: app.translator.trans('flagrow-byobu.admin.permission.edit_group_recipients'),
+                permission: 'editGroupRecipients'
             }, 95);
         });
     });
