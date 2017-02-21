@@ -23,8 +23,6 @@ export default class AddRecipientModal extends Modal {
             this.selected().add("users:" + app.session.user.id(), app.session.user);
         }
 
-        console.log(this.props.discussion, this.props.selectedRecipients, this.selected(), app.session.user);
-
         this.recipientSearch = RecipientSearch.component({
             selected: this.selected,
             discussion: this.props.discussion
