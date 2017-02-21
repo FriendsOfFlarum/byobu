@@ -46,6 +46,9 @@ class PostPolicy extends AbstractPolicy
         $events->listen(ScopePostVisibility::class, [$this, 'scopeHiddenDiscussionVisibility']);
     }
 
+    /**
+     * @param ScopePostVisibility $event
+     */
     public function scopeHiddenDiscussionVisibility(ScopePostVisibility $event)
     {
         $this->queryConstraints($event->discussion, $event->actor, $event->query);
