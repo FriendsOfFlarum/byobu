@@ -8,3 +8,6 @@
   - Added private discussions to the index by default, will be a setting in the future.
 - 0.1.0-beta.3
   - Fixes 500 error for guests.
+- 0.1.0-beta.9
+  - Fixed allowing yourself to be removed, now adding yourself by default on new discussions if you click recipients.
+  - Added locale polish.
