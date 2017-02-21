@@ -106,10 +106,6 @@ class SaveRecipientsToDatabase
         }
 
         if ($addsRecipients) {
-            // Add the creator to the discussion.
-            if ($newGroupIds->isEmpty() && !in_array($actor->id, $newUserIds->all())) {
-                $newUserIds->push($actor->id);
-            }
 
             $oldRecipients = [
                 'groups' => $discussion->recipientGroups()->get(),

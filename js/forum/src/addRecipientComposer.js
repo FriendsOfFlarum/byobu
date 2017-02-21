@@ -9,7 +9,9 @@ export default function (app) {
     DiscussionComposer.prototype.recipientUsers = [];
     DiscussionComposer.prototype.recipientGroups = [];
 
+    // Add a recipient selection modal when clicking the recipient tag label.
     DiscussionComposer.prototype.chooseRecipients = function () {
+
         app.modal.show(
             new AddRecipientModal({
                 selectedRecipients: this.recipients,
@@ -17,7 +19,9 @@ export default function (app) {
                     this.recipientUsers = recipientUsers;
                     this.recipientGroups = recipientGroups;
                     this.recipients = recipients;
-                    this.$('textarea').focus();
+
+                    // Focus on recipient autocomplete field.
+                    this.$('.RecipientsInput').focus();
                 }
             })
         )

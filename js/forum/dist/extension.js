@@ -42,6 +42,7 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
         DiscussionComposer.prototype.recipientUsers = [];
         DiscussionComposer.prototype.recipientGroups = [];
 
+        // Add a recipient selection modal when clicking the recipient tag label.
         DiscussionComposer.prototype.chooseRecipients = function () {
             var _this = this;
 
@@ -51,7 +52,9 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
                     _this.recipientUsers = recipientUsers;
                     _this.recipientGroups = recipientGroups;
                     _this.recipients = recipients;
-                    _this.$('textarea').focus();
+
+                    // Focus on recipient autocomplete field.
+                    _this.$('.RecipientsInput').focus();
                 }
             }));
         };
@@ -245,10 +248,17 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
                         this.selected = m.prop(new ItemList());
 
                         if (this.props.discussion) {
+                            // Adds recipients of the currently viewed discussion.
                             this.assignInitialRecipients(this.props.discussion);
                         } else if (this.props.selectedRecipients) {
+                            // Adds previously selected recipients.
                             this.selected().merge(this.props.selectedRecipients);
+                        } else {
+                            // Adds the current user in case there are no selected recipients yet and this is a new discussion.
+                            this.selected().add("users:" + app.session.user.id(), app.session.user);
                         }
+
+                        console.log(this.props.discussion, this.props.selectedRecipients, this.selected(), app.session.user);
 
                         this.recipientSearch = RecipientSearch.component({
                             selected: this.selected,

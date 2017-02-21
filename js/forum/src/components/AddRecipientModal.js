@@ -13,10 +13,17 @@ export default class AddRecipientModal extends Modal {
         this.selected = m.prop(new ItemList);
 
         if (this.props.discussion) {
+            // Adds recipients of the currently viewed discussion.
             this.assignInitialRecipients(this.props.discussion);
         } else if (this.props.selectedRecipients) {
+            // Adds previously selected recipients.
             this.selected().merge(this.props.selectedRecipients);
+        } else {
+            // Adds the current user in case there are no selected recipients yet and this is a new discussion.
+            this.selected().add("users:" + app.session.user.id(), app.session.user);
         }
+
+        console.log(this.props.discussion, this.props.selectedRecipients, this.selected(), app.session.user);
 
         this.recipientSearch = RecipientSearch.component({
             selected: this.selected,
