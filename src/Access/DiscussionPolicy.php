@@ -2,34 +2,38 @@
 
 namespace Flagrow\Byobu\Access;
 
+use Flagrow\Byobu\Traits\ProvidesAccess;
 use Flarum\Core\Access\AbstractPolicy;
 use Flarum\Core\Discussion;
 use Flarum\Core\User;
-use Flarum\Event\ScopeHiddenDiscussionVisibility;
-use Illuminate\Contracts\Events\Dispatcher;
+use Flarum\Extension\ExtensionManager;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 
 class DiscussionPolicy extends AbstractPolicy
 {
 
+    use ProvidesAccess;
+    /**
+     * @var ExtensionManager
+     */
+    protected $extensions;
+
+    /**
+     * DiscussionPolicy constructor.
+     * @param ExtensionManager $extensions
+     */
+    public function __construct(ExtensionManager $extensions)
+    {
+        $this->extensions = $extensions;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected $model = Discussion::class;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function subscribe(Dispatcher $events)
-    {
-        parent::subscribe($events);
-
-        $events->listen(ScopeHiddenDiscussionVisibility::class, [$this, 'scopeHiddenDiscussionVisibility']);
-    }
 
     /**
      * @param User $actor
@@ -39,23 +43,7 @@ class DiscussionPolicy extends AbstractPolicy
      */
     public function before(User $actor, $ability, Discussion $discussion)
     {
-        /** @var Collection $users */
-        $users = $discussion->recipientUsers->pluck('id');
-
-        if ($users->contains($actor->id)) {
-            return true;
-        }
-
-        /** @var Collection $groups */
-        $groups = $discussion->recipientGroups->pluck('id');
-
-        $groups->each(function ($requiredGroupId) use ($actor) {
-            if ($actor->groups()->find($requiredGroupId)) {
-                return true;
-            }
-        });
-
-        return false;
+        return $this->granted($discussion, $actor);
     }
 
     /**
@@ -68,13 +56,9 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * @param ScopeHiddenDiscussionVisibility $event
+     * @param EloquentBuilder|Builder $query
+     * @param User $actor
      */
-    public function scopeHiddenDiscussionVisibility(ScopeHiddenDiscussionVisibility $event)
-    {
-        $this->queryConstraints($event->query, $event->actor);
-    }
-
     protected function queryConstraints(EloquentBuilder &$query, User $actor)
     {
         $query->where(function (EloquentBuilder $query) use ($actor) {
@@ -91,13 +75,15 @@ class DiscussionPolicy extends AbstractPolicy
                         ->where('discussions.id', new Expression('discussion_id'))
                         ->whereNull('removed_at')
                         ->where(function (Builder $query) use ($actor) {
-                            $query
-                                ->where('user_id', $actor->id)
-                                ->orWhereIn('group_id', $actor->groups->pluck('id')->all());
+                            $query->where('recipients.user_id', $actor->id);
+                            if (!$actor->groups->isEmpty()) {
+                                $query->orWhereIn('recipients.group_id', $actor->groups->pluck('id')->all());
+                            }
                         });
                 });
+
+                $this->showWithFlags($query, $actor, 'posts.flags');
             }
         });
-        return $query;
     }
 }
