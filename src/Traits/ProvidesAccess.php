@@ -8,6 +8,8 @@ use Flarum\Core\User;
 trait ProvidesAccess
 {
     /**
+     * Does a generic test whether the user has access based on the recipients of the discussion.
+     *
      * @param Discussion $discussion
      * @param User $actor
      * @return bool
@@ -31,8 +33,11 @@ trait ProvidesAccess
 
 
     /**
+     * Enables visibility of discussions/posts when they are flagged.
+     *
      * @param $query
      * @param $actor
+     * @param string $relation
      */
     protected function showWithFlags(&$query, $actor, $relation = 'flags')
     {
