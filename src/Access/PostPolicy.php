@@ -3,7 +3,6 @@
 namespace Flagrow\Byobu\Access;
 
 use Flagrow\Byobu\Traits\ProvidesAccess;
-use Flarum\Core\Access\AbstractPolicy;
 use Flarum\Core\Discussion;
 use Flarum\Core\Post;
 use Flarum\Core\User;
@@ -24,6 +23,11 @@ class PostPolicy extends AbstractPolicy
     protected $extensions;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $model = Post::class;
+
+    /**
      * DiscussionPolicy constructor.
      * @param ExtensionManager $extensions
      */
@@ -31,11 +35,6 @@ class PostPolicy extends AbstractPolicy
     {
         $this->extensions = $extensions;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $model = Post::class;
 
 
     /**

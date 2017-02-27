@@ -3,7 +3,6 @@
 namespace Flagrow\Byobu\Access;
 
 use Flagrow\Byobu\Traits\ProvidesAccess;
-use Flarum\Core\Access\AbstractPolicy;
 use Flarum\Core\Discussion;
 use Flarum\Core\User;
 use Flarum\Extension\ExtensionManager;
@@ -21,6 +20,11 @@ class DiscussionPolicy extends AbstractPolicy
     protected $extensions;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $model = Discussion::class;
+
+    /**
      * DiscussionPolicy constructor.
      * @param ExtensionManager $extensions
      */
@@ -28,12 +32,6 @@ class DiscussionPolicy extends AbstractPolicy
     {
         $this->extensions = $extensions;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $model = Discussion::class;
-
 
     /**
      * @param User $actor
@@ -56,12 +54,32 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
+     * @param User $actor
+     * @param EloquentBuilder|Builder $query
+     */
+    public function findAfter(User $actor, EloquentBuilder $query)
+    {
+//        dd($query->toSql());
+//        dump($query->toSql());
+
+//        $this->queryConstraints($query, $actor);
+
+        dd($query->toSql(), $query->getBindings());
+    }
+
+    /**
      * @param EloquentBuilder|Builder $query
      * @param User $actor
      */
     protected function queryConstraints(EloquentBuilder &$query, User $actor)
     {
-        $query->where(function (EloquentBuilder $query) use ($actor) {
+//        $previous = $query->getQuery();
+
+//        $query->setQuery($query->getQuery()->newQuery());
+
+        $query->orWhere(function (EloquentBuilder $query) use ($actor) {
+//            $query->whereRaw($previous->getGrammar()->compileSelect($previous));
+//            $query->whereRaw($existingSubQuery->getGrammar()->compileSelect($existingSubQuery));
             $query->whereNotExists(function (Builder $query) {
                 $query->select(app('flarum.db')->raw(1))
                     ->from('recipients')
