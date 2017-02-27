@@ -61,7 +61,7 @@ class PostPolicy extends AbstractPolicy
     protected function queryConstraints(Discussion $discussion, User $actor, EloquentBuilder &$query)
     {
         // Close down to only specific users.
-        if ($discussion->recipientUsers || $discussion->recipientGroups) {
+        if (!$discussion->recipientUsers->isEmpty() || !$discussion->recipientGroups->isEmpty()) {
             if (!$actor->exists || !$this->granted($discussion, $actor)) {
                 $query->whereNull('posts.id');
             }
