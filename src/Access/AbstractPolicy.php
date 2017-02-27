@@ -3,6 +3,7 @@
 namespace Flagrow\Byobu\Access;
 
 use Flarum\Core\Access\AbstractPolicy as Policy;
+use Flarum\Event\ScopeHiddenDiscussionVisibility;
 use Flarum\Event\ScopeModelVisibility;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -16,6 +17,9 @@ abstract class AbstractPolicy extends Policy
         parent::subscribe($events);
 
         $events->listen(ScopeModelVisibility::class, [$this, 'scopeModelVisibilityAfter'], -100);
+        if (method_exists($this, 'scopeHiddenDiscussionVisibility')) {
+            $events->listen(ScopeHiddenDiscussionVisibility::class, [$this, 'scopeHiddenDiscussionVisibility']);
+        }
     }
 
 
