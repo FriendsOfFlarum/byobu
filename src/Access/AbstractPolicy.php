@@ -20,6 +20,9 @@ abstract class AbstractPolicy extends Policy
         if (method_exists($this, 'scopeHiddenDiscussionVisibility')) {
             $events->listen(ScopeHiddenDiscussionVisibility::class, [$this, 'scopeHiddenDiscussionVisibility']);
         }
+        if (method_exists($this, 'scopePostVisibility')) {
+            $events->listen(ScopePostVisibility::class, [$this, 'scopePostVisibility']);
+        }
     }
 
 

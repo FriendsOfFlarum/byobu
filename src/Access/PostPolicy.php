@@ -8,7 +8,6 @@ use Flarum\Core\Post;
 use Flarum\Core\User;
 use Flarum\Event\ScopePostVisibility;
 use Flarum\Extension\ExtensionManager;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder;
 
@@ -37,21 +36,34 @@ class PostPolicy extends AbstractPolicy
     }
 
 
+
     /**
-     * {@inheritdoc}
+     * @param User $actor
+     * @param EloquentBuilder $query
      */
-    public function subscribe(Dispatcher $events)
+    public function find(User $actor, EloquentBuilder $query)
     {
-        $events->listen(ScopePostVisibility::class, [$this, 'scopeHiddenDiscussionVisibility']);
+        $query->where(function($query) use ($actor) {
+
+            $query->whereNotExists(function (Builder $query) {
+                return $query->select(app('flarum.db')->raw(1))
+                    ->from('recipients')
+                    ->where('discussions.id', new Expression('discussion_id'))
+                    ->whereNull('removed_at');
+            });
+
+            $this->showWithFlags($query, $actor, 'flags');
+        });
     }
 
     /**
      * @param ScopePostVisibility $event
      */
-    public function scopeHiddenDiscussionVisibility(ScopePostVisibility $event)
+    public function scopePostVisibility(ScopePostVisibility $event)
     {
         $this->queryConstraints($event->discussion, $event->actor, $event->query);
     }
+
 
     /**
      * @param Discussion $discussion
