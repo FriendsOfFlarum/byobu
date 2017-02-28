@@ -3,9 +3,9 @@
 namespace Flagrow\Byobu\Access;
 
 use Flagrow\Byobu\Traits\ProvidesAccess;
-use Flarum\Core\Access\AbstractPolicy;
 use Flarum\Core\Discussion;
 use Flarum\Core\User;
+use Flarum\Event\ScopeHiddenDiscussionVisibility;
 use Flarum\Extension\ExtensionManager;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder;
@@ -21,6 +21,11 @@ class DiscussionPolicy extends AbstractPolicy
     protected $extensions;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $model = Discussion::class;
+
+    /**
      * DiscussionPolicy constructor.
      * @param ExtensionManager $extensions
      */
@@ -28,12 +33,6 @@ class DiscussionPolicy extends AbstractPolicy
     {
         $this->extensions = $extensions;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $model = Discussion::class;
-
 
     /**
      * @param User $actor
@@ -52,38 +51,50 @@ class DiscussionPolicy extends AbstractPolicy
      */
     public function find(User $actor, EloquentBuilder $query)
     {
-        $this->queryConstraints($query, $actor);
-    }
+        $query->where(function($query) use ($actor) {
 
-    /**
-     * @param EloquentBuilder|Builder $query
-     * @param User $actor
-     */
-    protected function queryConstraints(EloquentBuilder &$query, User $actor)
-    {
-        $query->where(function (EloquentBuilder $query) use ($actor) {
             $query->whereNotExists(function (Builder $query) {
-                $query->select(app('flarum.db')->raw(1))
+                return $query->select(app('flarum.db')->raw(1))
                     ->from('recipients')
                     ->where('discussions.id', new Expression('discussion_id'))
                     ->whereNull('removed_at');
             });
-            if ($actor->exists) {
-                $query->orWhereExists(function (Builder $query) use ($actor) {
-                    $query->select(app('flarum.db')->raw(1))
-                        ->from('recipients')
-                        ->where('discussions.id', new Expression('discussion_id'))
-                        ->whereNull('removed_at')
-                        ->where(function (Builder $query) use ($actor) {
-                            $query->where('recipients.user_id', $actor->id);
-                            if (!$actor->groups->isEmpty()) {
-                                $query->orWhereIn('recipients.group_id', $actor->groups->pluck('id')->all());
-                            }
-                        });
-                });
 
-                $this->showWithFlags($query, $actor, 'posts.flags');
-            }
+            $this->transformVisibilityQuery($actor, $query);
         });
+    }
+
+    /**
+     * @param ScopeHiddenDiscussionVisibility $event
+     */
+    public function scopeHiddenDiscussionVisibility(ScopeHiddenDiscussionVisibility $event)
+    {
+        $this->transformVisibilityQuery($event->actor, $event->query);
+    }
+
+    /**
+     * @param User $actor
+     * @param EloquentBuilder $query
+     */
+    protected function transformVisibilityQuery(User $actor, EloquentBuilder &$query)
+    {
+        if ($actor->exists) {
+            $query->orWhereExists(function (Builder $query) use ($actor) {
+                return $query->select(app('flarum.db')->raw(1))
+                    ->from('recipients')
+                    ->where('discussions.id', new Expression('discussion_id'))
+                    ->whereNull('removed_at')
+                    ->where(function (Builder $query) use ($actor) {
+                        $query->where('recipients.user_id', $actor->id);
+                        if (!$actor->groups->isEmpty()) {
+                            $query->orWhereIn('recipients.group_id', $actor->groups->pluck('id')->all());
+                        }
+
+                        return $query;
+                    });
+            });
+
+            $this->showWithFlags($query, $actor, 'posts.flags');
+        }
     }
 }
