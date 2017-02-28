@@ -35,8 +35,6 @@ class PostPolicy extends AbstractPolicy
         $this->extensions = $extensions;
     }
 
-
-
     /**
      * @param User $actor
      * @param EloquentBuilder $query
@@ -44,7 +42,6 @@ class PostPolicy extends AbstractPolicy
     public function find(User $actor, EloquentBuilder $query)
     {
         $query->where(function($query) use ($actor) {
-
             $query->whereNotExists(function (Builder $query) {
                 return $query->select(app('flarum.db')->raw(1))
                     ->from('recipients')

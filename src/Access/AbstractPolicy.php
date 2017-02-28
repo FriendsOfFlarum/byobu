@@ -5,6 +5,7 @@ namespace Flagrow\Byobu\Access;
 use Flarum\Core\Access\AbstractPolicy as Policy;
 use Flarum\Event\ScopeHiddenDiscussionVisibility;
 use Flarum\Event\ScopeModelVisibility;
+use Flarum\Event\ScopePostVisibility;
 use Illuminate\Contracts\Events\Dispatcher;
 
 abstract class AbstractPolicy extends Policy

@@ -28,9 +28,9 @@ trait ProvidesAccess
                 return true;
             }
         });
+
         return false;
     }
-
 
     /**
      * Enables visibility of discussions/posts when they are flagged.
