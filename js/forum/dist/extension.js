@@ -134,7 +134,8 @@ System.register("flagrow/byobu/addRecipientLabels", ["flarum/extend", "flarum/co
          * Require recipients from the API whenever we're loading a Discussion page.
          */
         extend(DiscussionPage.prototype, 'params', function (params) {
-            params.include.push('recipients');
+            params.include.push('recipientUsers');
+            params.include.push('recipientGroups');
         });
 
         /**
