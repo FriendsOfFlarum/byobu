@@ -109,12 +109,7 @@ System.register("flagrow/byobu/addRecipientLabels", ["flarum/extend", "flarum/co
 
     _export("default", function () {
 
-        /**
-         * Adds User labels on the discussion index page.
-         */
-        extend(DiscussionListItem.prototype, 'infoItems', function (items) {
-            var discussion = this.props.discussion;
-
+        var addToDiscussion = function addToDiscussion(discussion, items, long) {
             var recipients = [];
 
             if (discussion.recipientUsers().length) {
@@ -126,8 +121,21 @@ System.register("flagrow/byobu/addRecipientLabels", ["flarum/extend", "flarum/co
             }
 
             if (recipients && recipients.length) {
-                items.add('recipients', recipientsLabel(recipients), 10);
+                if (long) {
+                    items.add('recipients', recipientsLabel(recipients), 10);
+                } else {
+                    items.add('recipients', recipientsLabel(recipients, { link: true }), 4);
+                }
             }
+        };
+
+        /**
+         * Adds User labels on the discussion index page.
+         */
+        extend(DiscussionListItem.prototype, 'infoItems', function (items) {
+            var discussion = this.props.discussion;
+
+            addToDiscussion(discussion, items, true);
         });
 
         /**
@@ -144,19 +152,7 @@ System.register("flagrow/byobu/addRecipientLabels", ["flarum/extend", "flarum/co
         extend(DiscussionHero.prototype, 'items', function (items) {
             var discussion = this.props.discussion;
 
-            var recipients = [];
-
-            if (discussion.recipientUsers().length) {
-                recipients = recipients.concat(discussion.recipientUsers());
-            }
-
-            if (discussion.recipientGroups().length) {
-                recipients = recipients.concat(discussion.recipientGroups());
-            }
-
-            if (recipients && recipients.length) {
-                items.add('recipients', recipientsLabel(recipients, { link: true }), 4);
-            }
+            addToDiscussion(discussion, items, false);
         });
     });
 

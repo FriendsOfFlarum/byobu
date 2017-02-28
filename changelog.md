@@ -25,3 +25,6 @@
 - 0.1.0-beta.10
   - Access logic has been rewritten to fix some edge cases especially when working with the tags extension.
   - Now shows Private Discussions with flagged posts to mods and shows only flagged posts in those discussions as long as the flag exists.
+- 0.1.0-beta.11
+  - Fixes missing include that shows recipient labels and private discussion on discussion list.
+  - Dried up code.
