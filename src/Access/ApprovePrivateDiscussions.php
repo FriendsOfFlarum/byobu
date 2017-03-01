@@ -2,7 +2,6 @@
 
 namespace Flagrow\Byobu\Access;
 
-use Flarum\Core\Access\AbstractPolicy;
 use Flarum\Core\Discussion;
 use Flarum\Core\User;
 
