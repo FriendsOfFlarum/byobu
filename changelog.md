@@ -28,3 +28,7 @@
 - 0.1.0-beta.11
   - Fixes missing include that shows recipient labels and private discussion on discussion list.
   - Dried up code.
+- 0.1.0-beta.12
+  - Spanish locale.
+  - Dutch locale.
+  - Fix for incorrect import class of AbstractPolicy.
