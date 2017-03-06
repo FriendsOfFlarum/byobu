@@ -814,7 +814,7 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
 
                         var $search = this;
 
-                        this.$('.Search-results').on('click', function (e) {
+                        this.$('.Search-results').on('click touch', function (e) {
                             var target = _this2.$('.SearchResult.active');
 
                             $search.addRecipient(target.data('index'));
