@@ -32,3 +32,5 @@
   - Spanish locale.
   - Dutch locale.
   - Fix for incorrect import class of AbstractPolicy.
+- 0.1.0-beta.13
+  - Click event for mobile devices fixed by adding touch event.
