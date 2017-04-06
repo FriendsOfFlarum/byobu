@@ -26,7 +26,7 @@ export default class UserSearchSource {
 
                 return (
                     <li className='SearchResult' data-index={'users:' + user.id()}>
-                        <a>
+                        <a data-index={'users:' + user.id()}>
                             {avatar(user)}
                             {name}
                         </a>

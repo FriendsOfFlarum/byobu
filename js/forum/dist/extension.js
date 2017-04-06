@@ -815,20 +815,15 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                         var $search = this;
 
                         this.$('.Search-results').on('click', function (e) {
-                            var target = _this2.$(e.target.parentNode);
-
-                            var target2 = _this2.$('.SearchResult.active');
+                            var target = _this2.$('.SearchResult.active');
 
                             $search.addRecipient(target.data('index'));
-                            $search.addRecipient(target2.data('index'));
 
                             $search.$('.RecipientsInput').focus();
                         });
 
                         this.$('.Search-results').on('touchstart', function (e) {
                             var target = _this2.$(e.target.parentNode);
-
-                            console.log(e.target);
 
                             $search.addRecipient(target.data('index'));
 
@@ -1163,7 +1158,7 @@ System.register('flagrow/byobu/components/sources/UserSearchSource', ['flarum/he
                                 { className: 'SearchResult', 'data-index': 'users:' + user.id() },
                                 m(
                                     'a',
-                                    null,
+                                    { 'data-index': 'users:' + user.id() },
                                     avatar(user),
                                     name
                                 )
