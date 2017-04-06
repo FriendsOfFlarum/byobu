@@ -24,7 +24,7 @@ export default class GroupSearchSource {
 
                 return (
                     <li className="SearchResult" data-index={'groups:' + group.id()}>
-                        <a data-index={'groups:' + group.id()}>
+                        <a>
                             <span class="groupName">{name}</span>
                         </a>
                     </li>

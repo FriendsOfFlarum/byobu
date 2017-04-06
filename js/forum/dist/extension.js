@@ -1088,7 +1088,7 @@ System.register('flagrow/byobu/components/sources/GroupSearchSource', ['flarum/h
                                 { className: 'SearchResult', 'data-index': 'groups:' + group.id() },
                                 m(
                                     'a',
-                                    { 'data-index': 'groups:' + group.id() },
+                                    null,
                                     m(
                                         'span',
                                         { 'class': 'groupName' },
