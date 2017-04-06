@@ -814,8 +814,21 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
 
                         var $search = this;
 
-                        this.$('.Search-results').on('click touch', function (e) {
-                            var target = _this2.$('.SearchResult.active');
+                        this.$('.Search-results').on('click', function (e) {
+                            var target = _this2.$(e.target.parentNode);
+
+                            var target2 = _this2.$('.SearchResult.active');
+
+                            $search.addRecipient(target.data('index'));
+                            $search.addRecipient(target2.data('index'));
+
+                            $search.$('.RecipientsInput').focus();
+                        });
+
+                        this.$('.Search-results').on('touchstart', function (e) {
+                            var target = _this2.$(e.target.parentNode);
+
+                            console.log(e.target);
 
                             $search.addRecipient(target.data('index'));
 
