@@ -34,3 +34,8 @@
   - Fix for incorrect import class of AbstractPolicy.
 - 0.1.0-beta.13
   - Click event for mobile devices fixed by adding touch event.
+- 0.1.0-beta.14
+  - Added Italian locale.
+  - Fix for mobile devices when trying to select recipients.
+- 0.1.0-beta.15
+  - Actual fix for mobile see previous version.
