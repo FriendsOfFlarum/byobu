@@ -1,3 +1,58 @@
+'use strict';
+
+System.register('flagrow/byobu/addDiscussPrivatelyControl', ['flarum/extend', 'flarum/utils/UserControls', 'flarum/components/DiscussionComposer', 'flarum/components/Button', 'flarum/utils/ItemList'], function (_export, _context) {
+    "use strict";
+
+    var extend, UserControls, DiscussionComposer, Button, ItemList;
+
+    _export('default', function () {
+        // Add a control allowing the discussion to be moved to another category.
+        extend(UserControls, 'userControls', function (items, user) {
+            if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+                items.add('private-discussion', Button.component({
+                    children: app.translator.trans('flagrow-byobu.forum.buttons.send_pd', { username: user.username() }),
+                    icon: 'map-o',
+                    onclick: function onclick() {
+                        var deferred = m.deferred();
+
+                        var recipients = new ItemList([user]);
+                        recipients.add('to', user);
+
+                        DiscussionComposer.prototype.recipients = recipients;
+
+                        var component = new DiscussionComposer({
+                            user: app.session.user
+                        });
+
+                        app.composer.load(component);
+                        app.composer.show();
+
+                        deferred.resolve(component);
+
+                        return deferred.promise;
+                    }
+                }));
+            }
+
+            return items;
+        });
+    });
+
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumUtilsUserControls) {
+            UserControls = _flarumUtilsUserControls.default;
+        }, function (_flarumComponentsDiscussionComposer) {
+            DiscussionComposer = _flarumComponentsDiscussionComposer.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flarumUtilsItemList) {
+            ItemList = _flarumUtilsItemList.default;
+        }],
+        execute: function () {}
+    };
+});;
 "use strict";
 
 System.register("flagrow/byobu/addHasRecipientsBadge", ["flarum/extend", "flarum/models/Discussion", "flarum/components/Badge"], function (_export, _context) {
@@ -1295,10 +1350,10 @@ System.register('flagrow/byobu/helpers/recipientsLabel', ['flarum/utils/extract'
 });;
 "use strict";
 
-System.register("flagrow/byobu/main", ["flarum/Model", "flarum/models/Discussion", "flagrow/byobu/addRecipientComposer", "flagrow/byobu/addRecipientLabels", "flagrow/byobu/addRecipientsControl", "flagrow/byobu/addHasRecipientsBadge", "flagrow/byobu/components/PrivateDiscussionIndex", "flagrow/byobu/components/RecipientsModified"], function (_export, _context) {
+System.register("flagrow/byobu/main", ["flarum/Model", "flarum/models/Discussion", "flagrow/byobu/addRecipientComposer", "flagrow/byobu/addRecipientLabels", "flagrow/byobu/addRecipientsControl", "flagrow/byobu/addHasRecipientsBadge", "flagrow/byobu/addDiscussPrivatelyControl", "flagrow/byobu/components/PrivateDiscussionIndex", "flagrow/byobu/components/RecipientsModified"], function (_export, _context) {
     "use strict";
 
-    var Model, Discussion, addRecipientComposer, addRecipientLabels, addRecipientsControl, addHasRecipientsBadge, PrivateDiscussionIndex, RecipientsModified;
+    var Model, Discussion, addRecipientComposer, addRecipientLabels, addRecipientsControl, addHasRecipientsBadge, addDiscussPrivatelyControl, PrivateDiscussionIndex, RecipientsModified;
     return {
         setters: [function (_flarumModel) {
             Model = _flarumModel.default;
@@ -1312,6 +1367,8 @@ System.register("flagrow/byobu/main", ["flarum/Model", "flarum/models/Discussion
             addRecipientsControl = _flagrowByobuAddRecipientsControl.default;
         }, function (_flagrowByobuAddHasRecipientsBadge) {
             addHasRecipientsBadge = _flagrowByobuAddHasRecipientsBadge.default;
+        }, function (_flagrowByobuAddDiscussPrivatelyControl) {
+            addDiscussPrivatelyControl = _flagrowByobuAddDiscussPrivatelyControl.default;
         }, function (_flagrowByobuComponentsPrivateDiscussionIndex) {
             PrivateDiscussionIndex = _flagrowByobuComponentsPrivateDiscussionIndex.default;
         }, function (_flagrowByobuComponentsRecipientsModified) {
@@ -1337,6 +1394,8 @@ System.register("flagrow/byobu/main", ["flarum/Model", "flarum/models/Discussion
                 addRecipientLabels();
                 addRecipientsControl();
                 addHasRecipientsBadge();
+
+                addDiscussPrivatelyControl();
             });
         }
     };
