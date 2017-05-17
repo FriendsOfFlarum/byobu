@@ -17,10 +17,19 @@ export default class RecipientSearch extends Search {
         const $search = this;
 
         this.$('.Search-results').on('click', (e) => {
-            var target = this.$('.SearchResult.active');
+            var target = this.$('.SearchResult.active')
+            
 
             $search.addRecipient(target.data('index'));
 
+            $search.$('.RecipientsInput').focus();
+        });
+      
+        this.$('.Search-results').on('touchstart', (e) => {
+            var target = this.$(e.target.parentNode);
+           
+            $search.addRecipient(target.data('index'));
+          
             $search.$('.RecipientsInput').focus();
         });
 

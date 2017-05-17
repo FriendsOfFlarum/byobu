@@ -14,7 +14,7 @@
         {
             "name": "Daniël Klabbers",
             "email": "daniel+flarum@klabbers.email",
-            "homepage": "http://hyn.me"
+            "homepage": "http://gravure.io"
         }
     ],
     "support": {
@@ -31,8 +31,8 @@
             "title": "Flagrow Byōbu",
             "icon": {
                 "name": "map-o",
-                "backgroundColor": "#000",
-                "color": "#87d37c"
+                "backgroundColor": "#f4f4f4",
+                "color": "#5f4bb6"
             }
         }
     },

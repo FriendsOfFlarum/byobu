@@ -822,6 +822,14 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                             $search.$('.RecipientsInput').focus();
                         });
 
+                        this.$('.Search-results').on('touchstart', function (e) {
+                            var target = _this2.$(e.target.parentNode);
+
+                            $search.addRecipient(target.data('index'));
+
+                            $search.$('.RecipientsInput').focus();
+                        });
+
                         babelHelpers.get(RecipientSearch.prototype.__proto__ || Object.getPrototypeOf(RecipientSearch.prototype), "config", this).call(this, isInitialized);
                     }
                 }, {
@@ -1080,7 +1088,7 @@ System.register('flagrow/byobu/components/sources/GroupSearchSource', ['flarum/h
                                 { className: 'SearchResult', 'data-index': 'groups:' + group.id() },
                                 m(
                                     'a',
-                                    null,
+                                    { 'data-index': 'groups:' + group.id() },
                                     m(
                                         'span',
                                         { 'class': 'groupName' },
@@ -1150,7 +1158,7 @@ System.register('flagrow/byobu/components/sources/UserSearchSource', ['flarum/he
                                 { className: 'SearchResult', 'data-index': 'users:' + user.id() },
                                 m(
                                     'a',
-                                    null,
+                                    { 'data-index': 'users:' + user.id() },
                                     avatar(user),
                                     name
                                 )
