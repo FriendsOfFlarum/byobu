@@ -15,8 +15,9 @@ System.register('flagrow/byobu/addDiscussPrivatelyControl', ['flarum/extend', 'f
                     onclick: function onclick() {
                         var deferred = m.deferred();
 
-                        var recipients = new ItemList([user]);
+                        var recipients = new ItemList();
                         recipients.add('to', user);
+                        recipients.add('from', app.session.user);
 
                         DiscussionComposer.prototype.recipients = recipients;
 

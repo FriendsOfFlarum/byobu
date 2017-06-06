@@ -17,8 +17,9 @@ export default function () {
                 onclick: () => {
                     const deferred = m.deferred();
 
-                    let recipients = new ItemList([user]);
+                    let recipients = new ItemList();
                     recipients.add('to', user);
+                    recipients.add('from', app.session.user);
 
                     DiscussionComposer.prototype.recipients = recipients;
 
