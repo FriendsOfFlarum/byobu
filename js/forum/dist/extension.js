@@ -8,7 +8,7 @@ System.register('flagrow/byobu/addDiscussPrivatelyControl', ['flarum/extend', 'f
     _export('default', function () {
         // Add a control allowing the discussion to be moved to another category.
         extend(UserControls, 'userControls', function (items, user) {
-            if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+            if (app.session.user && app.session.user.id() != user.id() && app.forum.attribute('canStartPrivateDiscussion')) {
                 items.add('private-discussion', Button.component({
                     children: app.translator.trans('flagrow-byobu.forum.buttons.send_pd', { username: user.username() }),
                     icon: 'map-o',
