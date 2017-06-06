@@ -39,3 +39,6 @@
   - Fix for mobile devices when trying to select recipients.
 - 0.1.0-beta.15
   - Actual fix for mobile see previous version.
+- 0.1.0-beta.16
+  - Added control on user profile to start messaging user privately.
+  
