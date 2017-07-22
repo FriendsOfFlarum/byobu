@@ -45,3 +45,5 @@
   - Implemented is_private properties of core to hide etc.
   - Fixed a bug where deleting a recipient added through the profile card control was impossible.
   - Added missing translation for "send pm" control on profile card.
+- 0.1.0-beta.18
+  - Updates is_private property on all discussions that have been managed by Byobu.
