@@ -41,4 +41,7 @@
   - Actual fix for mobile see previous version.
 - 0.1.0-beta.16
   - Added control on user profile to start messaging user privately.
-  
+- 0.1.0-beta.17
+  - Implemented is_private properties of core to hide etc.
+  - Fixed a bug where deleting a recipient added through the profile card control was impossible.
+  - Added missing translation for "send pm" control on profile card.
