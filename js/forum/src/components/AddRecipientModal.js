@@ -71,7 +71,7 @@ export default class AddRecipientModal extends Modal {
     select(e) {
         // Ctrl + Enter submits the selection, just Enter completes the current entry
         if (e.metaKey || e.ctrlKey || this.selected.indexOf(this.index) !== -1) {
-            if (this.selected.length) {
+            if (this.selected().length) {
                 this.$('form').submit();
             }
         }

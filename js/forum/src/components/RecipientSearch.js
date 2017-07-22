@@ -49,6 +49,7 @@ export default class RecipientSearch extends Search {
             }, this.props.selected().toArray().map(recipient =>
                 recipientLabel(recipient, {
                     onclick: () => {
+                        console.log(recipient);
                         this.removeRecipient(recipient);
                     }
                 })
@@ -151,7 +152,7 @@ export default class RecipientSearch extends Search {
         }
 
         this.props.selected().remove(type + ":" + recipient.id());
-
+console.log(this.props.selected())
         m.redraw();
     }
 
