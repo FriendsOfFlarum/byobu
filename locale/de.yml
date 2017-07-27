@@ -12,7 +12,7 @@ flagrow-byobu:
             recipients: "{count} Empfänger|{count} Empfänger"
             user_deleted: -gelöscht-
         nav:
-            private_discussions: Private Diskussion
+            private_discussions: Private Diskussionen
         input:
             search_recipients: Empfänger suchen durch Eingabe der ersten Buchstaben…
         search:
@@ -29,7 +29,7 @@ flagrow-byobu:
                 removed: "{username} hat Empfänger {removed} entfernt."
     admin:
         permission:
-            create_private_discussions_with_users: Private Diskussion mit Nutzern erstellen
+            create_private_discussions_with_users: Private Diskussionen mit Nutzern erstellen
             create_private_discussions_with_groups: Private Diskussionen mit Gruppen erstellen
             edit_user_recipients: Nutzer in privaten Diskussionen bearbeiten
             edit_group_recipients: Gruppen in privaten Diskussionen bearbeiten
