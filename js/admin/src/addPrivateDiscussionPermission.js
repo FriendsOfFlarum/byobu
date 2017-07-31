@@ -6,24 +6,24 @@ export default function () {
         items.add('startPrivateUsers', {
             icon: 'map-o',
             label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_users'),
-            permission: 'startPrivateDiscussionWithUsers'
+            permission: 'discussion.startPrivateDiscussionWithUsers'
         }, 95);
         items.add('startPrivateGroups', {
             icon: 'map-o',
             label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_groups'),
-            permission: 'startPrivateDiscussionWithGroups'
+            permission: 'discussion.startPrivateDiscussionWithGroups'
         }, 95);
     });
     extend(PermissionGrid.prototype, 'moderateItems', items => {
         items.add('editUserRecipients', {
             icon: 'map-o',
             label: app.translator.trans('flagrow-byobu.admin.permission.edit_user_recipients'),
-            permission: 'editUserRecipients'
+            permission: 'discussion.editUserRecipients'
         }, 95);
         items.add('editGroupRecipients', {
             icon: 'map-o',
             label: app.translator.trans('flagrow-byobu.admin.permission.edit_group_recipients'),
-            permission: 'editGroupRecipients'
+            permission: 'discussion.editGroupRecipients'
         }, 95);
     });
 }
