@@ -47,3 +47,9 @@
   - Added missing translation for "send pm" control on profile card.
 - 0.1.0-beta.18
   - Updates is_private property on all discussions that have been managed by Byobu.
+- 0.1.0-beta.19
+  - German translation added by Kakifrucht
+  - Permission can now be configured per tag.
+  - Fixed issue where only admins could set recipients.
+  - Fixed issue where opening a private discussion from a user profile didn't make a discussion private :scream:.
+  - Some improvements to less files and listeners. 
