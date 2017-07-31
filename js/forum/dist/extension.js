@@ -898,7 +898,6 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                             var target = _this2.$('.SearchResult.active');
 
                             $search.addRecipient(target.data('index'));
-
                             $search.$('.RecipientsInput').focus();
                         });
 
@@ -906,7 +905,6 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                             var target = _this2.$(e.target.parentNode);
 
                             $search.addRecipient(target.data('index'));
-
                             $search.$('.RecipientsInput').focus();
                         });
 
@@ -920,6 +918,8 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                         if (typeof this.value() === 'undefined') {
                             this.value('');
                         }
+
+                        var loading = this.value() && this.value().length >= 3;
 
                         return m('div', {
                             className: 'AddRecipientModal-form-input'
@@ -952,8 +952,10 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                                 return _this3.hasFocus = false;
                             }
                         }), m('ul', {
-                            className: 'Dropdown-menu Search-results'
-                        }, this.value() && this.value().length >= 3 ? this.sources.map(function (source) {
+                            className: 'Dropdown-menu Search-results fade ' + classList({
+                                in: !!loading
+                            })
+                        }, loading ? this.sources.map(function (source) {
                             return source.view(_this3.value());
                         }) : LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' }))]);
                     }

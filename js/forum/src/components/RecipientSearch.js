@@ -19,9 +19,7 @@ export default class RecipientSearch extends Search {
         this.$('.Search-results').on('click', (e) => {
             var target = this.$('.SearchResult.active')
 
-
             $search.addRecipient(target.data('index'));
-
             $search.$('.RecipientsInput').focus();
         });
 
@@ -29,7 +27,6 @@ export default class RecipientSearch extends Search {
             var target = this.$(e.target.parentNode);
 
             $search.addRecipient(target.data('index'));
-
             $search.$('.RecipientsInput').focus();
         });
 
@@ -40,6 +37,8 @@ export default class RecipientSearch extends Search {
         if (typeof this.value() === 'undefined') {
             this.value('');
         }
+
+        const loading = this.value() && this.value().length >= 3;
 
         return m('div', {
             className: 'AddRecipientModal-form-input'
@@ -71,8 +70,10 @@ export default class RecipientSearch extends Search {
                 onblur: () => this.hasFocus = false
             }),
             m('ul', {
-                className: 'Dropdown-menu Search-results'
-            }, this.value() && this.value().length >= 3
+                className: 'Dropdown-menu Search-results fade ' + classList({
+                    in: !!loading
+                })
+            }, loading
                 ? this.sources.map(source => source.view(this.value()))
                 : LoadingIndicator.component({size: 'tiny', className: 'Button Button--icon Button--link'})
             )
@@ -86,7 +87,6 @@ export default class RecipientSearch extends Search {
      */
     sourceItems() {
         const items = new ItemList();
-
 
         // Add user source based on permissions.
         if (
