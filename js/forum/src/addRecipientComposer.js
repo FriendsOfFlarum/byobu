@@ -2,6 +2,8 @@ import {extend, override} from "flarum/extend";
 import DiscussionComposer from "flarum/components/DiscussionComposer";
 import AddRecipientModal from "flagrow/byobu/components/AddRecipientModal";
 import recipientCountLabel from "flagrow/byobu/helpers/recipientCountLabel";
+import User from "flarum/models/User";
+import Group from "flarum/models/Group";
 
 export default function (app) {
     // Add recipient-selection abilities to the discussion composer.
@@ -15,9 +17,7 @@ export default function (app) {
         app.modal.show(
             new AddRecipientModal({
                 selectedRecipients: this.recipients,
-                onsubmit: (recipients, recipientUsers, recipientGroups) => {
-                    this.recipientUsers = recipientUsers;
-                    this.recipientGroups = recipientGroups;
+                onsubmit: (recipients) => {
                     this.recipients = recipients;
 
                     // Focus on recipient autocomplete field.
@@ -35,7 +35,8 @@ export default function (app) {
             const recipients = this.recipients ? this.recipients.toArray() : [];
 
             items.add('recipients', (
-                <a className="DiscussionComposer-changeRecipients" onclick={this.chooseRecipients.bind(this)}>
+                <a className="DiscussionComposer-changeRecipients"
+                   onclick={this.chooseRecipients.bind(this)}>
                     {recipients.length
                         ? recipientCountLabel(recipients.length)
                         : <span className="RecipientLabel none">{app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')}</span>}
@@ -46,8 +47,27 @@ export default function (app) {
 
     // Add the selected tags as data to submit to the server.
     extend(DiscussionComposer.prototype, 'data', function (data) {
+        const users = [];
+        const groups = [];
+        this.recipients.toArray().forEach(recipient => {
+
+            if (recipient instanceof User) {
+                users.push(recipient);
+            }
+
+            if (recipient instanceof Group) {
+                groups.push(recipient);
+            }
+        });
+
         data.relationships = data.relationships || {};
-        data.relationships.recipientUsers = this.recipientUsers;
-        data.relationships.recipientGroups = this.recipientGroups;
+
+        if (users.length) {
+            data.relationships.recipientUsers = users;
+        }
+
+        if (groups.length) {
+            data.relationships.recipientGroups = groups;
+        }
     });
 }

@@ -22,7 +22,9 @@ System.register('flagrow/byobu/addDiscussPrivatelyControl', ['flarum/extend', 'f
                         DiscussionComposer.prototype.recipients = recipients;
 
                         var component = new DiscussionComposer({
-                            user: app.session.user
+                            user: app.session.user,
+                            recipients: recipients,
+                            recipientUsers: recipients
                         });
 
                         app.composer.load(component);
@@ -87,10 +89,10 @@ System.register("flagrow/byobu/addHasRecipientsBadge", ["flarum/extend", "flarum
 });;
 "use strict";
 
-System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/components/DiscussionComposer", "flagrow/byobu/components/AddRecipientModal", "flagrow/byobu/helpers/recipientCountLabel"], function (_export, _context) {
+System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/components/DiscussionComposer", "flagrow/byobu/components/AddRecipientModal", "flagrow/byobu/helpers/recipientCountLabel", "flarum/models/User", "flarum/models/Group"], function (_export, _context) {
     "use strict";
 
-    var extend, override, DiscussionComposer, AddRecipientModal, recipientCountLabel;
+    var extend, override, DiscussionComposer, AddRecipientModal, recipientCountLabel, User, Group;
 
     _export("default", function (app) {
         // Add recipient-selection abilities to the discussion composer.
@@ -104,9 +106,7 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
 
             app.modal.show(new AddRecipientModal({
                 selectedRecipients: this.recipients,
-                onsubmit: function onsubmit(recipients, recipientUsers, recipientGroups) {
-                    _this.recipientUsers = recipientUsers;
-                    _this.recipientGroups = recipientGroups;
+                onsubmit: function onsubmit(recipients) {
                     _this.recipients = recipients;
 
                     // Focus on recipient autocomplete field.
@@ -124,7 +124,8 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
 
                 items.add('recipients', m(
                     "a",
-                    { className: "DiscussionComposer-changeRecipients", onclick: this.chooseRecipients.bind(this) },
+                    { className: "DiscussionComposer-changeRecipients",
+                        onclick: this.chooseRecipients.bind(this) },
                     recipients.length ? recipientCountLabel(recipients.length) : m(
                         "span",
                         { className: "RecipientLabel none" },
@@ -136,9 +137,28 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
 
         // Add the selected tags as data to submit to the server.
         extend(DiscussionComposer.prototype, 'data', function (data) {
+            var users = [];
+            var groups = [];
+            this.recipients.toArray().forEach(function (recipient) {
+
+                if (recipient instanceof User) {
+                    users.push(recipient);
+                }
+
+                if (recipient instanceof Group) {
+                    groups.push(recipient);
+                }
+            });
+
             data.relationships = data.relationships || {};
-            data.relationships.recipientUsers = this.recipientUsers;
-            data.relationships.recipientGroups = this.recipientGroups;
+
+            if (users.length) {
+                data.relationships.recipientUsers = users;
+            }
+
+            if (groups.length) {
+                data.relationships.recipientGroups = groups;
+            }
         });
     });
 
@@ -152,6 +172,10 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
             AddRecipientModal = _flagrowByobuComponentsAddRecipientModal.default;
         }, function (_flagrowByobuHelpersRecipientCountLabel) {
             recipientCountLabel = _flagrowByobuHelpersRecipientCountLabel.default;
+        }, function (_flarumModelsUser) {
+            User = _flarumModelsUser.default;
+        }, function (_flarumModelsGroup) {
+            Group = _flarumModelsGroup.default;
         }],
         execute: function () {}
     };
@@ -310,7 +334,7 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
                             // Adds the current user in case there are no selected recipients yet and this is a new discussion.
                             this.selected().add("users:" + app.session.user.id(), app.session.user);
                         }
-
+                        console.log(this.selected());
                         this.recipientSearch = RecipientSearch.component({
                             selected: this.selected,
                             discussion: this.props.discussion
@@ -399,6 +423,7 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
                             }
                         });
 
+                        // Recipients are updated here for existing discussions here.
                         if (discussion) {
                             discussion.save({ relationships: { recipientUsers: recipientUsers, recipientGroups: recipientGroups } }).then(function () {
                                 if (app.current instanceof DiscussionPage) {
@@ -408,7 +433,8 @@ System.register("flagrow/byobu/components/AddRecipientModal", ["flarum/component
                             });
                         }
 
-                        if (this.props.onsubmit) this.props.onsubmit(recipients, recipientUsers, recipientGroups);
+                        // Use the onsubmit callback to trigger an update in the DiscussionComposer
+                        if (this.props.onsubmit) this.props.onsubmit(recipients);
 
                         app.modal.close();
 

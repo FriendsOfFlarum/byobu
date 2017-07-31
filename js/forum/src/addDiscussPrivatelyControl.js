@@ -24,7 +24,9 @@ export default function () {
                     DiscussionComposer.prototype.recipients = recipients;
 
                     const component = new DiscussionComposer({
-                        user: app.session.user
+                        user: app.session.user,
+                        recipients: recipients,
+                        recipientUsers: recipients
                     });
 
                     app.composer.load(component);

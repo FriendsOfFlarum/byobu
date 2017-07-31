@@ -22,7 +22,7 @@ export default class AddRecipientModal extends Modal {
             // Adds the current user in case there are no selected recipients yet and this is a new discussion.
             this.selected().add("users:" + app.session.user.id(), app.session.user);
         }
-
+console.log(this.selected());
         this.recipientSearch = RecipientSearch.component({
             selected: this.selected,
             discussion: this.props.discussion
@@ -97,6 +97,7 @@ export default class AddRecipientModal extends Modal {
             }
         });
 
+        // Recipients are updated here for existing discussions here.
         if (discussion) {
             discussion.save({relationships: {recipientUsers, recipientGroups}})
                 .then(() => {
@@ -107,7 +108,8 @@ export default class AddRecipientModal extends Modal {
                 });
         }
 
-        if (this.props.onsubmit) this.props.onsubmit(recipients, recipientUsers, recipientGroups);
+        // Use the onsubmit callback to trigger an update in the DiscussionComposer
+        if (this.props.onsubmit) this.props.onsubmit(recipients);
 
         app.modal.close();
 
