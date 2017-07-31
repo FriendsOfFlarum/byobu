@@ -22,7 +22,7 @@ export default class AddRecipientModal extends Modal {
             // Adds the current user in case there are no selected recipients yet and this is a new discussion.
             this.selected().add("users:" + app.session.user.id(), app.session.user);
         }
-console.log(this.selected());
+
         this.recipientSearch = RecipientSearch.component({
             selected: this.selected,
             discussion: this.props.discussion
@@ -87,11 +87,9 @@ console.log(this.selected());
         var recipientUsers = [];
 
         recipients.toArray().forEach(recipient => {
-
             if (recipient instanceof User) {
                 recipientUsers.push(recipient);
             }
-
             if (recipient instanceof Group) {
                 recipientGroups.push(recipient);
             }
