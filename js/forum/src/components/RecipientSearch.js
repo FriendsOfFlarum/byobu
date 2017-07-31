@@ -18,18 +18,18 @@ export default class RecipientSearch extends Search {
 
         this.$('.Search-results').on('click', (e) => {
             var target = this.$('.SearchResult.active')
-            
+
 
             $search.addRecipient(target.data('index'));
 
             $search.$('.RecipientsInput').focus();
         });
-      
+
         this.$('.Search-results').on('touchstart', (e) => {
             var target = this.$(e.target.parentNode);
-           
+
             $search.addRecipient(target.data('index'));
-          
+
             $search.$('.RecipientsInput').focus();
         });
 
@@ -49,7 +49,6 @@ export default class RecipientSearch extends Search {
             }, this.props.selected().toArray().map(recipient =>
                 recipientLabel(recipient, {
                     onclick: () => {
-                        console.log(recipient);
                         this.removeRecipient(recipient);
                     }
                 })
@@ -152,7 +151,7 @@ export default class RecipientSearch extends Search {
         }
 
         this.props.selected().remove(type + ":" + recipient.id());
-console.log(this.props.selected())
+
         m.redraw();
     }
 

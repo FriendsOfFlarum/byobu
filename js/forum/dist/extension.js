@@ -928,7 +928,6 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                         }, this.props.selected().toArray().map(function (recipient) {
                             return recipientLabel(recipient, {
                                 onclick: function onclick() {
-                                    console.log(recipient);
                                     _this3.removeRecipient(recipient);
                                 }
                             });
@@ -1009,7 +1008,7 @@ System.register("flagrow/byobu/components/RecipientSearch", ["flarum/components/
                         }
 
                         this.props.selected().remove(type + ":" + recipient.id());
-                        console.log(this.props.selected());
+
                         m.redraw();
                     }
                 }, {
