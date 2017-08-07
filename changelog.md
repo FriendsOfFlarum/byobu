@@ -53,3 +53,5 @@
   - Fixed issue where only admins could set recipients.
   - Fixed issue where opening a private discussion from a user profile didn't make a discussion private :scream:.
   - Some improvements to less files and listeners. 
+- 0.1.0-beta.20
+  - Fixed #20; not able to create normal discussions due to incorrect recipients definition.
