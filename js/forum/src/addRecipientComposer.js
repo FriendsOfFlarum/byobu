@@ -4,10 +4,11 @@ import AddRecipientModal from "flagrow/byobu/components/AddRecipientModal";
 import recipientCountLabel from "flagrow/byobu/helpers/recipientCountLabel";
 import User from "flarum/models/User";
 import Group from "flarum/models/Group";
+import ItemList from "flarum/utils/ItemList";
 
 export default function (app) {
     // Add recipient-selection abilities to the discussion composer.
-    DiscussionComposer.prototype.recipients;
+    DiscussionComposer.prototype.recipients = new ItemList;
     DiscussionComposer.prototype.recipientUsers = [];
     DiscussionComposer.prototype.recipientGroups = [];
 
@@ -32,7 +33,7 @@ export default function (app) {
     extend(DiscussionComposer.prototype, 'headerItems', function (items) {
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
 
-            const recipients = this.recipients ? this.recipients.toArray() : [];
+            const recipients = this.recipients.toArray();
 
             items.add('recipients', (
                 <a className="DiscussionComposer-changeRecipients"

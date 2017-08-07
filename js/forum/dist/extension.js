@@ -89,14 +89,14 @@ System.register("flagrow/byobu/addHasRecipientsBadge", ["flarum/extend", "flarum
 });;
 "use strict";
 
-System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/components/DiscussionComposer", "flagrow/byobu/components/AddRecipientModal", "flagrow/byobu/helpers/recipientCountLabel", "flarum/models/User", "flarum/models/Group"], function (_export, _context) {
+System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/components/DiscussionComposer", "flagrow/byobu/components/AddRecipientModal", "flagrow/byobu/helpers/recipientCountLabel", "flarum/models/User", "flarum/models/Group", "flarum/utils/ItemList"], function (_export, _context) {
     "use strict";
 
-    var extend, override, DiscussionComposer, AddRecipientModal, recipientCountLabel, User, Group;
+    var extend, override, DiscussionComposer, AddRecipientModal, recipientCountLabel, User, Group, ItemList;
 
     _export("default", function (app) {
         // Add recipient-selection abilities to the discussion composer.
-        DiscussionComposer.prototype.recipients;
+        DiscussionComposer.prototype.recipients = new ItemList();
         DiscussionComposer.prototype.recipientUsers = [];
         DiscussionComposer.prototype.recipientGroups = [];
 
@@ -120,7 +120,7 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
         extend(DiscussionComposer.prototype, 'headerItems', function (items) {
             if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
 
-                var recipients = this.recipients ? this.recipients.toArray() : [];
+                var recipients = this.recipients.toArray();
 
                 items.add('recipients', m(
                     "a",
@@ -176,6 +176,8 @@ System.register("flagrow/byobu/addRecipientComposer", ["flarum/extend", "flarum/
             User = _flarumModelsUser.default;
         }, function (_flarumModelsGroup) {
             Group = _flarumModelsGroup.default;
+        }, function (_flarumUtilsItemList) {
+            ItemList = _flarumUtilsItemList.default;
         }],
         execute: function () {}
     };
