@@ -15,7 +15,7 @@ export default class AddRecipientModal extends Modal {
         if (this.props.discussion) {
             // Adds recipients of the currently viewed discussion.
             this.assignInitialRecipients(this.props.discussion);
-        } else if (this.props.selectedRecipients) {
+        } else if (this.props.selectedRecipients.toArray().length > 0) {
             // Adds previously selected recipients.
             this.selected().merge(this.props.selectedRecipients);
         } else {

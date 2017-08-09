@@ -55,3 +55,5 @@
   - Some improvements to less files and listeners. 
 - 0.1.0-beta.20
   - Fixed #20; not able to create normal discussions due to incorrect recipients definition.
+- 0.1.0-beta.21
+  - Fixed #24; not adding current user when no recipients are defined.

@@ -14,7 +14,6 @@ export default function (app) {
 
     // Add a recipient selection modal when clicking the recipient tag label.
     DiscussionComposer.prototype.chooseRecipients = function () {
-
         app.modal.show(
             new AddRecipientModal({
                 selectedRecipients: this.recipients,
