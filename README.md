@@ -11,9 +11,9 @@ Private discussions for your forum. Allows you to select specific recipients for
 - Create discussions only specific users or groups can participate in.
 - Force new posts in these private discussions to show real-time.
 
-Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace) or install manually:
-
 ## Installation
+
+Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace) or install manually:
 
     composer require flagrow/byobu
 
