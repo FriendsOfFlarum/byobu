@@ -43,15 +43,6 @@ If you discover a security vulnerability within Byobu, please send an email to t
 
 Please include as many details as possible. You can use `php flarum info` to get the PHP, Flarum and extension versions installed.
 
-## FAQ
-
-- package not found: Make sure your composer.json has the following:
-
-```json
-    "prefer-stable": true,
-    "minimum-stability": "beta"
-```
-
 ## Links
 
 - [Flarum Discuss post](https://discuss.flarum.org/d/4762-flagrow-by-bu-well-integrated-advanced-private-discussions)
