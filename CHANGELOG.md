@@ -57,3 +57,7 @@
   - Fixed #20; not able to create normal discussions due to incorrect recipients definition.
 - 0.1.0-beta.21
   - Fixed #24; not adding current user when no recipients are defined.
+- 0.1.0
+  - Fixed #47; groups would not have access to discussion.
+  - Updated polish language file.
+  - Reformatted readme.
