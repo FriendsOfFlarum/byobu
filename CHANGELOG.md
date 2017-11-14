@@ -61,3 +61,5 @@
   - Fixed #47; groups would not have access to discussion.
   - Updated polish language file.
   - Reformatted readme.
+- 0.1.1
+  - Fixed the recipient labels from not showing in certain situations.
