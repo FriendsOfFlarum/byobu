@@ -2,6 +2,7 @@ import {extend} from "flarum/extend";
 import DiscussionListItem from "flarum/components/DiscussionListItem";
 import DiscussionPage from "flarum/components/DiscussionPage";
 import DiscussionHero from "flarum/components/DiscussionHero";
+import DiscussionList from "flarum/components/DiscussionList";
 import recipientsLabel from "flagrow/byobu/helpers/recipientsLabel";
 
 export default function() {
@@ -39,6 +40,10 @@ export default function() {
      * Require recipients from the API whenever we're loading a Discussion page.
      */
     extend(DiscussionPage.prototype, 'params', function(params) {
+        params.include.push('recipientUsers');
+        params.include.push('recipientGroups');
+    });
+    extend(DiscussionList.prototype, 'requestParams', function(params) {
         params.include.push('recipientUsers');
         params.include.push('recipientGroups');
     });
