@@ -3,8 +3,8 @@
 namespace Flagrow\Byobu\Access;
 
 use Flagrow\Byobu\Traits\ProvidesAccess;
-use Flarum\Core\Discussion;
-use Flarum\Core\User;
+use Flarum\Discussion\Discussion;
+use Flarum\User\User;
 use Flarum\Event\ScopeHiddenDiscussionVisibility;
 use Flarum\Event\ScopePrivateDiscussionVisibility;
 use Flarum\Extension\ExtensionManager;

@@ -2,9 +2,9 @@
 
 namespace Flagrow\Byobu\Events;
 
-use Flarum\Core\Discussion;
-use Flarum\Core\User;
-use Flarum\Core\Group;
+use Flarum\Discussion\Discussion;
+use Flarum\User\User;
+use Flarum\Group\Group;
 use Illuminate\Support\Collection;
 
 abstract class AbstractRecipientsEvent

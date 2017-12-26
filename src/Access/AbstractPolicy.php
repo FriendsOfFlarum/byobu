@@ -2,7 +2,7 @@
 
 namespace Flagrow\Byobu\Access;
 
-use Flarum\Core\Access\AbstractPolicy as Policy;
+use Flarum\User\AbstractPolicy as Policy;
 use Flarum\Event\ScopeHiddenDiscussionVisibility;
 use Flarum\Event\ScopeModelVisibility;
 use Flarum\Event\ScopePostVisibility;

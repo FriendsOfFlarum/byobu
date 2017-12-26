@@ -2,9 +2,9 @@
 
 namespace Flagrow\Byobu\Traits;
 
-use Flarum\Core\Discussion;
-use Flarum\Core\Group;
-use Flarum\Core\User;
+use Flarum\Discussion\Discussion;
+use Flarum\Group\Group;
+use Flarum\User\User;
 use Illuminate\Database\Eloquent\Collection;
 
 trait ProvidesAccess

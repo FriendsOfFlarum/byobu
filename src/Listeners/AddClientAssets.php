@@ -4,21 +4,21 @@ namespace Flagrow\Byobu\Listeners;
 
 use DirectoryIterator;
 use Flarum\Event\ConfigureLocales;
-use Flarum\Event\ConfigureWebApp;
+use Flarum\Frontend\Event\Rendering;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddClientAssets
 {
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureWebApp::class, [$this, 'addAssets']);
+        $events->listen(Rendering::class, [$this, 'addAssets']);
         $events->listen(ConfigureLocales::class, [$this, 'addLocales']);
     }
 
     /**
-     * @param ConfigureWebApp $app
+     * @param Rendering $app
      */
-    public function addAssets(ConfigureWebApp $app)
+    public function addAssets(Rendering $app)
     {
         if ($app->isForum()) {
             $app->addAssets([
