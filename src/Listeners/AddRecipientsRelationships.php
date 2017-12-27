@@ -3,10 +3,10 @@
 namespace Flagrow\Byobu\Listeners;
 
 use Flarum\Api\Serializer;
-use Flarum\Core\Discussion;
-use Flarum\Core\Group;
-use Flarum\Core\User;
-use Flarum\Event\ConfigureApiController;
+use Flarum\Discussion\Discussion;
+use Flarum\Group\Group;
+use Flarum\User\User;
+use Flarum\Api\Event\WillGetData;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -21,7 +21,7 @@ class AddRecipientsRelationships
     {
         $events->listen(GetModelRelationship::class, [$this, 'getModelRelationship']);
         $events->listen(GetApiRelationship::class, [$this, 'getApiRelationship']);
-        $events->listen(ConfigureApiController::class, [$this, 'includeRecipientsRelationship']);
+        $events->listen(WillGetData::class, [$this, 'includeRecipientsRelationship']);
     }
 
     /**
@@ -82,9 +82,9 @@ class AddRecipientsRelationships
     }
 
     /**
-     * @param ConfigureApiController $event
+     * @param WillGetData $event
      */
-    public function includeRecipientsRelationship(ConfigureApiController $event)
+    public function includeRecipientsRelationship(WillGetData $event)
     {
         if ($event->controller->serializer === Serializer\DiscussionSerializer::class) {
             $event->addInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups']);
@@ -97,17 +97,17 @@ class AddRecipientsRelationships
      */
     public function getApiRelationship(GetApiRelationship $event)
     {
-        if ($event->isRelationship(Serializer\DiscussionBasicSerializer::class, 'recipientUsers')) {
+        if ($event->isRelationship(Serializer\BasicDiscussionSerializer::class, 'recipientUsers')) {
             return $event->serializer->hasMany($event->model, Serializer\UserSerializer::class, 'recipientUsers');
         }
-        if ($event->isRelationship(Serializer\DiscussionBasicSerializer::class, 'oldRecipientUsers')) {
+        if ($event->isRelationship(Serializer\BasicDiscussionSerializer::class, 'oldRecipientUsers')) {
             return $event->serializer->hasMany($event->model, Serializer\UserSerializer::class, 'oldRecipientUsers');
         }
 
-        if ($event->isRelationship(Serializer\DiscussionBasicSerializer::class, 'recipientGroups')) {
+        if ($event->isRelationship(Serializer\BasicDiscussionSerializer::class, 'recipientGroups')) {
             return $event->serializer->hasMany($event->model, Serializer\GroupSerializer::class, 'recipientGroups');
         }
-        if ($event->isRelationship(Serializer\DiscussionBasicSerializer::class, 'oldRecipientGroups')) {
+        if ($event->isRelationship(Serializer\BasicDiscussionSerializer::class, 'oldRecipientGroups')) {
             return $event->serializer->hasMany($event->model, Serializer\GroupSerializer::class, 'oldRecipientGroups');
         }
 

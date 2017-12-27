@@ -7,12 +7,12 @@ use DateTime;
 use Flagrow\Byobu\Events\DiscussionMadePrivate;
 use Flagrow\Byobu\Events\DiscussionMadePublic;
 use Flagrow\Byobu\Events\DiscussionRecipientsChanged;
-use Flarum\Core\Discussion;
-use Flarum\Core\Exception\PermissionDeniedException;
-use Flarum\Core\Exception\ValidationException;
-use Flarum\Core\Repository\UserRepository;
-use Flarum\Event\DiscussionWillBeSaved;
-use Flarum\Event\PostWillBeSaved;
+use Flarum\Discussion\Discussion;
+use Flarum\User\Exception\PermissionDeniedException;
+use Flarum\Foundation\ValidationException;
+use Flarum\User\UserRepository;
+use Flarum\Discussion\Event\Saving as DiscussionSaving;
+use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Validation\Factory;
@@ -65,14 +65,14 @@ class SaveRecipientsToDatabase
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(DiscussionWillBeSaved::class, [$this, 'whenDiscussionWillBeSaved']);
-        $events->listen(PostWillBeSaved::class, [$this, 'makePostPrivate']);
+        $events->listen(DiscussionSaving::class, [$this, 'whenSaving']);
+        $events->listen(PostSaving::class, [$this, 'makePostPrivate']);
     }
 
     /**
-     * @param PostWillBeSaved $event
+     * @param PostSaving $event
      */
-    public function makePostPrivate(PostWillBeSaved $event)
+    public function makePostPrivate(PostSaving $event)
     {
         if ($event->post->discussion->is_private) {
             $event->post->is_private = $event->post->discussion->is_private;
@@ -80,11 +80,11 @@ class SaveRecipientsToDatabase
     }
 
     /**
-     * @param DiscussionWillBeSaved $event
+     * @param DiscussionSaving $event
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function whenDiscussionWillBeSaved(DiscussionWillBeSaved $event)
+    public function whenSaving(DiscussionSaving $event)
     {
         $discussion = $event->discussion;
         $actor = $event->actor;

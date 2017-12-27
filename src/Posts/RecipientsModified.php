@@ -3,9 +3,9 @@
 namespace Flagrow\Byobu\Posts;
 
 use Flagrow\Byobu\Events\AbstractRecipientsEvent;
-use Flarum\Core\Post;
-use Flarum\Core\Post\AbstractEventPost;
-use Flarum\Core\Post\MergeableInterface;
+use Flarum\Post\Post;
+use Flarum\Post\AbstractEventPost;
+use Flarum\Post\MergeableInterface;
 
 /**
  * @property array $content

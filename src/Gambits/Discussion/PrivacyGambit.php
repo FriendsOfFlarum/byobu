@@ -2,8 +2,8 @@
 
 namespace Flagrow\Byobu\Gambits\Discussion;
 
-use Flarum\Core\Search\AbstractRegexGambit;
-use Flarum\Core\Search\AbstractSearch;
+use Flarum\Search\AbstractRegexGambit;
+use Flarum\Search\AbstractSearch;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 

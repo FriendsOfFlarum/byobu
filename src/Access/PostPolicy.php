@@ -3,9 +3,9 @@
 namespace Flagrow\Byobu\Access;
 
 use Flagrow\Byobu\Traits\ProvidesAccess;
-use Flarum\Core\Discussion;
-use Flarum\Core\Post;
-use Flarum\Core\User;
+use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
+use Flarum\User\User;
 use Flarum\Event\ScopePrivatePostVisibility;
 use Flarum\Extension\ExtensionManager;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
