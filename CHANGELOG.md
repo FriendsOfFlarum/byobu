@@ -1,3 +1,6 @@
+- 0.2.0
+  - Flarum beta 8 compatibility.
+- 0.1.0
 - 0.1.0-beta.1
   - Is Private gambit. Enabled per default on all threads.
   - Adding, editing, deleting recipients.
