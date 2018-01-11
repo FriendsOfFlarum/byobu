@@ -23,7 +23,7 @@ class AddClientAssets
         if ($app->isForum()) {
             $app->addAssets([
                 __DIR__.'/../../js/forum/dist/extension.js',
-                __DIR__.'/../../less/forum/extension.less'
+                __DIR__.'/../../resources/less/forum/extension.less'
             ]);
             $app->addBootstrapper('flagrow/byobu/main');
         }
@@ -43,7 +43,7 @@ class AddClientAssets
      */
     public function addLocales(ConfigureLocales $event)
     {
-        foreach (new DirectoryIterator(__DIR__ . '/../../locale') as $file) {
+        foreach (new DirectoryIterator(__DIR__ . '/../../resources/locale') as $file) {
             if ($file->isFile() && in_array($file->getExtension(), ['yml', 'yaml'])) {
                 $event->locales->addTranslations($file->getBasename('.' . $file->getExtension()), $file->getPathname());
             }
