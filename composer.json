@@ -22,17 +22,17 @@
         "source": "https://github.com/flagrow/byobu"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.7",
-        "flarum/flarum-ext-markdown": "^0.1.0-beta.5",
-        "flarum/flarum-ext-pusher": "^0.1.0-beta.5"
+        "flarum/core": "^0.1.0-beta.8"
     },
     "extra": {
         "flarum-extension": {
             "title": "Flagrow Byōbu",
             "icon": {
-                "name": "map-o",
-                "backgroundColor": "#f4f4f4",
-                "color": "#5f4bb6"
+                "image": "resources/logo.svg",
+                "backgroundColor": "#5f4bb6",
+                "backgroundSize": "90%",
+                "backgroundRepeat": "no-repeat",
+                "backgroundPosition": "center"
             }
         },
         "flagrow": {
