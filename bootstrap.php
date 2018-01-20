@@ -13,8 +13,6 @@ return function (Dispatcher $events) {
     $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
 
     $events->subscribe(Access\DiscussionPolicy::class);
-    $events->subscribe(Access\PostPolicy::class);
-    $events->subscribe(Access\ApprovePrivateDiscussions::class);
 
     // Support for flagrow/split
     $events->subscribe(Listeners\AddRecipientsToSplitDiscussion::class);
