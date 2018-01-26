@@ -42,7 +42,7 @@ class SaveRecipientsToDatabase
      */
     protected $users;
 
-    private $privateDiscussion;
+    private $savingPrivateDiscussion;
 
     /**
      * @param SettingsRepositoryInterface $settings
@@ -110,7 +110,7 @@ class SaveRecipientsToDatabase
         }
 
         if ($addsRecipients) {
-            $this->privateDiscussion = $discussion;
+            $this->savingPrivateDiscussion = $discussion;
 
             $oldRecipients = [
                 'groups' => $discussion->recipientGroups()->get(),
@@ -159,7 +159,9 @@ class SaveRecipientsToDatabase
      */
     public function markSavedDiscussionAsPrivate(GetModelIsPrivate $event)
     {
-        if ($event->model === $this->privateDiscussion) {
+        $discussion = $event->model;
+
+        if ($discussion === $this->savingPrivateDiscussion || $discussion->recipientGroups()->count() || $discussion->recipientUsers()->count()) {
             return true;
         }
     }
