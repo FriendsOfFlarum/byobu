@@ -161,7 +161,8 @@ class SaveRecipientsToDatabase
     {
         $discussion = $event->model;
 
-        if ($discussion === $this->savingPrivateDiscussion || $discussion->recipientGroups()->count() || $discussion->recipientUsers()->count()) {
+        if ($discussion === $this->savingPrivateDiscussion
+            || ($discussion instanceof Discussion && ($discussion->recipientGroups()->count() || $discussion->recipientUsers()->count()))) {
             return true;
         }
     }
