@@ -8,11 +8,11 @@ use Flagrow\Byobu\Events\DiscussionMadePrivate;
 use Flagrow\Byobu\Events\DiscussionMadePublic;
 use Flagrow\Byobu\Events\DiscussionRecipientsChanged;
 use Flarum\Discussion\Discussion;
+use Flarum\Event\GetModelIsPrivate;
 use Flarum\User\Exception\PermissionDeniedException;
 use Flarum\Foundation\ValidationException;
 use Flarum\User\UserRepository;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
-use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Validation\Factory;
@@ -42,6 +42,8 @@ class SaveRecipientsToDatabase
      */
     protected $users;
 
+    private $savingPrivateDiscussion;
+
     /**
      * @param SettingsRepositoryInterface $settings
      * @param Factory $validator
@@ -66,17 +68,7 @@ class SaveRecipientsToDatabase
     public function subscribe(Dispatcher $events)
     {
         $events->listen(DiscussionSaving::class, [$this, 'whenSaving']);
-        $events->listen(PostSaving::class, [$this, 'makePostPrivate']);
-    }
-
-    /**
-     * @param PostSaving $event
-     */
-    public function makePostPrivate(PostSaving $event)
-    {
-        if ($event->post->discussion->is_private) {
-            $event->post->is_private = $event->post->discussion->is_private;
-        }
+        $events->listen(GetModelIsPrivate::class, [$this, 'markSavedDiscussionAsPrivate']);
     }
 
     /**
@@ -99,7 +91,6 @@ class SaveRecipientsToDatabase
             });
 
         $addsRecipients = !$newUserIds->isEmpty() || !$newGroupIds->isEmpty();
-        $discussion->is_private = $addsRecipients;
 
         // New discussion
         if ($discussion->exists) {
@@ -119,6 +110,7 @@ class SaveRecipientsToDatabase
         }
 
         if ($addsRecipients) {
+            $this->savingPrivateDiscussion = $discussion;
 
             $oldRecipients = [
                 'groups' => $discussion->recipientGroups()->get(),
@@ -158,6 +150,20 @@ class SaveRecipientsToDatabase
                     });
                 }
             });
+        }
+    }
+
+    /**
+     * @param GetModelIsPrivate $event
+     * @return bool
+     */
+    public function markSavedDiscussionAsPrivate(GetModelIsPrivate $event)
+    {
+        $discussion = $event->model;
+
+        if ($discussion === $this->savingPrivateDiscussion
+            || ($discussion instanceof Discussion && ($discussion->recipientGroups()->count() || $discussion->recipientUsers()->count()))) {
+            return true;
         }
     }
 
