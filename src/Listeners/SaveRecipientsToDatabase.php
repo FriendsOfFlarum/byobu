@@ -66,17 +66,6 @@ class SaveRecipientsToDatabase
     public function subscribe(Dispatcher $events)
     {
         $events->listen(DiscussionWillBeSaved::class, [$this, 'whenDiscussionWillBeSaved']);
-        $events->listen(PostWillBeSaved::class, [$this, 'makePostPrivate']);
-    }
-
-    /**
-     * @param PostWillBeSaved $event
-     */
-    public function makePostPrivate(PostWillBeSaved $event)
-    {
-        if ($event->post->discussion->is_private) {
-            $event->post->is_private = $event->post->discussion->is_private;
-        }
     }
 
     /**
@@ -101,7 +90,7 @@ class SaveRecipientsToDatabase
         $addsRecipients = !$newUserIds->isEmpty() || !$newGroupIds->isEmpty();
         $discussion->is_private = $addsRecipients;
 
-        // New discussion
+        // Existing discussion
         if ($discussion->exists) {
             if (!$newUserIds->isEmpty() && !$actor->can('discussion.editUserRecipients', $discussion)) {
                 throw new PermissionDeniedException('Not allowed to edit users of a private discussion');
