@@ -21,10 +21,10 @@ class AddRecipientsToSplitDiscussion
     public function addRecipients(DiscussionWasSplit $event)
     {
         $event->newDiscussion->recipientUsers()->sync(
-            $event->originalDiscussion->recipientUsers()->getRelatedIds()->all()
+            $event->originalDiscussion->recipientUsers()->allRelatedIds()->all()
         );
         $event->newDiscussion->recipientGroups()->sync(
-            $event->originalDiscussion->recipientGroups()->getRelatedIds()->all()
+            $event->originalDiscussion->recipientGroups()->allRelatedIds()->all()
         );
     }
 }
