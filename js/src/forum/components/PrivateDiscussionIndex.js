@@ -3,7 +3,7 @@ import Page from 'flarum/components/Page';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
 import icon from 'flarum/helpers/icon';
-import PrivateDiscussionList from 'flagrow/byobu/components/PrivateDiscussionList';
+import PrivateDiscussionList from './PrivateDiscussionList';
 import WelcomeHero from 'flarum/components/WelcomeHero';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 import LogInModal from 'flarum/components/LogInModal';
@@ -52,7 +52,7 @@ export default class PrivateDiscussionIndex extends Page
             app.cache.privateDiscussionList = new PrivateDiscussionList({params});
         }
 
-        app.history.push('private-index', icon('map-o'));
+        app.history.push('private-index', icon('far fa-map'));
 
         this.bodyClass = 'App--index';
     }
@@ -151,7 +151,7 @@ export default class PrivateDiscussionIndex extends Page
         items.add('newDiscussion',
             Button.component({
                 children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
-                icon: 'edit',
+                icon: 'fas fa-edit',
                 className: 'Button Button--primary IndexPage-newDiscussion',
                 itemClassName: 'App-primaryControl',
                 onclick: this.newDiscussion.bind(this),
@@ -184,7 +184,7 @@ export default class PrivateDiscussionIndex extends Page
             LinkButton.component({
                 href: app.route('index', params),
                 children: app.translator.trans('core.forum.index.all_discussions_link'),
-                icon: 'comments-o'
+                icon: 'far fa-comments'
             }),
             100
         );
@@ -231,7 +231,7 @@ export default class PrivateDiscussionIndex extends Page
         items.add('refresh',
             Button.component({
                 title: app.translator.trans('core.forum.index.refresh_tooltip'),
-                icon: 'refresh',
+                icon: 'fas fa-refresh',
                 className: 'Button Button--icon',
                 onclick: () => app.cache.discussionList.refresh()
             })
@@ -241,7 +241,7 @@ export default class PrivateDiscussionIndex extends Page
             items.add('markAllAsRead',
                 Button.component({
                     title: app.translator.trans('core.forum.index.mark_all_as_read_tooltip'),
-                    icon: 'check',
+                    icon: 'fas fa-check',
                     className: 'Button Button--icon',
                     onclick: this.markAllAsRead.bind(this)
                 })

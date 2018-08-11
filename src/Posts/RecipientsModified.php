@@ -55,7 +55,7 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
                 'groups' => $event->oldGroups->pluck('id')->all()
             ]
         ];
-        $post->time = time();
+        $post->created_at = time();
         $post->discussion_id = $event->discussion->id;
         $post->user_id = $event->actor->id;
 

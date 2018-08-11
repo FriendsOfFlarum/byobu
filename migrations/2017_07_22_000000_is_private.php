@@ -3,7 +3,9 @@
 use Illuminate\Database\Schema\Builder;
 
 return [
-    'up' => function (\Illuminate\Database\ConnectionInterface $connection) {
+    'up' => function (Builder $schema) {
+
+        $connection = $schema->getConnection();
 
         $ids = $connection->table('recipients')
             ->select('discussion_id')

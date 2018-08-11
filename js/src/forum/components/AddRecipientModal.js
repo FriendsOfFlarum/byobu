@@ -2,7 +2,7 @@ import Modal from "flarum/components/Modal";
 import DiscussionPage from "flarum/components/DiscussionPage";
 import Button from "flarum/components/Button";
 import ItemList from "flarum/utils/ItemList";
-import RecipientSearch from "flagrow/byobu/components/RecipientSearch";
+import RecipientSearch from "./RecipientSearch";
 import User from "flarum/models/User";
 import Group from "flarum/models/Group";
 
@@ -59,7 +59,7 @@ export default class AddRecipientModal extends Modal {
                             type: 'submit',
                             className: 'Button Button--primary',
                             disabled: false,
-                            icon: 'check',
+                            icon: 'fas fa-check',
                             children: app.translator.trans('flagrow-byobu.forum.buttons.submit')
                         })}
                     </div>

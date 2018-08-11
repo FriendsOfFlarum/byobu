@@ -1,13 +1,13 @@
 import Model from "flarum/Model";
 import Discussion from "flarum/models/Discussion";
-import addRecipientComposer from "flagrow/byobu/addRecipientComposer";
-import addRecipientLabels from "flagrow/byobu/addRecipientLabels";
-import addRecipientsControl from "flagrow/byobu/addRecipientsControl";
-import addHasRecipientsBadge from "flagrow/byobu/addHasRecipientsBadge";
-import addDiscussPrivatelyControl from 'flagrow/byobu/addDiscussPrivatelyControl';
+import addRecipientComposer from "./addRecipientComposer";
+import addRecipientLabels from "./addRecipientLabels";
+import addRecipientsControl from "./addRecipientsControl";
+import addHasRecipientsBadge from "./addHasRecipientsBadge";
+import addDiscussPrivatelyControl from './addDiscussPrivatelyControl';
 
-import PrivateDiscussionIndex from "flagrow/byobu/components/PrivateDiscussionIndex";
-import RecipientsModified from "flagrow/byobu/components/RecipientsModified";
+import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
+import RecipientsModified from "./components/RecipientsModified";
 
 app.initializers.add('flagrow-byobu', function(app) {
     app.routes.private_discussions = {path: '/private-discussions', component: PrivateDiscussionIndex.component()};

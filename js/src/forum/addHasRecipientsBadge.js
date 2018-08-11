@@ -8,7 +8,7 @@ export default function addHasRecipientsBadge() {
             badges.add('private', Badge.component({
                 type: 'private',
                 label: app.translator.trans('flagrow-byobu.forum.badges.is_private.tooltip'),
-                icon: 'map'
+                icon: 'fas fa-map'
             }), 10);
         }
     });
