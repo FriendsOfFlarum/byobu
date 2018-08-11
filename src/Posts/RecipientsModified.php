@@ -3,9 +3,9 @@
 namespace Flagrow\Byobu\Posts;
 
 use Flagrow\Byobu\Events\AbstractRecipientsEvent;
-use Flarum\Post\Post;
 use Flarum\Post\AbstractEventPost;
 use Flarum\Post\MergeableInterface;
+use Flarum\Post\Post;
 
 /**
  * @property array $content
@@ -22,6 +22,7 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
 
     /**
      * @param Post|null|RecipientsModified $previous
+     *
      * @return $this|RecipientsModified|Post
      */
     public function saveAfter(Post $previous = null)
@@ -38,22 +39,24 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
 
     /**
      * Create a new instance in reply to a discussion.
+     *
      * @param AbstractRecipientsEvent $event
+     *
      * @return static
      */
     public static function reply(AbstractRecipientsEvent $event)
     {
-        $post = new static;
+        $post = new static();
 
         $post->content = [
             'new' => [
-                'users' => $event->newUsers->all(),
-                'groups' => $event->newGroups->all()
+                'users'  => $event->newUsers->all(),
+                'groups' => $event->newGroups->all(),
             ],
             'old' => [
-                'users' => $event->oldUsers->pluck('id')->all(),
-                'groups' => $event->oldGroups->pluck('id')->all()
-            ]
+                'users'  => $event->oldUsers->pluck('id')->all(),
+                'groups' => $event->oldGroups->pluck('id')->all(),
+            ],
         ];
         $post->created_at = time();
         $post->discussion_id = $event->discussion->id;
@@ -62,4 +65,3 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
         return $post;
     }
 }
-

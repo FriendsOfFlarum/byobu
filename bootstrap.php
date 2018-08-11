@@ -7,11 +7,11 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     (new Extend\Frontend('admin'))
-        ->js(__DIR__ . '/js/dist/admin.js'),
+        ->js(__DIR__.'/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
-        ->css(__DIR__ . '/resources/less/forum/extension.less')
-        ->js(__DIR__ . '/js/dist/forum.js'),
-    new Extend\Locales(__DIR__ . '/resources/locale'),
+        ->css(__DIR__.'/resources/less/forum/extension.less')
+        ->js(__DIR__.'/js/dist/forum.js'),
+    new Extend\Locales(__DIR__.'/resources/locale'),
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\AddRecipientsRelationships::class);

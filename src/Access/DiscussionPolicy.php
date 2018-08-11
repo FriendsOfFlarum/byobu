@@ -16,7 +16,7 @@ class DiscussionPolicy extends AbstractPolicy
     protected $model = Discussion::class;
 
     /**
-     * @param User $actor
+     * @param User            $actor
      * @param EloquentBuilder $query
      */
     public function findPrivate(User $actor, EloquentBuilder $query)
@@ -39,8 +39,9 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * @param User $actor
+     * @param User       $actor
      * @param Discussion $discussion
+     *
      * @return bool|void
      */
     public function startWithoutApproval(User $actor, Discussion $discussion)
@@ -49,8 +50,9 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * @param User $actor
+     * @param User       $actor
      * @param Discussion $discussion
+     *
      * @return bool|void
      */
     public function replyWithoutApproval(User $actor, Discussion $discussion)
@@ -60,6 +62,7 @@ class DiscussionPolicy extends AbstractPolicy
 
     /**
      * @param Discussion $discussion
+     *
      * @return bool|void
      */
     private function approveIfPrivate(Discussion $discussion)
