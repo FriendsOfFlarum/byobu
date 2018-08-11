@@ -2,18 +2,17 @@
 
 namespace Flagrow\Byobu\Listeners;
 
+use Flarum\Api\Event\WillGetData;
 use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
-use Flarum\Group\Group;
-use Flarum\User\User;
-use Flarum\Api\Event\WillGetData;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
+use Flarum\Group\Group;
+use Flarum\User\User;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddRecipientsRelationships
 {
-
     /**
      * @param Dispatcher $events
      */
@@ -26,6 +25,7 @@ class AddRecipientsRelationships
 
     /**
      * @param GetModelRelationship $event
+     *
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
     public function getModelRelationship(GetModelRelationship $event)
@@ -93,6 +93,7 @@ class AddRecipientsRelationships
 
     /**
      * @param GetApiRelationship $event
+     *
      * @return \Tobscure\JsonApi\Relationship
      */
     public function getApiRelationship(GetApiRelationship $event)

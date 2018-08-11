@@ -4,7 +4,6 @@ use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
-
         $connection = $schema->getConnection();
 
         $ids = $connection->table('recipients')
@@ -18,5 +17,5 @@ return [
     },
     'down' => function (Builder $schema) {
         // .. bugger off
-    }
+    },
 ];
