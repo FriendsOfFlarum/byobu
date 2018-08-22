@@ -1,0 +1,35 @@
+flagrow-byobu:
+    forum:
+        badges:
+            is_private:
+                tooltip: Özel Tartışma
+        buttons:
+            add_recipients: Katılımcılar
+            submit: Tamam
+            edit_recipients: Katılımcıları Düzenle
+            send_pd: "{username}'a bir mesaj gönder"
+        labels:
+            recipients: "{count} Katılımcı|{count} Katılımcı"
+            user_deleted: -silindi-
+        nav:
+            private_discussions: Özel Tartışma
+        input:
+            search_recipients: İlk 3 harfini yazarak bir katılımcı ara...
+        search:
+            headings:
+                groups: İzin Grupları
+        modal:
+            titles:
+                update_recipients: Katılımcıyı güncelledi {title}
+                add_recipients: Tartışmaya katılımcı ekle
+        post:
+            recipients_modified:
+                added_and_removed: "{username} katılımcı ekledi: {added} ve katılımcı sildi: {removed}."
+                added: "{username} katılımcı(lar) ekledi: {added}."
+                removed: "{username} katılımcı(ları) sildi: {removed}."
+    admin:
+        permission:
+            create_private_discussions_with_users: Kullanıcılarla özel tartışma oluşturma
+            create_private_discussions_with_groups: Gruplarla özel tartışma oluşturma
+            edit_user_recipients: Özel tartışmaya katılan kullanıcıları düzenle
+edit_group_recipients: Özel tartışmaya katılan grupları düzenle
