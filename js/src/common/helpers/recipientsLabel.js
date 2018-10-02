@@ -1,5 +1,5 @@
 import extract from 'flarum/utils/extract';
-import recipientLabel from 'flagrow/byobu/helpers/recipientLabel';
+import recipientLabel from './recipientLabel';
 
 export default function recipientsLabel(recipients, attrs = {}) {
   const children = [];

@@ -8,12 +8,12 @@ use Flagrow\Byobu\Events\DiscussionMadePrivate;
 use Flagrow\Byobu\Events\DiscussionMadePublic;
 use Flagrow\Byobu\Events\DiscussionRecipientsChanged;
 use Flarum\Discussion\Discussion;
-use Flarum\Event\GetModelIsPrivate;
-use Flarum\User\Exception\PermissionDeniedException;
-use Flarum\Foundation\ValidationException;
-use Flarum\User\UserRepository;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
+use Flarum\Event\GetModelIsPrivate;
+use Flarum\Foundation\ValidationException;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\Exception\PermissionDeniedException;
+use Flarum\User\UserRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
@@ -46,9 +46,9 @@ class SaveRecipientsToDatabase
 
     /**
      * @param SettingsRepositoryInterface $settings
-     * @param Factory $validator
-     * @param TranslatorInterface $translator
-     * @param UserRepository $users
+     * @param Factory                     $validator
+     * @param TranslatorInterface         $translator
+     * @param UserRepository              $users
      */
     public function __construct(
         SettingsRepositoryInterface $settings,
@@ -73,6 +73,7 @@ class SaveRecipientsToDatabase
 
     /**
      * @param DiscussionSaving $event
+     *
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
@@ -83,11 +84,11 @@ class SaveRecipientsToDatabase
 
         $newUserIds = collect(Arr::get($event->data, 'relationships.recipientUsers.data', []))
             ->map(function ($in) {
-                return (int)$in['id'];
+                return (int) $in['id'];
             });
         $newGroupIds = collect(Arr::get($event->data, 'relationships.recipientGroups.data', []))
             ->map(function ($in) {
-                return (int)$in['id'];
+                return (int) $in['id'];
             });
 
         $addsRecipients = !$newUserIds->isEmpty() || !$newGroupIds->isEmpty();
@@ -114,7 +115,7 @@ class SaveRecipientsToDatabase
 
             $oldRecipients = [
                 'groups' => $discussion->recipientGroups()->get(),
-                'users' => $discussion->recipientUsers()->get()
+                'users'  => $discussion->recipientUsers()->get(),
             ];
 
             // Nothing changed.
@@ -128,8 +129,8 @@ class SaveRecipientsToDatabase
 
             $discussion->afterSave(function (Discussion $discussion) use ($newGroupIds, $newUserIds, $oldRecipients) {
                 foreach (['users', 'groups'] as $type) {
-                    $variable = 'new' . Str::ucfirst(Str::singular($type)) . 'Ids';
-                    $method = 'recipient' . Str::ucfirst($type);
+                    $variable = 'new'.Str::ucfirst(Str::singular($type)).'Ids';
+                    $method = 'recipient'.Str::ucfirst($type);
 
                     $new = ${$variable};
                     $old = $oldRecipients[$type];
@@ -140,11 +141,11 @@ class SaveRecipientsToDatabase
                     $recipients->each(function ($id) use ($discussion, $method, $new) {
                         if ($new->contains($id)) {
                             $discussion->{$method}()->updateExistingPivot($id, [
-                                'removed_at' => null
+                                'removed_at' => null,
                             ]);
                         } else {
                             $discussion->{$method}()->updateExistingPivot($id, [
-                                'removed_at' => Carbon::now()->format(DateTime::RFC3339)
+                                'removed_at' => Carbon::now()->format(DateTime::RFC3339),
                             ]);
                         }
                     });
@@ -155,6 +156,7 @@ class SaveRecipientsToDatabase
 
     /**
      * @param GetModelIsPrivate $event
+     *
      * @return bool
      */
     public function markSavedDiscussionAsPrivate(GetModelIsPrivate $event)

@@ -24,5 +24,5 @@ return [
     },
     'down' => function (Builder $schema) {
         $schema->drop('recipients');
-    }
+    },
 ];

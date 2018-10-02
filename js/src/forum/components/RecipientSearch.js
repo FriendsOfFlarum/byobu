@@ -1,11 +1,11 @@
 import Search from "flarum/components/Search";
-import UserSearchSource from "flagrow/byobu/components/sources/UserSearchSource";
-import GroupSearchSource from "flagrow/byobu/components/sources/GroupSearchSource";
+import UserSearchSource from "./sources/UserSearchSource";
+import GroupSearchSource from "./sources/GroupSearchSource";
 import ItemList from "flarum/utils/ItemList";
 import classList from "flarum/utils/classList";
 import extractText from "flarum/utils/extractText";
 import LoadingIndicator from "flarum/components/LoadingIndicator";
-import recipientLabel from "flagrow/byobu/helpers/recipientLabel";
+import recipientLabel from "../../common/helpers/recipientLabel";
 import User from "flarum/models/User";
 import Group from "flarum/models/Group";
 

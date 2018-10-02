@@ -1,5 +1,5 @@
 import EventPost from "flarum/components/EventPost";
-import recipientsLabel from "flagrow/byobu/helpers/recipientsLabel";
+import recipientsLabel from "../../common/helpers/recipientsLabel";
 
 export default class RecipientsModified extends EventPost {
     static initProps(props) {
@@ -31,7 +31,7 @@ export default class RecipientsModified extends EventPost {
     }
 
     icon() {
-        return 'map-o';
+        return 'far fa-map';
     }
 
     descriptionKey() {

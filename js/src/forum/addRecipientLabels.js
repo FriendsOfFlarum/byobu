@@ -3,7 +3,7 @@ import DiscussionListItem from "flarum/components/DiscussionListItem";
 import DiscussionPage from "flarum/components/DiscussionPage";
 import DiscussionHero from "flarum/components/DiscussionHero";
 import DiscussionList from "flarum/components/DiscussionList";
-import recipientsLabel from "flagrow/byobu/helpers/recipientsLabel";
+import recipientsLabel from "../common/helpers/recipientsLabel";
 
 export default function() {
 

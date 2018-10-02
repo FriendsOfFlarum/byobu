@@ -13,7 +13,7 @@ export default function () {
         ) {
             items.add('private-discussion', Button.component({
                 children: app.translator.trans('flagrow-byobu.forum.buttons.send_pd', {username: user.username()}),
-                icon: 'map-o',
+                icon: 'far fa-map',
                 onclick: () => {
                     const deferred = m.deferred();
 

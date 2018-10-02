@@ -2,14 +2,13 @@
 
 namespace Flagrow\Byobu\Listeners;
 
+use Flarum\Api\Event\Serializing;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
-use Flarum\Api\Event\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddPermissions
 {
-
     /**
      * @param Dispatcher $events
      */

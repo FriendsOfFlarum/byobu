@@ -1,7 +1,7 @@
 import {extend, override} from "flarum/extend";
 import DiscussionComposer from "flarum/components/DiscussionComposer";
-import AddRecipientModal from "flagrow/byobu/components/AddRecipientModal";
-import recipientCountLabel from "flagrow/byobu/helpers/recipientCountLabel";
+import AddRecipientModal from "./components/AddRecipientModal";
+import recipientCountLabel from "../common/helpers/recipientCountLabel";
 import User from "flarum/models/User";
 import Group from "flarum/models/Group";
 import ItemList from "flarum/utils/ItemList";
