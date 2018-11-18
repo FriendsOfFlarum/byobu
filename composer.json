@@ -3,10 +3,8 @@
     "description": "Well integrated, advanced private discussions.",
     "keywords": [
         "pm",
-        "flarum",
-        "flagrow",
-        "messaging",
-        "private discussions"
+        "flarum", "flagrow",
+        "messaging", "private discussions"
     ],
     "type": "flarum-extension",
     "license": "MIT",
