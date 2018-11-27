@@ -3,10 +3,8 @@
     "description": "Well integrated, advanced private discussions.",
     "keywords": [
         "pm",
-        "flarum",
-        "flagrow",
-        "messaging",
-        "private discussions"
+        "flarum", "flagrow",
+        "messaging", "private discussions"
     ],
     "type": "flarum-extension",
     "license": "MIT",
@@ -36,7 +34,7 @@
             }
         },
         "flagrow": {
-            "discuss": "https://discuss.flarum.org/d/4762-flagrow-by-bu-well-integrated-advanced-private-discussions"
+            "discuss": "https://discuss.flarum.org/d/4762"
         }
     },
     "autoload": {

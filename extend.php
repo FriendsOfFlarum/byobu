@@ -12,7 +12,7 @@ return [
         ->css(__DIR__.'/resources/less/forum/extension.less')
         ->js(__DIR__.'/js/dist/forum.js'),
     new Extend\Locales(__DIR__.'/resources/locale'),
-    function (Dispatcher $events) {
+    new Extend\Compat(function (Dispatcher $events) {
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
         $events->subscribe(Listeners\AddPermissions::class);
@@ -23,5 +23,5 @@ return [
 
         // Support for flagrow/split
         $events->subscribe(Listeners\AddRecipientsToSplitDiscussion::class);
-    },
+    }),
 ];
