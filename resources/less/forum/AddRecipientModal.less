@@ -1,41 +1,10 @@
-.AddRecipientModal {
-    @media @tablet-up {
-        .Modal-header {
-            background: @control-bg;
-            padding: 20px 20px 0;
+.AddRecipientModal-form-input {
+    display: flex;
+    flex-direction: column;
+    position: relative;
 
-            & h3 {
-                text-align: left;
-                color: @control-color;
-                font-size: 16px;
-            }
-        }
-    }
-    .Modal-body {
-        padding: 20px;
-
-        @media @phone {
-            padding: 15px;
-        }
-    }
-    .Modal-footer {
-        padding: 1px 0 0;
-        text-align: left;
-    }
-}
-
-@media @tablet, @desktop, @desktop-hd {
-    .AddRecipientModal-form {
-        display: table;
-        width: 100%;
-    }
-    .AddRecipientModal-form-input {
-        display: table-cell;
-        width: 100%;
-        vertical-align: top;
-    }
-    .AddRecipientModal-form-submit {
-        display: table-cell;
-        padding-left: 15px;
+    input.RecipientsInput {
+        margin: 0 1em;
+        width: auto !important;
     }
 }

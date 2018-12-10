@@ -39,7 +39,10 @@ export default class RecipientSearch extends Search {
         }
 
         const loading = this.value() && this.value().length >= 3;
-        const sources = this.sourceItems().toArray();
+
+        if (!this.sources) {
+            this.sources = this.sourceItems().toArray();
+        }
 
         return m('div', {
             className: 'AddRecipientModal-form-input'
@@ -74,9 +77,9 @@ export default class RecipientSearch extends Search {
                 className: 'Dropdown-menu Search-results fade ' + classList({
                     in: !!loading
                 })
-            }, loading
-                ? sources.map(source => source.view(this.value()))
-                : LoadingIndicator.component({size: 'tiny', className: 'Button Button--icon Button--link'})
+            }, this.loadingSources
+                ? LoadingIndicator.component({size: 'tiny', className: 'Button Button--icon Button--link'})
+                : this.sources.map(source => source.view(this.value()))
             )
         ]);
     }
@@ -125,11 +128,11 @@ export default class RecipientSearch extends Search {
      */
     addRecipient(value) {
 
-        var values = value.split(':'),
+        let values = value.split(':'),
             type = values[0],
             id = values[1];
 
-        var recipient = this.findRecipient(type, id);
+        let recipient = this.findRecipient(type, id);
 
         this.props.selected().add(value, recipient);
 
@@ -142,7 +145,7 @@ export default class RecipientSearch extends Search {
      * @param recipient
      */
     removeRecipient(recipient) {
-        var type;
+        let type;
 
         if (recipient instanceof User) {
             type = 'users';
