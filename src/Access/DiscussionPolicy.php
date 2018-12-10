@@ -22,10 +22,13 @@ class DiscussionPolicy extends AbstractPolicy
     public function findPrivate(User $actor, EloquentBuilder $query)
     {
         if ($actor->exists) {
+
             $query->orWhereExists(function (Builder $query) use ($actor) {
+                $prefix = $query->getConnection()->getTablePrefix();
+
                 return $query->selectRaw('1')
                     ->from('recipients')
-                    ->whereRaw('discussions.id = discussion_id')
+                    ->whereRaw($prefix.'discussions.id = discussion_id')
                     ->whereNull('removed_at')
                     ->where(function (Builder $query) use ($actor) {
                         $query->where('recipients.user_id', $actor->id);
