@@ -32,4 +32,4 @@ flagrow-byobu:
             create_private_discussions_with_users: Cipta diskusi tertutup dengan ahli
             create_private_discussions_with_groups: Cipta diskusi tertutup dengan grup
             edit_user_recipients: Edit ahli peserta dalam diskusi tertutup 
-edit_group_recipients: Edit grup peserta dalam diskusi tertutup
+            edit_group_recipients: Edit grup peserta dalam diskusi tertutup
