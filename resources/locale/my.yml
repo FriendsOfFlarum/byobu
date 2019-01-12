@@ -1,0 +1,35 @@
+flagrow-byobu:
+    forum:
+        badges:
+            is_private:
+                tooltip: Diskusi Tertutup
+        buttons:
+            add_recipients: Penerima
+            submit: OK
+            edit_recipients: Edit Penerima
+            send_pd: "Kirim {username} satu mesej"
+        labels:
+            recipients: "{count} Penerima|{count} Penerima"
+            user_deleted: -dipadam-
+        nav:
+            private_discussions: Diskusi Tertutup
+        input:
+            search_recipients: Cari penerima dengan menaip tiga huruf mula...
+        search:
+            headings:
+                groups: Grup Keizinan
+        modal:
+            titles:
+                update_recipients: Kemaskini penerima dari {title}
+                add_recipients: Tambah penerima ke diskusi anda
+        post:
+            recipients_modified:
+                added_and_removed: "{username} menambah penerima {added} dan membuang {removed}."
+                added: "{username} menambah penerima {added}."
+                removed: "{username} membuang penerima {removed}."
+    admin:
+        permission:
+            create_private_discussions_with_users: Cipta diskusi tertutup dengan ahli
+            create_private_discussions_with_groups: Cipta diskusi tertutup dengan grup
+            edit_user_recipients: Edit ahli peserta dalam diskusi tertutup 
+edit_group_recipients: Edit grup peserta dalam diskusi tertutup
