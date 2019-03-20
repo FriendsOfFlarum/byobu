@@ -7,9 +7,11 @@ import ItemList from 'flarum/utils/ItemList';
 export default function () {
     // Add a control allowing the discussion to be moved to another category.
     extend(UserControls, 'userControls', function (items, user) {
+        console.log(app.forum.attribute('canStartPrivateDiscussion'), user.blocksPd())
         if (app.session.user &&
-                app.session.user.id() != user.id() &&
-                app.forum.attribute('canStartPrivateDiscussion')
+            app.session.user.id() !== user.id() &&
+            app.forum.attribute('canStartPrivateDiscussion') &&
+            (user.blocksPd() === false || app.forum.attribute('canStartPrivateDiscussionWithBlockers'))
         ) {
             items.add('private-discussion', Button.component({
                 children: app.translator.trans('flagrow-byobu.forum.buttons.send_pd', {username: user.username()}),

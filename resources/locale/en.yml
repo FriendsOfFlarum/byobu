@@ -27,9 +27,13 @@ flagrow-byobu:
                 added_and_removed: "{username} added recipients {added} and removed {removed}."
                 added: "{username} added recipients {added}."
                 removed: "{username} removed recipients {removed}."
+        user:
+            settings:
+                block_pd: Block private discussions
     admin:
         permission:
             create_private_discussions_with_users: Create private discussions with users
             create_private_discussions_with_groups: Create private discussions with groups
+            create_private_discussions_with_blocking_users: Create private discussions with users that block it
             edit_user_recipients: Edit users partaking in private discussions
             edit_group_recipients: Edit groups partaking in private discussions

@@ -1,26 +1,17 @@
 <?php
 
-namespace Flagrow\Byobu\Listeners;
+namespace Flagrow\Byobu\Api;
 
 use Flarum\Api\Event\Serializing;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
-use Illuminate\Contracts\Events\Dispatcher;
 
-class AddPermissions
+class PermissionAttributes
 {
-    /**
-     * @param Dispatcher $events
-     */
-    public function subscribe(Dispatcher $events)
-    {
-        $events->listen(Serializing::class, [$this, 'prepareApiAttributes']);
-    }
-
     /**
      * @param Serializing $event
      */
-    public function prepareApiAttributes(Serializing $event)
+    public function __invoke(Serializing $event)
     {
         if ($event->isSerializer(ForumSerializer::class)) {
             $users = $event->actor->can('discussion.startPrivateDiscussionWithUsers');
@@ -29,6 +20,7 @@ class AddPermissions
             $event->attributes['canStartPrivateDiscussion'] = $users || $groups;
             $event->attributes['canStartPrivateDiscussionWithUsers'] = $users;
             $event->attributes['canStartPrivateDiscussionWithGroups'] = $groups;
+            $event->attributes['canStartPrivateDiscussionWithBlockers'] = $event->actor->can('discussion.startPrivateDiscussionWithBlockers');
         }
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $users = $event->actor->can('editUserRecipients', $event->model);

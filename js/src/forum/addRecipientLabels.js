@@ -7,8 +7,8 @@ import recipientsLabel from "../common/helpers/recipientsLabel";
 
 export default function() {
 
-    var addToDiscussion = function(discussion, items, long) {
-        var recipients = [];
+    const addToDiscussion = function(discussion, items, long) {
+        let recipients = [];
 
         if (discussion.recipientUsers().length) {
             recipients = recipients.concat(discussion.recipientUsers());

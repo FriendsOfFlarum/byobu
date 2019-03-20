@@ -132,6 +132,11 @@ __webpack_require__.r(__webpack_exports__);
       label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_groups'),
       permission: 'discussion.startPrivateDiscussionWithGroups'
     }, 95);
+    items.add('startPrivateBlockers', {
+      icon: 'far fa-map',
+      label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_blocking_users'),
+      permission: 'discussion.startPrivateDiscussionWithBlockers'
+    }, 95);
   });
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'moderateItems', function (items) {
     items.add('editUserRecipients', {
