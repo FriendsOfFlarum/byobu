@@ -16,7 +16,7 @@ export default function () {
         items.add('startPrivateBlockers', {
             icon: 'far fa-map',
             label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_blocking_users'),
-            permission: 'discussion.startPrivateDiscussionWithBlockers'
+            permission: 'startPrivateDiscussionWithBlockers'
         }, 95);
     });
     extend(PermissionGrid.prototype, 'moderateItems', items => {
