@@ -83,8 +83,8 @@ export default class AddRecipientModal extends Modal {
         const discussion = this.props.discussion;
         const recipients = this.selected();
 
-        var recipientGroups = [];
-        var recipientUsers = [];
+        let recipientGroups = [];
+        let recipientUsers = [];
 
         recipients.toArray().forEach(recipient => {
             if (recipient instanceof User) {

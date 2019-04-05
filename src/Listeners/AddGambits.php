@@ -3,7 +3,7 @@
 namespace Flagrow\Byobu\Listeners;
 
 use Flagrow\Byobu\Gambits\Discussion\PrivacyGambit;
-use Flagrow\Byobu\Gambits\User\BlocksPdGambit;
+use Flagrow\Byobu\Gambits\User\AllowsPdGambit;
 use Flarum\Event\ConfigureDiscussionGambits;
 use Flarum\Event\ConfigureUserGambits;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -29,6 +29,6 @@ class AddGambits
 
     public function addUserGambits(ConfigureUserGambits $event)
     {
-        $event->gambits->add(BlocksPdGambit::class);
+        $event->gambits->add(AllowsPdGambit::class);
     }
 }

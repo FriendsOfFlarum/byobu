@@ -93,8 +93,12 @@ class SaveRecipientsToDatabase
 
         $addsRecipients = !$newUserIds->isEmpty() || !$newGroupIds->isEmpty();
 
-        if (!$actor->can('startPrivateDiscussionWithBlockers')) {
-            $newUserIds->each(function (int $userId) {
+        if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
+            $newUserIds->each(function (int $userId) use ($actor) {
+                if ($actor->id === $userId) {
+                    return;
+                }
+
                 if ($this->users->findOrFail($userId)->getPreference('blocksPd', false)) {
                     throw new PermissionDeniedException('Not allowed to add users that blocked receiving private discussions');
                 }

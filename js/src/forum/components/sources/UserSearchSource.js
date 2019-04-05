@@ -4,6 +4,7 @@ import username from 'flarum/helpers/username';
 
 export default class UserSearchSource {
     search(query) {
+        query = query + ' allows-pd';
 
         return app.store.find('users', {
             filter: {q: query},

@@ -1615,6 +1615,7 @@ function () {
   var _proto = UserSearchSource.prototype;
 
   _proto.search = function search(query) {
+    query = query + ' allows-pd';
     return app.store.find('users', {
       filter: {
         q: query
