@@ -24,7 +24,7 @@
     },
     "extra": {
         "flarum-extension": {
-            "title": "FriendsOfFlarum Byōbu",
+            "title": "FoF Byōbu",
             "icon": {
                 "image": "resources/logo.svg",
                 "backgroundColor": "#e74c3c",

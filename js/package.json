@@ -8,6 +8,6 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "watch": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch"
   }
 }

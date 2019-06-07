@@ -7,6 +7,7 @@ import addRecipientsControl from "./addRecipientsControl";
 import addHasRecipientsBadge from "./addHasRecipientsBadge";
 import addDiscussPrivatelyControl from './addDiscussPrivatelyControl';
 import addPrivacySetting from './addPrivacySetting';
+import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
 
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
@@ -35,4 +36,6 @@ app.initializers.add('fof-byobu', function(app) {
     addPrivacySetting();
 
     addDiscussPrivatelyControl();
+
+    addPrivateDiscussionsPage();
 });
