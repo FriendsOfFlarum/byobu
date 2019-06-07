@@ -140,7 +140,7 @@ function recipientCountLabel(count, attrs) {
 
   attrs.style = attrs.style || {};
   attrs.className = 'RecipientLabel ' + (attrs.className || '');
-  var label = app.translator.transChoice('flagrow-byobu.forum.labels.recipients', count, {
+  var label = app.translator.transChoice('fof-byobu.forum.labels.recipients', count, {
     count: count
   });
   return m('span', attrs, m("span", {
@@ -194,7 +194,7 @@ function recipientLabel(recipient, attrs) {
     label = recipient.namePlural();
   } else {
     attrs.className += ' none';
-    label = app.translator.trans('flagrow-byobu.forum.labels.user_deleted');
+    label = app.translator.trans('fof-byobu.forum.labels.user_deleted');
   }
 
   return m(link ? 'a' : 'span', attrs, m("span", {
@@ -285,7 +285,7 @@ __webpack_require__.r(__webpack_exports__);
 
     if (app.session.user && app.session.user.id() !== user.id() && app.forum.attribute('canStartPrivateDiscussion') && (user.blocksPd() === false || app.forum.attribute('canStartPrivateDiscussionWithBlockers'))) {
       items.add('private-discussion', flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
-        children: app.translator.trans('flagrow-byobu.forum.buttons.send_pd', {
+        children: app.translator.trans('fof-byobu.forum.buttons.send_pd', {
           username: user.username()
         }),
         icon: 'far fa-map',
@@ -338,7 +338,7 @@ function addHasRecipientsBadge() {
     if (this.recipientUsers().length || this.recipientGroups().length) {
       badges.add('private', flarum_components_Badge__WEBPACK_IMPORTED_MODULE_2___default.a.component({
         type: 'private',
-        label: app.translator.trans('flagrow-byobu.forum.badges.is_private.tooltip'),
+        label: app.translator.trans('fof-byobu.forum.badges.is_private.tooltip'),
         icon: 'fas fa-map'
       }), 10);
     }
@@ -370,7 +370,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     items.add('byobu-block-dm', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_2___default.a.component({
-      children: app.translator.trans('flagrow-byobu.forum.user.settings.block_pd'),
+      children: app.translator.trans('fof-byobu.forum.user.settings.block_pd'),
       state: this.user.preferences().blocksPd,
       onchange: function onchange(value, component) {
         return _this.preferenceSaver('blocksPd')(value, component);
@@ -438,7 +438,7 @@ __webpack_require__.r(__webpack_exports__);
         onclick: this.chooseRecipients.bind(this)
       }, recipients.length ? Object(_common_helpers_recipientCountLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(recipients.length) : m("span", {
         className: "RecipientLabel none"
-      }, app.translator.trans('flagrow-byobu.forum.buttons.add_recipients'))), 5);
+      }, app.translator.trans('fof-byobu.forum.buttons.add_recipients'))), 5);
     }
   }); // Add the selected tags as data to submit to the server.
 
@@ -574,7 +574,7 @@ __webpack_require__.r(__webpack_exports__);
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_utils_DiscussionControls__WEBPACK_IMPORTED_MODULE_1___default.a, 'moderationControls', function (items, discussion) {
     if (discussion.canEditRecipients()) {
       items.add('recipients', flarum_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a.component({
-        children: app.translator.trans('flagrow-byobu.forum.buttons.edit_recipients'),
+        children: app.translator.trans('fof-byobu.forum.buttons.edit_recipients'),
         icon: 'far fa-map',
         onclick: function onclick() {
           return app.modal.show(new _components_AddRecipientModal__WEBPACK_IMPORTED_MODULE_3__["default"]({
@@ -670,9 +670,9 @@ function (_Modal) {
   };
 
   _proto.title = function title() {
-    return this.props.discussion ? app.translator.trans('flagrow-byobu.forum.modal.titles.update_recipients', {
+    return this.props.discussion ? app.translator.trans('fof-byobu.forum.modal.titles.update_recipients', {
       title: m("em", null, this.props.discussion.title())
-    }) : app.translator.trans('flagrow-byobu.forum.modal.titles.add_recipients');
+    }) : app.translator.trans('fof-byobu.forum.modal.titles.add_recipients');
   };
 
   _proto.content = function content() {
@@ -687,7 +687,7 @@ function (_Modal) {
       className: 'Button Button--primary',
       disabled: false,
       icon: 'fas fa-check',
-      children: app.translator.trans('flagrow-byobu.forum.buttons.submit')
+      children: app.translator.trans('fof-byobu.forum.buttons.submit')
     }))))];
   };
 
@@ -1320,7 +1320,7 @@ function (_Search) {
         element.focus();
       },
       type: 'search',
-      placeholder: flarum_utils_extractText__WEBPACK_IMPORTED_MODULE_6___default()(app.translator.trans('flagrow-byobu.forum.input.search_recipients')),
+      placeholder: flarum_utils_extractText__WEBPACK_IMPORTED_MODULE_6___default()(app.translator.trans('fof-byobu.forum.input.search_recipients')),
       value: this.value(),
       oninput: m.withAttr('value', this.value),
       onfocus: function onfocus() {
@@ -1488,7 +1488,7 @@ function (_EventPost) {
   };
 
   _proto.descriptionKey = function descriptionKey() {
-    var localeBase = 'flagrow-byobu.forum.post.recipients_modified.';
+    var localeBase = 'fof-byobu.forum.post.recipients_modified.';
 
     if (this.props.added.length) {
       if (this.props.removed.length) {
@@ -1566,7 +1566,7 @@ function () {
     if (!results.length) return '';
     return [m("li", {
       className: "Dropdown-header"
-    }, app.translator.trans('flagrow-byobu.forum.search.headings.groups')), results.map(function (group) {
+    }, app.translator.trans('fof-byobu.forum.search.headings.groups')), results.map(function (group) {
       var groupName = group.namePlural();
       var name = flarum_helpers_highlight__WEBPACK_IMPORTED_MODULE_0___default()(groupName, query);
       return m("li", {
@@ -1687,7 +1687,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-app.initializers.add('flagrow-byobu', function (app) {
+app.initializers.add('fof-byobu', function (app) {
   app.routes.private_discussions = {
     path: '/private-discussions',
     component: _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_9__["default"].component()

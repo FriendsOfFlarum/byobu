@@ -23,7 +23,7 @@ export default function recipientLabel(recipient, attrs = {}) {
       label = recipient.namePlural();
   } else {
       attrs.className += ' none';
-      label = app.translator.trans('flagrow-byobu.forum.labels.user_deleted');
+      label = app.translator.trans('fof-byobu.forum.labels.user_deleted');
   }
 
   return (

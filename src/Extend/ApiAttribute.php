@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu\Extend;
+namespace FoF\Byobu\Extend;
 
 use Flarum\Api\Event\Serializing;
 use Flarum\Extend\ExtenderInterface;

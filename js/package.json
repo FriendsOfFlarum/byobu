@@ -1,5 +1,5 @@
 {
-  "name": "@flagrow/byobu",
+  "name": "@fof/byobu",
   "version": "0.0.0",
   "dependencies": {
     "flarum-webpack-config": "^0.1.0-beta.10",

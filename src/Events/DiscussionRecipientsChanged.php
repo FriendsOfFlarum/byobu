@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu\Events;
+namespace FoF\Byobu\Events;
 
 class DiscussionRecipientsChanged extends AbstractRecipientsEvent
 {

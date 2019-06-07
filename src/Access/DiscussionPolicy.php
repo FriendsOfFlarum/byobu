@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu\Access;
+namespace FoF\Byobu\Access;
 
 use Flarum\Discussion\Discussion;
 use Flarum\User\AbstractPolicy;

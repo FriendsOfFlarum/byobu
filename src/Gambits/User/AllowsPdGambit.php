@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu\Gambits\User;
+namespace FoF\Byobu\Gambits\User;
 
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;

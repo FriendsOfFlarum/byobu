@@ -36,7 +36,7 @@ export default class RecipientsModified extends EventPost {
 
     descriptionKey() {
 
-        var localeBase = 'flagrow-byobu.forum.post.recipients_modified.';
+        var localeBase = 'fof-byobu.forum.post.recipients_modified.';
 
         if (this.props.added.length) {
             if (this.props.removed.length) {

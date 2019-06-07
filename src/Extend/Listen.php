@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu\Extend;
+namespace FoF\Byobu\Extend;
 
 use Flarum\Extend\ExtenderInterface;
 use Flarum\Extension\Extension;

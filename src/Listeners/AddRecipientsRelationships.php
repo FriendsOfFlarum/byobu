@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu\Listeners;
+namespace FoF\Byobu\Listeners;
 
 use Flarum\Api\Event\WillGetData;
 use Flarum\Api\Serializer;

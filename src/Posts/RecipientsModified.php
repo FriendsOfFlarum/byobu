@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Byobu\Posts;
+namespace FoF\Byobu\Posts;
 
-use Flagrow\Byobu\Events\AbstractRecipientsEvent;
+use FoF\Byobu\Events\AbstractRecipientsEvent;
 use Flarum\Post\AbstractEventPost;
 use Flarum\Post\MergeableInterface;
 use Flarum\Post\Post;

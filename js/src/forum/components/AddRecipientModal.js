@@ -44,8 +44,8 @@ export default class AddRecipientModal extends Modal {
 
     title() {
         return this.props.discussion
-            ? app.translator.trans('flagrow-byobu.forum.modal.titles.update_recipients', {title: <em>{this.props.discussion.title()}</em>})
-            : app.translator.trans('flagrow-byobu.forum.modal.titles.add_recipients');
+            ? app.translator.trans('fof-byobu.forum.modal.titles.update_recipients', {title: <em>{this.props.discussion.title()}</em>})
+            : app.translator.trans('fof-byobu.forum.modal.titles.add_recipients');
     }
 
     content() {
@@ -60,7 +60,7 @@ export default class AddRecipientModal extends Modal {
                             className: 'Button Button--primary',
                             disabled: false,
                             icon: 'fas fa-check',
-                            children: app.translator.trans('flagrow-byobu.forum.buttons.submit')
+                            children: app.translator.trans('fof-byobu.forum.buttons.submit')
                         })}
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu\Events;
+namespace FoF\Byobu\Events;
 
 use Flarum\Discussion\Discussion;
 use Flarum\Group\Group;

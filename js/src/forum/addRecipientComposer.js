@@ -39,7 +39,7 @@ export default function (app) {
                    onclick={this.chooseRecipients.bind(this)}>
                     {recipients.length
                         ? recipientCountLabel(recipients.length)
-                        : <span className="RecipientLabel none">{app.translator.trans('flagrow-byobu.forum.buttons.add_recipients')}</span>}
+                        : <span className="RecipientLabel none">{app.translator.trans('fof-byobu.forum.buttons.add_recipients')}</span>}
                 </a>
             ), 5);
         }

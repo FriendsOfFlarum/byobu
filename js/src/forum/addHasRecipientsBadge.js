@@ -7,7 +7,7 @@ export default function addHasRecipientsBadge() {
         if (this.recipientUsers().length || this.recipientGroups().length) {
             badges.add('private', Badge.component({
                 type: 'private',
-                label: app.translator.trans('flagrow-byobu.forum.badges.is_private.tooltip'),
+                label: app.translator.trans('fof-byobu.forum.badges.is_private.tooltip'),
                 icon: 'fas fa-map'
             }), 10);
         }

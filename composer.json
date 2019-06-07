@@ -1,9 +1,9 @@
 {
-    "name": "flagrow/byobu",
+    "name": "fof/byobu",
     "description": "Well integrated, advanced private discussions.",
     "keywords": [
         "pm",
-        "flarum", "flagrow",
+        "flarum", "fof",
         "messaging", "private discussions"
     ],
     "type": "flarum-extension",
@@ -16,30 +16,30 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/flagrow/byobu/issues",
-        "source": "https://github.com/flagrow/byobu"
+        "issues": "https://github.com/FriendsOfFlarum/byobu/issues",
+        "source": "https://github.com/FriendsOfFlarum/byobu"
     },
     "require": {
         "flarum/core": "^0.1.0-beta.8"
     },
     "extra": {
         "flarum-extension": {
-            "title": "Byōbu",
+            "title": "FriendsOfFlarum Byōbu",
             "icon": {
                 "image": "resources/logo.svg",
-                "backgroundColor": "#5f4bb6",
+                "backgroundColor": "#e74c3c",
                 "backgroundSize": "90%",
                 "backgroundRepeat": "no-repeat",
                 "backgroundPosition": "center"
             }
         },
-        "flagrow": {
+        "fof": {
             "discuss": "https://discuss.flarum.org/d/4762"
         }
     },
     "autoload": {
         "psr-4": {
-            "Flagrow\\Byobu\\": "src/"
+            "FoF\\Byobu\\": "src/"
         }
     }
 }

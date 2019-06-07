@@ -1,12 +1,12 @@
 <?php
 
-namespace Flagrow\Byobu\Listeners;
+namespace FoF\Byobu\Listeners;
 
-use Flagrow\Byobu\Events\AbstractRecipientsEvent;
-use Flagrow\Byobu\Events\DiscussionMadePrivate;
-use Flagrow\Byobu\Events\DiscussionMadePublic;
-use Flagrow\Byobu\Events\DiscussionRecipientsChanged;
-use Flagrow\Byobu\Posts\RecipientsModified;
+use FoF\Byobu\Events\AbstractRecipientsEvent;
+use FoF\Byobu\Events\DiscussionMadePrivate;
+use FoF\Byobu\Events\DiscussionMadePublic;
+use FoF\Byobu\Events\DiscussionRecipientsChanged;
+use FoF\Byobu\Posts\RecipientsModified;
 use Flarum\Event\ConfigurePostTypes;
 use Illuminate\Contracts\Events\Dispatcher;
 

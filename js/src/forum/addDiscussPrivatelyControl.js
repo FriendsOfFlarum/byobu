@@ -14,7 +14,7 @@ export default function () {
             (user.blocksPd() === false || app.forum.attribute('canStartPrivateDiscussionWithBlockers'))
         ) {
             items.add('private-discussion', Button.component({
-                children: app.translator.trans('flagrow-byobu.forum.buttons.send_pd', {username: user.username()}),
+                children: app.translator.trans('fof-byobu.forum.buttons.send_pd', {username: user.username()}),
                 icon: 'far fa-map',
                 onclick: () => {
                     const deferred = m.deferred();

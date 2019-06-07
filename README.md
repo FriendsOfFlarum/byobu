@@ -1,10 +1,11 @@
-# Byobu by ![Flagrow logo](https://avatars0.githubusercontent.com/u/16413865?v=3&s=20) [Flagrow](https://discuss.flarum.org/d/1832-flagrow-extension-developer-group), a project of [Gravure](https://gravure.io/)
+# Byobu by FriendsOfFlarum
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/flagrow/byobu/blob/master/LICENSE.md) [![Latest Stable Version](https://img.shields.io/packagist/v/flagrow/byobu.svg)](https://packagist.org/packages/flagrow/byobu) [![Total Downloads](https://img.shields.io/packagist/dt/flagrow/byobu.svg)](https://packagist.org/packages/flagrow/byobu) [![Donate](https://img.shields.io/badge/patreon-support-yellow.svg)](https://www.patreon.com/flagrow) [![Join our Discord server](https://discordapp.com/api/guilds/240489109041315840/embed.png)](https://flagrow.io/join-discord)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/FriendsOfFlarumbyobu/blob/master/LICENSE)
+[![Latest Stable Version](https://img.shields.io/packagist/v/fof/byobu.svg)](https://packagist.org/packages/fof/byobu)
+[![Total Downloads](https://img.shields.io/packagist/dt/fof/byobu.svg)](https://packagist.org/packages/fof/byobu)
+[![Donate](https://img.shields.io/badge/opencollective-support-blue.svg)](https://opencollective.com/fof)
 
 Private discussions for your forum. Allows you to select specific recipients for your discussions.
-
-![Preview](https://discuss.hyn.me/assets/files/2017-01-26/11:29:440-private-discussionsgif.gif)
 
 ## Goals
 
@@ -13,15 +14,14 @@ Private discussions for your forum. Allows you to select specific recipients for
 
 ## Installation
 
-Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace) or install manually:
+Use [Bazaar](https://discuss.flarum.org/d/5151-fof-bazaar-the-extension-marketplace) or install manually:
 
-    composer require flagrow/byobu
+    composer require "fof/byobu:*"
 
 ## Updating
 
-    composer update flagrow/byobu
+    composer update fof/byobu
     php flarum migrate
-    php flarum cache:clear
 
 ## Configuration
 
@@ -35,7 +35,7 @@ Make sure you configure the private discussions permission on the Admin Permissi
 ## Support our work
 
 We prefer to keep our work available to everyone.
-In order to do so we rely on voluntary contributions on [Patreon](https://www.patreon.com/flagrow).
+In order to do so we rely on voluntary contributions on [OpenCollective](https://opencollective.com/fof).
 
 ## Security
 
@@ -45,10 +45,10 @@ Please include as many details as possible. You can use `php flarum info` to get
 
 ## Links
 
-- [Flarum Discuss post](https://discuss.flarum.org/d/4762-flagrow-by-bu-well-integrated-advanced-private-discussions)
-- [Source code on GitHub](https://github.com/flagrow/byobu)
-- [Changelog](https://github.com/flagrow/byobu/blob/master/CHANGELOG.md)
-- [Report an issue](https://github.com/flagrow/byobu/issues)
-- [Download via Packagist](https://packagist.org/packages/flagrow/byobu)
+- [Flarum Discuss post](https://discuss.flarum.org/d/4762-fof-by-bu-well-integrated-advanced-private-discussions)
+- [Source code on GitHub](https://github.com/FriendsOfFlarumbyobu)
+- [Changelog](https://github.com/FriendsOfFlarumbyobu/blob/master/CHANGELOG.md)
+- [Report an issue](https://github.com/FriendsOfFlarumbyobu/issues)
+- [Download via Packagist](https://packagist.org/packages/fof/byobu)
 
-An extension by [Flagrow](https://flagrow.io/), a project of [Gravure](https://gravure.io/).
+An extension by FriendsOfFlarum.

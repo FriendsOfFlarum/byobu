@@ -1,12 +1,12 @@
 <?php
 
-namespace Flagrow\Byobu\Listeners;
+namespace FoF\Byobu\Listeners;
 
 use Carbon\Carbon;
 use DateTime;
-use Flagrow\Byobu\Events\DiscussionMadePrivate;
-use Flagrow\Byobu\Events\DiscussionMadePublic;
-use Flagrow\Byobu\Events\DiscussionRecipientsChanged;
+use FoF\Byobu\Events\DiscussionMadePrivate;
+use FoF\Byobu\Events\DiscussionMadePublic;
+use FoF\Byobu\Events\DiscussionRecipientsChanged;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
 use Flarum\Event\GetModelIsPrivate;

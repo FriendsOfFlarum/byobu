@@ -124,29 +124,29 @@ __webpack_require__.r(__webpack_exports__);
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'startItems', function (items) {
     items.add('startPrivateUsers', {
       icon: 'far fa-map',
-      label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_users'),
+      label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_users'),
       permission: 'discussion.startPrivateDiscussionWithUsers'
     }, 95);
     items.add('startPrivateGroups', {
       icon: 'far fa-map',
-      label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_groups'),
+      label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_groups'),
       permission: 'discussion.startPrivateDiscussionWithGroups'
     }, 95);
     items.add('startPrivateBlockers', {
       icon: 'far fa-map',
-      label: app.translator.trans('flagrow-byobu.admin.permission.create_private_discussions_with_blocking_users'),
+      label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_blocking_users'),
       permission: 'startPrivateDiscussionWithBlockers'
     }, 95);
   });
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'moderateItems', function (items) {
     items.add('editUserRecipients', {
       icon: 'far fa-map',
-      label: app.translator.trans('flagrow-byobu.admin.permission.edit_user_recipients'),
+      label: app.translator.trans('fof-byobu.admin.permission.edit_user_recipients'),
       permission: 'discussion.editUserRecipients'
     }, 95);
     items.add('editGroupRecipients', {
       icon: 'far fa-map',
-      label: app.translator.trans('flagrow-byobu.admin.permission.edit_group_recipients'),
+      label: app.translator.trans('fof-byobu.admin.permission.edit_group_recipients'),
       permission: 'discussion.editGroupRecipients'
     }, 95);
   });
@@ -168,7 +168,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _addPrivateDiscussionPermission__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./addPrivateDiscussionPermission */ "./src/admin/addPrivateDiscussionPermission.js");
 
 
-app.initializers.add('flagrow-byobu', function (app) {
+app.initializers.add('fof-byobu', function (app) {
   app.store.models.recipients = flarum_core_models_User__WEBPACK_IMPORTED_MODULE_0___default.a;
   Object(_addPrivateDiscussionPermission__WEBPACK_IMPORTED_MODULE_1__["default"])();
 });

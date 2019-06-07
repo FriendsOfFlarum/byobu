@@ -11,7 +11,7 @@ import addPrivacySetting from './addPrivacySetting';
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
 
-app.initializers.add('flagrow-byobu', function(app) {
+app.initializers.add('fof-byobu', function(app) {
     app.routes.private_discussions = {path: '/private-discussions', component: PrivateDiscussionIndex.component()};
 
     Discussion.prototype.recipientUsers = Model.hasMany('recipientUsers');

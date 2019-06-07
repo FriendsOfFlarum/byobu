@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu\Api;
+namespace FoF\Byobu\Api;
 
 use Flarum\Api\Event\Serializing;
 use Flarum\User\User;

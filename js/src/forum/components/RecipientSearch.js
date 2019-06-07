@@ -67,7 +67,7 @@ export default class RecipientSearch extends Search {
                     element.focus();
                 },
                 type: 'search',
-                placeholder: extractText(app.translator.trans('flagrow-byobu.forum.input.search_recipients')),
+                placeholder: extractText(app.translator.trans('fof-byobu.forum.input.search_recipients')),
                 value: this.value(),
                 oninput: m.withAttr('value', this.value),
                 onfocus: () => this.hasFocus = true,

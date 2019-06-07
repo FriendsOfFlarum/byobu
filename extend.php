@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Byobu;
+namespace FoF\Byobu;
 
 use Flarum\Api\Serializer\BasicUserSerializer;
 use Flarum\Api\Serializer\DiscussionSerializer;
@@ -23,13 +23,12 @@ return [
     new Native\Compat(function (Dispatcher $events) {
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
-//        $events->subscribe(Listeners\AddPermissions::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
 
-        // Support for flagrow/split
+        // Support for fof/split
         $events->subscribe(Listeners\AddRecipientsToSplitDiscussion::class);
     }),
 ];

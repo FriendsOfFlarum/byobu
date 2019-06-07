@@ -9,7 +9,7 @@ export default function() {
     extend(DiscussionControls, 'moderationControls', function(items, discussion) {
         if (discussion.canEditRecipients()) {
             items.add('recipients', Button.component({
-                children: app.translator.trans('flagrow-byobu.forum.buttons.edit_recipients'),
+                children: app.translator.trans('fof-byobu.forum.buttons.edit_recipients'),
                 icon: 'far fa-map',
                 onclick: () => app.modal.show(new AddRecipientModal({discussion}))
             }));

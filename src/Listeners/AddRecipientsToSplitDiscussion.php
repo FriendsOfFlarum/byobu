@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Byobu\Listeners;
+namespace FoF\Byobu\Listeners;
 
-use Flagrow\Split\Events\DiscussionWasSplit;
+use Fof\Split\Events\DiscussionWasSplit;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddRecipientsToSplitDiscussion
