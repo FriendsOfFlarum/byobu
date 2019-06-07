@@ -1,4 +1,4 @@
-# Byobu by FriendsOfFlarum
+# Byōbu by FriendsOfFlarum
 
 [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/FriendsOfFlarumbyobu/blob/master/LICENSE)
 [![Latest Stable Version](https://img.shields.io/packagist/v/fof/byobu.svg)](https://packagist.org/packages/fof/byobu)

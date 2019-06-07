@@ -400,6 +400,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
+  if (!Number(app.data['fof-byobu.enable_byobu_user_page'])) return;
   app.routes['user.byobu'] = {
     path: '/u/:username/byobu',
     component: _components_PrivateDiscussionsUserPage__WEBPACK_IMPORTED_MODULE_3__["default"].component()
