@@ -5,7 +5,9 @@ namespace FoF\Byobu\Gambits\Discussion;
 use Flarum\Discussion\Search\DiscussionSearch;
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
+use Flarum\User\User;
 use Flarum\User\UserRepository;
+use Illuminate\Database\Query\Builder;
 use LogicException;
 
 class ByobuGambit extends AbstractRegexGambit
@@ -46,19 +48,23 @@ class ByobuGambit extends AbstractRegexGambit
 
         $usernames = explode(',', trim($matches[1], '"'));
 
-        $ids = [];
-
-        foreach ($usernames as $username) {
-            $ids[] = $this->users->getIdForUsername($username);
-        }
-
         $actor = $search->getActor();
 
-        $ids[] = $actor->id;
+        $userIds = User::query()
+            ->whereIn('username', $usernames)
+            ->whereVisibleTo($actor)
+            ->pluck('id')
+            ->toArray();
+
+        $userIds[] = $actor->id;
+        $groupIds = $actor->groups()->pluck('id')->toArray();
 
         $search->getQuery()
-            ->orWhereHas('recipients', function ($query) use ($ids) {
-                $query->whereIn('user_id', $ids);
+            ->join('recipients', 'discussions.id', '=', 'recipients.discussion_id')
+            ->where(function (Builder $query) use ($userIds, $groupIds) {
+                $query
+                    ->whereIn('recipients.user_id', $userIds)
+                    ->orWhereIn('recipients.group_id', $groupIds);
             });
     }
 }

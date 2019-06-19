@@ -37,6 +37,9 @@
             "discuss": "https://discuss.flarum.org/d/4762"
         }
     },
+    "replace": {
+        "flagrow/byobu": "*"
+    },
     "autoload": {
         "psr-4": {
             "FoF\\Byobu\\": "src/"
