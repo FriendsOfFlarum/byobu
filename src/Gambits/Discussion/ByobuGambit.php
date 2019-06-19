@@ -7,6 +7,7 @@ use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
 use Flarum\User\User;
 use Flarum\User\UserRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use LogicException;
 
@@ -50,21 +51,37 @@ class ByobuGambit extends AbstractRegexGambit
 
         $actor = $search->getActor();
 
-        $userIds = User::query()
+        /** @var Collection|User[] $users */
+        $users = User::query()
+            ->with('groups')
             ->whereIn('username', $usernames)
             ->whereVisibleTo($actor)
+            ->get();
+        /** @var array|int[] $userIds */
+        $userIds = $users
             ->pluck('id')
             ->toArray();
 
-        $userIds[] = $actor->id;
-        $groupIds = $actor->groups()->pluck('id')->toArray();
+        $groupIds = $users
+            // Create an array of user group Ids.
+            ->map(function (User $user) {
+                return $user->groups()->pluck('id')->toArray();
+            })
+            // Identify groups of actor that are mutual to those we are retrieving.
+            ->filter(function (array $ids) use ($actor) {
+                return count(array_intersect($ids, $actor->groups()->pluck('id')->toArray())) > 0;
+            })
+            // Flatten the available id's.
+            ->flatten();
 
         $search->getQuery()
             ->join('recipients', 'discussions.id', '=', 'recipients.discussion_id')
             ->where(function (Builder $query) use ($userIds, $groupIds) {
                 $query
                     ->whereIn('recipients.user_id', $userIds)
-                    ->orWhereIn('recipients.group_id', $groupIds);
+                    ->when(count($groupIds) > 0, function (Builder $query) use ($groupIds) {
+                        $query->orWhereIn('recipients.group_id', $groupIds);
+                    });
             });
     }
 }
