@@ -69,7 +69,9 @@ class ByobuGambit extends AbstractRegexGambit
             })
             // Identify groups of actor that are mutual to those we are retrieving.
             ->filter(function (array $ids) use ($actor) {
-                return count(array_intersect($ids, $actor->groups()->pluck('id')->toArray())) > 0;
+                $match = $actor->isGuest() ? [] : $actor->groups()->pluck('id')->toArray();
+
+                return count(array_intersect($ids, $match)) > 0;
             })
             // Flatten the available id's.
             ->flatten();
