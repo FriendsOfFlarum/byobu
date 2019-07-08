@@ -26,10 +26,7 @@ class AllowsPdGambit extends AbstractRegexGambit
             $search
                 ->getQuery()
                 ->where(function($query) use ($negate) {
-                    $query->where('preferences->blocksPd', $negate);
-                    if (! $negate) {
-                        $query->orWhereNull('preferences->blocksPd');
-                    }
+                    $query->where('blocks_byobu_pd', $negate);
                 });
         }
     }

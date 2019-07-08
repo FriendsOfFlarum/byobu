@@ -26,6 +26,7 @@ return [
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
+        $events->subscribe(Listeners\SaveBlocksPdPreference::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
 
