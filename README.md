@@ -37,12 +37,6 @@ Make sure you configure the private discussions permission on the Admin Permissi
 We prefer to keep our work available to everyone.
 In order to do so we rely on voluntary contributions on [OpenCollective](https://opencollective.com/fof).
 
-## Security
-
-If you discover a security vulnerability within Byobu, please send an email to the Gravure team at security@gravure.io. All security vulnerabilities will be promptly addressed.
-
-Please include as many details as possible. You can use `php flarum info` to get the PHP, Flarum and extension versions installed.
-
 ## Links
 
 - [Flarum Discuss post](https://discuss.flarum.org/d/4762-fof-by-bu-well-integrated-advanced-private-discussions)
