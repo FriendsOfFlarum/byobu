@@ -8,14 +8,16 @@ return [
         // in case someone updates from really old flagrow/byobu version, set is_private to 1 on private discussions
         $connection = $schema->getConnection();
 
-        $ids = $connection->table('recipients')
-            ->select('discussion_id')
-            ->groupBy('discussion_id')
-            ->get();
+        if ($connection->getSchemaBuilder()->hasTable('recipients')) {
+            $ids = $connection->table('recipients')
+                ->select('discussion_id')
+                ->groupBy('discussion_id')
+                ->get();
 
-        $connection->table('discussions')
-            ->whereIn('id', collect($ids)->pluck('discussion_id')->all())
-            ->update(['is_private' => 1]);
+            $connection->table('discussions')
+                ->whereIn('id', collect($ids)->pluck('discussion_id')->all())
+                ->update(['is_private' => 1]);
+        }
 
         // stop if migrating from flagrow/byobu
         if ($schema->getConnection()->table('migrations')->whereExtension('flagrow-byobu')->exists()) {
@@ -25,8 +27,8 @@ return [
         $schema->create('recipients', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('discussion_id')->unsigned()->nullable();
-            $table->integer('group_id')->unsigned()->nullable()->after('user_id');
             $table->integer('user_id')->unsigned();
+            $table->integer('group_id')->unsigned()->nullable();
             $table->timestamps();
             $table->timestamp('removed_at')->nullable();
 
