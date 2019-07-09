@@ -4,7 +4,7 @@ import username from 'flarum/helpers/username';
 
 export default class UserSearchSource {
     view(query) {
-        if (!query || query.length < 3 || this.loading) return;
+        if (query.length < 3 || this.loading) return;
 
         if (!app.cache.byobuResults) {
             app.cache.byobuResults = [];
@@ -18,7 +18,7 @@ export default class UserSearchSource {
 
             app.cache.byobuResults[this.query] = [];
             app.store.find('users', {
-                filter: {q: this.query + ' allows-pd' + (app.forum.attribute('byobu-extend') ? ' byobu-extend' : '')},
+                filter: {q: this.query + ' byobu-search'},
                 page: {limit: 5}
             }).then(this.pushResults.bind(this));
         } else
