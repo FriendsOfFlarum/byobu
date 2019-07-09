@@ -7,9 +7,9 @@ use Flarum\Search\AbstractSearch;
 use FoF\Byobu\Events\SearchingForRecipients;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class ByobuGambit extends AbstractRegexGambit
+class AllowsPdGambit extends AbstractRegexGambit
 {
-    protected $pattern = 'byobu-search';
+    protected $pattern = 'allows-pd';
 
     /**
      * @var Dispatcher

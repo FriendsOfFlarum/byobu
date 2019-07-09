@@ -18,7 +18,7 @@ export default class UserSearchSource {
 
             app.cache.byobuResults[this.query] = [];
             app.store.find('users', {
-                filter: {q: this.query + ' byobu-search'},
+                filter: {q: this.query + ' allows-pd'},
                 page: {limit: 5}
             }).then(this.pushResults.bind(this));
         } else

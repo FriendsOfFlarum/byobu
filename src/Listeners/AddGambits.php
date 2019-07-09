@@ -4,7 +4,7 @@ namespace FoF\Byobu\Listeners;
 
 use FoF\Byobu\Gambits\Discussion\ByobuGambit;
 use FoF\Byobu\Gambits\Discussion\PrivacyGambit;
-use FoF\Byobu\Gambits\User\ByobuGambit as UserGambit;
+use FoF\Byobu\Gambits\User\AllowsPdGambit;
 use Flarum\Event\ConfigureDiscussionGambits;
 use Flarum\Event\ConfigureUserGambits;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -31,6 +31,6 @@ class AddGambits
 
     public function addUserGambits(ConfigureUserGambits $event)
     {
-        $event->gambits->add(UserGambit::class);
+        $event->gambits->add(AllowsPdGambit::class);
     }
 }
