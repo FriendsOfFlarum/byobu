@@ -14,6 +14,6 @@ class UserAttributes
     {
         /** @var User $user */
         $user = $event->model;
-        $event->attributes['blocksPd'] = $user->blocks_byobu_pd;
+        $event->attributes['blocksPd'] = (bool) $user->blocks_byobu_pd;
     }
 }
