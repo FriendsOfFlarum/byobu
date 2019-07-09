@@ -10,7 +10,7 @@ export default function () {
         if (app.session.user &&
             app.session.user.id() !== user.id() &&
             app.forum.attribute('canStartPrivateDiscussion') &&
-            (user.blocksPd() === false || app.forum.attribute('canStartPrivateDiscussionWithBlockers'))
+            ((user.blocksPd() === false || app.forum.attribute('canStartPrivateDiscussionWithBlockers')) && !user.cannotBeDirectMessaged())
         ) {
             items.add('private-discussion', Button.component({
                 children: app.translator.trans('fof-byobu.forum.buttons.send_pd', {username: user.username()}),

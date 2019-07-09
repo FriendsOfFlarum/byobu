@@ -4,10 +4,22 @@ namespace FoF\Byobu\Gambits\User;
 
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
+use FoF\Byobu\Events\SearchingForRecipients;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class AllowsPdGambit extends AbstractRegexGambit
 {
     protected $pattern = 'allows-pd';
+
+    /**
+     * @var Dispatcher
+     */
+    public $dispatcher;
+
+    public function __construct(Dispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
 
     /**
      * Apply conditions to the search, given that the gambit was matched.
@@ -21,6 +33,8 @@ class AllowsPdGambit extends AbstractRegexGambit
     protected function conditions(AbstractSearch $search, array $matches, $negate)
     {
         $actor = $search->getActor();
+
+        $this->dispatcher->dispatch(new SearchingForRecipients($search, $matches, $negate));
 
         if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
             $search

@@ -14,6 +14,8 @@ class UserAttributes
     {
         /** @var User $user */
         $user = $event->model;
+        
         $event->attributes['blocksPd'] = (bool) $user->blocks_byobu_pd;
+        $event->attributes['cannotBeDirectMessaged'] = $event->actor->can('cannotBeDirectMessaged', $user);
     }
 }

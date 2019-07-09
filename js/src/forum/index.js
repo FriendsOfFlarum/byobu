@@ -26,6 +26,7 @@ app.initializers.add('fof-byobu', function(app) {
     Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
 
     User.prototype.blocksPd = Model.attribute('blocksPd');
+    User.prototype.cannotBeDirectMessaged = Model.attribute('cannotBeDirectMessaged');
 
     app.postComponents.recipientsModified = RecipientsModified;
 
