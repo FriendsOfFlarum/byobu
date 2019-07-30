@@ -57,19 +57,20 @@ class ByobuGambit extends AbstractRegexGambit
             ->whereIn('username', $usernames)
             ->whereVisibleTo($actor)
             ->get();
+
         /** @var array|int[] $userIds */
         $userIds = $users
-            ->pluck('id')
+            ->pluck('users.id')
             ->toArray();
 
         $groupIds = $users
             // Create an array of user group Ids.
             ->map(function (User $user) {
-                return $user->groups()->pluck('id')->toArray();
+                return $user->groups()->pluck('groups.id')->toArray();
             })
             // Identify groups of actor that are mutual to those we are retrieving.
             ->filter(function (array $ids) use ($actor) {
-                $match = $actor->isGuest() ? [] : $actor->groups()->pluck('id')->toArray();
+                $match = $actor->isGuest() ? [] : $actor->groups()->pluck('groups.id')->toArray();
 
                 return count(array_intersect($ids, $match)) > 0;
             })
