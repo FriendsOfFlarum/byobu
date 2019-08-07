@@ -41,7 +41,8 @@ class AllowsPdGambit extends AbstractRegexGambit
                 ->getQuery()
                 ->where(function($query) use ($negate) {
                     $query->where('blocks_byobu_pd', $negate);
-                });
+                })
+                ->orderBy('username', 'desc');
         }
     }
 }
