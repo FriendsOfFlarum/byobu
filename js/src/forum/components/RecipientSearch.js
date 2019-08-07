@@ -23,7 +23,7 @@ export default class RecipientSearch extends Search {
             $search.$('.RecipientsInput').focus();
         });
 
-        $('.Search-results').on('touchstart', (e) => {
+        this.$('.Search-results').on('touchstart', (e) => {
             const target = this.$(e.target.parentNode);
 
             $search.addRecipient(target.data('index'));
@@ -37,9 +37,7 @@ export default class RecipientSearch extends Search {
                 this.doSearch = true;
                 m.redraw();
             }, 900);
-        });
-
-        this.$('.RecipientsInput').on('keydown', () => {
+        }).on('keydown', () => {
             clearTimeout(this.typingTimer);
         });
 
