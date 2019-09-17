@@ -1,0 +1,45 @@
+fof-byobu:
+    forum:
+        badges:
+            is_private:
+                tooltip: Discussion privée
+        buttons:
+            add_recipients: Destinataires
+            submit: OK
+            edit_recipients: Modifier Destinataires
+            send_pd: "Envoyer un message à {username}"
+        labels:
+            recipients: "{count} Destinataire|{count} Destinataires"
+            user_deleted: -supprimé-
+        nav:
+            private_discussions: Discussion privée
+        input:
+            search_recipients: Chercher un destinataire en tapant les 3 premiers caractères...
+        search:
+            headings:
+                groups: Groupe de permission
+        modal:
+            titles:
+                update_recipients: Modifier les destinataires de {title}
+                add_recipients: Ajouter des destinaire à la discussion
+        post:
+            recipients_modified:
+                added_and_removed: "{username} a ajouté {added} et retiré {removed}."
+                added: "{username} a ajouté {added}."
+                removed: "{username} a retiré {removed}."
+        user:
+            settings:
+                block_pd: Bloquer les discussions privées
+
+            byobu_link: Discussions privées
+
+    admin:
+        permission:
+            create_private_discussions_with_users: Créer des discussions privées avec des utilisateurs
+            create_private_discussions_with_groups: Créer des discussions privées avec des groupes
+            create_private_discussions_with_blocking_users: Créer des discussion privées avec des utilisateurs qui l'ont bloqué
+            edit_user_recipients: Modifier les utilisateurs participant à une discussion privée
+            edit_group_recipients: Modifier les groupes participant à une discussion privée
+
+        settings:
+            byobu_users_page_label: Ajouter des discussions privées à la page du profil
