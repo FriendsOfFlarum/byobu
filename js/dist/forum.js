@@ -1310,7 +1310,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PrivateDiscussionList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PrivateDiscussionList */ "./src/forum/components/PrivateDiscussionList.js");
 /* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/components/Button */ "flarum/components/Button");
 /* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PrivateDiscussionComposer */ "./src/forum/components/PrivateDiscussionComposer.js");
+/* harmony import */ var flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/components/LogInModal */ "flarum/components/LogInModal");
+/* harmony import */ var flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PrivateDiscussionComposer */ "./src/forum/components/PrivateDiscussionComposer.js");
+
 
 
 
@@ -1353,7 +1356,7 @@ function (_UserPage) {
     var deferred = m.deferred();
 
     if (app.session.user) {
-      var component = new _PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_4__["default"]({
+      var component = new _PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_5__["default"]({
         user: app.session.user
       });
       app.composer.load(component);
@@ -1361,18 +1364,24 @@ function (_UserPage) {
       deferred.resolve(component);
     } else {
       deferred.reject();
-      app.modal.show(new LogInModal());
+      app.modal.show(new flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_4___default.a());
     }
 
     return deferred.promise;
   };
 
   _proto.content = function content() {
+    var canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
     return m("div", {
       className: "DiscussionsUserPage"
-    }, m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a, {
-      onclick: this.newDiscussionAction.bind(this)
-    }, "New PM"), this.list.render());
+    }, flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
+      children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
+      // icon: 'fas fa-edit',
+      className: 'Button Button--primary IndexPage-newDiscussion',
+      itemClassName: 'App-primaryControl',
+      onclick: this.newDiscussionAction.bind(this),
+      disabled: !canStartDiscussion
+    }), this.list.render());
   };
 
   return PrivateDiscussionsUserPage;
