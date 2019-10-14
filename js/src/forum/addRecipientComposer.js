@@ -1,5 +1,5 @@
 import {extend, override} from "flarum/extend";
-import DiscussionComposer from "flarum/components/DiscussionComposer";
+import PrivateDiscussionComposer from "./components/PrivateDiscussionComposer";
 import AddRecipientModal from "./components/AddRecipientModal";
 import recipientCountLabel from "../common/helpers/recipientCountLabel";
 import User from "flarum/models/User";
@@ -8,12 +8,12 @@ import ItemList from "flarum/utils/ItemList";
 
 export default function (app) {
     // Add recipient-selection abilities to the discussion composer.
-    DiscussionComposer.prototype.recipients = new ItemList;
-    DiscussionComposer.prototype.recipientUsers = [];
-    DiscussionComposer.prototype.recipientGroups = [];
+    PrivateDiscussionComposer.prototype.recipients = new ItemList;
+    PrivateDiscussionComposer.prototype.recipientUsers = [];
+    PrivateDiscussionComposer.prototype.recipientGroups = [];
 
     // Add a recipient selection modal when clicking the recipient tag label.
-    DiscussionComposer.prototype.chooseRecipients = function () {
+    PrivateDiscussionComposer.prototype.chooseRecipients = function () {
         app.modal.show(
             new AddRecipientModal({
                 selectedRecipients: this.recipients,
@@ -29,13 +29,13 @@ export default function (app) {
 
     // Add a tag-selection menu to the discussion composer's header, after the
     // title.
-    extend(DiscussionComposer.prototype, 'headerItems', function (items) {
+    extend(PrivateDiscussionComposer.prototype, 'headerItems', function (items) {
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
 
             const recipients = this.recipients.toArray();
 
             items.add('recipients', (
-                <a className="DiscussionComposer-changeRecipients"
+                <a className="PrivateDiscussionComposer-changeRecipients"
                    onclick={this.chooseRecipients.bind(this)}>
                     {recipients.length
                         ? recipientCountLabel(recipients.length)
@@ -46,7 +46,7 @@ export default function (app) {
     });
 
     // Add the selected tags as data to submit to the server.
-    extend(DiscussionComposer.prototype, 'data', function (data) {
+    extend(PrivateDiscussionComposer.prototype, 'data', function (data) {
         const users = [];
         const groups = [];
         this.recipients.toArray().forEach(recipient => {
