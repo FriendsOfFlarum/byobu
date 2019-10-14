@@ -9,8 +9,13 @@ import addHasRecipientsBadge from "./addHasRecipientsBadge";
 import addDiscussPrivatelyControl from './addDiscussPrivatelyControl';
 import addPrivacySetting from './addPrivacySetting';
 import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
+<<<<<<< HEAD
 import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
+=======
+import addPrivateMessageSessionDropdownLinkButton from './addPrivateMessageSessionDropdownLinkButton';
+
+>>>>>>> Added private message session dropdown link button
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
 
@@ -37,6 +42,7 @@ app.initializers.add('fof-byobu', function (app) {
     addRecipientsControl();
     addHasRecipientsBadge();
     addPrivacySetting();
+    addPrivateMessageSessionDropdownLinkButton();
 
     addDiscussPrivatelyControl();
 
