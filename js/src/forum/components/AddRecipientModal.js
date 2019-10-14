@@ -29,6 +29,10 @@ export default class AddRecipientModal extends Modal {
         });
     }
 
+    isDismissible() {
+        return false;
+    }
+
     assignInitialRecipients(discussion) {
         discussion.recipientUsers().map(user => {
             this.selected().add("users:" + user.id(), user);
@@ -44,7 +48,7 @@ export default class AddRecipientModal extends Modal {
 
     title() {
         return this.props.discussion
-            ? app.translator.trans('fof-byobu.forum.modal.titles.update_recipients', {title: <em>{this.props.discussion.title()}</em>})
+            ? app.translator.trans('fof-byobu.forum.modal.titles.update_recipients', { title: <em>{this.props.discussion.title()}</em> })
             : app.translator.trans('fof-byobu.forum.modal.titles.add_recipients');
     }
 
@@ -61,6 +65,12 @@ export default class AddRecipientModal extends Modal {
                             disabled: false,
                             icon: 'fas fa-check',
                             children: app.translator.trans('fof-byobu.forum.buttons.submit')
+                        })}
+                        {Button.component({
+                            onclick: this.hide.bind(this),
+                            className: 'Button Button--primary',
+                            disabled: false, // if more than one user / not only me true
+                            children: app.translator.trans('fof-byobu.forum.buttons.cancel')
                         })}
                     </div>
                 </div>
@@ -97,7 +107,7 @@ export default class AddRecipientModal extends Modal {
 
         // Recipients are updated here for existing discussions here.
         if (discussion) {
-            discussion.save({relationships: {recipientUsers, recipientGroups}})
+            discussion.save({ relationships: { recipientUsers, recipientGroups } })
                 .then(() => {
                     if (app.current instanceof DiscussionPage) {
                         app.current.stream.update();
