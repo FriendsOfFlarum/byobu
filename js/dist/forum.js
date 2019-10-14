@@ -726,6 +726,10 @@ function (_Modal) {
     });
   };
 
+  _proto.isDismissible = function isDismissible() {
+    return false;
+  };
+
   _proto.assignInitialRecipients = function assignInitialRecipients(discussion) {
     var _this = this;
 
@@ -760,6 +764,12 @@ function (_Modal) {
       disabled: false,
       icon: 'fas fa-check',
       children: app.translator.trans('fof-byobu.forum.buttons.submit')
+    }), flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
+      onclick: this.hide.bind(this),
+      className: 'Button Button--primary',
+      disabled: false,
+      // if more than one user / not only me true
+      children: app.translator.trans('fof-byobu.forum.buttons.cancel')
     }))))];
   };
 
