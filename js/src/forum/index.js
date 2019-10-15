@@ -49,7 +49,6 @@ app.initializers.add('fof-byobu', function (app) {
 
     addPrivateDiscussionsPage();
 
-<<<<<<< HEAD
     app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
 
     // Add notification preferences.
@@ -60,7 +59,5 @@ app.initializers.add('fof-byobu', function (app) {
             label: app.translator.trans('fof-byobu.forum.notifications.pd_label')
         });
     });
-=======
     removeTagComposer();
->>>>>>> Import new remove tag composer
 });
