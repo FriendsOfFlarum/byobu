@@ -14,6 +14,7 @@ import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
 =======
 import addPrivateMessageSessionDropdownLinkButton from './addPrivateMessageSessionDropdownLinkButton';
+import removeTagComposer from './removeTagComposer';
 
 >>>>>>> Added private message session dropdown link button
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
@@ -48,6 +49,7 @@ app.initializers.add('fof-byobu', function (app) {
 
     addPrivateDiscussionsPage();
 
+<<<<<<< HEAD
     app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
 
     // Add notification preferences.
@@ -58,4 +60,7 @@ app.initializers.add('fof-byobu', function (app) {
             label: app.translator.trans('fof-byobu.forum.notifications.pd_label')
         });
     });
+=======
+    removeTagComposer();
+>>>>>>> Import new remove tag composer
 });
