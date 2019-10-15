@@ -9,6 +9,7 @@ import addDiscussPrivatelyControl from './addDiscussPrivatelyControl';
 import addPrivacySetting from './addPrivacySetting';
 import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
 import addPrivateMessageSessionDropdownLinkButton from './addPrivateMessageSessionDropdownLinkButton';
+import removeTagComposer from './removeTagComposer';
 
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
@@ -41,4 +42,6 @@ app.initializers.add('fof-byobu', function(app) {
     addDiscussPrivatelyControl();
 
     addPrivateDiscussionsPage();
+
+    removeTagComposer();
 });
