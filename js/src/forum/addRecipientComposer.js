@@ -34,6 +34,8 @@ export default function (app) {
 
             const recipients = this.recipients.toArray();
 
+            items.remove('tags');
+
             items.add('recipients', (
                 <a className="PrivateDiscussionComposer-changeRecipients"
                    onclick={this.chooseRecipients.bind(this)}>

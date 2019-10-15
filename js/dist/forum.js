@@ -505,6 +505,7 @@ __webpack_require__.r(__webpack_exports__);
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'headerItems', function (items) {
     if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
       var recipients = this.recipients.toArray();
+      items.remove('tags');
       items.add('recipients', m("a", {
         className: "PrivateDiscussionComposer-changeRecipients",
         onclick: this.chooseRecipients.bind(this)
