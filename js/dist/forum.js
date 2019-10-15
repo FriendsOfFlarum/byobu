@@ -504,14 +504,33 @@ __webpack_require__.r(__webpack_exports__);
 
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'headerItems', function (items) {
     if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+      this.recipients.add('users:' + app.session.user.id(), app.session.user); // this.recipients.add('users:' + user.id(), user);
+
       var recipients = this.recipients.toArray();
-      items.remove('tags');
       items.add('recipients', m("a", {
         className: "PrivateDiscussionComposer-changeRecipients",
         onclick: this.chooseRecipients.bind(this)
       }, recipients.length ? Object(_common_helpers_recipientCountLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(recipients.length) : m("span", {
         className: "RecipientLabel none"
       }, app.translator.trans('fof-byobu.forum.buttons.add_recipients'))), 5);
+    }
+  });
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["override"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'onsubmit', function (original) {
+    var _this2 = this;
+
+    var recipients = this.recipients.toArray();
+
+    if (recipients.length < 2) {
+      app.modal.show(new _components_AddRecipientModal__WEBPACK_IMPORTED_MODULE_2__["default"]({
+        selectedRecipients: this.recipients,
+        onsubmit: function onsubmit(recipients) {
+          _this2.recipients = recipients; //todo: make this better?
+
+          original();
+        }
+      }));
+    } else {
+      original();
     }
   }); // Add the selected tags as data to submit to the server.
 
@@ -753,6 +772,7 @@ function (_Modal) {
   };
 
   _proto.content = function content() {
+    var isDisabled = this.selected().toArray().length < 2;
     return [m("div", {
       className: "Modal-body"
     }, m("div", {
@@ -762,14 +782,12 @@ function (_Modal) {
     }, flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
       type: 'submit',
       className: 'Button Button--primary',
-      disabled: false,
+      disabled: isDisabled,
       icon: 'fas fa-check',
       children: app.translator.trans('fof-byobu.forum.buttons.submit')
     }), flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
       onclick: this.hide.bind(this),
       className: 'Button Button--primary',
-      disabled: false,
-      // if more than one user / not only me true
       children: app.translator.trans('fof-byobu.forum.buttons.cancel')
     }))))];
   };
@@ -1890,8 +1908,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _addPrivacySetting__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./addPrivacySetting */ "./src/forum/addPrivacySetting.js");
 /* harmony import */ var _addPrivateDiscussionsPage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./addPrivateDiscussionsPage */ "./src/forum/addPrivateDiscussionsPage.js");
 /* harmony import */ var _addPrivateMessageSessionDropdownLinkButton__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./addPrivateMessageSessionDropdownLinkButton */ "./src/forum/addPrivateMessageSessionDropdownLinkButton.js");
-/* harmony import */ var _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/PrivateDiscussionIndex */ "./src/forum/components/PrivateDiscussionIndex.js");
-/* harmony import */ var _components_RecipientsModified__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/RecipientsModified */ "./src/forum/components/RecipientsModified.js");
+/* harmony import */ var _removeTagComposer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./removeTagComposer */ "./src/forum/removeTagComposer.js");
+/* harmony import */ var _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/PrivateDiscussionIndex */ "./src/forum/components/PrivateDiscussionIndex.js");
+/* harmony import */ var _components_RecipientsModified__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/RecipientsModified */ "./src/forum/components/RecipientsModified.js");
+
 
 
 
@@ -1908,7 +1928,7 @@ __webpack_require__.r(__webpack_exports__);
 app.initializers.add('fof-byobu', function (app) {
   app.routes.private_discussions = {
     path: '/private-discussions',
-    component: _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_11__["default"].component()
+    component: _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_12__["default"].component()
   };
   flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.recipientUsers = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasMany('recipientUsers');
   flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.oldRecipientUsers = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasMany('oldRecipientUsers');
@@ -1920,7 +1940,7 @@ app.initializers.add('fof-byobu', function (app) {
   flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.canEditGroupRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('canEditGroupRecipients');
   flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.blocksPd = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('blocksPd');
   flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.cannotBeDirectMessaged = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('cannotBeDirectMessaged');
-  app.postComponents.recipientsModified = _components_RecipientsModified__WEBPACK_IMPORTED_MODULE_12__["default"];
+  app.postComponents.recipientsModified = _components_RecipientsModified__WEBPACK_IMPORTED_MODULE_13__["default"];
   Object(_addRecipientComposer__WEBPACK_IMPORTED_MODULE_3__["default"])(app);
   Object(_addRecipientLabels__WEBPACK_IMPORTED_MODULE_4__["default"])();
   Object(_addRecipientsControl__WEBPACK_IMPORTED_MODULE_5__["default"])();
@@ -1929,6 +1949,39 @@ app.initializers.add('fof-byobu', function (app) {
   Object(_addPrivateMessageSessionDropdownLinkButton__WEBPACK_IMPORTED_MODULE_10__["default"])();
   Object(_addDiscussPrivatelyControl__WEBPACK_IMPORTED_MODULE_7__["default"])();
   Object(_addPrivateDiscussionsPage__WEBPACK_IMPORTED_MODULE_9__["default"])();
+  Object(_removeTagComposer__WEBPACK_IMPORTED_MODULE_11__["default"])();
+});
+
+/***/ }),
+
+/***/ "./src/forum/removeTagComposer.js":
+/*!****************************************!*\
+  !*** ./src/forum/removeTagComposer.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/PrivateDiscussionComposer */ "./src/forum/components/PrivateDiscussionComposer.js");
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.tags = [];
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'headerItems', function (items) {
+    items.remove('tags');
+  });
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["override"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'onsubmit', function (original) {
+    var tag = app.store.getBy('tags', 'slug', 'general-discussion');
+    this.tags = [tag];
+    original();
+  });
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'data', function (data) {
+    data.relationships = data.relationships || {};
+    data.relationships.tags = this.tags;
+  });
 });
 
 /***/ }),
