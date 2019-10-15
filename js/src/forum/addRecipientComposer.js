@@ -1,4 +1,4 @@
-import {extend, override} from "flarum/extend";
+import { extend, override } from "flarum/extend";
 import PrivateDiscussionComposer from "./components/PrivateDiscussionComposer";
 import AddRecipientModal from "./components/AddRecipientModal";
 import recipientCountLabel from "../common/helpers/recipientCountLabel";
@@ -32,18 +32,36 @@ export default function (app) {
     extend(PrivateDiscussionComposer.prototype, 'headerItems', function (items) {
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
 
+            this.recipients.add('users:' + app.session.user.id(), app.session.user);
+            // this.recipients.add('users:' + user.id(), user);
             const recipients = this.recipients.toArray();
-
-            items.remove('tags');
 
             items.add('recipients', (
                 <a className="PrivateDiscussionComposer-changeRecipients"
-                   onclick={this.chooseRecipients.bind(this)}>
+                    onclick={this.chooseRecipients.bind(this)}>
                     {recipients.length
                         ? recipientCountLabel(recipients.length)
                         : <span className="RecipientLabel none">{app.translator.trans('fof-byobu.forum.buttons.add_recipients')}</span>}
                 </a>
             ), 5);
+        }
+    });
+
+    override(PrivateDiscussionComposer.prototype, 'onsubmit', function (original) {
+        const recipients = this.recipients.toArray();
+        if (recipients.length < 2) {
+            app.modal.show(
+                new AddRecipientModal({
+                    selectedRecipients: this.recipients,
+                    onsubmit: (recipients) => {
+                        this.recipients = recipients;
+                        //todo: make this better?
+                        original();
+                    }
+                })
+            )
+        } else {
+            original();
         }
     });
 
