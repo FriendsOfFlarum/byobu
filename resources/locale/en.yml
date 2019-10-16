@@ -33,6 +33,10 @@ fof-byobu:
 
             byobu_link: Private Discussions
 
+        notifications:
+            pd_label: Someone includes me in a Private discussion
+            pd_text: "{username} started a new private discussion with you"
+
     admin:
         permission:
             create_private_discussions_with_users: Create private discussions with users
@@ -43,3 +47,7 @@ fof-byobu:
 
         settings:
             byobu_users_page_label: Add private discussions to user page
+
+    notifications:
+        private_discussion_created:
+            title: "[forum-name] New private discussion"
