@@ -744,11 +744,11 @@ function (_Modal) {
       selected: this.selected,
       discussion: this.props.discussion
     });
-  };
-
-  _proto.isDismissible = function isDismissible() {
-    return false;
-  };
+  } // todo: Add cancel button to replace modal X
+  // isDismissible() {
+  //     return false;
+  // }
+  ;
 
   _proto.assignInitialRecipients = function assignInitialRecipients(discussion) {
     var _this = this;
@@ -785,10 +785,6 @@ function (_Modal) {
       disabled: isDisabled,
       icon: 'fas fa-check',
       children: app.translator.trans('fof-byobu.forum.buttons.submit')
-    }), flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
-      onclick: this.hide.bind(this),
-      className: 'Button Button--primary',
-      children: app.translator.trans('fof-byobu.forum.buttons.cancel')
     }))))];
   };
 
