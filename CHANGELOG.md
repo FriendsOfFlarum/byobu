@@ -1,6 +1,3 @@
-- 0.2.0
-  - Flarum beta 8 compatibility.
-- 0.1.0
 - 0.1.0-beta.1
   - Is Private gambit. Enabled per default on all threads.
   - Adding, editing, deleting recipients.
@@ -66,3 +63,9 @@
   - Reformatted readme.
 - 0.1.1
   - Fixed the recipient labels from not showing in certain situations.
+- 0.2.0
+  - Flarum beta 8 compatibility.
+- 0.3.4
+	- Private discussions user page fixes
+		- Hid private discussions user page link from guests.
+		- Fixed private discussions page breaking when user is loaded async.

@@ -6,15 +6,22 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         super.init();
 
         this.loadUser(m.route.param('username'));
+    }
 
+    show(user) {
+        // We can not create the list in init because the user will not be available if it has to be loaded asynchronously
         this.list = new PrivateDiscussionList({
             params: {
-                q: `byobu:${this.user.username()} is:private`,
+                q: `byobu:${user.username()} is:private`,
                 sort: 'newest'
             }
         });
 
         this.list.refresh();
+
+        // We call the parent method after creating the list, this way the this.list property
+        // is set before content() is called for the first time
+        super.show(user);
     }
 
     content() {
