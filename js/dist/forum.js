@@ -485,7 +485,21 @@ __webpack_require__.r(__webpack_exports__);
   // Add recipient-selection abilities to the discussion composer.
   _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.recipients = new flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_6___default.a();
   _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.recipientUsers = [];
-  _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.recipientGroups = []; // Add a recipient selection modal when clicking the recipient tag label.
+  _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.recipientGroups = [];
+
+  _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.addDefaultRecipients = function (username) {
+    var user = app.store.getBy('users', 'username', username);
+    this.recipients.add('users:' + app.session.user.id(), app.session.user);
+
+    if (user.id() !== app.session.user.id()) {
+      this.recipients.add('users:' + user.id(), user);
+    }
+  };
+
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["override"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'init', function (original) {
+    original();
+    this.addDefaultRecipients(m.route.param('username'));
+  }); // Add a recipient selection modal when clicking the recipient tag label.
 
   _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.chooseRecipients = function () {
     var _this = this;
@@ -504,13 +518,6 @@ __webpack_require__.r(__webpack_exports__);
 
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'headerItems', function (items) {
     if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
-      var user = app.store.getBy('users', 'username', m.route.param('username'));
-      this.recipients.add('users:' + app.session.user.id(), app.session.user);
-
-      if (user.id() !== app.session.user.id()) {
-        this.recipients.add('users:' + user.id(), user);
-      }
-
       var recipients = this.recipients.toArray();
       items.add('recipients', m("a", {
         className: "PrivateDiscussionComposer-changeRecipients",

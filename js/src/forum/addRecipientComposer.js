@@ -12,6 +12,22 @@ export default function (app) {
     PrivateDiscussionComposer.prototype.recipientUsers = [];
     PrivateDiscussionComposer.prototype.recipientGroups = [];
 
+    PrivateDiscussionComposer.prototype.addDefaultRecipients = function (username) {
+        const user = app.store.getBy('users', 'username', username);
+
+        this.recipients.add('users:' + app.session.user.id(), app.session.user);
+        if(user.id() !== app.session.user.id()) {
+            this.recipients.add('users:' + user.id(), user);
+        }
+    };
+
+    override(PrivateDiscussionComposer.prototype, 'init', function(original) {
+        original();
+
+        this.addDefaultRecipients(m.route.param('username'));
+    });
+
+
     // Add a recipient selection modal when clicking the recipient tag label.
     PrivateDiscussionComposer.prototype.chooseRecipients = function () {
         app.modal.show(
@@ -31,13 +47,6 @@ export default function (app) {
     // title.
     extend(PrivateDiscussionComposer.prototype, 'headerItems', function (items) {
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
-            const user = app.store.getBy('users', 'username', m.route.param('username'));
-
-            this.recipients.add('users:' + app.session.user.id(), app.session.user);
-            if(user.id() !== app.session.user.id()) {
-                this.recipients.add('users:' + user.id(), user);
-            }
-
             const recipients = this.recipients.toArray();
 
             items.add('recipients', (
