@@ -504,7 +504,12 @@ __webpack_require__.r(__webpack_exports__);
 
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'headerItems', function (items) {
     if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
-      this.recipients.add('users:' + app.session.user.id(), app.session.user); // this.recipients.add('users:' + user.id(), user);
+      var user = app.store.getBy('users', 'username', m.route.param('username'));
+      this.recipients.add('users:' + app.session.user.id(), app.session.user);
+
+      if (user.id() !== app.session.user.id()) {
+        this.recipients.add('users:' + user.id(), user);
+      }
 
       var recipients = this.recipients.toArray();
       items.add('recipients', m("a", {
