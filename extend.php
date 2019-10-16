@@ -19,6 +19,10 @@ use Flarum\Extend as Native;
 use Flarum\Foundation\Application;
 use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
 use Illuminate\Contracts\Events\Dispatcher;
+use Flarum\Foundation\Application;
+use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
+use Flarum\Event\ConfigureNotificationTypes;
+
 
 return [
     (new Native\Frontend('admin'))
