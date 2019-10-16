@@ -59,7 +59,8 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                     className: 'Button Button--primary IndexPage-newDiscussion',
                     itemClassName: 'App-primaryControl',
                     onclick: this.newDiscussionAction.bind(this),
-                    disabled: !canStartDiscussion
+                    disabled: !canStartDiscussion,
+                    style: {marginBottom: '24px'}
                 })}
                 {this.list.render()}
             </div>
