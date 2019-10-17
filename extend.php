@@ -50,7 +50,7 @@ return [
 
         // Add notifications
         $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
-            $event->add(DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert']);
+            $event->add(DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
     }),
     function (Application $app) {
