@@ -7,6 +7,10 @@ use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Extend as Native;
 use Illuminate\Contracts\Events\Dispatcher;
+use Flarum\Foundation\Application;
+use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
+use Flarum\Event\ConfigureNotificationTypes;
+
 
 return [
     (new Native\Frontend('admin'))
@@ -27,10 +31,19 @@ return [
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
         $events->subscribe(Listeners\SaveBlocksPdPreference::class);
+        $events->subscribe(Listeners\SendPrivateDiscussionNotification::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
 
         // Support for fof/split
         $events->subscribe(Listeners\AddRecipientsToSplitDiscussion::class);
+
+        // Add notifications
+        $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
+            $event->add(DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert']);
+        });
     }),
+    function (Application $app) {
+        $app->register(Providers\ViewProvider::class);
+    },
 ];
