@@ -267,8 +267,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var flarum_utils_UserControls__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/utils/UserControls */ "flarum/utils/UserControls");
 /* harmony import */ var flarum_utils_UserControls__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_UserControls__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/components/DiscussionComposer */ "flarum/components/DiscussionComposer");
-/* harmony import */ var flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/PrivateDiscussionComposer */ "./src/forum/components/PrivateDiscussionComposer.js");
 /* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/components/Button */ "flarum/components/Button");
 /* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/utils/ItemList */ "flarum/utils/ItemList");
@@ -292,12 +291,8 @@ __webpack_require__.r(__webpack_exports__);
           var recipients = new flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_4___default.a();
           recipients.add('users:' + user.id(), user);
           recipients.add('users:' + app.session.user.id(), app.session.user);
-          flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.recipients = recipients;
-          var component = new flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_2___default.a({
-            user: app.session.user,
-            recipients: recipients,
-            recipientUsers: recipients
-          });
+          _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.recipients = recipients;
+          var component = new _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_2__["default"]();
           app.composer.load(component);
           app.composer.show();
           deferred.resolve(component);
@@ -498,7 +493,11 @@ __webpack_require__.r(__webpack_exports__);
 
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["override"])(_components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype, 'init', function (original) {
     original();
-    this.addDefaultRecipients(m.route.param('username'));
+    var username = m.route.param('username');
+
+    if (typeof username !== 'undefined') {
+      this.addDefaultRecipients(username);
+    }
   }); // Add a recipient selection modal when clicking the recipient tag label.
 
   _components_PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.chooseRecipients = function () {
