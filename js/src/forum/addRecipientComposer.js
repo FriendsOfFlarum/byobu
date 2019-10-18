@@ -24,7 +24,11 @@ export default function (app) {
     override(PrivateDiscussionComposer.prototype, 'init', function(original) {
         original();
 
-        this.addDefaultRecipients(m.route.param('username'));
+        const username = m.route.param('username');
+
+        if(typeof username !== 'undefined') {
+           this.addDefaultRecipients(username); 
+        }
     });
 
 
