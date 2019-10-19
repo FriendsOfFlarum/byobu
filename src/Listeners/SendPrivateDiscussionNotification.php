@@ -100,7 +100,7 @@ class SendPrivateDiscussionNotification
         $actor = $event->actor;
         
         $event->post->afterSave(function ($post) use ($actor) {
-            if ($post->discussion->is_private) {
+            if ($post->discussion->is_private && $post->number > 1) {
                 
                 foreach ($post->discussion->recipientUsers as $recipient) {
                     if ($recipient->id === $actor->id) {
