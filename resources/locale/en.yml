@@ -37,7 +37,7 @@ fof-byobu:
             pd_label: Someone includes me in a Private discussion
             pd_text: "{username} started a new private discussion with you"
             pd_reply_label: Someone posts in a private discussion I'm a recipient of
-            pd_reply_text: "{username} posted in a private discusion you're a part of"
+            pd_reply_text: "{username} replied in a private discusion you're a part of"
 
     admin:
         permission:
@@ -54,4 +54,4 @@ fof-byobu:
         private_discussion_created:
             title: "[forum-name] New private discussion"
         private_discussion_replied:
-            title: "[forum-name] Private discussion reply"
+            title: "[forum-name] user replied in a private discussion"
