@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Gambits\Discussion;
 
 use Flarum\Discussion\Search\DiscussionSearch;
@@ -43,7 +52,7 @@ class ByobuGambit extends AbstractRegexGambit
      */
     protected function conditions(AbstractSearch $search, array $matches, $negate)
     {
-        if (! $search instanceof DiscussionSearch) {
+        if (!$search instanceof DiscussionSearch) {
             throw new LogicException('This gambit can only be applied on a DiscussionSearch');
         }
 
