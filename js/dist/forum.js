@@ -1378,7 +1378,7 @@ function (_UserPage) {
     this.list = new _PrivateDiscussionList__WEBPACK_IMPORTED_MODULE_2__["default"]({
       params: {
         q: "byobu:" + user.username() + " is:private",
-        sort: 'newest'
+        sort: 'latest'
       }
     });
     this.list.refresh(); // We call the parent method after creating the list, this way the this.list property
