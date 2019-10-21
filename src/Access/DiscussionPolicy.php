@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Access;
 
 use Flarum\Discussion\Discussion;
@@ -22,7 +31,6 @@ class DiscussionPolicy extends AbstractPolicy
     public function findPrivate(User $actor, EloquentBuilder $query)
     {
         if ($actor->exists) {
-
             $query->orWhereExists(function (Builder $query) use ($actor) {
                 $prefix = $query->getConnection()->getTablePrefix();
 

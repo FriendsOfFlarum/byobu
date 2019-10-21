@@ -1,3 +1,4 @@
+import { extend } from 'flarum/extend';
 import Model from "flarum/Model";
 import Discussion from "flarum/models/Discussion";
 import User from "flarum/models/User";
@@ -8,6 +9,8 @@ import addHasRecipientsBadge from "./addHasRecipientsBadge";
 import addDiscussPrivatelyControl from './addDiscussPrivatelyControl';
 import addPrivacySetting from './addPrivacySetting';
 import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
+import NotificationGrid from 'flarum/components/NotificationGrid';
+import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
 import addPrivateMessageSessionDropdownLinkButton from './addPrivateMessageSessionDropdownLinkButton';
 import removeTagComposer from './removeTagComposer';
 
@@ -43,5 +46,15 @@ app.initializers.add('fof-byobu', function(app) {
 
     addPrivateDiscussionsPage();
 
+    app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
+
+    // Add notification preferences.
+    extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+        items.add('byobuPrivateDiscussionCreated', {
+            name: 'byobuPrivateDiscussionCreated',
+            icon: 'fas fa-map',
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_label')
+        });
+    });
     removeTagComposer();
 });

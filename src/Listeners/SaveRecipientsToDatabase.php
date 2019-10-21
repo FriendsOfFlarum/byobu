@@ -1,12 +1,18 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Listeners;
 
 use Carbon\Carbon;
 use DateTime;
-use FoF\Byobu\Events\DiscussionMadePrivate;
-use FoF\Byobu\Events\DiscussionMadePublic;
-use FoF\Byobu\Events\DiscussionRecipientsChanged;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
 use Flarum\Event\GetModelIsPrivate;
@@ -14,6 +20,9 @@ use Flarum\Foundation\ValidationException;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Exception\PermissionDeniedException;
 use Flarum\User\UserRepository;
+use FoF\Byobu\Events\DiscussionMadePrivate;
+use FoF\Byobu\Events\DiscussionMadePublic;
+use FoF\Byobu\Events\DiscussionRecipientsChanged;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
