@@ -1329,6 +1329,57 @@ function (_DiscussionList) {
 
 /***/ }),
 
+/***/ "./src/forum/components/PrivateDiscussionNotification.js":
+/*!***************************************************************!*\
+  !*** ./src/forum/components/PrivateDiscussionNotification.js ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PrivateDiscussionNotification; });
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/inheritsLoose */ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js");
+/* harmony import */ var flarum_components_Notification__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/Notification */ "flarum/components/Notification");
+/* harmony import */ var flarum_components_Notification__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Notification__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var PrivateDiscussionNotification =
+/*#__PURE__*/
+function (_Notification) {
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(PrivateDiscussionNotification, _Notification);
+
+  function PrivateDiscussionNotification() {
+    return _Notification.apply(this, arguments) || this;
+  }
+
+  var _proto = PrivateDiscussionNotification.prototype;
+
+  _proto.icon = function icon() {
+    return 'fas fa-map';
+  };
+
+  _proto.href = function href() {
+    var notification = this.props.notification;
+    var discussion = notification.subject();
+    return app.route.discussion(discussion);
+  };
+
+  _proto.content = function content() {
+    var user = this.props.notification.fromUser();
+    return app.translator.trans('fof-byobu.forum.notifications.pd_text', {
+      username: user.data.attributes.username
+    });
+  };
+
+  return PrivateDiscussionNotification;
+}(flarum_components_Notification__WEBPACK_IMPORTED_MODULE_1___default.a);
+
+
+
+/***/ }),
+
 /***/ "./src/forum/components/PrivateDiscussionsUserPage.js":
 /*!************************************************************!*\
   !*** ./src/forum/components/PrivateDiscussionsUserPage.js ***!
@@ -1903,23 +1954,31 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var flarum_Model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/Model */ "flarum/Model");
-/* harmony import */ var flarum_Model__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_Model__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/models/Discussion */ "flarum/models/Discussion");
-/* harmony import */ var flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var flarum_models_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/models/User */ "flarum/models/User");
-/* harmony import */ var flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_models_User__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _addRecipientComposer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./addRecipientComposer */ "./src/forum/addRecipientComposer.js");
-/* harmony import */ var _addRecipientLabels__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./addRecipientLabels */ "./src/forum/addRecipientLabels.js");
-/* harmony import */ var _addRecipientsControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./addRecipientsControl */ "./src/forum/addRecipientsControl.js");
-/* harmony import */ var _addHasRecipientsBadge__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./addHasRecipientsBadge */ "./src/forum/addHasRecipientsBadge.js");
-/* harmony import */ var _addDiscussPrivatelyControl__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./addDiscussPrivatelyControl */ "./src/forum/addDiscussPrivatelyControl.js");
-/* harmony import */ var _addPrivacySetting__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./addPrivacySetting */ "./src/forum/addPrivacySetting.js");
-/* harmony import */ var _addPrivateDiscussionsPage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./addPrivateDiscussionsPage */ "./src/forum/addPrivateDiscussionsPage.js");
-/* harmony import */ var _addPrivateMessageSessionDropdownLinkButton__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./addPrivateMessageSessionDropdownLinkButton */ "./src/forum/addPrivateMessageSessionDropdownLinkButton.js");
-/* harmony import */ var _removeTagComposer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./removeTagComposer */ "./src/forum/removeTagComposer.js");
-/* harmony import */ var _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/PrivateDiscussionIndex */ "./src/forum/components/PrivateDiscussionIndex.js");
-/* harmony import */ var _components_RecipientsModified__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/RecipientsModified */ "./src/forum/components/RecipientsModified.js");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_Model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/Model */ "flarum/Model");
+/* harmony import */ var flarum_Model__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_Model__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/models/Discussion */ "flarum/models/Discussion");
+/* harmony import */ var flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_models_User__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/models/User */ "flarum/models/User");
+/* harmony import */ var flarum_models_User__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_models_User__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _addRecipientComposer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./addRecipientComposer */ "./src/forum/addRecipientComposer.js");
+/* harmony import */ var _addRecipientLabels__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./addRecipientLabels */ "./src/forum/addRecipientLabels.js");
+/* harmony import */ var _addRecipientsControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./addRecipientsControl */ "./src/forum/addRecipientsControl.js");
+/* harmony import */ var _addHasRecipientsBadge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./addHasRecipientsBadge */ "./src/forum/addHasRecipientsBadge.js");
+/* harmony import */ var _addDiscussPrivatelyControl__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./addDiscussPrivatelyControl */ "./src/forum/addDiscussPrivatelyControl.js");
+/* harmony import */ var _addPrivacySetting__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./addPrivacySetting */ "./src/forum/addPrivacySetting.js");
+/* harmony import */ var _addPrivateDiscussionsPage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./addPrivateDiscussionsPage */ "./src/forum/addPrivateDiscussionsPage.js");
+/* harmony import */ var flarum_components_NotificationGrid__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! flarum/components/NotificationGrid */ "flarum/components/NotificationGrid");
+/* harmony import */ var flarum_components_NotificationGrid__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(flarum_components_NotificationGrid__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _components_PrivateDiscussionNotification__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/PrivateDiscussionNotification */ "./src/forum/components/PrivateDiscussionNotification.js");
+/* harmony import */ var _addPrivateMessageSessionDropdownLinkButton__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./addPrivateMessageSessionDropdownLinkButton */ "./src/forum/addPrivateMessageSessionDropdownLinkButton.js");
+/* harmony import */ var _removeTagComposer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./removeTagComposer */ "./src/forum/removeTagComposer.js");
+/* harmony import */ var _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/PrivateDiscussionIndex */ "./src/forum/components/PrivateDiscussionIndex.js");
+/* harmony import */ var _components_RecipientsModified__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/RecipientsModified */ "./src/forum/components/RecipientsModified.js");
+
+
+
 
 
 
@@ -1937,28 +1996,37 @@ __webpack_require__.r(__webpack_exports__);
 app.initializers.add('fof-byobu', function (app) {
   app.routes.private_discussions = {
     path: '/private-discussions',
-    component: _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_12__["default"].component()
+    component: _components_PrivateDiscussionIndex__WEBPACK_IMPORTED_MODULE_15__["default"].component()
   };
-  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.recipientUsers = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasMany('recipientUsers');
-  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.oldRecipientUsers = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasMany('oldRecipientUsers');
-  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.recipientGroups = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasMany('recipientGroups');
-  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.oldRecipientGroups = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasMany('oldRecipientGroups');
-  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.canEditRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('canEditRecipients');
-  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.canEditUserRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('canEditUserRecipients');
-  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.canEditGroupRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('canEditGroupRecipients');
-  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.canEditGroupRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('canEditGroupRecipients');
-  flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.blocksPd = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('blocksPd');
-  flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.cannotBeDirectMessaged = flarum_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('cannotBeDirectMessaged');
-  app.postComponents.recipientsModified = _components_RecipientsModified__WEBPACK_IMPORTED_MODULE_13__["default"];
-  Object(_addRecipientComposer__WEBPACK_IMPORTED_MODULE_3__["default"])(app);
-  Object(_addRecipientLabels__WEBPACK_IMPORTED_MODULE_4__["default"])();
-  Object(_addRecipientsControl__WEBPACK_IMPORTED_MODULE_5__["default"])();
-  Object(_addHasRecipientsBadge__WEBPACK_IMPORTED_MODULE_6__["default"])();
-  Object(_addPrivacySetting__WEBPACK_IMPORTED_MODULE_8__["default"])();
-  Object(_addPrivateMessageSessionDropdownLinkButton__WEBPACK_IMPORTED_MODULE_10__["default"])();
-  Object(_addDiscussPrivatelyControl__WEBPACK_IMPORTED_MODULE_7__["default"])();
-  Object(_addPrivateDiscussionsPage__WEBPACK_IMPORTED_MODULE_9__["default"])();
-  Object(_removeTagComposer__WEBPACK_IMPORTED_MODULE_11__["default"])();
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.recipientUsers = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.hasMany('recipientUsers');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.oldRecipientUsers = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.hasMany('oldRecipientUsers');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.recipientGroups = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.hasMany('recipientGroups');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.oldRecipientGroups = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.hasMany('oldRecipientGroups');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.canEditRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('canEditRecipients');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.canEditUserRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('canEditUserRecipients');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.canEditGroupRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('canEditGroupRecipients');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.canEditGroupRecipients = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('canEditGroupRecipients');
+  flarum_models_User__WEBPACK_IMPORTED_MODULE_3___default.a.prototype.blocksPd = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('blocksPd');
+  flarum_models_User__WEBPACK_IMPORTED_MODULE_3___default.a.prototype.cannotBeDirectMessaged = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('cannotBeDirectMessaged');
+  app.postComponents.recipientsModified = _components_RecipientsModified__WEBPACK_IMPORTED_MODULE_16__["default"];
+  Object(_addRecipientComposer__WEBPACK_IMPORTED_MODULE_4__["default"])(app);
+  Object(_addRecipientLabels__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  Object(_addRecipientsControl__WEBPACK_IMPORTED_MODULE_6__["default"])();
+  Object(_addHasRecipientsBadge__WEBPACK_IMPORTED_MODULE_7__["default"])();
+  Object(_addPrivacySetting__WEBPACK_IMPORTED_MODULE_9__["default"])();
+  Object(_addPrivateMessageSessionDropdownLinkButton__WEBPACK_IMPORTED_MODULE_13__["default"])();
+  Object(_addDiscussPrivatelyControl__WEBPACK_IMPORTED_MODULE_8__["default"])();
+  Object(_addPrivateDiscussionsPage__WEBPACK_IMPORTED_MODULE_10__["default"])();
+  app.notificationComponents.byobuPrivateDiscussionCreated = _components_PrivateDiscussionNotification__WEBPACK_IMPORTED_MODULE_12__["default"]; // Add notification preferences.
+
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_NotificationGrid__WEBPACK_IMPORTED_MODULE_11___default.a.prototype, 'notificationTypes', function (items) {
+    items.add('byobuPrivateDiscussionCreated', {
+      name: 'byobuPrivateDiscussionCreated',
+      icon: 'fas fa-map',
+      label: app.translator.trans('fof-byobu.forum.notifications.pd_label')
+    });
+  });
+  Object(_removeTagComposer__WEBPACK_IMPORTED_MODULE_14__["default"])();
 });
 
 /***/ }),
@@ -2135,6 +2203,28 @@ module.exports = flarum.core.compat['components/LogInModal'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['components/Modal'];
+
+/***/ }),
+
+/***/ "flarum/components/Notification":
+/*!****************************************************************!*\
+  !*** external "flarum.core.compat['components/Notification']" ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Notification'];
+
+/***/ }),
+
+/***/ "flarum/components/NotificationGrid":
+/*!********************************************************************!*\
+  !*** external "flarum.core.compat['components/NotificationGrid']" ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/NotificationGrid'];
 
 /***/ }),
 
