@@ -12,6 +12,8 @@ import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
 import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
 import PrivateDiscussionRepliedNotification from './components/PrivateDiscussionReplyNotification';
+import addPrivateMessageSessionDropdownLinkButton from './addPrivateMessageSessionDropdownLinkButton';
+import removeTagComposer from './removeTagComposer';
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
 
@@ -38,6 +40,7 @@ app.initializers.add('fof-byobu', function (app) {
     addRecipientsControl();
     addHasRecipientsBadge();
     addPrivacySetting();
+    addPrivateMessageSessionDropdownLinkButton();
 
     addDiscussPrivatelyControl();
 
@@ -59,4 +62,6 @@ app.initializers.add('fof-byobu', function (app) {
             label: app.translator.trans('fof-byobu.forum.notifications.pd_reply_label')
         });
     });
+
+    removeTagComposer();
 });
