@@ -1,3 +1,4 @@
+import { extend } from 'flarum/extend';
 import Model from "flarum/Model";
 import Discussion from "flarum/models/Discussion";
 import User from "flarum/models/User";
@@ -8,14 +9,11 @@ import addHasRecipientsBadge from "./addHasRecipientsBadge";
 import addDiscussPrivatelyControl from './addDiscussPrivatelyControl';
 import addPrivacySetting from './addPrivacySetting';
 import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
-<<<<<<< HEAD
 import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
-=======
 import addPrivateMessageSessionDropdownLinkButton from './addPrivateMessageSessionDropdownLinkButton';
 import removeTagComposer from './removeTagComposer';
 
->>>>>>> Added private message session dropdown link button
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
 
