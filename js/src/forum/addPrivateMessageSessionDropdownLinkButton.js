@@ -9,8 +9,8 @@ export default () => {
         items.add('privateDiscussions',
             LinkButton.component({
                 icon: 'fas fa-map',
-                children: app.translator.trans('fof-byobu.forum.user.byobu_link'),
-                href: app.route('user.byobu', { username: user.username() }),
+                children: app.translator.trans('fof-byobu.forum.user.dropdown_label'),
+                href: app.route('user.pd', { username: user.username() }),
             }),
             99
         );

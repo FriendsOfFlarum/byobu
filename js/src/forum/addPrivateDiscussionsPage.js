@@ -8,6 +8,7 @@ export default function () {
     if (!Number(app.data['fof-byobu.enable_byobu_user_page'])) return;
 
     app.routes['user.byobu'] = {path: '/u/:username/byobu', component: PrivateDiscussionsUserPage.component()};
+    app.routes['user.pd'] = {path: '/u/:username/pd', component: PrivateDiscussionsUserPage.component()};
 
     extend(UserPage.prototype, 'navItems', function (items) {
         const href = app.route('user.byobu', {username: this.user.username()});

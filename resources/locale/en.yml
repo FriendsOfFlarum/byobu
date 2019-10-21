@@ -14,6 +14,7 @@ fof-byobu:
             user_deleted: -deleted-
         nav:
             private_discussions: Private discussion
+            start_button: Start a private discussion
         input:
             search_recipients: Search recipient by typing first three characters...
         search:
@@ -33,6 +34,7 @@ fof-byobu:
                 block_pd: Block private discussions
 
             byobu_link: Private Discussions
+            dropdown_label: Private discussions
 
         notifications:
             pd_label: Someone includes me in a Private discussion

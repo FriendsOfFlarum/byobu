@@ -400,6 +400,10 @@ __webpack_require__.r(__webpack_exports__);
     path: '/u/:username/byobu',
     component: _components_PrivateDiscussionsUserPage__WEBPACK_IMPORTED_MODULE_3__["default"].component()
   };
+  app.routes['user.pd'] = {
+    path: '/u/:username/pd',
+    component: _components_PrivateDiscussionsUserPage__WEBPACK_IMPORTED_MODULE_3__["default"].component()
+  };
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_UserPage__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'navItems', function (items) {
     var href = app.route('user.byobu', {
       username: this.user.username()
@@ -439,8 +443,8 @@ __webpack_require__.r(__webpack_exports__);
     var user = app.session.user;
     items.add('privateDiscussions', flarum_components_LinkButton__WEBPACK_IMPORTED_MODULE_1___default.a.component({
       icon: 'fas fa-map',
-      children: app.translator.trans('fof-byobu.forum.user.byobu_link'),
-      href: app.route('user.byobu', {
+      children: app.translator.trans('fof-byobu.forum.user.dropdown_label'),
+      href: app.route('user.pd', {
         username: user.username()
       })
     }), 99);
@@ -1513,7 +1517,7 @@ function (_UserPage) {
     return m("div", {
       className: "DiscussionsUserPage"
     }, flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
-      children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
+      children: app.translator.trans(canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'),
       // icon: 'fas fa-edit',
       className: 'Button Button--primary IndexPage-newDiscussion',
       itemClassName: 'App-primaryControl',

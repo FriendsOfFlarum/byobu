@@ -54,7 +54,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         return (
             <div className="DiscussionsUserPage">
                 {Button.component({
-                    children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
+                    children: app.translator.trans(canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'),
                     // icon: 'fas fa-edit',
                     className: 'Button Button--primary IndexPage-newDiscussion',
                     itemClassName: 'App-primaryControl',
