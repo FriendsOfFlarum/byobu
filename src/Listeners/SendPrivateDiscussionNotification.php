@@ -12,11 +12,13 @@
 namespace FoF\Byobu\Listeners;
 
 use Flarum\Notification\NotificationSyncer;
+use Flarum\Post\Event\Saving;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use Flarum\User\UserRepository;
 use FoF\Byobu\Events\DiscussionMadePrivate;
 use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
+use FoF\Byobu\Notifications\DiscussionRepliedBlueprint;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Validation\Factory;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -74,21 +76,42 @@ class SendPrivateDiscussionNotification
     public function subscribe(Dispatcher $events)
     {
         $events->listen(DiscussionMadePrivate::class, [$this, 'discussionMadePrivate']);
+        $events->listen(Saving::class, [$this, 'postMadeInPrivateDiscussion']);
     }
 
     public function discussionMadePrivate(DiscussionMadePrivate $event)
     {
         $privateDiscussion = $event->discussion;
 
-        $recipients = $event->newUsers;
+        $actor = $event->actor;
+        $sendToUsers = $this->recipientsMinusActor($privateDiscussion->recipientUsers, $actor);
+
+        $this->notifications->sync(new DiscussionCreatedBlueprint($privateDiscussion, $this->translator, $this->settings), $sendToUsers);
+    }
+
+    public function postMadeInPrivateDiscussion(Saving $event):void
+    {
         $actor = $event->actor;
 
+        $event->post->afterSave(function ($post) use ($actor) {
+            if ($post->discussion->is_private && $post->number > 1) {
+                $sendToUsers = $this->recipientsMinusActor($post->discussion->recipientUsers, $actor);
+
+                $this->notifications->sync(new DiscussionRepliedBlueprint($post, $actor, $this->translator, $this->settings), $sendToUsers);
+            }
+        });
+    }
+
+    protected function recipientsMinusActor($recipients, User $actor)
+    {
+        $filtered = [];
         foreach ($recipients as $recipient) {
-            if ($recipient === $actor->id) {
+            if ($recipient->id === $actor->id) {
                 continue;
-            } // Don't send to sender
-            $user = User::where('id', $recipient)->first();
-            $this->notifications->sync(new DiscussionCreatedBlueprint($privateDiscussion, $this->translator, $this->settings), [$user]);
+            }
+            $filtered[] = $recipient;
         }
+
+        return $filtered;
     }
 }

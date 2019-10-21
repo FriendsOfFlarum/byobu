@@ -18,6 +18,7 @@ use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend as Native;
 use Flarum\Foundation\Application;
 use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
+use FoF\Byobu\Notifications\DiscussionRepliedBlueprint;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
@@ -51,6 +52,7 @@ return [
         // Add notifications
         $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
             $event->add(DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
+            $event->add(DiscussionRepliedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
     }),
     function (Application $app) {
