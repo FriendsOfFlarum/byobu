@@ -83,32 +83,35 @@ class SendPrivateDiscussionNotification
     {
         $privateDiscussion = $event->discussion;
 
-        $recipients = $event->newUsers;
         $actor = $event->actor;
+        $sendToUsers = $this->recipientsMinusActor($privateDiscussion->recipientUsers, $actor);
 
-        foreach ($recipients as $recipient) {
-            if ($recipient === $actor->id) {
-                continue;
-            } // Don't send to sender
-            $user = User::where('id', $recipient)->first();
-            $this->notifications->sync(new DiscussionCreatedBlueprint($privateDiscussion, $this->translator, $this->settings), [$user]);
-        }
+        $this->notifications->sync(new DiscussionCreatedBlueprint($privateDiscussion, $this->translator, $this->settings), $sendToUsers);
     }
 
     public function postMadeInPrivateDiscussion(Saving $event):void
     {
         $actor = $event->actor;
-        
+
         $event->post->afterSave(function ($post) use ($actor) {
             if ($post->discussion->is_private && $post->number > 1) {
-                
-                foreach ($post->discussion->recipientUsers as $recipient) {
-                    if ($recipient->id === $actor->id) {
-                        continue;
-                    } // Don't notify post author
-                    $this->notifications->sync(new DiscussionRepliedBlueprint($post, $actor, $this->translator, $this->settings), [$recipient]);
-                }
+                $sendToUsers = $this->recipientsMinusActor($post->discussion->recipientUsers, $actor);
+
+                $this->notifications->sync(new DiscussionRepliedBlueprint($post, $actor, $this->translator, $this->settings), $sendToUsers);
             }
         });
+    }
+
+    protected function recipientsMinusActor($recipients, User $actor)
+    {
+        $filtered = [];
+        foreach ($recipients as $recipient) {
+            if ($recipient->id === $actor->id) {
+                continue;
+            }
+            $filtered[] = $recipient;
+        }
+
+        return $filtered;
     }
 }
