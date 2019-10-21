@@ -24,7 +24,7 @@
     },
     "extra": {
         "flarum-extension": {
-            "title": "FoF Byōbu, enhanced by giffgaff",
+            "title": "FoF Byōbu",
             "icon": {
                 "image": "resources/logo.svg",
                 "backgroundColor": "#e74c3c",
