@@ -16,7 +16,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         this.list = new PrivateDiscussionList({
             params: {
                 q: `byobu:${user.username()} is:private`,
-                sort: 'newest'
+                sort: 'latest'
             }
         });
 
