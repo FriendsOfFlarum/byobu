@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Gambits\User;
 
 use Flarum\Search\AbstractRegexGambit;
@@ -28,6 +37,7 @@ class AllowsPdGambit extends AbstractRegexGambit
      * @param array          $matches An array of matches from the search bit.
      * @param bool           $negate  Whether or not the bit was negated, and thus whether
      *                                or not the conditions should be negated.
+     *
      * @return mixed
      */
     protected function conditions(AbstractSearch $search, array $matches, $negate)
@@ -39,7 +49,7 @@ class AllowsPdGambit extends AbstractRegexGambit
         if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
             $search
                 ->getQuery()
-                ->where(function($query) use ($negate) {
+                ->where(function ($query) use ($negate) {
                     $query->where('blocks_byobu_pd', $negate);
                 })
                 ->orderBy('username', 'asc');
