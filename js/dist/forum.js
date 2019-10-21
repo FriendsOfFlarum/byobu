@@ -908,8 +908,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PrivateDiscussionList__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PrivateDiscussionList */ "./src/forum/components/PrivateDiscussionList.js");
 /* harmony import */ var flarum_components_WelcomeHero__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! flarum/components/WelcomeHero */ "flarum/components/WelcomeHero");
 /* harmony import */ var flarum_components_WelcomeHero__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(flarum_components_WelcomeHero__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/components/DiscussionComposer */ "flarum/components/DiscussionComposer");
-/* harmony import */ var flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./PrivateDiscussionComposer */ "./src/forum/components/PrivateDiscussionComposer.js");
 /* harmony import */ var flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! flarum/components/LogInModal */ "flarum/components/LogInModal");
 /* harmony import */ var flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var flarum_components_DiscussionPage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! flarum/components/DiscussionPage */ "flarum/components/DiscussionPage");
@@ -1005,7 +1004,7 @@ function (_Page) {
       className: "container"
     }, m("nav", {
       className: "IndexPage-nav sideNav"
-    }, m("ul", null, flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_4___default()(this.sidebarItems().toArray()))), m("div", {
+    }, console.log('here!'), m("ul", null, flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_4___default()(this.sidebarItems().toArray()))), m("div", {
       className: "IndexPage-results sideNavOffset"
     }, m("div", {
       className: "IndexPage-toolbar"
@@ -1266,7 +1265,7 @@ function (_Page) {
   ;
 
   _proto.composeNewDiscussion = function composeNewDiscussion(deferred) {
-    var component = new flarum_components_DiscussionComposer__WEBPACK_IMPORTED_MODULE_8___default.a({
+    var component = new _PrivateDiscussionComposer__WEBPACK_IMPORTED_MODULE_8__["default"]({
       user: app.session.user
     });
     app.composer.load(component);
