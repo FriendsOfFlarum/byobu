@@ -13,12 +13,11 @@ import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
 import addPrivateMessageSessionDropdownLinkButton from './addPrivateMessageSessionDropdownLinkButton';
 import removeTagComposer from './removeTagComposer';
-
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
 
-app.initializers.add('fof-byobu', function(app) {
-    app.routes.private_discussions = {path: '/private-discussions', component: PrivateDiscussionIndex.component()};
+app.initializers.add('fof-byobu', function (app) {
+    app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
 
     Discussion.prototype.recipientUsers = Model.hasMany('recipientUsers');
     Discussion.prototype.oldRecipientUsers = Model.hasMany('oldRecipientUsers');
@@ -56,5 +55,6 @@ app.initializers.add('fof-byobu', function(app) {
             label: app.translator.trans('fof-byobu.forum.notifications.pd_label')
         });
     });
+
     removeTagComposer();
 });

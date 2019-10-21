@@ -41,6 +41,7 @@ return [
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
         $events->subscribe(Listeners\SaveBlocksPdPreference::class);
+        $events->subscribe(Listeners\SendPrivateDiscussionNotification::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
 
@@ -52,4 +53,7 @@ return [
             $event->add(DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
     }),
+    function (Application $app) {
+        $app->register(Providers\ViewProvider::class);
+    },
 ];
