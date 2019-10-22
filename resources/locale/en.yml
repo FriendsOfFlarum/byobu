@@ -7,6 +7,7 @@ fof-byobu:
             add_recipients: Recipients
             submit: OK
             edit_recipients: Edit Recipients
+            remove_from_discussion: Remove from iscussion
             send_pd: "Send {username} a message"
             cancel: Cancel
         labels:
