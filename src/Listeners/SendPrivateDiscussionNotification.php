@@ -92,6 +92,9 @@ class SendPrivateDiscussionNotification
     public function postMadeInPrivateDiscussion(Saving $event):void
     {
         $actor = $event->actor;
+        if (isset($event->data["attributes"]["reaction"])) {
+            return; // Ignore if this is a save for a reaction to existing post
+        }
 
         $event->post->afterSave(function ($post) use ($actor) {
             if ($post->discussion->is_private && $post->number > 1) {
