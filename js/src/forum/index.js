@@ -11,6 +11,7 @@ import addPrivacySetting from './addPrivacySetting';
 import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
 import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
+import PrivateDiscussionAddedNotification from './components/PrivateDiscussionAddedNotification';
 import PrivateDiscussionRepliedNotification from './components/PrivateDiscussionReplyNotification';
 import addPrivateMessageSessionDropdownLinkButton from './addPrivateMessageSessionDropdownLinkButton';
 import removeTagComposer from './removeTagComposer';
@@ -48,6 +49,7 @@ app.initializers.add('fof-byobu', function (app) {
 
     app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
     app.notificationComponents.byobuPrivateDiscussionReplied = PrivateDiscussionRepliedNotification;
+    app.notificationComponents.byobuPrivateDiscussionAdded = PrivateDiscussionAddedNotification;
 
     // Add notification preferences.
     extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
@@ -60,6 +62,11 @@ app.initializers.add('fof-byobu', function (app) {
             name: 'byobuPrivateDiscussionReplied',
             icon: 'fas fa-map',
             label: app.translator.trans('fof-byobu.forum.notifications.pd_reply_label')
+        });
+        items.add('byobuPrivateDiscussionAdded', {
+            name: 'byobuPrivateDiscussionAdded',
+            icon: 'fas fa-map',
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_added_label')
         });
     });
 

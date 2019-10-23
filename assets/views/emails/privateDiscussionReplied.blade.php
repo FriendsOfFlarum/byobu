@@ -1,4 +1,4 @@
-Hey {{ $user->username }}!
+Hey {{ $user->username }},
 
 {{ $blueprint->post->user->username }} replied in a private discussion with you as recipient, titled '{{ $blueprint->post->discussion->title }}''.
 
