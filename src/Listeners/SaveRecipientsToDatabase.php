@@ -117,7 +117,11 @@ class SaveRecipientsToDatabase
         // New discussion
         if ($discussion->exists) {
             if (!$newUserIds->isEmpty() && !$actor->can('discussion.editUserRecipients', $discussion)) {
-                throw new PermissionDeniedException('Not allowed to edit users of a private discussion');
+                $isInNewRecipients = $newUserIds->contains($actor->id);
+                $isInOldRecipients = $discussion->recipientUsers()->get()->contains($actor->id);
+                if ($isInNewRecipients && !$isInOldRecipients){
+                    throw new PermissionDeniedException('Not allowed to edit users of a private discussion');
+                }
             }
             if (!$newGroupIds->isEmpty() && !$actor->can('discussion.editGroupRecipients', $discussion)) {
                 throw new PermissionDeniedException('Not allowed to edit groups of a private discussion');
