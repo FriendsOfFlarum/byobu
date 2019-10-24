@@ -18,34 +18,36 @@ export default function () {
             }));
         }
 
-        items.add('remove', Button.component({
-            children: app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion'),
-            icon: 'fas fa-user-slash',
-            onclick: () => {
-                if (discussion) {
+       if (discussion.recipientUsers().length) {
+            items.add('remove', Button.component({
+                children: app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion'),
+                icon: 'fas fa-user-slash',
+                onclick: () => {
+                    if (discussion) {
 
-                    let recipients = new ItemList();
-                    discussion.recipientUsers().map(user => {
-                        if (app.session.user.id() !== user.id()) {
-                            recipients.add("users:" + user.id(), user);
-                        }
-                    });
+                        let recipients = new ItemList();
+                        discussion.recipientUsers().map(user => {
+                            if (app.session.user.id() !== user.id()) {
+                                recipients.add("users:" + user.id(), user);
+                            }
+                        });
 
-                    let recipientGroups = [];
-                    let recipientUsers = [];
+                        let recipientGroups = [];
+                        let recipientUsers = [];
 
-                    recipients.toArray().forEach(recipient => {
-                        if (recipient instanceof User) {
-                            recipientUsers.push(recipient);
-                        }
-                        if (recipient instanceof Group) {
-                            recipientGroups.push(recipient);
-                        }
-                    });
+                        recipients.toArray().forEach(recipient => {
+                            if (recipient instanceof User) {
+                                recipientUsers.push(recipient);
+                            }
+                            if (recipient instanceof Group) {
+                                recipientGroups.push(recipient);
+                            }
+                        });
 
-                    discussion.save({ relationships: { recipientUsers, recipientGroups } }).then(() => app.history.back());
+                        discussion.save({ relationships: { recipientUsers, recipientGroups } }).then(() => app.history.back());
+                    }
                 }
-            }
-        }));
+            }));
+        }
     });
 }
