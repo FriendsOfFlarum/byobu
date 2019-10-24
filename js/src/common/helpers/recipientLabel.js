@@ -30,6 +30,9 @@ export default function recipientLabel(recipient, attrs = {}) {
     m((link ? 'a' : 'span'), attrs,
         <span className="RecipientLabel-text">
             {label}
+            <span className="RecipientLabel-text-delete">
+                <i className="fas fa-times"></i>
+            </span>
         </span>
     )
   );
