@@ -29,10 +29,9 @@ export default class AddRecipientModal extends Modal {
         });
     }
 
-    // todo: Add cancel button to replace modal X
-    // isDismissible() {
-    //     return false;
-    // }
+    isDismissible() {
+        return false;
+    }
 
     assignInitialRecipients(discussion) {
         discussion.recipientUsers().map(user => {
@@ -68,11 +67,11 @@ export default class AddRecipientModal extends Modal {
                             icon: 'fas fa-check',
                             children: app.translator.trans('fof-byobu.forum.buttons.submit')
                         })}
-                        {/* {Button.component({
+                        {Button.component({
                             onclick: this.hide.bind(this),
-                            className: 'Button Button--primary',
+                            className: 'Button Button--primary Button--cancel',
                             children: app.translator.trans('fof-byobu.forum.buttons.cancel')
-                        })} */}
+                        })}
                     </div>
                 </div>
             </div>
