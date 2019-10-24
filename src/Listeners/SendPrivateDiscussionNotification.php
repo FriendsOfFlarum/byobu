@@ -17,6 +17,8 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use Flarum\User\UserRepository;
 use FoF\Byobu\Events\DiscussionMadePrivate;
+use FoF\Byobu\Events\DiscussionRecipientsChanged;
+use FoF\Byobu\Notifications\DiscussionAddedBlueprint;
 use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
 use FoF\Byobu\Notifications\DiscussionRepliedBlueprint;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -77,6 +79,7 @@ class SendPrivateDiscussionNotification
     {
         $events->listen(DiscussionMadePrivate::class, [$this, 'discussionMadePrivate']);
         $events->listen(Saving::class, [$this, 'postMadeInPrivateDiscussion']);
+        $events->listen(DiscussionRecipientsChanged::class, [$this, 'discussionRecipientsChanged']);
     }
 
     public function discussionMadePrivate(DiscussionMadePrivate $event)
@@ -105,6 +108,17 @@ class SendPrivateDiscussionNotification
         });
     }
 
+    public function discussionRecipientsChanged(DiscussionRecipientsChanged $event):void
+    {
+        $actor = $event->actor;
+        $privateDiscussion = $event->discussion;
+        $newUsers = $this->recipientsMinusActor($this->getNewUsers($event->oldUsers, $event->discussion->recipientUsers), $actor);
+
+        if ($newUsers) {
+            $this->notifications->sync(new DiscussionAddedBlueprint($privateDiscussion, $actor, $this->translator, $this->settings), $newUsers);
+        }
+    }
+
     protected function recipientsMinusActor($recipients, User $actor)
     {
         $filtered = [];
@@ -116,5 +130,10 @@ class SendPrivateDiscussionNotification
         }
 
         return $filtered;
+    }
+
+    protected function getNewUsers(\Illuminate\Support\Collection $old, \Illuminate\Support\Collection $new):\Illuminate\Support\Collection
+    {
+        return $new->diff($old);
     }
 }
