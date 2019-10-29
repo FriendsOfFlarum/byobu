@@ -3,6 +3,16 @@
     flex-direction: column;
     position: relative;
 
+    .RecipientsInput-selected.RecipientsLabel {
+
+      .username {
+        &::after {
+          font-family: "Font Awesome 5 Free";
+          content: " \f00d"
+        }
+      }
+    }
+
     input.RecipientsInput {
         margin: 0 1em;
         width: auto !important;
