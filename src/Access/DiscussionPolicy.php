@@ -24,6 +24,11 @@ class DiscussionPolicy extends AbstractPolicy
      */
     protected $model = Discussion::class;
 
+    private function actorIsInEducatorsGroup($actor)
+    {
+        return $actor->hasPermission('user.canViewFlaggedPds');
+    }
+
     /**
      * @param User            $actor
      * @param EloquentBuilder $query
@@ -31,21 +36,27 @@ class DiscussionPolicy extends AbstractPolicy
     public function findPrivate(User $actor, EloquentBuilder $query)
     {
         if ($actor->exists) {
-            $query->orWhereExists(function (Builder $query) use ($actor) {
-                $prefix = $query->getConnection()->getTablePrefix();
-
-                return $query->selectRaw('1')
-                    ->from('recipients')
-                    ->whereRaw($prefix.'discussions.id = discussion_id')
-                    ->whereNull('removed_at')
-                    ->where(function (Builder $query) use ($actor) {
-                        $query->where('recipients.user_id', $actor->id);
-
-                        if (!$actor->groups->isEmpty()) {
-                            $query->orWhereIn('recipients.group_id', $actor->groups->pluck('id')->all());
-                        }
-                    });
-            });
+            if ($this->actorIsInEducatorsGroup($actor)) {
+                $query->join('posts', 'posts.discussion_id', '=', 'discussions.id');
+                $query->join('flags', 'flags.post_id', '=', 'posts.id');
+                $query->orWhere('discussions.is_approved', true);
+            } else {
+                $query->orWhereExists(function (Builder $query) use ($actor) {
+                    $prefix = $query->getConnection()->getTablePrefix();
+    
+                    return $query->selectRaw('1')
+                        ->from('recipients')
+                        ->whereRaw($prefix.'discussions.id = discussion_id')
+                        ->whereNull('removed_at')
+                        ->where(function (Builder $query) use ($actor) {
+                            $query->where('recipients.user_id', $actor->id);
+    
+                            if (!$actor->groups->isEmpty()) {
+                                $query->orWhereIn('recipients.group_id', $actor->groups->pluck('id')->all());
+                            }
+                        });
+                });    
+            }
         }
     }
 
