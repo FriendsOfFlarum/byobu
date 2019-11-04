@@ -62,7 +62,7 @@ export default class AddRecipientModal extends Modal {
                     <div className="AddRecipientModal-form-submit App-primaryControl">
                         {Button.component({
                             type: 'submit',
-                            className: 'Button Button--disabled',
+                            className: 'Button Button--primary',
                             disabled: isDisabled,
                             icon: 'fas fa-check',
                             children: app.translator.trans('fof-byobu.forum.buttons.submit')
