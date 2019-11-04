@@ -18,4 +18,12 @@ app.initializers.add('fof-byobu', app => {
       permission: 'user.canViewFlaggedPds'
     }, 1);
   });
+  
+  extend(PermissionGrid.prototype, 'moderateItems', items => {
+    items.add('view-all-flagged-pds', {
+      icon: 'fas fa-flag',
+      label: app.translator.trans('fof-byobu.admin.permission.view_all_flagged_pds'),
+      permission: 'user.canViewAllFlaggedPds'
+    }, 1);
+  });
 });
