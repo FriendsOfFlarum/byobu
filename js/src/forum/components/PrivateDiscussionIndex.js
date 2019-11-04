@@ -69,7 +69,6 @@ export default class PrivateDiscussionIndex extends Page
                 {this.hero()}
                 <div className="container">
                     <nav className="IndexPage-nav sideNav">
-                        {console.log('here!')}
                         <ul>{listItems(this.sidebarItems().toArray())}</ul>
                     </nav>
                     <div className="IndexPage-results sideNavOffset">

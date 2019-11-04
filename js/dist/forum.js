@@ -1108,7 +1108,7 @@ function (_Page) {
       className: "container"
     }, m("nav", {
       className: "IndexPage-nav sideNav"
-    }, console.log('here!'), m("ul", null, flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_4___default()(this.sidebarItems().toArray()))), m("div", {
+    }, m("ul", null, flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_4___default()(this.sidebarItems().toArray()))), m("div", {
       className: "IndexPage-results sideNavOffset"
     }, m("div", {
       className: "IndexPage-toolbar"
