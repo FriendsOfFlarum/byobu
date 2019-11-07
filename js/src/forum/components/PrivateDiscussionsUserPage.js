@@ -36,7 +36,6 @@ export default class PrivateDiscussionsUserPage extends UserPage {
             const component = new PrivateDiscussionComposer({ user: app.session.user });
 
             app.composer.load(component);
-            app.composer.show();
 
             deferred.resolve(component);
         } else {

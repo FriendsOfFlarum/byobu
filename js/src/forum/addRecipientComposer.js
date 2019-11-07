@@ -23,6 +23,7 @@ export default function (app) {
 
     override(PrivateDiscussionComposer.prototype, 'init', function(original) {
         original();
+        this.chooseRecipients();
 
         const username = m.route.param('username');
 
@@ -34,6 +35,7 @@ export default function (app) {
 
     // Add a recipient selection modal when clicking the recipient tag label.
     PrivateDiscussionComposer.prototype.chooseRecipients = function () {
+        const tagsClassName = '.RecipientsInput-selected > .RecipientLabel:first-child';
         app.modal.show(
             new AddRecipientModal({
                 selectedRecipients: this.recipients,
@@ -45,6 +47,7 @@ export default function (app) {
                 }
             })
         )
+        $(tagsClassName).css('display', 'none');
     };
 
     // Add a tag-selection menu to the discussion composer's header, after the
@@ -57,7 +60,7 @@ export default function (app) {
                 <a className="PrivateDiscussionComposer-changeRecipients"
                     onclick={this.chooseRecipients.bind(this)}>
                     {recipients.length
-                        ? recipientCountLabel(recipients.length)
+                        ? recipientCountLabel(recipients.length - 1)
                         : <span className="RecipientLabel none">{app.translator.trans('fof-byobu.forum.buttons.add_recipients')}</span>}
                 </a>
             ), 5);
