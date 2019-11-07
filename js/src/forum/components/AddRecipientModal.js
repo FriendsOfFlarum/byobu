@@ -120,7 +120,7 @@ export default class AddRecipientModal extends Modal {
         if (this.props.onsubmit) this.props.onsubmit(recipients);
 
         app.modal.close();
-
+        app.composer.show();
         m.redraw.strategy('none');
     }
 }
