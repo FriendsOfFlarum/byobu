@@ -1,6 +1,7 @@
 import UserPage from 'flarum/components/UserPage';
 import PrivateDiscussionList from './PrivateDiscussionList';
 import Button from 'flarum/components/Button';
+import Dropdown from 'flarum/components/Dropdown';
 import LogInModal from 'flarum/components/LogInModal';
 import PrivateDiscussionComposer from './PrivateDiscussionComposer';
 
@@ -8,7 +9,11 @@ export default class PrivateDiscussionsUserPage extends UserPage {
     init() {
         super.init();
 
-        this.loadUser(m.route.param('username'));
+        this.changeSort('latest');
+        this.sortOptions = {};
+        this.sortOptions['latest'] = 'Latest';
+        this.sortOptions['popular'] = 'Popular';
+        this.sortOptions['unpopular'] = 'Unpopular';
     }
 
     show(user) {
@@ -16,13 +21,13 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         this.list = new PrivateDiscussionList({
             params: {
                 q: `byobu:${user.username()} is:private`,
-                sort: 'latest'
+                sort: this.sort
             }
         });
 
         this.list.refresh();
 
-        // We call the parent method after creating the list, this way the this.list property
+        // We call the parent method after creating the list, this way the this.list propert
         // is set before content() is called for the first time
         super.show(user);
     }
@@ -47,20 +52,54 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         return deferred.promise;
     }
 
+    handleChangeSort(sort, e) {
+        e.preventDefault();
+
+        this.changeSort(sort);
+    }
+
+    changeSort(sort) {
+        this.sort = sort;
+        this.loadUser(m.route.param('username'));
+    }
+
     content() {
         const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
 
         return (
             <div className="DiscussionsUserPage">
-                {Button.component({
-                    children: app.translator.trans(canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'),
-                    // icon: 'fas fa-edit',
-                    className: 'Button Button--primary IndexPage-newDiscussion',
-                    itemClassName: 'App-primaryControl',
-                    onclick: this.newDiscussionAction.bind(this),
-                    disabled: !canStartDiscussion,
-                    style: {marginBottom: '24px'}
-                })}
+                    <ul className="DiscussionsUserPage-toolbar-action">
+                        <li>
+                            {Button.component({
+                                children: app.translator.trans(canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'),
+                                // icon: 'fas fa-edit',
+                                className: 'Button Button--primary IndexPage-newDiscussion',
+                                itemClassName: 'App-primaryControl',
+                                onclick: this.newDiscussionAction.bind(this),
+                                disabled: !canStartDiscussion,
+                                style: { marginBottom: '24px' }
+                            })}
+                        </li>
+                    </ul>
+                    <ul className="DiscussionsUserPage-toolbar-view">
+                        <li>
+                            {Dropdown.component({
+                                buttonClassName: 'Button',
+                                label: this.sortOptions[this.sort] || Object.keys(this.sortOptions).map(key => this.sortOptions[key])[0],
+                                children: Object.keys(this.sortOptions).map(value => {
+                                    const label = this.sortOptions[value];
+                                    const active = (this.sort || Object.keys(this.sortOptions)[0]) === value;
+
+                                    return Button.component({
+                                        children: label,
+                                        icon: active ? 'fas fa-check' : true,
+                                        onclick: this.handleChangeSort.bind(this, value),
+                                        active: active,
+                                    })
+                                }),
+                            })}
+                        </li>
+                    </ul>
                 {this.list.render()}
             </div>
         );
