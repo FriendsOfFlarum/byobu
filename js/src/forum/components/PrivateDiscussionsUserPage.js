@@ -70,6 +70,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
 
         return (
             <div className="DiscussionsUserPage">
+                <div className="DiscussionsUserPage-toolbar">
                     <ul className="DiscussionsUserPage-toolbar-action">
                         <li>
                             {Button.component({
@@ -78,8 +79,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                                 className: 'Button Button--primary IndexPage-newDiscussion',
                                 itemClassName: 'App-primaryControl',
                                 onclick: this.newDiscussionAction.bind(this),
-                                disabled: !canStartDiscussion,
-                                style: { marginBottom: '24px' }
+                                disabled: !canStartDiscussion
                             })}
                         </li>
                     </ul>
@@ -102,6 +102,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                             })}
                         </li>
                     </ul>
+                    </div>
                 {this.list.render()}
             </div>
         );
