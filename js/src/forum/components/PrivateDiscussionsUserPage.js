@@ -10,10 +10,6 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         super.init();
 
         this.changeSort('latest');
-        this.sortOptions = {};
-        this.sortOptions['latest'] = 'Latest';
-        this.sortOptions['popular'] = 'Popular';
-        this.sortOptions['unpopular'] = 'Unpopular';
     }
 
     show(user) {
@@ -66,6 +62,12 @@ export default class PrivateDiscussionsUserPage extends UserPage {
     content() {
         const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
 
+        const sortMap = this.list.sortMap();
+        const sortOptions = {};
+        for (const i in sortMap) {
+          sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
+        }
+
         return (
             <div className="DiscussionsUserPage">
                     <ul className="DiscussionsUserPage-toolbar-action">
@@ -85,10 +87,10 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                         <li>
                             {Dropdown.component({
                                 buttonClassName: 'Button',
-                                label: this.sortOptions[this.sort] || Object.keys(this.sortOptions).map(key => this.sortOptions[key])[0],
-                                children: Object.keys(this.sortOptions).map(value => {
-                                    const label = this.sortOptions[value];
-                                    const active = (this.sort || Object.keys(this.sortOptions)[0]) === value;
+                                label: sortOptions[this.sort] || Object.keys(sortMap).map(key => sortOptions[key])[0],
+                                children: Object.keys(sortOptions).map(value => {
+                                    const label = sortOptions[value];
+                                    const active = (this.sort || Object.keys(sortMap)[0]) === value;
 
                                     return Button.component({
                                         children: label,
