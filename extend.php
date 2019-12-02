@@ -18,9 +18,11 @@ use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend as Native;
 use Flarum\Foundation\Application;
 use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
+use FoF\Components\Extend\AddFofComponents;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
+    new AddFofComponents(),
     (new Native\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),
     (new Native\Frontend('forum'))

@@ -1,5 +1,6 @@
-import SettingsModal from "@fof/components/admin/settings/SettingsModal";
-import BooleanItem from "@fof/components/admin/settings/items/BooleanItem";
+import { settings } from '@fof-components';
+
+const { SettingsModal, items: { BooleanItem } } = settings;
 
 export default () => {
     app.extensionSettings['fof-byobu'] = () =>
