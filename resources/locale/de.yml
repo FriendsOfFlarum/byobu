@@ -1,0 +1,53 @@
+fof-byobu:
+    forum:
+        badges:
+            is_private:
+                tooltip: Private Diskussion
+        buttons:
+            add_recipients: Gesprächspartner
+            submit: OK
+            edit_recipients: Gesprächspartner bearbeiten
+            send_pd: "{username} eine Nachricht senden"
+        labels:
+            recipients: "{count} Gesprächspartner|{count} Gesprächspartner"
+            user_deleted: -gelöscht-
+        nav:
+            private_discussions: Private Diskussion
+        input:
+            search_recipients: Tippe die ersten drei Zeichen um deinen Gesprächsparnter zu finden...
+        search:
+            headings:
+                groups: Gruppen
+        modal:
+            titles:
+                update_recipients: Gesprächspartner von {title} updaten
+                add_recipients: Gesprächspartner zu deiner Diskussion hinzufügen
+        post:
+            recipients_modified:
+                added_and_removed: "{username} hat Gesprächspartner hinzugefügt {added} und gelöscht {removed}."
+                added: "{username} hat Gesprächspartner hinzugefügt {added}."
+                removed: "{username} hat Gesprächspartner entfernt {removed}."
+        user:
+            settings:
+                block_pd: Private Diskussionen sperren
+
+            byobu_link: Private Diskussionen
+
+        notifications:
+            pd_label: Jemand fügt mich zu einer privaten Diskussion hinzu
+            pd_text: "{username} hat eine private Diskussion mit dir gestartet"
+
+    admin:
+        permission:
+            create_private_discussions_with_users: Private Diskussionen mit Benutzern erstellen
+            create_private_discussions_with_groups: Private Diskussionen mit Gruppen erstellen
+            create_private_discussions_with_blocking_users: Private Diskussionen mit Benutzern erstellen, die die Funktion gesperrt haben
+            edit_user_recipients: Benutzer, die an einer privaten Diskussion teilnehmen, bearbeiten
+            edit_group_recipients: Gruppen, die an einer privaten Diskussion teilnehmen, bearbeiten
+
+        settings:
+            byobu_users_page_label: Private Diskussionen zum Benutzerprofil hinzufügen
+
+    notifications:
+        private_discussion_created:
+            title: "[forum-name] Neue private Diskussion"
