@@ -1,6 +1,6 @@
 # Byōbu by FriendsOfFlarum
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/FriendsOfFlarumbyobu/blob/master/LICENSE)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/FriendsOfFlarum/byobu/blob/master/LICENSE)
 [![Latest Stable Version](https://img.shields.io/packagist/v/fof/byobu.svg)](https://packagist.org/packages/fof/byobu)
 [![Total Downloads](https://img.shields.io/packagist/dt/fof/byobu.svg)](https://packagist.org/packages/fof/byobu)
 [![Donate](https://img.shields.io/badge/opencollective-support-blue.svg)](https://opencollective.com/fof)
@@ -40,9 +40,9 @@ In order to do so we rely on voluntary contributions on [OpenCollective](https:/
 ## Links
 
 - [Flarum Discuss post](https://discuss.flarum.org/d/4762-fof-by-bu-well-integrated-advanced-private-discussions)
-- [Source code on GitHub](https://github.com/FriendsOfFlarumbyobu)
-- [Changelog](https://github.com/FriendsOfFlarumbyobu/blob/master/CHANGELOG.md)
-- [Report an issue](https://github.com/FriendsOfFlarumbyobu/issues)
+- [Source code on GitHub](https://github.com/FriendsOfFlarum/byobu)
+- [Changelog](https://github.com/FriendsOfFlarum/byobu/blob/master/CHANGELOG.md)
+- [Report an issue](https://github.com/FriendsOfFlarum/byobu/issues)
 - [Download via Packagist](https://packagist.org/packages/fof/byobu)
 
 An extension by FriendsOfFlarum.
