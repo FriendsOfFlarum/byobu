@@ -58,5 +58,5 @@ return [
     }),
     function (Factory $views) {
         $views->addNamespace('fof-byobu', __DIR__.'/resources/views');
-    }
+    },
 ];

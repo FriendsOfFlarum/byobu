@@ -14,7 +14,6 @@ namespace FoF\Byobu\Notifications;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
-use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 
 class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterface
@@ -36,7 +35,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      *
      * @return \Flarum\User\User|null
      */
-    public function getFromUser():?User
+    public function getFromUser(): ?User
     {
         return $this->discussion->user;
     }
@@ -46,7 +45,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      *
      * @return \Flarum\Database\AbstractModel|null
      */
-    public function getSubject():?Discussion
+    public function getSubject(): ?Discussion
     {
         return $this->discussion;
     }
@@ -100,7 +99,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
     {
         return app('translator')->trans('fof-byobu.notifications.private_discussion_created.title', [
             'user'       => $this->discussion->user->username,
-            'title'      => $this->discussion->title
+            'title'      => $this->discussion->title,
         ]);
     }
 }

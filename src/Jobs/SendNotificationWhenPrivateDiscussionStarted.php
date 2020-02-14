@@ -22,13 +22,17 @@ use Illuminate\Queue\SerializesModels;
 
 class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var Discussion
      */
     protected $discussion;
 
+    /**
+     * @var Collection
+     */
     protected $newUsers;
 
     protected $settings;
@@ -36,8 +40,7 @@ class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
     public function __construct(
         Discussion $discussion,
         Collection $newUsers 
-        )
-    {
+        ) {
         $this->discussion = $discussion;
         $this->newUsers = $newUsers;
     }

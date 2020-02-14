@@ -11,21 +11,12 @@
 
 namespace FoF\Byobu\Listeners;
 
-use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Byobu\Events\DiscussionMadePrivate;
 use FoF\Byobu\Jobs;
 use Illuminate\Events\Dispatcher;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class QueueNotificationJobs
 {
-    protected $settings;
-    
-    public function __construct(SettingsRepositoryInterface $settings)
-    {
-        $this->settings = $settings;
-    }
-    
     public function subscribe(Dispatcher $events)
     {
         $events->listen(DiscussionMadePrivate::class, [$this, 'discussionMadePrivate']);
