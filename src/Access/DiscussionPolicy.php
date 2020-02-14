@@ -51,7 +51,11 @@ class DiscussionPolicy extends AbstractPolicy
                         ->orWhereIn('group_id', $actor->groups->pluck('id')->all());
                 });
 
-                if ($this->extensions->isEnabled('flarum-flags') && $actor->hasPermission('user.viewPrivateDiscussionsWhenFlagged')) {
+                if (
+                    $this->extensions->isEnabled('flarum-flags') &&
+                    $actor->hasPermission('user.viewPrivateDiscussionsWhenFlagged') &&
+                    $actor->hasPermission('discussion.viewFlags')
+                ) {
                     $query->orWhereIn('id', function ($query) {
                         $query->select('posts.discussion_id')
                             ->from('flags')
