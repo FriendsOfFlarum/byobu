@@ -34,7 +34,9 @@ fof-byobu:
             byobu_link: Private Discussions
 
         notifications:
-            pd_label: Someone includes me in a Private discussion
+            pd_label: Someone includes me in a new Private discussion
+            pd_reply_label: Someone posts in a private discussion I'm a recipient of
+            pd_reply_text: "{username} posted in a private discussion you're a part of"
             pd_text: "{username} started a new private discussion with you"
 
     admin:
@@ -51,3 +53,5 @@ fof-byobu:
     notifications:
         private_discussion_created:
             title: "[Private Discussion] user started a new private discussion with you"
+        private_discussion_replied:
+            title: "[Private Discussion] user posted in a private discussion"

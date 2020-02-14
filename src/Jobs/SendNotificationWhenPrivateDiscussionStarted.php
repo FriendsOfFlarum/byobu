@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/byobu.
  *
- * Copyright (c) 2020 FriendsOfFlarum.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,8 +17,8 @@ use Flarum\User\User;
 use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Collection;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
 class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
 {
@@ -39,7 +39,7 @@ class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
 
     public function __construct(
         Discussion $discussion,
-        Collection $newUsers 
+        Collection $newUsers
         ) {
         $this->discussion = $discussion;
         $this->newUsers = $newUsers;
