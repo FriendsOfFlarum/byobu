@@ -16,10 +16,10 @@ use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend as Native;
-use Flarum\Foundation\Application;
 use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
 use FoF\Components\Extend\AddFofComponents;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\View\Factory;
 
 return [
     new AddFofComponents(),
@@ -55,7 +55,7 @@ return [
             $event->add(DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
     }),
-    function (Application $app) {
-        $app->register(Providers\ViewProvider::class);
-    },
+    function (Factory $views) {
+        $views->addNamespace('fof-byobu', __DIR__.'/resources/views');
+    }
 ];

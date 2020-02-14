@@ -99,7 +99,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getEmailView()
     {
-        return ['text' => 'byobu::emails.privateDiscussionCreated'];
+        return ['text' => 'fof-byobu::emails.privateDiscussionCreated'];
     }
 
     /**
@@ -112,7 +112,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
         $forumName = $this->settings->get('forum_title');
 
         return $this->trans->trans('fof-byobu.notifications.private_discussion_created.title', [
-            'user'       => $this->discussion->startUser->username,
+            'user'       => $this->discussion->user->username,
             'title'      => $this->discussion->title,
             'forum-name' => $forumName,
         ]);

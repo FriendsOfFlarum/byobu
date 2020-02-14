@@ -50,4 +50,4 @@ fof-byobu:
 
     notifications:
         private_discussion_created:
-            title: "[forum-name] New private discussion"
+            title: "[forum-name] user started a new private discussion with you"
