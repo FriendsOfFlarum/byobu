@@ -78,17 +78,8 @@ class SendPrivateDiscussionNotification
 
     public function discussionMadePrivate(DiscussionMadePrivate $event)
     {
-        $privateDiscussion = $event->discussion;
+        $recipients = User::whereIn('id', $event->newUsers)->whereNotIn('id', [$event->actor->id])->get();
 
-        $recipients = $event->newUsers;
-        $actor = $event->actor;
-
-        foreach ($recipients as $recipient) {
-            if ($recipient === $actor->id) {
-                continue;
-            } // Don't send to sender
-            $user = User::where('id', $recipient)->first();
-            $this->notifications->sync(new DiscussionCreatedBlueprint($privateDiscussion, $this->translator, $this->settings), [$user]);
-        }
+        $this->notifications->sync(new DiscussionCreatedBlueprint($event->discussion, $this->translator, $this->settings), $recipients->all());
     }
 }
