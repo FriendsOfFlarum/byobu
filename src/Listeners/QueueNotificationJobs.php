@@ -36,7 +36,7 @@ class QueueNotificationJobs
         $actor = $event->actor;
 
         $event->post->afterSave(function ($post) use ($actor) {
-            if ($post->discussion->is_private) {
+            if ($post->discussion->is_private && $post->number !== 1) {
                 app('flarum.queue.connection')->push(
                     new Jobs\SendNotificationWhenPostedInPrivateDiscussion($post, $actor)
                 );
