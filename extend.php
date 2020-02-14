@@ -43,7 +43,8 @@ return [
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
         $events->subscribe(Listeners\SaveBlocksPdPreference::class);
-        $events->subscribe(Listeners\SendPrivateDiscussionNotification::class);
+
+        $events->subscribe(Listeners\QueueNotificationJobs::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
 

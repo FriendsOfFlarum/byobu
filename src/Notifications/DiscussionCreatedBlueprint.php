@@ -16,7 +16,6 @@ use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterface
 {
@@ -24,22 +23,12 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      * @var Discussion
      */
     public $discussion;
-    /**
-     * @var Translator
-     */
-    protected $trans;
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
 
     protected $sender;
 
-    public function __construct(Discussion $discussion, TranslatorInterface $trans, SettingsRepositoryInterface $settings)
+    public function __construct(Discussion $discussion)
     {
         $this->discussion = $discussion;
-        $this->trans = $trans;
-        $this->settings = $settings;
     }
 
     /**
@@ -109,12 +98,9 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getEmailSubject()
     {
-        $forumName = $this->settings->get('forum_title');
-
-        return $this->trans->trans('fof-byobu.notifications.private_discussion_created.title', [
+        return app('translator')->trans('fof-byobu.notifications.private_discussion_created.title', [
             'user'       => $this->discussion->user->username,
-            'title'      => $this->discussion->title,
-            'forum-name' => $forumName,
+            'title'      => $this->discussion->title
         ]);
     }
 }
