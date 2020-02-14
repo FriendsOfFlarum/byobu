@@ -12,6 +12,7 @@
 namespace FoF\Byobu\Access;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Extension\ExtensionManager;
 use Flarum\User\AbstractPolicy;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -25,6 +26,16 @@ class DiscussionPolicy extends AbstractPolicy
     protected $model = Discussion::class;
 
     /**
+     * @var ExtensionManager
+     */
+    protected $extensions;
+
+    public function __construct(ExtensionManager $extensions)
+    {
+        $this->extensions = $extensions;
+    }
+
+    /**
      * @param User            $actor
      * @param EloquentBuilder $query
      */
@@ -32,19 +43,21 @@ class DiscussionPolicy extends AbstractPolicy
     {
         if ($actor->exists) {
             $query->orWhereExists(function (Builder $query) use ($actor) {
-                $prefix = $query->getConnection()->getTablePrefix();
+                $query->whereIn('id', function ($query) use ($actor) {
+                    $query->select('discussion_id')
+                        ->from('recipients')
+                        ->whereNull('removed_at')
+                        ->where('user_id', $actor->id)
+                        ->orWhereIn('group_id', $actor->groups->pluck('id')->all());
+                });
 
-                return $query->selectRaw('1')
-                    ->from('recipients')
-                    ->whereRaw($prefix.'discussions.id = discussion_id')
-                    ->whereNull('removed_at')
-                    ->where(function (Builder $query) use ($actor) {
-                        $query->where('recipients.user_id', $actor->id);
-
-                        if (!$actor->groups->isEmpty()) {
-                            $query->orWhereIn('recipients.group_id', $actor->groups->pluck('id')->all());
-                        }
+                if ($this->extensions->isEnabled('flarum-flags') && $actor->hasPermission('user.viewPrivateDiscussionsWhenFlagged')) {
+                    $query->orWhereIn('id', function ($query) {
+                        $query->select('posts.discussion_id')
+                            ->from('flags')
+                            ->leftJoin('posts', 'flags.post_id', 'posts.id');
                     });
+                }
             });
         }
     }
