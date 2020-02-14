@@ -39,14 +39,14 @@ class SendNotificationWhenPostedInPrivateDiscussion implements ShouldQueue
     public function __construct(
         Post $post,
         User $actor
-        ) {
+    ) {
         $this->post = $post;
         $this->actor = $actor;
     }
 
     public function handle(NotificationSyncer $notifications)
     {
-        $recipients = $this->post->discussion->recipientUsers->reject(function($user) {
+        $recipients = $this->post->discussion->recipientUsers->reject(function ($user) {
             return $user->id === $this->actor->id;
         });
 
