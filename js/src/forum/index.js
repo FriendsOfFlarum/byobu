@@ -13,6 +13,7 @@ import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
+import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessionDropdown';
 
 app.initializers.add('fof-byobu', function (app) {
     app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
@@ -41,6 +42,7 @@ app.initializers.add('fof-byobu', function (app) {
     addDiscussPrivatelyControl();
 
     addPrivateDiscussionsPage();
+    addPrivateDiscussionSessionDropdown();
 
     app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
 

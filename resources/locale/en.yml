@@ -32,6 +32,7 @@ fof-byobu:
                 block_pd: Block private discussions
 
             byobu_link: Private Discussions
+            dropdown_label: Private Discussions
 
         notifications:
             pd_label: Someone includes me in a Private discussion
