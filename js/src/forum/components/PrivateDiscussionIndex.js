@@ -5,7 +5,7 @@ import listItems from 'flarum/helpers/listItems';
 import icon from 'flarum/helpers/icon';
 import PrivateDiscussionList from './PrivateDiscussionList';
 import WelcomeHero from 'flarum/components/WelcomeHero';
-import DiscussionComposer from 'flarum/components/DiscussionComposer';
+import PrivateDiscussionComposer from './PrivateDiscussionComposer';
 import LogInModal from 'flarum/components/LogInModal';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 import Select from 'flarum/components/Select';
@@ -345,7 +345,7 @@ export default class PrivateDiscussionIndex extends Page
      * @return {Promise}
      */
     composeNewDiscussion(deferred) {
-        const component = new DiscussionComposer({user: app.session.user});
+        const component = new PrivateDiscussionComposer({user: app.session.user});
 
         app.composer.load(component);
         app.composer.show();

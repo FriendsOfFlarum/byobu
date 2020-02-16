@@ -1,6 +1,6 @@
 import {extend} from 'flarum/extend';
 import UserControls from 'flarum/utils/UserControls';
-import DiscussionComposer from "flarum/components/DiscussionComposer";
+import PrivateDiscussionComposer from "./components/PrivateDiscussionComposer";
 import Button from 'flarum/components/Button';
 import ItemList from 'flarum/utils/ItemList';
 
@@ -19,12 +19,12 @@ export default function () {
                     const deferred = m.deferred();
 
                     let recipients = new ItemList();
-                    recipients.add('users:' + user.id(), user);
                     recipients.add('users:' + app.session.user.id(), app.session.user);
+                    recipients.add('users:' + user.id(), user);
 
-                    DiscussionComposer.prototype.recipients = recipients;
+                    PrivateDiscussionComposer.prototype.recipients = recipients;
 
-                    const component = new DiscussionComposer({
+                    const component = new PrivateDiscussionComposer({
                         user: app.session.user,
                         recipients: recipients,
                         recipientUsers: recipients
