@@ -14,6 +14,7 @@ import PrivateDiscussionNotification from './components/PrivateDiscussionNotific
 import PrivateDiscussionRepliedNotification from './components/PrivateDiscussionReplyNotification';
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
+import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessionDropdown';
 
 app.initializers.add('fof-byobu', function (app) {
     app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
@@ -42,6 +43,7 @@ app.initializers.add('fof-byobu', function (app) {
     addDiscussPrivatelyControl();
 
     addPrivateDiscussionsPage();
+    addPrivateDiscussionSessionDropdown();
 
     app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
     app.notificationComponents.byobuPrivateDiscussionReplied = PrivateDiscussionRepliedNotification;

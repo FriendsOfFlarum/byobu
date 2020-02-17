@@ -29,6 +29,10 @@ export default class AddRecipientModal extends Modal {
         });
     }
 
+    isDismissible() {
+        return false;
+    }
+
     assignInitialRecipients(discussion) {
         discussion.recipientUsers().map(user => {
             this.selected().add("users:" + user.id(), user);
@@ -48,19 +52,34 @@ export default class AddRecipientModal extends Modal {
             : app.translator.trans('fof-byobu.forum.modal.titles.add_recipients');
     }
 
+    helpText() {
+        return this.props.discussion
+            ? app.translator.trans('fof-byobu.forum.modal.help.update_recipients')
+            : app.translator.trans('fof-byobu.forum.modal.help.add_recipients');
+    }
+
     content() {
+        const isDisabled = this.selected().toArray().length < 2;
 
         return [
             <div className="Modal-body">
+                <div class="AddRecipientModal-help">
+                    {this.helpText()}
+                </div>
                 <div className="AddRecipientModal-form">
                     {this.recipientSearch}
                     <div className="AddRecipientModal-form-submit App-primaryControl">
                         {Button.component({
                             type: 'submit',
                             className: 'Button Button--primary',
-                            disabled: false,
+                            disabled: isDisabled,
                             icon: 'fas fa-check',
                             children: app.translator.trans('fof-byobu.forum.buttons.submit')
+                        })}
+                        {Button.component({
+                            onclick: this.hide.bind(this),
+                            className: 'Button Button--cancel',
+                            children: app.translator.trans('fof-byobu.forum.buttons.cancel')
                         })}
                     </div>
                 </div>
@@ -111,6 +130,7 @@ export default class AddRecipientModal extends Modal {
 
         app.modal.close();
 
+        app.composer.show();
         m.redraw.strategy('none');
     }
 }

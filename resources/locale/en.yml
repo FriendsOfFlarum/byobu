@@ -8,11 +8,13 @@ fof-byobu:
             submit: OK
             edit_recipients: Edit Recipients
             send_pd: "Send {username} a message"
+            cancel: Cancel
         labels:
             recipients: "{count} Recipient|{count} Recipients"
             user_deleted: -deleted-
         nav:
             private_discussions: Private discussion
+            start_button: New Private Discussion
         input:
             search_recipients: Search recipient by typing first three characters...
         search:
@@ -22,6 +24,9 @@ fof-byobu:
             titles:
                 update_recipients: Update recipients of {title}
                 add_recipients: Add recipients to your discussion
+            help:
+                add_recipients: This discussion will only be visible to the users you choose here. At least 1 recipient (other than yourself) is required
+                update_recipients: This discussion will only be visible to the users you choose here.
         post:
             recipients_modified:
                 added_and_removed: "{username} added recipients {added} and removed {removed}."
@@ -32,6 +37,7 @@ fof-byobu:
                 block_pd: Block private discussions
 
             byobu_link: Private Discussions
+            dropdown_label: Private Discussions
 
         notifications:
             pd_label: Someone includes me in a new Private discussion
