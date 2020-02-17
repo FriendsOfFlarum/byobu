@@ -43,7 +43,7 @@ class DiscussionPolicy extends AbstractPolicy
     {
         if ($actor->exists) {
             $query->orWhereExists(function (Builder $query) use ($actor) {
-                $query->whereIn('id', function ($query) use ($actor) {
+                $query->whereIn('discussions.id', function ($query) use ($actor) {
                     $query->select('discussion_id')
                         ->from('recipients')
                         ->whereNull('removed_at')
@@ -56,7 +56,7 @@ class DiscussionPolicy extends AbstractPolicy
                     $actor->hasPermission('user.viewPrivateDiscussionsWhenFlagged') &&
                     $actor->hasPermission('discussion.viewFlags')
                 ) {
-                    $query->orWhereIn('id', function ($query) {
+                    $query->orWhereIn('discussions.id', function ($query) {
                         $query->select('posts.discussion_id')
                             ->from('flags')
                             ->leftJoin('posts', 'flags.post_id', 'posts.id');
