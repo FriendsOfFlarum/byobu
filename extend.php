@@ -16,10 +16,9 @@ use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend as Native;
-use Flarum\Foundation\Application;
-use FoF\Byobu\Notifications\DiscussionCreatedBlueprint;
 use FoF\Components\Extend\AddFofComponents;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\View\Factory;
 
 return [
     new AddFofComponents(),
@@ -43,7 +42,8 @@ return [
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
         $events->subscribe(Listeners\SaveBlocksPdPreference::class);
-        $events->subscribe(Listeners\SendPrivateDiscussionNotification::class);
+
+        $events->subscribe(Listeners\QueueNotificationJobs::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
 
@@ -52,10 +52,11 @@ return [
 
         // Add notifications
         $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
-            $event->add(DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
+            $event->add(Notifications\DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
+            $event->add(Notifications\DiscussionRepliedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
     }),
-    function (Application $app) {
-        $app->register(Providers\ViewProvider::class);
+    function (Factory $views) {
+        $views->addNamespace('fof-byobu', __DIR__.'/resources/views');
     },
 ];

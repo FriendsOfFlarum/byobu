@@ -14,20 +14,24 @@ namespace FoF\Byobu\Notifications;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
+use Flarum\Post\Post;
 use Flarum\User\User;
 
-class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterface
+class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterface
 {
     /**
-     * @var Discussion
+     * @var Post
      */
-    public $discussion;
+    public $post;
 
     protected $sender;
 
-    public function __construct(Discussion $discussion)
+    protected $actor;
+
+    public function __construct(Post $post, User $actor)
     {
-        $this->discussion = $discussion;
+        $this->post = $post;
+        $this->actor = $actor;
     }
 
     /**
@@ -37,7 +41,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getFromUser(): ?User
     {
-        return $this->discussion->user;
+        return $this->actor;
     }
 
     /**
@@ -47,7 +51,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getSubject(): ?Discussion
     {
-        return $this->discussion;
+        return $this->post->discussion;
     }
 
     /**
@@ -57,7 +61,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getData()
     {
-        return [];
+        return ['postNumber' => $this->post->number];
     }
 
     /**
@@ -67,7 +71,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public static function getType()
     {
-        return 'byobuPrivateDiscussionCreated';
+        return 'byobuPrivateDiscussionReplied';
     }
 
     /**
@@ -87,7 +91,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getEmailView()
     {
-        return ['text' => 'fof-byobu::emails.privateDiscussionCreated'];
+        return ['text' => 'fof-byobu::emails.privateDiscussionReplied'];
     }
 
     /**
@@ -97,9 +101,9 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getEmailSubject()
     {
-        return app('translator')->trans('fof-byobu.notifications.private_discussion_created.title', [
-            'user'       => $this->discussion->user->username,
-            'title'      => $this->discussion->title,
+        return app('translator')->trans('fof-byobu.notifications.private_discussion_replied.title', [
+            'user'       => $this->actor->username,
+            'title'      => $this->post->discussion->title,
         ]);
     }
 }

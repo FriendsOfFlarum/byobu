@@ -15,7 +15,7 @@ export default class PrivateDiscussionNotification extends Notification {
   content() {
     const user = this.props.notification.fromUser();
     return app.translator.trans('fof-byobu.forum.notifications.pd_text', {
-      username: user.data.attributes.username,
+      user: user,
     });
   }
 }
