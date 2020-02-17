@@ -30,5 +30,10 @@ export default function () {
             label: app.translator.trans('fof-byobu.admin.permission.edit_group_recipients'),
             permission: 'discussion.editGroupRecipients'
         }, 95);
+        items.add('actor-can-view-private-discussions-when-flagged', {
+            icon: 'fas fa-flag',
+            label: app.translator.trans('fof-byobu.admin.permission.view_private_discussions-when-flagged'),
+            permission: 'user.viewPrivateDiscussionsWhenFlagged'
+          }, 95);
     });
 }
