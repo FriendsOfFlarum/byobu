@@ -54,7 +54,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
             let recipients = new ItemList();
             recipients.add('users:' + app.session.user.id(), app.session.user);
 
-            if (this.duser !== null && app.session.user.id() !== this.duser.id()) {
+            if (this.duser !== null && app.session.user !== this.duser) {
                 recipients.add('users:' + this.duser.id(), this.duser);
             }
 
