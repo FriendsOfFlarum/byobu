@@ -9,6 +9,8 @@ fof-byobu:
             edit_recipients: Edit Recipients
             send_pd: "Send {username} a message"
             cancel: Cancel
+        composer_private_discussion:
+            title_placeholder: Private Discussion Title
         labels:
             recipients: "{count} Recipient|{count} Recipients"
             user_deleted: -deleted-

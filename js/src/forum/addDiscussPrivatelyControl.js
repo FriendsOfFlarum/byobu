@@ -27,7 +27,8 @@ export default function () {
                     const component = new PrivateDiscussionComposer({
                         user: app.session.user,
                         recipients: recipients,
-                        recipientUsers: recipients
+                        recipientUsers: recipients,
+                        titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder')
                     });
 
                     app.composer.load(component);
