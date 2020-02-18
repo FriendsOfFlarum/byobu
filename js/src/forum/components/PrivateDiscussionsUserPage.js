@@ -13,7 +13,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
 
         this.changeSort('latest');
 
-        this.user = null;
+        this.duser = null;
     }
 
     show(user) {
@@ -27,7 +27,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
 
         this.list.refresh();
 
-        this.user = user;
+        this.duser = user;
 
         // We call the parent method after creating the list, this way the this.list property
         // is set before content() is called for the first time
@@ -54,8 +54,8 @@ export default class PrivateDiscussionsUserPage extends UserPage {
             let recipients = new ItemList();
             recipients.add('users:' + app.session.user.id(), app.session.user);
 
-            if (this.user !== null && app.session.user !== this.user) {
-                recipients.add('users:' + this.user.id(), this.user);
+            if (this.duser !== null && app.session.user.id() !== this.duser.id()) {
+                recipients.add('users:' + this.duser.id(), this.duser);
             }
 
             PrivateDiscussionComposer.prototype.recipients = recipients;
