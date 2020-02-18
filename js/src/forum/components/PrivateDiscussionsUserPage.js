@@ -64,7 +64,8 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                 user: app.session.user,
                 recipients: recipients,
                 recipientUsers: recipients,
-                titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder')
+                titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button')
             });
 
             app.composer.load(component);

@@ -10,6 +10,7 @@ fof-byobu:
             send_pd: "Send {username} a message"
             cancel: Cancel
         composer_private_discussion:
+            submit_button: Post Private Discussion
             title_placeholder: Private Discussion Title
         labels:
             recipients: "{count} Recipient|{count} Recipients"
