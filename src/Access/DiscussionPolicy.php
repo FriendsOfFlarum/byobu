@@ -16,7 +16,6 @@ use Flarum\Extension\ExtensionManager;
 use Flarum\User\AbstractPolicy;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Query\Builder;
 
 class DiscussionPolicy extends AbstractPolicy
 {
@@ -60,7 +59,7 @@ class DiscussionPolicy extends AbstractPolicy
                         ->from('flags')
                         ->leftJoin('posts', 'flags.post_id', 'posts.id');
                 });
-            };
+            }
         }
     }
 
