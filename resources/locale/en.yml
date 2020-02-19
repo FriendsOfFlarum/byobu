@@ -58,7 +58,7 @@ fof-byobu:
             view_private_discussions-when-flagged: View private discussions of other users if flagged
 
         settings:
-            byobu_users_page_label: Add private discussions to user page
+            nothing_here: Nothing to see here, yet
 
     notifications:
         private_discussion_created:
