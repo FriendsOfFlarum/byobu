@@ -53,7 +53,7 @@ class AddRecipientsRelationships
                 'recipients'
             )
                 ->withTimestamps()
-                ->wherePivot('removed_at', '!=', 'null');
+                ->wherePivot('removed_at', '!=', null);
         }
 
         if ($event->isRelationship(Discussion::class, 'recipientGroups')) {
@@ -70,7 +70,7 @@ class AddRecipientsRelationships
                 'recipients'
             )
                 ->withTimestamps()
-                ->wherePivot('removed_at', '!=', 'null');
+                ->wherePivot('removed_at', '!=', null);
         }
         if ($event->isRelationship(User::class, 'privateDiscussions')) {
             return $event->model->belongsToMany(
