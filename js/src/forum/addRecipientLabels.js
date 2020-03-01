@@ -86,6 +86,9 @@ export default function () {
         }
     });
 
+    /**
+     * Remove tag from private discussions in discussion list
+     */
     extend(DiscussionListItem.prototype, 'config', (isInitialized, context) => {
         if (isInitialized || context || !app.forum.attribute('byobuTag')) {
           return;
@@ -94,7 +97,6 @@ export default function () {
         const tagsClassName = '.item-tags';
         const recipientsClassName = '.DiscussionListItem-info > .item-recipients';
 
-        // eslint-disable-next-line
         $(recipientsClassName).prev(tagsClassName).css('display', 'none');
       });
 }
