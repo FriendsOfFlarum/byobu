@@ -58,7 +58,8 @@ fof-byobu:
             view_private_discussions-when-flagged: View private discussions of other users if flagged
 
         settings:
-            nothing_here: Nothing to see here, yet
+            use_tag_slug: Specify the slug of the tag to force all private discussions into
+            use_tag_slug_help: Leave blank to allow users to select their own tag, applies to newly created private discussions only
 
     notifications:
         private_discussion_created:

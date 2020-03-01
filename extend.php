@@ -14,6 +14,7 @@ namespace FoF\Byobu;
 use Flarum\Api\Serializer\BasicUserSerializer;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
+use Flarum\Discussion\Event\Saving;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend as Native;
 use FoF\Components\Extend\AddFofComponents;
@@ -42,6 +43,8 @@ return [
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
         $events->subscribe(Listeners\SaveBlocksPdPreference::class);
+        $events->subscribe(Listeners\AddApiAttributes::class);
+        $events->listen(Saving::class, Listeners\CheckTags::class);
 
         $events->subscribe(Listeners\QueueNotificationJobs::class);
 

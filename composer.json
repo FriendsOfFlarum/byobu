@@ -13,6 +13,11 @@
             "name": "Daniël Klabbers",
             "email": "daniel@klabbers.email",
             "homepage": "http://luceos.com"
+        },
+        {
+            "name": "Ian Morland",
+            "email": "ian@morland.me",
+            "role": "Developer"
         }
     ],
     "support": {
