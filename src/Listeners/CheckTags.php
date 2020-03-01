@@ -42,11 +42,10 @@ class CheckTags
             && (bool) $this->settings->get('fof-byobu.use_tag_slug', false)
             && (isset($event->data['relationships']['recipientUsers']) || isset($event->data['relationships']['recipientGroups']))
         ) {
-
             $tags = $event->data['relationships']['tags']['data'];
             $slugCheck = $this->settings->get('fof-byobu.use_tag_slug');
 
-            foreach ($tags as $tag){
+            foreach ($tags as $tag) {
                 $t = $this->getTagFromId($tag['id']);
 
                 if ($t->slug !== $slugCheck) {
