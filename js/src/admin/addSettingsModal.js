@@ -9,8 +9,8 @@ export default () => {
                 title: 'FoF Byōbu',
                 size: 'medium',
                 items: [
-                    <StringItem>
-                        {app.translator.trans('fof-byobu.admin.settings.nothing_here')}
+                    <StringItem key="fof-byobu.use_tag_slug">
+                        {app.translator.trans('fof-byobu.admin.settings.use_tag_slug')}
                     </StringItem>,
                 ],
             })
