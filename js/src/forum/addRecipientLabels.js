@@ -25,6 +25,10 @@ export default function() {
                 items.add('recipients', recipientsLabel(recipients, {link: true}), 4);
             }
         }
+
+        if (app.forum.attribute('byobuTag') && recipients) {
+            items.remove('tags');
+        }
     };
 
     /**
