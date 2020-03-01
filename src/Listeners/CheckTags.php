@@ -29,26 +29,29 @@ class CheckTags
      */
     protected $extensions;
 
+    protected $byobuSlug;
+
     public function __construct(SettingsRepositoryInterface $settings, ExtensionManager $extensions)
     {
         $this->settings = $settings;
         $this->extensions = $extensions;
+
+        $this->byobuSlug = $this->settings->get('fof-byobu.use_tag_slug');
     }
 
     public function handle(Saving $event)
     {
         if (
             $this->extensions->isEnabled('flarum-tags')
-            && (bool) $this->settings->get('fof-byobu.use_tag_slug', false)
+            && !empty($this->byobuSlug)
             && (isset($event->data['relationships']['recipientUsers']) || isset($event->data['relationships']['recipientGroups']))
         ) {
             $tags = $event->data['relationships']['tags']['data'];
-            $slugCheck = $this->settings->get('fof-byobu.use_tag_slug');
 
             foreach ($tags as $tag) {
                 $t = $this->getTagFromId($tag['id']);
 
-                if ($t->slug !== $slugCheck) {
+                if ($t->slug !== $this->byobuSlug) {
                     throw new ValidationException(['byobu' => 'Invalid tag for private discussions']);
                 }
             }
