@@ -70,3 +70,5 @@ fof-byobu:
             title: "[Private Discussion] user started a new private discussion with you"
         private_discussion_replied:
             title: "[Private Discussion] user posted in a private discussion"
+        recipient_removed:
+            title: "[Private Discussion] user left the discussion"
