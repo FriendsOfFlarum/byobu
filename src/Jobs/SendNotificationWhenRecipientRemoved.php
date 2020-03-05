@@ -12,6 +12,7 @@
 namespace FoF\Byobu\Jobs;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Notification\Notification;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\User\User;
 use FoF\Byobu\Notifications\DiscussionRecipientRemovedBlueprint;
@@ -55,5 +56,7 @@ class SendNotificationWhenRecipientRemoved implements ShouldQueue
         $recipients = User::whereIn('id', $this->newUsers)->get();
 
         $notifications->sync(new DiscussionRecipientRemovedBlueprint($this->actor, $this->discussion), $recipients->all());
+
+        Notification::where('user_id', $this->actor->id)->where('subject_id', $this->discussion->id)->delete();
     }
 }
