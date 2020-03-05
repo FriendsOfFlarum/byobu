@@ -15,7 +15,9 @@ use Flarum\Event\ConfigurePostTypes;
 use FoF\Byobu\Events\AbstractRecipientsEvent;
 use FoF\Byobu\Events\DiscussionMadePrivate;
 use FoF\Byobu\Events\DiscussionMadePublic;
+use FoF\Byobu\Events\DiscussionRecipientRemovedSelf;
 use FoF\Byobu\Events\DiscussionRecipientsChanged;
+use FoF\Byobu\Posts\RecipientLeft;
 use FoF\Byobu\Posts\RecipientsModified;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -30,6 +32,7 @@ class CreatePostWhenRecipientsChanged
         $events->listen(DiscussionMadePrivate::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(DiscussionMadePublic::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(DiscussionRecipientsChanged::class, [$this, 'whenDiscussionWasTagged']);
+        $events->listen(DiscussionRecipientRemovedSelf::class, [$this, 'whenActorRemovedSelf']);
     }
 
     /**
@@ -38,6 +41,7 @@ class CreatePostWhenRecipientsChanged
     public function addPostType(ConfigurePostTypes $event)
     {
         $event->add(RecipientsModified::class);
+        $event->add(RecipientLeft::class);
     }
 
     /**
@@ -50,6 +54,17 @@ class CreatePostWhenRecipientsChanged
         }
 
         $post = RecipientsModified::reply($event);
+
+        $event->discussion->mergePost($post);
+    }
+
+    public function whenActorRemovedSelf(DiscussionRecipientRemovedSelf $event)
+    {
+        if ($event->oldUsers->isEmpty() && $event->oldGroups->isEmpty()) {
+            return;
+        }
+
+        $post = RecipientLeft::reply($event);
 
         $event->discussion->mergePost($post);
     }

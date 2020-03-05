@@ -12,8 +12,10 @@ import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
 import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
 import PrivateDiscussionRepliedNotification from './components/PrivateDiscussionReplyNotification';
+import PrivateDiscussionUserLeftNotification from './components/PrivateDiscussionUserLeftNotification';
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
+import RecipientLeft from './components/RecipientLeft';
 import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessionDropdown';
 
 app.initializers.add('fof-byobu', function (app) {
@@ -33,6 +35,7 @@ app.initializers.add('fof-byobu', function (app) {
     User.prototype.cannotBeDirectMessaged = Model.attribute('cannotBeDirectMessaged');
 
     app.postComponents.recipientsModified = RecipientsModified;
+    app.postComponents.recipientLeft = RecipientLeft;
 
     addRecipientComposer(app);
     addRecipientLabels();
@@ -47,6 +50,7 @@ app.initializers.add('fof-byobu', function (app) {
 
     app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
     app.notificationComponents.byobuPrivateDiscussionReplied = PrivateDiscussionRepliedNotification;
+    app.notificationComponents.byobuRecipientRemoved = PrivateDiscussionUserLeftNotification;
 
     // Add notification preferences.
     extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
@@ -59,6 +63,11 @@ app.initializers.add('fof-byobu', function (app) {
             name: 'byobuPrivateDiscussionReplied',
             icon: 'fas fa-map',
             label: app.translator.trans('fof-byobu.forum.notifications.pd_reply_label')
+        });
+        items.add('byobuRecipientRemoved', {
+            name: 'byobuRecipientRemoved',
+            icon: 'fas fa-map',
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_user_left_label')
         });
     });
 });

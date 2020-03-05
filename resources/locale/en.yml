@@ -9,6 +9,7 @@ fof-byobu:
             edit_recipients: Edit Recipients
             send_pd: "Send {username} a message"
             cancel: Cancel
+            remove_from_discussion: Leave this private discussion
         composer_private_discussion:
             submit_button: Post Private Discussion
             title_placeholder: Private Discussion Title
@@ -35,6 +36,7 @@ fof-byobu:
                 added_and_removed: "{username} added recipients {added} and removed {removed}."
                 added: "{username} added recipients {added}."
                 removed: "{username} removed recipients {removed}."
+                removed_self: "{username} left the private discussion."
         user:
             settings:
                 block_pd: Block private discussions
@@ -47,6 +49,8 @@ fof-byobu:
             pd_reply_label: Someone posts in a private discussion I'm a recipient of
             pd_reply_text: "{username} posted in a private discussion you're a part of"
             pd_text: "{username} started a new private discussion with you"
+            pd_user_left_label: A recipient user leaves a private discussion I'm a part of
+            pd_user_left_text: "{username} left the private discussion"
 
     admin:
         permission:
