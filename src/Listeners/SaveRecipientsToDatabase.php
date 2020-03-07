@@ -154,8 +154,8 @@ class SaveRecipientsToDatabase
 
             $discussion->afterSave(function (Discussion $discussion) use ($newGroupIds, $newUserIds, $oldRecipients) {
                 foreach (['users', 'groups'] as $type) {
-                    $variable = 'new' . Str::ucfirst(Str::singular($type)) . 'Ids';
-                    $method = 'recipient' . Str::ucfirst($type);
+                    $variable = 'new'.Str::ucfirst(Str::singular($type)).'Ids';
+                    $method = 'recipient'.Str::ucfirst($type);
 
                     $new = ${$variable};
                     $old = $oldRecipients[$type];

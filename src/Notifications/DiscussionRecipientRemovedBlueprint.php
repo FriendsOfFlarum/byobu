@@ -20,7 +20,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
 {
     /**
      * @var User
-     * The user that was removed from the private discussion.
+     *           The user that was removed from the private discussion.
      */
     public $user;
 
