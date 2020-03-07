@@ -50,6 +50,8 @@ fof-byobu:
             pd_text: "{username} started a new private discussion with you"
             pd_user_left_label: A recipient user leaves a private discussion I'm a part of
             pd_user_left_text: "{username} left the private discussion"
+            pd_added_text: "{username} added you to a private discussion"
+            pd_added_label: "Someone adds me to an existing private discussion"
 
     admin:
         permission:
@@ -71,3 +73,5 @@ fof-byobu:
             title: "[Private Discussion] user posted in a private discussion"
         recipient_removed:
             title: "[Private Discussion] user left the discussion"
+        private_discussion_added:
+            title: "[Private Discussion] user added you to a private discussion"
