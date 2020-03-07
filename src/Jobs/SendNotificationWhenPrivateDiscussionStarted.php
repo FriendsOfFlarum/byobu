@@ -40,7 +40,7 @@ class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
     public function __construct(
         Discussion $discussion,
         Collection $newUsers
-        ) {
+    ) {
         $this->discussion = $discussion;
         $this->newUsers = $newUsers;
     }
