@@ -20,7 +20,8 @@ return [
     },
     'down' => function (Builder $schema) {
         $schema->table('users', function (Blueprint $table) {
-            $table->dropIndex('blocks_byobu_pd');
+            // Use array syntax so the blueprint "guesses" the full index name
+            $table->dropIndex(['blocks_byobu_pd']);
         });
     },
 ];

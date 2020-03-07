@@ -12,7 +12,7 @@
 use Illuminate\Database\Schema\Builder;
 
 return [
-    'up' => function (Builder $schema) use ($permissionKey) {
+    'up' => function (Builder $schema) {
         /**
          * @var \Flarum\Settings\SettingsRepositoryInterface
          */
@@ -20,7 +20,7 @@ return [
         $settings->delete('fof-byobu.enable_byobu_user_page');
     },
 
-    'down' => function (Builder $schema) use ($permissionKey) {
+    'down' => function (Builder $schema) {
         // erm, no
     },
 ];
