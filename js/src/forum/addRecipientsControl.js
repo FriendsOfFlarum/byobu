@@ -18,7 +18,7 @@ export default function() {
             }));
         }
 
-        if (discussion.recipientUsers().length) {
+        if (discussion.recipientUsers().length > 1) {
             items.add('remove', Button.component({
                 children: app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion'),
                 icon: 'fas fa-user-slash',

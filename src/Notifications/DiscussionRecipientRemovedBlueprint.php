@@ -64,7 +64,10 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      */
     public function getData()
     {
-        return [];
+        return [
+            'user_left' => $this->user->id,
+            'discussion' => $this->discussion->id
+        ];
     }
 
     /**
