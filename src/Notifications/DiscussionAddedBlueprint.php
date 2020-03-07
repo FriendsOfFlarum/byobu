@@ -39,7 +39,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
      *
      * @return \Flarum\User\User|null
      */
-    public function getFromUser():?User
+    public function getFromUser(): ?User
     {
         return $this->actor;
     }
@@ -49,7 +49,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
      *
      * @return \Flarum\Database\AbstractModel|null
      */
-    public function getSubject():?Discussion
+    public function getSubject(): ?Discussion
     {
         return $this->discussion;
     }
