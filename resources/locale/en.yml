@@ -17,7 +17,6 @@ fof-byobu:
             recipients: "{count} Recipient|{count} Recipients"
             user_deleted: -deleted-
         nav:
-            private_discussions: Private discussion
             start_button: New Private Discussion
         input:
             search_recipients: Search recipient by typing first three characters...
