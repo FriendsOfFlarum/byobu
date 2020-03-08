@@ -153,7 +153,7 @@ class SaveRecipientsToDatabase
         }
 
         if ($addsRecipients || $makingPublic) {
-            if ($addsRecipients){
+            if ($addsRecipients) {
                 $this->savingPrivateDiscussion = $discussion;
             }
 
