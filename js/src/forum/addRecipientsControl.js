@@ -18,6 +18,21 @@ export default function() {
             }));
         }
 
+        if (discussion.recipientUsers().length > 0 && discussion.canMakePublic()) {
+            items.add('make_public', Button.component({
+                children: app.translator.trans('fof-byobu.forum.buttons.make_public'),
+                icon: 'far fa-eye',
+                onclick: () => {
+                    if (discussion && confirm(app.translator.trans('fof-byobu.forum.confirm.make_public'))) {
+                        let recipientGroups = [];
+                        let recipientUsers = [];
+
+                        discussion.save({ relationships: { recipientUsers, recipientGroups } }).then(() => m.redraw());
+                    }
+                }
+            }));
+        }
+
         if (discussion.recipientUsers().length > 1) {
             items.add('remove', Button.component({
                 children: app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion'),

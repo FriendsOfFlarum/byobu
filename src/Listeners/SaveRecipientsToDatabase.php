@@ -92,6 +92,11 @@ class SaveRecipientsToDatabase
         $discussion = $event->discussion;
         $actor = $event->actor;
 
+        $oldRecipients = [
+            'groups' => $discussion->recipientGroups()->get(),
+            'users'  => $discussion->recipientUsers()->get(),
+        ];
+
         $newUserIds = collect(Arr::get($event->data, 'relationships.recipientUsers.data', []))
             ->map(function ($in) {
                 return (int) $in['id'];
@@ -103,7 +108,15 @@ class SaveRecipientsToDatabase
 
         $addsRecipients = !$newUserIds->isEmpty() || !$newGroupIds->isEmpty();
 
+        $makingPublic = ($newUserIds->isEmpty() && $newGroupIds->isEmpty()) && (!$oldRecipients['users']->isEmpty() || !$oldRecipients['groups']->isEmpty()) && empty($event->data['attributes']);
+
         $removingSelf = (!$newUserIds->contains($actor->id) && $newUserIds->count() >= 1 && $discussion->recipientUsers()->get()->contains($actor->id));
+
+        if ($makingPublic) {
+            if (!$actor->can('makePublic', $discussion)) {
+                throw new PermissionDeniedException('Not allowed to make discussion public');
+            }
+        }
 
         if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
             $newUserIds->each(function (int $userId) use ($actor) {
@@ -139,13 +152,10 @@ class SaveRecipientsToDatabase
             throw new PermissionDeniedException('Not allowed to remove the final recipient');
         }
 
-        if ($addsRecipients) {
-            $this->savingPrivateDiscussion = $discussion;
-
-            $oldRecipients = [
-                'groups' => $discussion->recipientGroups()->get(),
-                'users'  => $discussion->recipientUsers()->get(),
-            ];
+        if ($addsRecipients || $makingPublic) {
+            if ($addsRecipients){
+                $this->savingPrivateDiscussion = $discussion;
+            }
 
             // Nothing changed.
             if (
@@ -225,8 +235,8 @@ class SaveRecipientsToDatabase
                 )
             );
         } elseif (
-            !$oldRecipients['users']->isEmpty() && !$oldRecipients['groups']->isEmpty()
-            && ($newUserIds->isEmpty() || $newGroupIds->isEmpty())
+            (!$oldRecipients['users']->isEmpty() || !$oldRecipients['groups']->isEmpty())
+            && ($newUserIds->isEmpty() && $newGroupIds->isEmpty())
         ) {
             $discussion->raise(
                 new DiscussionMadePublic(

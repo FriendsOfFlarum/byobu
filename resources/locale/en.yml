@@ -10,6 +10,7 @@ fof-byobu:
             send_pd: "Send {username} a message"
             cancel: Cancel
             remove_from_discussion: Leave this private discussion
+            make_public: Make this discussion public
         composer_private_discussion:
             submit_button: Post Private Discussion
             title_placeholder: Private Discussion Title
@@ -53,6 +54,9 @@ fof-byobu:
             pd_added_text: "{username} added you to a private discussion"
             pd_added_label: "Someone adds me to an existing private discussion"
 
+        confirm:
+            make_public: This will make this private discussion visible to everyone. Consider if this is the correct action before proceeding.
+
     admin:
         permission:
             create_private_discussions_with_users: Create private discussions with users
@@ -60,6 +64,7 @@ fof-byobu:
             create_private_discussions_with_blocking_users: Create private discussions with users that block it
             edit_user_recipients: Edit users partaking in private discussions
             edit_group_recipients: Edit groups partaking in private discussions
+            make_private_into_public: Transform a private discussion into a public discussion
             view_private_discussions-when-flagged: View private discussions of other users if flagged
 
         settings:
