@@ -11,7 +11,11 @@ export default function () {
     override(PrivateDiscussionComposer.prototype, 'onsubmit', function (original) {
         const tag = app.store.getBy('tags', 'slug', app.forum.attribute('byobuTag'));
 
-        this.tags = [tag];
+        if (tag) {
+            this.tags = [tag];
+        } else {
+            console.error('fof/byobu: Could not find tag with slug ' + app.forum.attribute('byobuTag'));
+        }
 
         original();
     });
