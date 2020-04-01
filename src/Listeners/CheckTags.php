@@ -46,13 +46,15 @@ class CheckTags
             && !empty($this->byobuSlug)
             && (isset($event->data['relationships']['recipientUsers']) || isset($event->data['relationships']['recipientGroups']))
         ) {
-            $tags = $event->data['relationships']['tags']['data'];
+            if (isset($event->data['relationships']['tags']['data'])) {
+                $tags = $event->data['relationships']['tags']['data'];
 
-            foreach ($tags as $tag) {
-                $t = $this->getTagFromId($tag['id']);
+                foreach ($tags as $tag) {
+                    $t = $this->getTagFromId($tag['id']);
 
-                if ($t->slug !== $this->byobuSlug) {
-                    throw new ValidationException(['byobu' => 'Invalid tag for private discussions']);
+                    if ($t->slug !== $this->byobuSlug) {
+                        throw new ValidationException(['byobu' => 'Invalid tag for private discussions']);
+                    }
                 }
             }
         }

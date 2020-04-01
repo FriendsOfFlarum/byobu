@@ -19,6 +19,13 @@ export default function () {
             permission: 'startPrivateDiscussionWithBlockers'
         }, 95);
     });
+    extend(PermissionGrid.prototype, 'replyItems', items => {
+        items.add('makePrivatePublic', {
+            icon: 'far fa-map',
+            label: app.translator.trans('fof-byobu.admin.permission.make_private_into_public'),
+            permission: 'discussion.makePublic'
+        }, 95);
+    });
     extend(PermissionGrid.prototype, 'moderateItems', items => {
         items.add('editUserRecipients', {
             icon: 'far fa-map',

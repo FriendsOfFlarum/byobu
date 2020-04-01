@@ -38,6 +38,9 @@ class PermissionAttributes
             $event->attributes['canEditRecipients'] = $users || $groups;
             $event->attributes['canEditUserRecipients'] = $users;
             $event->attributes['canEditGroupRecipients'] = $groups;
+            if ($event->model->is_private) {
+                $event->attributes['canMakePublic'] = $event->actor->can('makePublic', $event->model);
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ use Flarum\User\Exception\PermissionDeniedException;
 use Flarum\User\UserRepository;
 use FoF\Byobu\Events\DiscussionMadePrivate;
 use FoF\Byobu\Events\DiscussionMadePublic;
+use FoF\Byobu\Events\DiscussionRecipientRemovedSelf;
 use FoF\Byobu\Events\DiscussionRecipientsChanged;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Validation\Factory;
@@ -91,6 +92,11 @@ class SaveRecipientsToDatabase
         $discussion = $event->discussion;
         $actor = $event->actor;
 
+        $oldRecipients = [
+            'groups' => $discussion->recipientGroups()->get(),
+            'users'  => $discussion->recipientUsers()->get(),
+        ];
+
         $newUserIds = collect(Arr::get($event->data, 'relationships.recipientUsers.data', []))
             ->map(function ($in) {
                 return (int) $in['id'];
@@ -101,6 +107,16 @@ class SaveRecipientsToDatabase
             });
 
         $addsRecipients = !$newUserIds->isEmpty() || !$newGroupIds->isEmpty();
+
+        $makingPublic = ($newUserIds->isEmpty() && $newGroupIds->isEmpty()) && (!$oldRecipients['users']->isEmpty() || !$oldRecipients['groups']->isEmpty()) && empty($event->data['attributes']);
+
+        $removingSelf = (!$newUserIds->contains($actor->id) && $newUserIds->count() >= 1 && $discussion->recipientUsers()->get()->contains($actor->id));
+
+        if ($makingPublic) {
+            if (!$actor->can('makePublic', $discussion)) {
+                throw new PermissionDeniedException('Not allowed to make discussion public');
+            }
+        }
 
         if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
             $newUserIds->each(function (int $userId) use ($actor) {
@@ -115,7 +131,7 @@ class SaveRecipientsToDatabase
         }
 
         // New discussion
-        if ($discussion->exists) {
+        if ($discussion->exists && !$removingSelf) {
             if (!$newUserIds->isEmpty() && !$actor->can('discussion.editUserRecipients', $discussion)) {
                 throw new PermissionDeniedException('Not allowed to edit users of a private discussion');
             }
@@ -131,22 +147,25 @@ class SaveRecipientsToDatabase
             }
         }
 
-        if ($addsRecipients) {
-            $this->savingPrivateDiscussion = $discussion;
+        // Removing self
+        if ($discussion->exists && $removingSelf && !$addsRecipients) {
+            throw new PermissionDeniedException('Not allowed to remove the final recipient');
+        }
 
-            $oldRecipients = [
-                'groups' => $discussion->recipientGroups()->get(),
-                'users'  => $discussion->recipientUsers()->get(),
-            ];
+        if ($addsRecipients || $makingPublic) {
+            if ($addsRecipients) {
+                $this->savingPrivateDiscussion = $discussion;
+            }
 
             // Nothing changed.
-            if ($oldRecipients['groups']->pluck('id')->all() == $newGroupIds->all()
+            if (
+                $oldRecipients['groups']->pluck('id')->all() == $newGroupIds->all()
                 && $oldRecipients['users']->pluck('id')->all() == $newUserIds->all()
             ) {
                 return;
             }
 
-            $this->raiseEvent($oldRecipients, $newUserIds, $newGroupIds, $discussion, $actor);
+            $this->raiseEvent($oldRecipients, $newUserIds, $newGroupIds, $discussion, $actor, $removingSelf);
 
             $discussion->afterSave(function (Discussion $discussion) use ($newGroupIds, $newUserIds, $oldRecipients) {
                 foreach (['users', 'groups'] as $type) {
@@ -184,8 +203,10 @@ class SaveRecipientsToDatabase
     {
         $discussion = $event->model;
 
-        if ($discussion === $this->savingPrivateDiscussion
-            || ($discussion instanceof Discussion && ($discussion->recipientGroups()->count() || $discussion->recipientUsers()->count()))) {
+        if (
+            $discussion === $this->savingPrivateDiscussion
+            || ($discussion instanceof Discussion && ($discussion->recipientGroups()->count() || $discussion->recipientUsers()->count()))
+        ) {
             return true;
         }
     }
@@ -197,9 +218,10 @@ class SaveRecipientsToDatabase
      * @param $discussion
      * @param $actor
      */
-    protected function raiseEvent($oldRecipients, $newUserIds, $newGroupIds, $discussion, $actor)
+    protected function raiseEvent($oldRecipients, $newUserIds, $newGroupIds, $discussion, $actor, $removingSelf)
     {
-        if ($oldRecipients['users']->isEmpty() && $oldRecipients['groups']->isEmpty()
+        if (
+            $oldRecipients['users']->isEmpty() && $oldRecipients['groups']->isEmpty()
             && (!$newUserIds->isEmpty() || !$newGroupIds->isEmpty())
         ) {
             $discussion->raise(
@@ -212,11 +234,23 @@ class SaveRecipientsToDatabase
                     $oldRecipients['groups']
                 )
             );
-        } elseif (!$oldRecipients['users']->isEmpty() && !$oldRecipients['groups']->isEmpty()
-            && ($newUserIds->isEmpty() || $newGroupIds->isEmpty())
+        } elseif (
+            (!$oldRecipients['users']->isEmpty() || !$oldRecipients['groups']->isEmpty())
+            && ($newUserIds->isEmpty() && $newGroupIds->isEmpty())
         ) {
             $discussion->raise(
                 new DiscussionMadePublic(
+                    $discussion,
+                    $actor,
+                    $newUserIds,
+                    $newGroupIds,
+                    $oldRecipients['users'],
+                    $oldRecipients['groups']
+                )
+            );
+        } elseif ($removingSelf) {
+            $discussion->raise(
+                new DiscussionRecipientRemovedSelf(
                     $discussion,
                     $actor,
                     $newUserIds,

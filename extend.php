@@ -57,6 +57,8 @@ return [
         $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
             $event->add(Notifications\DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
             $event->add(Notifications\DiscussionRepliedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
+            $event->add(Notifications\DiscussionRecipientRemovedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
+            $event->add(Notifications\DiscussionAddedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
     }),
     function (Factory $views) {
