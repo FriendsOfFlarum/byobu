@@ -92,7 +92,8 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         const items = new ItemList();
         const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
 
-        items.add('start_private',
+        if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+            items.add('start_private',
             Button.component({
                 children: app.translator.trans(canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'),
                 className: 'Button Button--primary IndexPage-newDiscussion',
@@ -100,6 +101,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                 onclick: this.newDiscussionAction.bind(this),
                 disabled: !canStartDiscussion
             }));
+        }
 
         return items;
     }
