@@ -66,6 +66,7 @@ class QueueNotificationJobs
 
     public function discussionMadePublic(DiscussionMadePublic $event)
     {
-        $ian = $event;
+        // TODO
+        //app('flarum.queue.connection')->push();
     }
 }
