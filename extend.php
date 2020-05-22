@@ -19,8 +19,10 @@ use Flarum\Discussion\Event\Saving;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend as Native;
 use Flarum\Group\Group;
+use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
 use FoF\Components\Extend\AddFofComponents;
+use FoF\Split\Events\DiscussionWasSplit;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\View\Factory;
 
@@ -29,14 +31,17 @@ return [
 
     (new Native\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),
+
     (new Native\Frontend('forum'))
         ->css(__DIR__.'/resources/less/forum/extension.less')
-        ->js(__DIR__.'/js/dist/forum.js')
-        ->content(Content\PassExtensionSettings::class),
+        ->js(__DIR__.'/js/dist/forum.js'),
+
     new Native\Locales(__DIR__.'/resources/locale'),
+
     new Extend\UserPreference('blocksPd', function ($value) {
         return boolval($value);
     }, false),
+
     (new Extend\ApiAttribute())
         ->add(ForumSerializer::class, Api\PermissionAttributes::class)
         ->add(DiscussionSerializer::class, Api\PermissionAttributes::class)
@@ -79,20 +84,19 @@ return [
         }),
 
     function (Dispatcher $events) {
+        $events->subscribe(Access\DiscussionPolicy::class);
+        $events->subscribe(Listeners\AddApiAttributes::class);
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
-        $events->subscribe(Listeners\SaveBlocksPdPreference::class);
-        $events->subscribe(Listeners\AddApiAttributes::class);
-        $events->listen(Saving::class, Listeners\CheckTags::class);
-
         $events->subscribe(Listeners\QueueNotificationJobs::class);
 
-        $events->subscribe(Access\DiscussionPolicy::class);
+        $events->listen(Saving::class, Listeners\CheckTags::class);
+        $events->listen(UserSaving::class, Listeners\SaveBlocksPdPreference::class);
 
         // Support for fof/split
-        $events->subscribe(Listeners\AddRecipientsToSplitDiscussion::class);
+        $events->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class);
 
         // Add notifications
         $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
