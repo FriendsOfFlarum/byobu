@@ -50,6 +50,7 @@ Browser alert and email notifications are available for `user` recipients of pri
 Notifications for `group` recipients are available for:
 
 - Private discussion started
+- Private discussion replied
 
 (More notification types are planned for `groups` soon)
 
