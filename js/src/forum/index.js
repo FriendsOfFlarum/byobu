@@ -14,6 +14,7 @@ import PrivateDiscussionNotification from './components/PrivateDiscussionNotific
 import PrivateDiscussionRepliedNotification from './components/PrivateDiscussionReplyNotification';
 import PrivateDiscussionUserLeftNotification from './components/PrivateDiscussionUserLeftNotification';
 import PrivateDiscussionAddedNotification from './components/PrivateDiscussionAddedNotification';
+import PrivateDiscussionMadePublicNotification from './components/PrivateDiscussionMadePublicNotification';
 import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
 import RecipientsModified from "./components/RecipientsModified";
 import RecipientLeft from './components/RecipientLeft';
@@ -54,6 +55,7 @@ app.initializers.add('fof-byobu', function (app) {
     app.notificationComponents.byobuPrivateDiscussionReplied = PrivateDiscussionRepliedNotification;
     app.notificationComponents.byobuRecipientRemoved = PrivateDiscussionUserLeftNotification;
     app.notificationComponents.byobuPrivateDiscussionAdded = PrivateDiscussionAddedNotification;
+    app.notificationComponents.byobuMadePublic = PrivateDiscussionMadePublicNotification;
 
     // Add notification preferences.
     extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
@@ -77,5 +79,10 @@ app.initializers.add('fof-byobu', function (app) {
             icon: 'fas fa-map',
             label: app.translator.trans('fof-byobu.forum.notifications.pd_user_left_label')
         });
+        items.add('byobuMadePublic', {
+            name: 'byobuMadePublic',
+            icon: 'fas fa-map',
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_made_public_label')
+        })
     });
 });

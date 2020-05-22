@@ -33,7 +33,7 @@ class QueueNotificationJobs
     public function discussionMadePrivate(DiscussionMadePrivate $event)
     {
         app('flarum.queue.connection')->push(
-            new Jobs\SendNotificationWhenPrivateDiscussionStarted($event->discussion, $event->newUsers)
+            new Jobs\SendNotificationWhenPrivateDiscussionStarted($event->discussion, $event->newUsers, $event->newGroups)
         );
     }
 
@@ -66,6 +66,8 @@ class QueueNotificationJobs
 
     public function discussionMadePublic(DiscussionMadePublic $event)
     {
-        $ian = $event;
+        app('flarum.queue.connection')->push(
+            new Jobs\SendNotificationWhenDiscussionMadePublic($event->actor, $event->discussion, $event->oldUsers)
+        );
     }
 }

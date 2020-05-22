@@ -35,22 +35,37 @@ class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
      */
     protected $newUsers;
 
+    protected $newGroups;
+
     protected $settings;
 
     public function __construct(
         Discussion $discussion,
-        Collection $newUsers
+        Collection $newUsers,
+        Collection $newGroups
     ) {
         $this->discussion = $discussion;
         $this->newUsers = $newUsers;
+        $this->newGroups = $newGroups;
     }
 
     public function handle(NotificationSyncer $notifications)
     {
-        $recipients = User::whereIn('id', $this->newUsers)
+        $userRecipients = User::whereIn('id', $this->newUsers)
             ->whereNotIn('id', [$this->discussion->user_id])
             ->get();
 
-        $notifications->sync(new DiscussionCreatedBlueprint($this->discussion), $recipients->all());
+        $groupRecipientUsers = User::leftJoin('group_user', 'users.id', 'group_user.user_id')
+            ->whereIn('group_user.group_id', [$this->newGroups])
+            ->whereNotIn('users.id', [$this->discussion->user_id])
+            ->get();
+
+        if ($userRecipients) {
+            $notifications->sync(new DiscussionCreatedBlueprint($this->discussion), $userRecipients->all());
+        }
+
+        if ($groupRecipientUsers) {
+            $notifications->sync(new DiscussionCreatedBlueprint($this->discussion), $groupRecipientUsers->all());
+        }
     }
 }
