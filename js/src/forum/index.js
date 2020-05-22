@@ -79,5 +79,10 @@ app.initializers.add('fof-byobu', function (app) {
             icon: 'fas fa-map',
             label: app.translator.trans('fof-byobu.forum.notifications.pd_user_left_label')
         });
+        items.add('byobuMadePublic', {
+            name: 'byobuMadePublic',
+            icon: 'fas fa-map',
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_made_public_label')
+        })
     });
 });
