@@ -25,7 +25,7 @@
         "source": "https://github.com/FriendsOfFlarum/byobu"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.10",
+        "flarum/core": "^0.1.0-beta.13",
         "fof/components": ">=0.1.0"
     },
     "extra": {
