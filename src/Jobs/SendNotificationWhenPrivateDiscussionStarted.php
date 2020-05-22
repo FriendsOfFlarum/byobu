@@ -63,7 +63,7 @@ class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
         if ($userRecipients) {
             $notifications->sync(new DiscussionCreatedBlueprint($this->discussion), $userRecipients->all());
         }
-        
+
         if ($groupRecipientUsers) {
             $notifications->sync(new DiscussionCreatedBlueprint($this->discussion), $groupRecipientUsers->all());
         }
