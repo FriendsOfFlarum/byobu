@@ -66,7 +66,8 @@ class QueueNotificationJobs
 
     public function discussionMadePublic(DiscussionMadePublic $event)
     {
-        // TODO
-        //app('flarum.queue.connection')->push();
+        app('flarum.queue.connection')->push(
+            new Jobs\SendNotificationWhenDiscussionMadePublic($event->actor, $event->discussion, $event->oldUsers)
+        );
     }
 }
