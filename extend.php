@@ -28,12 +28,12 @@ return [
     new AddFofComponents(),
 
     (new Native\Frontend('admin'))
-        ->js(__DIR__ . '/js/dist/admin.js'),
+        ->js(__DIR__.'/js/dist/admin.js'),
     (new Native\Frontend('forum'))
-        ->css(__DIR__ . '/resources/less/forum/extension.less')
-        ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__.'/resources/less/forum/extension.less')
+        ->js(__DIR__.'/js/dist/forum.js')
         ->content(Content\PassExtensionSettings::class),
-    new Native\Locales(__DIR__ . '/resources/locale'),
+    new Native\Locales(__DIR__.'/resources/locale'),
     new Extend\UserPreference('blocksPd', function ($value) {
         return boolval($value);
     }, false),
@@ -104,6 +104,6 @@ return [
     },
 
     function (Factory $views) {
-        $views->addNamespace('fof-byobu', __DIR__ . '/resources/views');
+        $views->addNamespace('fof-byobu', __DIR__.'/resources/views');
     },
 ];
