@@ -1,6 +1,6 @@
 import EventPost from "flarum/components/EventPost";
 
-export default class RecipientsModified extends EventPost {
+export default class RecipientLeft extends EventPost {
     static initProps(props) {
         super.initProps(props);
     }
