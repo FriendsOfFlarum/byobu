@@ -17,22 +17,27 @@ import recipientLabel from "../common/helpers/recipientLabel";
 import recipientsLabel from "../common/helpers/recipientsLabel";
 
 
-export default {
-    'components/AddRecipientModal': AddRecipientModal,
-    'components/PrivateDiscussionAddedNotification': PrivateDiscussionAddedNotification,
-    'components/PrivateDiscussionComposer': PrivateDiscussionComposer,
-    'components/PrivateDiscussionIndex': PrivateDiscussionIndex,
-    'components/PrivateDiscussionList': PrivateDiscussionList,
-    'components/PrivateDiscussionNotification': PrivateDiscussionNotification,
-    'components/PrivateDiscussionReplyNotification':PrivateDiscussionReplyNotification,
-    'components/PrivateDiscussionUserPage': PrivateDiscussionsUserPage,
-    'components/PrivateDiscussionUserLeftNotification':PrivateDiscussionUserLeftNotification,
-    'components/RecipientLeft': RecipientLeft,
-    'components/RecipientSearch': RecipientSearch,
-    'components/RecipientsModified': RecipientsModified,
-    'components/sources/GroupSearchSource': GroupSearchSource,
-    'components/sources/UserSearchSource': UserSearchSource,
-    'helpers/recipientCountLabel': recipientCountLabel,
-    'helpers/recipientLabel': recipientLabel,
-    'helpers/recipientsLabel': recipientsLabel,
+export const components = {
+    'AddRecipientModal': AddRecipientModal,
+    'PrivateDiscussionAddedNotification': PrivateDiscussionAddedNotification,
+    'PrivateDiscussionComposer': PrivateDiscussionComposer,
+    'PrivateDiscussionIndex': PrivateDiscussionIndex,
+    'PrivateDiscussionList': PrivateDiscussionList,
+    'PrivateDiscussionNotification': PrivateDiscussionNotification,
+    'PrivateDiscussionReplyNotification': PrivateDiscussionReplyNotification,
+    'PrivateDiscussionUserPage': PrivateDiscussionsUserPage,
+    'PrivateDiscussionUserLeftNotification': PrivateDiscussionUserLeftNotification,
+    'RecipientLeft': RecipientLeft,
+    'RecipientSearch': RecipientSearch,
+    'RecipientsModified': RecipientsModified,
+    sources: {
+        'GroupSearchSource': GroupSearchSource,
+        'UserSearchSource': UserSearchSource
+    }
+}
+
+export const helpers = {
+    'recipientCountLabel': recipientCountLabel,
+    'recipientLabel': recipientLabel,
+    'recipientsLabel': recipientsLabel,
 };

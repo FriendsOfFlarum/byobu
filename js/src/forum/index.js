@@ -80,6 +80,4 @@ app.initializers.add('fof-byobu', function (app) {
     });
 });
 
-import compat from './compat';
-
-export { compat };
+export * from './compat';
