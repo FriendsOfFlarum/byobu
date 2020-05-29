@@ -20,6 +20,9 @@ import RecipientsModified from "./components/RecipientsModified";
 import RecipientLeft from './components/RecipientLeft';
 import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessionDropdown';
 
+export * from '../common/helpers';
+export * from './components';
+
 app.initializers.add('fof-byobu', function (app) {
     app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
 
