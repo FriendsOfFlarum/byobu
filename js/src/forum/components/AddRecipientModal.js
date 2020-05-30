@@ -77,6 +77,7 @@ export default class AddRecipientModal extends Modal {
                         {Button.component({
                             onclick: this.hide.bind(this),
                             className: 'Button Button--cancel',
+                            icon: 'fas fa-times',
                             children: app.translator.trans('fof-byobu.forum.buttons.cancel'),
                         })}
                     </div>
