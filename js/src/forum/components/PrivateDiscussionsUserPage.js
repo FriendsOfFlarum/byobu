@@ -100,7 +100,6 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                         canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'
                     ),
                     className: 'Button Button--primary IndexPage-newDiscussion',
-                    itemClassName: 'App-primaryControl',
                     onclick: this.newDiscussionAction.bind(this),
                     disabled: !canStartDiscussion,
                 })
