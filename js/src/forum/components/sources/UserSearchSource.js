@@ -13,16 +13,16 @@ export default class UserSearchSource {
         this.query = query;
 
         if (!app.cache.byobuResults[this.query]) {
-
             this.loading = true;
 
             app.cache.byobuResults[this.query] = [];
-            app.store.find('users', {
-                filter: {q: this.query + ' allows-pd'},
-                page: {limit: 5}
-            }).then(this.pushResults.bind(this));
+            app.store
+                .find('users', {
+                    filter: { q: this.query + ' allows-pd' },
+                    page: { limit: 5 },
+                })
+                .then(this.pushResults.bind(this));
         } else
-
             return [
                 <li className="Dropdown-header">{app.translator.trans('core.forum.search.users_heading')}</li>,
                 app.cache.byobuResults[this.query].map(user => {
@@ -30,14 +30,14 @@ export default class UserSearchSource {
                     name.children[0] = highlight(name.children[0], this.query);
 
                     return (
-                        <li className='SearchResult' data-index={'users:' + user.id()}>
+                        <li className="SearchResult" data-index={'users:' + user.id()}>
                             <a data-index={'users:' + user.id()}>
                                 {avatar(user)}
                                 {name}
                             </a>
                         </li>
                     );
-                })
+                }),
             ];
     }
 

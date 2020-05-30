@@ -1,29 +1,29 @@
 import { extend } from 'flarum/extend';
-import Model from "flarum/Model";
-import Discussion from "flarum/models/Discussion";
-import User from "flarum/models/User";
-import addRecipientComposer from "./addRecipientComposer";
-import addRecipientLabels from "./addRecipientLabels";
-import addRecipientsControl from "./addRecipientsControl";
-import addHasRecipientsBadge from "./addHasRecipientsBadge";
+import Model from 'flarum/Model';
+import Discussion from 'flarum/models/Discussion';
+import User from 'flarum/models/User';
+import addRecipientComposer from './addRecipientComposer';
+import addRecipientLabels from './addRecipientLabels';
+import addRecipientsControl from './addRecipientsControl';
+import addHasRecipientsBadge from './addHasRecipientsBadge';
 import addDiscussPrivatelyControl from './addDiscussPrivatelyControl';
 import addPrivacySetting from './addPrivacySetting';
-import addPrivateDiscussionsPage from "./addPrivateDiscussionsPage";
+import addPrivateDiscussionsPage from './addPrivateDiscussionsPage';
 import NotificationGrid from 'flarum/components/NotificationGrid';
 import PrivateDiscussionNotification from './components/PrivateDiscussionNotification';
 import PrivateDiscussionRepliedNotification from './components/PrivateDiscussionReplyNotification';
 import PrivateDiscussionUserLeftNotification from './components/PrivateDiscussionUserLeftNotification';
 import PrivateDiscussionAddedNotification from './components/PrivateDiscussionAddedNotification';
 import PrivateDiscussionMadePublicNotification from './components/PrivateDiscussionMadePublicNotification';
-import PrivateDiscussionIndex from "./components/PrivateDiscussionIndex";
-import RecipientsModified from "./components/RecipientsModified";
+import PrivateDiscussionIndex from './components/PrivateDiscussionIndex';
+import RecipientsModified from './components/RecipientsModified';
 import RecipientLeft from './components/RecipientLeft';
 import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessionDropdown';
 
 export * from '../common/helpers';
 export * from './components';
 
-app.initializers.add('fof-byobu', function (app) {
+app.initializers.add('fof-byobu', function(app) {
     app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
 
     Discussion.prototype.recipientUsers = Model.hasMany('recipientUsers');
@@ -61,31 +61,31 @@ app.initializers.add('fof-byobu', function (app) {
     app.notificationComponents.byobuMadePublic = PrivateDiscussionMadePublicNotification;
 
     // Add notification preferences.
-    extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+    extend(NotificationGrid.prototype, 'notificationTypes', function(items) {
         items.add('byobuPrivateDiscussionCreated', {
             name: 'byobuPrivateDiscussionCreated',
             icon: 'fas fa-map',
-            label: app.translator.trans('fof-byobu.forum.notifications.pd_label')
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_label'),
         });
         items.add('byobuPrivateDiscussionReplied', {
             name: 'byobuPrivateDiscussionReplied',
             icon: 'fas fa-map',
-            label: app.translator.trans('fof-byobu.forum.notifications.pd_reply_label')
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_reply_label'),
         });
         items.add('byobuPrivateDiscussionAdded', {
             name: 'byobuPrivateDiscussionAdded',
             icon: 'fas fa-map',
-            label: app.translator.trans('fof-byobu.forum.notifications.pd_added_label')
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_added_label'),
         });
         items.add('byobuRecipientRemoved', {
             name: 'byobuRecipientRemoved',
             icon: 'fas fa-map',
-            label: app.translator.trans('fof-byobu.forum.notifications.pd_user_left_label')
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_user_left_label'),
         });
         items.add('byobuMadePublic', {
             name: 'byobuMadePublic',
             icon: 'fas fa-map',
-            label: app.translator.trans('fof-byobu.forum.notifications.pd_made_public_label')
-        })
+            label: app.translator.trans('fof-byobu.forum.notifications.pd_made_public_label'),
+        });
     });
 });

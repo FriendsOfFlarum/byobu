@@ -1,45 +1,54 @@
-import {extend} from 'flarum/extend';
+import { extend } from 'flarum/extend';
 import UserControls from 'flarum/utils/UserControls';
-import PrivateDiscussionComposer from "./components/PrivateDiscussionComposer";
+import PrivateDiscussionComposer from './components/PrivateDiscussionComposer';
 import Button from 'flarum/components/Button';
 import ItemList from 'flarum/utils/ItemList';
+import removeTags from './removeTags';
 
-export default function () {
+export default function() {
     // Add a control allowing the discussion to be moved to another category.
-    extend(UserControls, 'userControls', function (items, user) {
-        if (app.session.user &&
+    extend(UserControls, 'userControls', function(items, user) {
+        if (
+            app.session.user &&
             app.session.user.id() !== user.id() &&
             app.forum.attribute('canStartPrivateDiscussion') &&
-            (user.blocksPd() === false || app.forum.attribute('canStartPrivateDiscussionWithBlockers') && user.cannotBeDirectMessaged())
+            (user.blocksPd() === false || (app.forum.attribute('canStartPrivateDiscussionWithBlockers') && user.cannotBeDirectMessaged()))
         ) {
-            items.add('private-discussion', Button.component({
-                children: app.translator.trans('fof-byobu.forum.buttons.send_pd', {username: user.username()}),
-                icon: 'far fa-map',
-                onclick: () => {
-                    const deferred = m.deferred();
+            items.add(
+                'private-discussion',
+                Button.component({
+                    children: app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() }),
+                    icon: 'far fa-map',
+                    onclick: () => {
+                        const deferred = m.deferred();
 
-                    let recipients = new ItemList();
-                    recipients.add('users:' + app.session.user.id(), app.session.user);
-                    recipients.add('users:' + user.id(), user);
+                        let recipients = new ItemList();
+                        recipients.add('users:' + app.session.user.id(), app.session.user);
+                        recipients.add('users:' + user.id(), user);
 
-                    PrivateDiscussionComposer.prototype.recipients = recipients;
+                        PrivateDiscussionComposer.prototype.recipients = recipients;
 
-                    const component = new PrivateDiscussionComposer({
-                        user: app.session.user,
-                        recipients: recipients,
-                        recipientUsers: recipients,
-                        titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                        submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button')
-                    });
+                        const component = new PrivateDiscussionComposer({
+                            user: app.session.user,
+                            recipients: recipients,
+                            recipientUsers: recipients,
+                            titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                            submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
+                        });
 
-                    app.composer.load(component);
-                    app.composer.show();
+                        app.composer.load(component);
+                        app.composer.show();
 
-                    deferred.resolve(component);
+                        deferred.resolve(component);
 
-                    return deferred.promise;
-                }
-            }));
+                        return deferred.promise;
+                    },
+                })
+            );
+
+            if (app.forum.attribute('byobuTag')) {
+                removeTags();
+            }
         }
 
         return items;

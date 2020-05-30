@@ -3,16 +3,21 @@ import highlight from 'flarum/helpers/highlight';
 export default class GroupSearchSource {
     search(query) {
         return app.store.find('groups', {
-            filter: {q: query},
-            page: {limit: 5}
+            filter: { q: query },
+            page: { limit: 5 },
         });
     }
 
     view(query) {
         query = query.toLowerCase();
 
-        const results = app.store.all('groups')
-            .filter(group => group.namePlural().toLowerCase().substr(0, query.length) === query);
+        const results = app.store.all('groups').filter(
+            group =>
+                group
+                    .namePlural()
+                    .toLowerCase()
+                    .substr(0, query.length) === query
+        );
 
         if (!results.length) return '';
 
@@ -29,7 +34,7 @@ export default class GroupSearchSource {
                         </a>
                     </li>
                 );
-            })
+            }),
         ];
     }
 }

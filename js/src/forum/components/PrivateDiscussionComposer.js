@@ -1,5 +1,5 @@
-import DiscussionComposer from "flarum/components/DiscussionComposer";
-import AddRecipientModal from "./AddRecipientModal";
+import DiscussionComposer from 'flarum/components/DiscussionComposer';
+import AddRecipientModal from './AddRecipientModal';
 
 export default class PrivateDiscussionComposer extends DiscussionComposer {
     init() {
@@ -19,24 +19,26 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
         const recipients = this.recipients.toArray();
 
         if (recipients.length < 2) {
-            app.modal.show(new AddRecipientModal({
-                selectedRecipients: this.recipients
-            }))
+            app.modal.show(
+                new AddRecipientModal({
+                    selectedRecipients: this.recipients,
+                })
+            );
 
             this.loading = false;
         } else {
             const data = this.data();
 
-            app.store.createRecord('discussions').save(data).then(
-                discussion => {
+            app.store
+                .createRecord('discussions')
+                .save(data)
+                .then(discussion => {
                     app.composer.hide();
                     if (app.cache.discussionList) {
                         app.cache.discussionList.addDiscussion(discussion);
                     }
                     m.route(app.route.discussion(discussion));
-                },
-                this.loaded.bind(this)
-            );
+                }, this.loaded.bind(this));
         }
     }
 }

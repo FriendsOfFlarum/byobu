@@ -13,8 +13,7 @@ import Button from 'flarum/components/Button';
 import LinkButton from 'flarum/components/LinkButton';
 import SelectDropdown from 'flarum/components/SelectDropdown';
 
-export default class PrivateDiscussionIndex extends Page
-{
+export default class PrivateDiscussionIndex extends Page {
     init() {
         super.init();
 
@@ -49,7 +48,7 @@ export default class PrivateDiscussionIndex extends Page
         }
 
         if (!app.cache.privateDiscussionList) {
-            app.cache.privateDiscussionList = new PrivateDiscussionList({params});
+            app.cache.privateDiscussionList = new PrivateDiscussionList({ params });
         }
 
         app.history.push('private-index', icon('far fa-map'));
@@ -97,7 +96,7 @@ export default class PrivateDiscussionIndex extends Page
         // previous hero. Maintain the same scroll position relative to the bottom
         // of the hero so that the sidebar doesn't jump around.
         const oldHeroHeight = app.cache.heroHeight;
-        const heroHeight = app.cache.heroHeight = this.$('.Hero').outerHeight();
+        const heroHeight = (app.cache.heroHeight = this.$('.Hero').outerHeight());
         const scrollTop = app.cache.scrollTop;
 
         $('#app').css('min-height', $(window).height() + heroHeight);
@@ -148,22 +147,26 @@ export default class PrivateDiscussionIndex extends Page
         const items = new ItemList();
         const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
 
-        items.add('newDiscussion',
+        items.add(
+            'newDiscussion',
             Button.component({
-                children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
+                children: app.translator.trans(
+                    canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'
+                ),
                 icon: 'fas fa-edit',
                 className: 'Button Button--primary IndexPage-newDiscussion',
                 itemClassName: 'App-primaryControl',
                 onclick: this.newDiscussion.bind(this),
-                disabled: !canStartDiscussion
+                disabled: !canStartDiscussion,
             })
         );
 
-        items.add('nav',
+        items.add(
+            'nav',
             SelectDropdown.component({
                 children: this.navItems(this).toArray(),
                 buttonClassName: 'Button',
-                className: 'App-titleControl'
+                className: 'App-titleControl',
             })
         );
 
@@ -180,11 +183,12 @@ export default class PrivateDiscussionIndex extends Page
         const items = new ItemList();
         const params = this.stickyParams();
 
-        items.add('allDiscussions',
+        items.add(
+            'allDiscussions',
             LinkButton.component({
                 href: app.route('index', params),
                 children: app.translator.trans('core.forum.index.all_discussions_link'),
-                icon: 'far fa-comments'
+                icon: 'far fa-comments',
             }),
             100
         );
@@ -208,11 +212,12 @@ export default class PrivateDiscussionIndex extends Page
             sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
         }
 
-        items.add('sort',
+        items.add(
+            'sort',
             Select.component({
                 options: sortOptions,
                 value: this.params().sort || Object.keys(sortMap)[0],
-                onchange: this.changeSort.bind(this)
+                onchange: this.changeSort.bind(this),
             })
         );
 
@@ -228,22 +233,24 @@ export default class PrivateDiscussionIndex extends Page
     actionItems() {
         const items = new ItemList();
 
-        items.add('refresh',
+        items.add(
+            'refresh',
             Button.component({
                 title: app.translator.trans('core.forum.index.refresh_tooltip'),
                 icon: 'fas fa-refresh',
                 className: 'Button Button--icon',
-                onclick: () => app.cache.discussionList.refresh()
+                onclick: () => app.cache.discussionList.refresh(),
             })
         );
 
         if (app.session.user) {
-            items.add('markAllAsRead',
+            items.add(
+                'markAllAsRead',
                 Button.component({
                     title: app.translator.trans('core.forum.index.mark_all_as_read_tooltip'),
                     icon: 'fas fa-check',
                     className: 'Button Button--icon',
-                    onclick: this.markAllAsRead.bind(this)
+                    onclick: this.markAllAsRead.bind(this),
                 })
             );
         }
@@ -300,7 +307,7 @@ export default class PrivateDiscussionIndex extends Page
     stickyParams() {
         return {
             sort: m.route.param('sort'),
-            q: m.route.param('q')
+            q: m.route.param('q'),
         };
     }
 
@@ -330,7 +337,7 @@ export default class PrivateDiscussionIndex extends Page
         } else {
             app.modal.show(
                 new LogInModal({
-                    onlogin: this.composeNewDiscussion.bind(this, deferred)
+                    onlogin: this.composeNewDiscussion.bind(this, deferred),
                 })
             );
         }
@@ -345,7 +352,7 @@ export default class PrivateDiscussionIndex extends Page
      * @return {Promise}
      */
     composeNewDiscussion(deferred) {
-        const component = new PrivateDiscussionComposer({user: app.session.user});
+        const component = new PrivateDiscussionComposer({ user: app.session.user });
 
         app.composer.load(component);
         app.composer.show();
@@ -364,7 +371,7 @@ export default class PrivateDiscussionIndex extends Page
         const confirmation = confirm(app.translator.trans('core.forum.index.mark_all_as_read_confirmation'));
 
         if (confirmation) {
-            app.session.user.save({readTime: new Date()});
+            app.session.user.save({ readTime: new Date() });
         }
     }
 }

@@ -1,14 +1,12 @@
-import EventPost from "flarum/components/EventPost";
-import recipientsLabel from "../../common/helpers/recipientsLabel";
+import EventPost from 'flarum/components/EventPost';
+import recipientsLabel from '../../common/helpers/recipientsLabel';
 
 export default class RecipientsModified extends EventPost {
     static initProps(props) {
         super.initProps(props);
 
         function diff(diff1, diff2, store) {
-            return diff1
-                .filter(item => diff2.indexOf(item) === -1)
-                .map(id => app.store.getById(store, id));
+            return diff1.filter(item => diff2.indexOf(item) === -1).map(id => app.store.getById(store, id));
         }
 
         const content = props.post.content();
@@ -35,7 +33,6 @@ export default class RecipientsModified extends EventPost {
     }
 
     descriptionKey() {
-
         var localeBase = 'fof-byobu.forum.post.recipients_modified.';
 
         if (this.props.added.length) {
@@ -53,11 +50,11 @@ export default class RecipientsModified extends EventPost {
         const data = {};
 
         if (this.props.added.length) {
-            data.added = recipientsLabel(this.props.added, {link: true});
+            data.added = recipientsLabel(this.props.added, { link: true });
         }
 
         if (this.props.removed.length) {
-            data.removed = recipientsLabel(this.props.removed, {link: true});
+            data.removed = recipientsLabel(this.props.removed, { link: true });
         }
 
         return data;

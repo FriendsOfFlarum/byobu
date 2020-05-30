@@ -6,12 +6,14 @@ export default () => {
     extend(SessionDropdown.prototype, 'items', items => {
         const user = app.session.user;
 
-        items.add('privateDiscussions',
+        items.add(
+            'privateDiscussions',
             LinkButton.component({
                 icon: 'fas fa-map',
                 children: app.translator.trans('fof-byobu.forum.user.dropdown_label'),
                 href: app.route('user.byobu', { username: user.username() }),
-            }), 99
+            }),
+            99
         );
-    })
-}
+    });
+};

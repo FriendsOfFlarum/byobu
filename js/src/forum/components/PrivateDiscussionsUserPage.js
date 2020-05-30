@@ -20,7 +20,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
             params: {
                 q: `byobu:${user.username()} is:private`,
                 sort: this.sort,
-            }
+            },
         });
 
         this.list.refresh();
@@ -61,7 +61,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                 recipients: recipients,
                 recipientUsers: recipients,
                 titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button')
+                submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
             });
 
             app.composer.load(component);
@@ -93,14 +93,18 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
 
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
-            items.add('start_private',
-            Button.component({
-                children: app.translator.trans(canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'),
-                className: 'Button Button--primary IndexPage-newDiscussion',
-                itemClassName: 'App-primaryControl',
-                onclick: this.newDiscussionAction.bind(this),
-                disabled: !canStartDiscussion
-            }));
+            items.add(
+                'start_private',
+                Button.component({
+                    children: app.translator.trans(
+                        canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'
+                    ),
+                    className: 'Button Button--primary IndexPage-newDiscussion',
+                    itemClassName: 'App-primaryControl',
+                    onclick: this.newDiscussionAction.bind(this),
+                    disabled: !canStartDiscussion,
+                })
+            );
         }
 
         return items;
@@ -115,7 +119,8 @@ export default class PrivateDiscussionsUserPage extends UserPage {
             sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
         }
 
-        items.add('sort',
+        items.add(
+            'sort',
             Dropdown.component({
                 buttonClassName: 'Button',
                 label: sortOptions[this.sort] || Object.keys(sortMap).map(key => sortOptions[key])[0],
@@ -128,7 +133,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                         icon: active ? 'fas fa-check' : true,
                         onclick: this.handleChangeSort.bind(this, value),
                         active: active,
-                    })
+                    });
                 }),
             })
         );
