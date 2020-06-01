@@ -24,7 +24,7 @@ export * from '../common/helpers';
 export * from './components';
 
 app.initializers.add('fof-byobu', function(app) {
-    app.routes.private_discussions = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
+    //app.routes['private_discussions'] = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
 
     Discussion.prototype.recipientUsers = Model.hasMany('recipientUsers');
     Discussion.prototype.oldRecipientUsers = Model.hasMany('oldRecipientUsers');

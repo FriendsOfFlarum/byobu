@@ -5,8 +5,7 @@ import IndexPage from 'flarum/components/IndexPage';
 
 export default () => {
     extend(SessionDropdown.prototype, 'items', items => {
-        if (!app.forum.attribute('byobuOnIndex')) {
-            const user = app.session.user;
+        const user = app.session.user;
 
             items.add(
                 'privateDiscussions',
@@ -17,9 +16,6 @@ export default () => {
                 }),
                 99
             );
-        }
-
-
     });
 
     extend(IndexPage.prototype, 'navItems', items => {
