@@ -42,13 +42,23 @@ class AddApiAttributes
 
     public function prepareApiAttributes(Serializing $event)
     {
-        if ($event->isSerializer(ForumSerializer::class) && $this->extensions->isEnabled('flarum-tags') && $this->disableByobuTags()) {
-            $event->attributes['byobuTag'] = app('flarum.settings')->get('fof-byobu.use_tag_slug');
+        if ($event->isSerializer(ForumSerializer::class)) {
+            if ($this->extensions->isEnabled('flarum-tags') && $this->disableByobuTags()) {
+                $event->attributes['byobuTag'] = app('flarum.settings')->get('fof-byobu.use_tag_slug');
+            }
+            if ($this->showByobuOnIndexPage()) {
+                $event->attributes['byobuOnIndex'] = true;
+            }
         }
     }
 
     private function disableByobuTags(): bool
     {
         return (bool) app('flarum.settings')->get('fof-byobu.use_tag_slug', false);
+    }
+
+    private function showByobuOnIndexPage(): bool
+    {
+        return (bool) app('flarum.settings')->get('fof-byobu.index_link', false);
     }
 }

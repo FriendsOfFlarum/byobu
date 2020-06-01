@@ -14,6 +14,8 @@ export default () => {
                 items: [
                     <StringItem key="fof-byobu.use_tag_slug">{app.translator.trans('fof-byobu.admin.settings.use_tag_slug')}</StringItem>,
                     <p>{app.translator.trans('fof-byobu.admin.settings.use_tag_slug_help')}</p>,
+                    <BooleanItem key="fof-byobu.index_link">{app.translator.trans('fof-byobu.admin.settings.byobu_index')}</BooleanItem>,
+                    <p>{app.translator.trans('fof-byobu.admin.settings.byobu_index_help')}</p>,
                 ],
             })
         );

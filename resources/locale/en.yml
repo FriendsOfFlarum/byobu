@@ -72,6 +72,8 @@ fof-byobu:
         settings:
             use_tag_slug: Specify the slug of the tag to force all private discussions into
             use_tag_slug_help: Leave blank to allow users to select their own tag, applies to newly created private discussions only
+            byobu_index: Display a link to Private Discussions on the index page
+            byobu_index_help: When this option is enabled, the Private Discussion link will move from the user session dropdown to the main nav items on the index page
 
     notifications:
         private_discussion_created:
