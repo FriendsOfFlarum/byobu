@@ -1,9 +1,7 @@
 import { extend } from 'flarum/extend';
 import UserPage from 'flarum/components/UserPage';
 import LinkButton from 'flarum/components/LinkButton';
-
 import PrivateDiscussionsUserPage from './components/PrivateDiscussionsUserPage';
-import removeTags from './removeTags';
 
 export default function() {
     app.routes['user.byobu'] = { path: '/u/:username/byobu', component: PrivateDiscussionsUserPage.component() };
@@ -23,9 +21,5 @@ export default function() {
             }),
             85
         );
-
-        if (app.forum.attribute('byobuTag')) {
-            removeTags();
-        }
     });
 }

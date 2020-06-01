@@ -1,3 +1,4 @@
+import { extend } from 'flarum/extend';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 import AddRecipientModal from './AddRecipientModal';
 
@@ -10,6 +11,12 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
 
         if (typeof username !== 'undefined') {
             this.addDefaultRecipients(username);
+        }
+
+        if (app.forum.attribute('byobuTag') && app.forum.attribute('byobuTag').length > 0) {
+            extend(PrivateDiscussionComposer.prototype, 'headerItems', function(items) {
+                items.remove('tags');
+            });
         }
     }
 
@@ -27,6 +34,14 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
 
             this.loading = false;
         } else {
+            const tag = app.store.getBy('tags', 'slug', app.forum.attribute('byobuTag'));
+
+            if (tag) {
+                this.tags = [tag];
+            } else {
+                console.error('fof/byobu: Could not find tag with slug ' + app.forum.attribute('byobuTag'));
+            }
+
             const data = this.data();
 
             app.store
@@ -35,8 +50,10 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
                 .then(discussion => {
                     app.composer.hide();
                     if (app.cache.discussionList) {
-                        app.cache.discussionList.addDiscussion(discussion);
+                        //app.cache.discussionList.addDiscussion(discussion);
+                        app.cache.discussionList.refresh();
                     }
+                    //this.loading = false;
                     m.route(app.route.discussion(discussion));
                 }, this.loaded.bind(this));
         }
