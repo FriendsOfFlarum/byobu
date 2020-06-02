@@ -99,6 +99,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                     children: app.translator.trans(
                         canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'
                     ),
+                    icon: 'fas fa-pen',
                     className: 'Button Button--primary IndexPage-newDiscussion',
                     itemClassName: 'fof-byobu_primaryControl',
                     onclick: this.newDiscussionAction.bind(this),
