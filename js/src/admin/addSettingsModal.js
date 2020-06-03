@@ -13,7 +13,7 @@ function visualiseTags() {
         .all("tags")
         .sort((a, b) => a.data.attributes.position - b.data.attributes.position)
         .reduce((options, object) => {
-            if (/*object.isChild() ||*/ object.position() === null) {
+            if (object.position() === null) {
                 return options;
             }
 
