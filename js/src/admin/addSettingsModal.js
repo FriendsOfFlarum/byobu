@@ -20,7 +20,7 @@ function visualiseTags() {
             if (object.isChild()) {
                 if (
                     typeof secondaryTags[
-                        object.data.relationships.parent.data.id
+                    object.data.relationships.parent.data.id
                     ] === "undefined"
                 ) {
                     secondaryTags[object.data.relationships.parent.data.id] = [
@@ -39,7 +39,7 @@ function visualiseTags() {
         }, {});
 
     let options = {
-        "": "--- No restriction ---"
+        "": app.translator.trans("fof-byobu.admin.settings.use_tag_slug_no_restriction")
     };
 
     for (const prop in tags) {
@@ -96,7 +96,8 @@ export default () => {
                     </div>,
                     <p>
                         {app.translator.trans(
-                            "fof-byobu.admin.settings.use_tag_slug_help"
+                            "fof-byobu.admin.settings.use_tag_slug_help",
+                            { no_restriction: app.translator.trans("fof-byobu.admin.settings.use_tag_slug_no_restriction") }
                         )}
                     </p>
                 ]
