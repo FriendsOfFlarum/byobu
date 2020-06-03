@@ -71,7 +71,7 @@ fof-byobu:
 
         settings:
             use_tag_slug: Specify the tag that all private discussions must use
-            use_tag_slug_help: Leave blank to allow users to select their own tag. This applies to newly created private discussions only.
+            use_tag_slug_help: Select 'No restriction' to allow users to select their own tag. This applies to newly created private discussions only.
             byobu_index: Display a link to Private Discussions on the index page
             byobu_index_help: When this option is enabled, a link from the forum main nav items to Private Discussions will be displayed
 
