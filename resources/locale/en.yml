@@ -29,7 +29,7 @@ fof-byobu:
                 update_recipients: Update recipients of {title}
                 add_recipients: Add recipients to your discussion
             help:
-                add_recipients: This discussion will only be visible to the users you choose here. At least 1 recipient (other than yourself) is required
+                add_recipients: This discussion will only be visible to the users you choose here. At least 1 recipient (other than yourself) is required.
                 update_recipients: This discussion will only be visible to the users you choose here.
         post:
             recipients_modified:
@@ -45,7 +45,7 @@ fof-byobu:
             dropdown_label: Private Discussions
 
         notifications:
-            pd_label: Someone includes me in a new Private discussion
+            pd_label: Someone includes me in a new private discussion
             pd_reply_label: Someone posts in a private discussion I'm a recipient of
             pd_reply_text: "{username} posted in a private discussion you're a part of"
             pd_text: "{username} started a new private discussion with you"
@@ -70,8 +70,9 @@ fof-byobu:
             view_private_discussions-when-flagged: View private discussions of other users if flagged
 
         settings:
-            use_tag_slug: Specify the which tag that all private discussions should use
-            use_tag_slug_help: Leave blank to allow users to select their own tag, applies to newly created private discussions only. Only primary tags are supported
+            use_tag_slug: Specify the tag that all private discussions must use
+            use_tag_slug_help: 'Select "{no_restriction}" to allow users to select their own tag. This applies to newly created private discussions only.'
+            use_tag_slug_no_restriction: "- No restriction -"
             byobu_index: Display a link to Private Discussions on the index page
             byobu_index_help: When this option is enabled, a link from the forum main nav items to Private Discussions will be displayed
 
