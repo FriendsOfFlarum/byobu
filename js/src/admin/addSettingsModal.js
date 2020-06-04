@@ -1,16 +1,16 @@
-import { settings } from "@fof-components";
-import Badge from "flarum/components/Badge";
+import { settings } from '@fof-components';
+import Badge from 'flarum/components/Badge';
 
 const {
     SettingsModal,
-    items: { BooleanItem, StringItem, SelectItem }
+    items: { BooleanItem, StringItem, SelectItem },
 } = settings;
 
 function visualiseTags() {
     let secondaryTags = {};
 
     const tags = app.store
-        .all("tags")
+        .all('tags')
         .sort((a, b) => a.data.attributes.position - b.data.attributes.position)
         .reduce((options, object) => {
             if (object.position() === null) {
@@ -18,18 +18,10 @@ function visualiseTags() {
             }
 
             if (object.isChild()) {
-                if (
-                    typeof secondaryTags[
-                    object.data.relationships.parent.data.id
-                    ] === "undefined"
-                ) {
-                    secondaryTags[object.data.relationships.parent.data.id] = [
-                        object.data.id
-                    ];
+                if (typeof secondaryTags[object.data.relationships.parent.data.id] === 'undefined') {
+                    secondaryTags[object.data.relationships.parent.data.id] = [object.data.id];
                 } else {
-                    secondaryTags[
-                        object.data.relationships.parent.data.id
-                    ].push(object.data.id);
+                    secondaryTags[object.data.relationships.parent.data.id].push(object.data.id);
                 }
             } else {
                 options[object.slug()] = object.name();
@@ -39,24 +31,21 @@ function visualiseTags() {
         }, {});
 
     let options = {
-        "": app.translator.trans("fof-byobu.admin.settings.use_tag_slug_no_restriction")
+        '': app.translator.trans('fof-byobu.admin.settings.use_tag_slug_no_restriction'),
     };
 
     for (const prop in tags) {
         options[prop] = tags[prop];
 
-        const tag = app.store.getBy("tags", "slug", prop);
+        const tag = app.store.getBy('tags', 'slug', prop);
 
-        if (
-            tag.isPrimary() &&
-            typeof secondaryTags[tag.data.id] !== "undefined"
-        ) {
+        if (tag.isPrimary() && typeof secondaryTags[tag.data.id] !== 'undefined') {
             secondaryTags[tag.data.id].forEach(subTagId => {
-                const subTag = app.store.getBy("tags", "id", subTagId);
+                const subTag = app.store.getBy('tags', 'id', subTagId);
 
                 // Add "fancy" graphics for child tags
                 // (that space at the start is a double width em space for better displaying)
-                options[subTag.slug()] = " └─ " + subTag.name();
+                options[subTag.slug()] = ' └─ ' + subTag.name();
             });
         }
     }
@@ -65,42 +54,29 @@ function visualiseTags() {
 }
 
 export default () => {
-    app.extensionSettings["fof-byobu"] = () =>
+    app.extensionSettings['fof-byobu'] = () =>
         app.modal.show(
             new SettingsModal({
-                title: "FoF Byōbu",
-                size: "medium",
+                title: 'FoF Byōbu',
+                size: 'medium',
                 items: [
-                    <BooleanItem key="fof-byobu.index_link">
-                        {app.translator.trans(
-                            "fof-byobu.admin.settings.byobu_index"
-                        )}
-                    </BooleanItem>,
-                    <p>
-                        {app.translator.trans(
-                            "fof-byobu.admin.settings.byobu_index_help"
-                        )}
-                    </p>,
+                    <BooleanItem key="fof-byobu.index_link">{app.translator.trans('fof-byobu.admin.settings.byobu_index')}</BooleanItem>,
+                    <p>{app.translator.trans('fof-byobu.admin.settings.byobu_index_help')}</p>,
                     <div className="Form-group">
-                        <label>
-                            {app.translator.trans(
-                                "fof-byobu.admin.settings.use_tag_slug"
-                            )}
-                        </label>
+                        <label>{app.translator.trans('fof-byobu.admin.settings.use_tag_slug')}</label>
 
                         {SelectItem.component({
                             options: visualiseTags(),
-                            key: "fof-byobu.use_tag_slug",
-                            required: false
+                            key: 'fof-byobu.use_tag_slug',
+                            required: false,
                         })}
                     </div>,
                     <p>
-                        {app.translator.trans(
-                            "fof-byobu.admin.settings.use_tag_slug_help",
-                            { no_restriction: app.translator.trans("fof-byobu.admin.settings.use_tag_slug_no_restriction") }
-                        )}
-                    </p>
-                ]
+                        {app.translator.trans('fof-byobu.admin.settings.use_tag_slug_help', {
+                            no_restriction: app.translator.trans('fof-byobu.admin.settings.use_tag_slug_no_restriction'),
+                        })}
+                    </p>,
+                ],
             })
         );
 };

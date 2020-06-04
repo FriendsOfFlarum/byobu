@@ -18,7 +18,7 @@ export default function() {
                 Button.component({
                     children: app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() }),
                     icon: 'far fa-map',
-                    onclick: (e) => {
+                    onclick: e => {
                         e.preventDefault();
 
                         const deferred = m.deferred();
