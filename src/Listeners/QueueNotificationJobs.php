@@ -18,7 +18,6 @@ use FoF\Byobu\Events\DiscussionRecipientRemovedSelf;
 use FoF\Byobu\Events\DiscussionRecipientsChanged;
 use FoF\Byobu\Jobs;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Support\Arr;
 
 class QueueNotificationJobs
 {
