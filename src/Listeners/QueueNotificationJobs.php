@@ -47,7 +47,7 @@ class QueueNotificationJobs
 
         // If the post content contains a postmention, don't notify here, we will assume some other event will handle it.
         $postMentions = Utils::getAttributeValues($event->post->parsedContent, 'POSTMENTION', 'id');
-        if (sizeOf($postMentions) > 0) {
+        if (count($postMentions) > 0) {
             return;
         }
 
