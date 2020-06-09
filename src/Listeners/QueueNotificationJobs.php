@@ -42,12 +42,12 @@ class QueueNotificationJobs
     {
         // stop the notification from firing when events such as flarum/likes or fof/reactions re-save the post.
         if ($event->post->exists) {
-            return;
+            //return;
         }
 
         // If the post content contains a postmention, don't notify here, we will assume some other event will handle it.
         $postMentions = Utils::getAttributeValues($event->post->parsedContent, 'POSTMENTION', 'id');
-        if ($postMentions > 0) {
+        if (sizeOf($postMentions) > 0) {
             return;
         }
 
