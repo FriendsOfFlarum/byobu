@@ -4,9 +4,9 @@ import PrivateDiscussionComposer from './components/PrivateDiscussionComposer';
 import Button from 'flarum/components/Button';
 import ItemList from 'flarum/utils/ItemList';
 
-export default function() {
+export default function () {
     // Add a control allowing the discussion to be moved to another category.
-    extend(UserControls, 'userControls', function(items, user) {
+    extend(UserControls, 'userControls', function (items, user) {
         if (
             app.session.user &&
             app.session.user.id() !== user.id() &&
@@ -18,7 +18,7 @@ export default function() {
                 Button.component({
                     children: app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() }),
                     icon: 'far fa-map',
-                    onclick: e => {
+                    onclick: (e) => {
                         e.preventDefault();
 
                         const deferred = m.deferred();

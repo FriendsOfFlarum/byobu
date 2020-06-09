@@ -6,7 +6,7 @@ export default class RecipientsModified extends EventPost {
         super.initProps(props);
 
         function diff(diff1, diff2, store) {
-            return diff1.filter(item => diff2.indexOf(item) === -1).map(id => app.store.getById(store, id));
+            return diff1.filter((item) => diff2.indexOf(item) === -1).map((id) => app.store.getById(store, id));
         }
 
         const content = props.post.content();

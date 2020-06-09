@@ -6,7 +6,7 @@ import User from 'flarum/models/User';
 import Group from 'flarum/models/Group';
 import ItemList from 'flarum/utils/ItemList';
 
-export default function(app) {
+export default function (app) {
     // Add recipient-selection abilities to the discussion composer.
     PrivateDiscussionComposer.prototype.recipients = new ItemList();
     PrivateDiscussionComposer.prototype.recipientUsers = [];
@@ -14,7 +14,7 @@ export default function(app) {
 
     // Add the session user as a recipient
     // If the composer is triggered from a different user page, add them as a recipient
-    PrivateDiscussionComposer.prototype.addDefaultRecipients = function(username) {
+    PrivateDiscussionComposer.prototype.addDefaultRecipients = function (username) {
         const user = app.store.getBy('users', 'username', username);
 
         this.recipients.add('users:' + app.session.user.id(), app.session.user);
@@ -24,12 +24,12 @@ export default function(app) {
     };
 
     // Add a recipient selection modal when clicking the recipient tag label.
-    PrivateDiscussionComposer.prototype.chooseRecipients = function() {
+    PrivateDiscussionComposer.prototype.chooseRecipients = function () {
         //const actorRecipientClassName = '.RecipientsInput-selected > .RecipientLabel:first-child';
         app.modal.show(
             new AddRecipientModal({
                 selectedRecipients: this.recipients,
-                onsubmit: recipients => {
+                onsubmit: (recipients) => {
                     this.recipients = recipients;
 
                     // Focus on recipient autocomplete field.
@@ -42,7 +42,7 @@ export default function(app) {
 
     // Add a tag-selection menu to the discussion composer's header, after the
     // title.
-    extend(PrivateDiscussionComposer.prototype, 'headerItems', function(items) {
+    extend(PrivateDiscussionComposer.prototype, 'headerItems', function (items) {
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
             const recipients = this.recipients.toArray();
 
@@ -61,10 +61,10 @@ export default function(app) {
     });
 
     // Add the selected tags as data to submit to the server.
-    extend(PrivateDiscussionComposer.prototype, 'data', function(data) {
+    extend(PrivateDiscussionComposer.prototype, 'data', function (data) {
         const users = [];
         const groups = [];
-        this.recipients.toArray().forEach(recipient => {
+        this.recipients.toArray().forEach((recipient) => {
             if (recipient instanceof User) {
                 users.push(recipient);
             }

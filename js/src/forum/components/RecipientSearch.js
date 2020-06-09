@@ -15,14 +15,14 @@ export default class RecipientSearch extends Search {
 
         const $search = this;
 
-        this.$('.Search-results').on('click', e => {
+        this.$('.Search-results').on('click', (e) => {
             const target = this.$('.SearchResult.active');
 
             $search.addRecipient(target.data('index'));
             $search.$('.RecipientsInput').focus();
         });
 
-        this.$('.Search-results').on('touchstart', e => {
+        this.$('.Search-results').on('touchstart', (e) => {
             const target = this.$(e.target.parentNode);
 
             $search.addRecipient(target.data('index'));
@@ -70,7 +70,7 @@ export default class RecipientSearch extends Search {
                     this.props
                         .selected()
                         .toArray()
-                        .map(recipient =>
+                        .map((recipient) =>
                             recipientLabel(recipient, {
                                 onclick: () => {
                                     this.removeRecipient(recipient);
@@ -87,7 +87,7 @@ export default class RecipientSearch extends Search {
                             active: !!this.value(),
                             loading: !!this.loadingSources,
                         }),
-                    config: function(element) {
+                    config: function (element) {
                         element.focus();
                     },
                     type: 'search',
@@ -108,7 +108,7 @@ export default class RecipientSearch extends Search {
                     },
                     !this.doSearch
                         ? LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' })
-                        : this.sources.map(source => source.view(this.value()))
+                        : this.sources.map((source) => source.view(this.value()))
                 ),
             ]
         );

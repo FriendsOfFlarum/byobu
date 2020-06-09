@@ -14,7 +14,7 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
         }
 
         if (app.forum.attribute('byobuTag') && app.forum.attribute('byobuTag').length > 0) {
-            extend(PrivateDiscussionComposer.prototype, 'headerItems', function(items) {
+            extend(PrivateDiscussionComposer.prototype, 'headerItems', function (items) {
                 items.remove('tags');
             });
         }
@@ -56,7 +56,7 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
             app.store
                 .createRecord('discussions')
                 .save(data)
-                .then(discussion => {
+                .then((discussion) => {
                     if (app.cache.discussionList) {
                         //app.cache.discussionList.addDiscussion(discussion);
                         app.cache.discussionList.refresh();

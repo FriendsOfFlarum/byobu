@@ -1,8 +1,8 @@
 import { extend } from 'flarum/extend';
 import PermissionGrid from 'flarum/components/PermissionGrid';
 
-export default function() {
-    extend(PermissionGrid.prototype, 'startItems', items => {
+export default function () {
+    extend(PermissionGrid.prototype, 'startItems', (items) => {
         items.add(
             'startPrivateUsers',
             {
@@ -31,7 +31,7 @@ export default function() {
             95
         );
     });
-    extend(PermissionGrid.prototype, 'replyItems', items => {
+    extend(PermissionGrid.prototype, 'replyItems', (items) => {
         items.add(
             'makePrivatePublic',
             {
@@ -42,7 +42,7 @@ export default function() {
             95
         );
     });
-    extend(PermissionGrid.prototype, 'moderateItems', items => {
+    extend(PermissionGrid.prototype, 'moderateItems', (items) => {
         items.add(
             'editUserRecipients',
             {

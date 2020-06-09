@@ -34,10 +34,10 @@ export default class AddRecipientModal extends Modal {
     }
 
     assignInitialRecipients(discussion) {
-        discussion.recipientUsers().map(user => {
+        discussion.recipientUsers().map((user) => {
             this.selected().add('users:' + user.id(), user);
         });
-        discussion.recipientGroups().map(group => {
+        discussion.recipientGroups().map((group) => {
             this.selected().add('groups:' + group.id(), group);
         });
     }
@@ -104,7 +104,7 @@ export default class AddRecipientModal extends Modal {
         let recipientGroups = [];
         let recipientUsers = [];
 
-        recipients.toArray().forEach(recipient => {
+        recipients.toArray().forEach((recipient) => {
             if (recipient instanceof User) {
                 recipientUsers.push(recipient);
             }

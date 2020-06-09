@@ -23,7 +23,7 @@ import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessio
 export * from '../common/helpers';
 export * from './components';
 
-app.initializers.add('fof-byobu', function(app) {
+app.initializers.add('fof-byobu', function (app) {
     //app.routes['private_discussions'] = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
 
     Discussion.prototype.recipientUsers = Model.hasMany('recipientUsers');
@@ -61,7 +61,7 @@ app.initializers.add('fof-byobu', function(app) {
     app.notificationComponents.byobuMadePublic = PrivateDiscussionMadePublicNotification;
 
     // Add notification preferences.
-    extend(NotificationGrid.prototype, 'notificationTypes', function(items) {
+    extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
         items.add('byobuPrivateDiscussionCreated', {
             name: 'byobuPrivateDiscussionCreated',
             icon: 'fas fa-map',

@@ -5,8 +5,8 @@ import DiscussionHero from 'flarum/components/DiscussionHero';
 import DiscussionList from 'flarum/components/DiscussionList';
 import recipientsLabel from '../common/helpers/recipientsLabel';
 
-export default function() {
-    const addToDiscussion = function(discussion, items, long) {
+export default function () {
+    const addToDiscussion = function (discussion, items, long) {
         let recipients = [];
 
         if (discussion.recipientUsers().length) {
@@ -29,7 +29,7 @@ export default function() {
     /**
      * Adds User labels on the discussion index page.
      */
-    extend(DiscussionListItem.prototype, 'infoItems', function(items) {
+    extend(DiscussionListItem.prototype, 'infoItems', function (items) {
         const discussion = this.props.discussion;
 
         addToDiscussion(discussion, items, true);
@@ -38,11 +38,11 @@ export default function() {
     /**
      * Require recipients from the API whenever we're loading a Discussion page.
      */
-    extend(DiscussionPage.prototype, 'params', function(params) {
+    extend(DiscussionPage.prototype, 'params', function (params) {
         params.include.push('recipientUsers');
         params.include.push('recipientGroups');
     });
-    extend(DiscussionList.prototype, 'requestParams', function(params) {
+    extend(DiscussionList.prototype, 'requestParams', function (params) {
         params.include.push('recipientUsers');
         params.include.push('recipientGroups');
     });
@@ -50,7 +50,7 @@ export default function() {
     /**
      * Adds User labels on the discussion Hero.
      */
-    extend(DiscussionHero.prototype, 'items', function(items) {
+    extend(DiscussionHero.prototype, 'items', function (items) {
         const discussion = this.props.discussion;
 
         addToDiscussion(discussion, items, false);
@@ -59,7 +59,7 @@ export default function() {
     /**
      * Adds 'hasPrivateMessages' to the class, if we're looking at a private discussion.
      */
-    extend(DiscussionHero.prototype, 'config', function(isInitialized, context, items) {
+    extend(DiscussionHero.prototype, 'config', function (isInitialized, context, items) {
         if (isInitialized || context || !app.forum.attribute('byobuTag')) {
             return;
         }
@@ -72,11 +72,11 @@ export default function() {
             const recipients = 'item-recipients';
 
             const classes = [];
-            Object.keys(children).forEach(item => {
+            Object.keys(children).forEach((item) => {
                 classes.push(children[item].className);
             });
 
-            const privateDiscussion = classes.filter(i => i === recipients);
+            const privateDiscussion = classes.filter((i) => i === recipients);
 
             if (privateDiscussion.length) {
                 items[0].className = `${items[0].className} isPrivateDiscussion`;
@@ -95,8 +95,6 @@ export default function() {
         const tagsClassName = '.item-tags';
         const recipientsClassName = '.DiscussionListItem-info > .item-recipients';
 
-        $(recipientsClassName)
-            .prev(tagsClassName)
-            .css('display', 'none');
+        $(recipientsClassName).prev(tagsClassName).css('display', 'none');
     });
 }

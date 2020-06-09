@@ -3,10 +3,10 @@ import UserPage from 'flarum/components/UserPage';
 import LinkButton from 'flarum/components/LinkButton';
 import PrivateDiscussionsUserPage from './components/PrivateDiscussionsUserPage';
 
-export default function() {
+export default function () {
     app.routes['user.byobu'] = { path: '/u/:username/byobu', component: PrivateDiscussionsUserPage.component() };
 
-    extend(UserPage.prototype, 'navItems', function(items) {
+    extend(UserPage.prototype, 'navItems', function (items) {
         const href = app.route('user.byobu', { username: this.user.username() });
 
         // Hide links from guests if they are not already on the page

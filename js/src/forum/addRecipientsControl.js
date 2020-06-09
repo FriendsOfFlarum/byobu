@@ -7,9 +7,9 @@ import Button from 'flarum/components/Button';
 
 import AddRecipientModal from './components/AddRecipientModal';
 
-export default function() {
+export default function () {
     // Add a control allowing the discussion to be moved to another category.
-    extend(DiscussionControls, 'moderationControls', function(items, discussion) {
+    extend(DiscussionControls, 'moderationControls', function (items, discussion) {
         if (discussion.canEditRecipients()) {
             items.add(
                 'recipients',
@@ -48,7 +48,7 @@ export default function() {
                     onclick: () => {
                         if (discussion) {
                             let recipients = new ItemList();
-                            discussion.recipientUsers().map(user => {
+                            discussion.recipientUsers().map((user) => {
                                 if (app.session.user.id() !== user.id()) {
                                     recipients.add('users:' + user.id(), user);
                                 }
@@ -57,7 +57,7 @@ export default function() {
                             let recipientGroups = [];
                             let recipientUsers = [];
 
-                            recipients.toArray().forEach(recipient => {
+                            recipients.toArray().forEach((recipient) => {
                                 if (recipient instanceof User) {
                                     recipientUsers.push(recipient);
                                 }

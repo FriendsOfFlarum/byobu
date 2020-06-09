@@ -3,7 +3,7 @@ import Discussion from 'flarum/models/Discussion';
 import Badge from 'flarum/components/Badge';
 
 export default function addHasRecipientsBadge() {
-    extend(Discussion.prototype, 'badges', function(badges) {
+    extend(Discussion.prototype, 'badges', function (badges) {
         if (this.recipientUsers().length || this.recipientGroups().length) {
             badges.add(
                 'private',

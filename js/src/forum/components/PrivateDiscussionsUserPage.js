@@ -124,8 +124,8 @@ export default class PrivateDiscussionsUserPage extends UserPage {
             'sort',
             Dropdown.component({
                 buttonClassName: 'Button',
-                label: sortOptions[this.sort] || Object.keys(sortMap).map(key => sortOptions[key])[0],
-                children: Object.keys(sortOptions).map(value => {
+                label: sortOptions[this.sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0],
+                children: Object.keys(sortOptions).map((value) => {
                     const label = sortOptions[value];
                     const active = (this.sort || Object.keys(sortMap)[0]) === value;
 

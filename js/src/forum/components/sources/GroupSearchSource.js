@@ -11,19 +11,13 @@ export default class GroupSearchSource {
     view(query) {
         query = query.toLowerCase();
 
-        const results = app.store.all('groups').filter(
-            group =>
-                group
-                    .namePlural()
-                    .toLowerCase()
-                    .substr(0, query.length) === query
-        );
+        const results = app.store.all('groups').filter((group) => group.namePlural().toLowerCase().substr(0, query.length) === query);
 
         if (!results.length) return '';
 
         return [
             <li className="Dropdown-header">{app.translator.trans('fof-byobu.forum.search.headings.groups')}</li>,
-            results.map(group => {
+            results.map((group) => {
                 const groupName = group.namePlural();
                 var name = highlight(groupName, query);
 

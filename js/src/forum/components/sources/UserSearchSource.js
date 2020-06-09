@@ -25,7 +25,7 @@ export default class UserSearchSource {
         } else
             return [
                 <li className="Dropdown-header">{app.translator.trans('core.forum.search.users_heading')}</li>,
-                app.cache.byobuResults[this.query].map(user => {
+                app.cache.byobuResults[this.query].map((user) => {
                     const name = username(user);
                     name.children[0] = highlight(name.children[0], this.query);
 
@@ -42,7 +42,7 @@ export default class UserSearchSource {
     }
 
     pushResults(results) {
-        results.payload.data.map(result => {
+        results.payload.data.map((result) => {
             var user = app.store.getById('users', result.id);
             app.cache.byobuResults[this.query].push(user);
         });

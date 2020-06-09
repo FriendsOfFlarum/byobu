@@ -40,7 +40,7 @@ function visualiseTags() {
         const tag = app.store.getBy('tags', 'slug', prop);
 
         if (tag.isPrimary() && typeof secondaryTags[tag.data.id] !== 'undefined') {
-            secondaryTags[tag.data.id].forEach(subTagId => {
+            secondaryTags[tag.data.id].forEach((subTagId) => {
                 const subTag = app.store.getBy('tags', 'id', subTagId);
 
                 // Add "fancy" graphics for child tags

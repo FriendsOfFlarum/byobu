@@ -4,7 +4,7 @@ import SessionDropdown from 'flarum/components/SessionDropdown';
 import IndexPage from 'flarum/components/IndexPage';
 
 export default () => {
-    extend(SessionDropdown.prototype, 'items', items => {
+    extend(SessionDropdown.prototype, 'items', (items) => {
         const user = app.session.user;
 
         items.add(
@@ -18,7 +18,7 @@ export default () => {
         );
     });
 
-    extend(IndexPage.prototype, 'navItems', items => {
+    extend(IndexPage.prototype, 'navItems', (items) => {
         const user = app.session.user;
 
         if (app.forum.attribute('byobuOnIndex') && user) {

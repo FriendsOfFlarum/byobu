@@ -39,7 +39,7 @@ export default class PrivateDiscussionIndex extends Page {
             // are currently present in the cached discussion list. If they differ, we
             // will clear the cache and set up a new discussion list component with
             // the new parameters.
-            Object.keys(params).some(key => {
+            Object.keys(params).some((key) => {
                 if (app.cache.privateDiscussionList.props.params[key] !== params[key]) {
                     app.cache.privateDiscussionList = null;
                     return true;
