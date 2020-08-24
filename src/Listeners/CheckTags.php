@@ -16,7 +16,6 @@ use Flarum\Extension\ExtensionManager;
 use Flarum\Foundation\ValidationException;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
-use FoF\Byobu\TagPlus;
 use Illuminate\Support\Arr;
 
 class CheckTags
@@ -63,7 +62,7 @@ class CheckTags
                     })
                     ->count() === count($tagIds);
 
-                if (! $matches) {
+                if (!$matches) {
                     throw new ValidationException(['byobu' => 'Incorrect tags have been assigned to the private discussion']);
                 }
             }
