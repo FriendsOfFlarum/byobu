@@ -7,7 +7,7 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
     oninit(vnode) {
         super.oninit(vnode);
 
-        app.composer.fields.recipients = app.composer.fields.recipients = new ItemList()
+        app.composer.fields.recipients = app.composer.fields.recipients = new ItemList();
 
         const username = m.route.param('username');
 
@@ -20,6 +20,10 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
                 items.remove('tags');
             });
         }
+    }
+
+    getRecipientArr() {
+        return app.composer.fields.recipients ? app.composer.fields.recipients.toArray() : [];
     }
 
     chooseRecipients() {

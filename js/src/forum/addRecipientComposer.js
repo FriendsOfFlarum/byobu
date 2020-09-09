@@ -1,10 +1,8 @@
 import { extend, override } from 'flarum/extend';
 import PrivateDiscussionComposer from './components/PrivateDiscussionComposer';
-import AddRecipientModal from './components/AddRecipientModal';
 import recipientCountLabel from '../common/helpers/recipientCountLabel';
 import User from 'flarum/models/User';
 import Group from 'flarum/models/Group';
-import ItemList from 'flarum/utils/ItemList';
 
 export default function (app) {
     // Add recipient-selection abilities to the discussion composer.
@@ -26,7 +24,7 @@ export default function (app) {
     // title.
     extend(PrivateDiscussionComposer.prototype, 'headerItems', function (items) {
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
-            const recipients = app.composer.fields.recipients.toArray();
+            const recipients = this.getRecipientArr();
 
             items.add(
                 'recipients',
@@ -46,7 +44,7 @@ export default function (app) {
     extend(PrivateDiscussionComposer.prototype, 'data', function (data) {
         const users = [];
         const groups = [];
-        app.composer.fields.recipients.toArray().forEach((recipient) => {
+        this.getRecipientArr().forEach((recipient) => {
             if (recipient instanceof User) {
                 users.push(recipient);
             }
