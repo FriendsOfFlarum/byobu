@@ -16,8 +16,7 @@ export default function recipientLabel(recipient, attrs = {}) {
 
         if (link) {
             attrs.title = recipient.username() || '';
-            attrs.href = app.route.user(recipient);
-            attrs.config = m.route;
+            attrs.route = app.route.user(recipient);
         }
     } else if (recipient instanceof Group) {
         label = recipient.namePlural();
