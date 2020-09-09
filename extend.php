@@ -83,6 +83,9 @@ return [
                 ->wherePivot('removed_at', null);
         }),
 
+    (new Native\View())
+        ->namespace('fof-byobu', __DIR__ . '/resources/views'),
+
     function (Dispatcher $events) {
         $events->subscribe(Access\DiscussionPolicy::class);
         $events->subscribe(Listeners\AddApiAttributes::class);
@@ -106,9 +109,5 @@ return [
             $event->add(Notifications\DiscussionAddedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
             $event->add(Notifications\DiscussionMadePublicBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
-    },
-
-    function (Factory $views) {
-        $views->addNamespace('fof-byobu', __DIR__.'/resources/views');
     },
 ];
