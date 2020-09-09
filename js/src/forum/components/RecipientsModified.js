@@ -2,29 +2,29 @@ import EventPost from 'flarum/components/EventPost';
 import recipientsLabel from '../../common/helpers/recipientsLabel';
 
 export default class RecipientsModified extends EventPost {
-    static initProps(props) {
-        super.initProps(props);
+    static initAttrs(attrs) {
+        super.initAttrs(attrs);
 
         function diff(diff1, diff2, store) {
             return diff1.filter((item) => diff2.indexOf(item) === -1).map((id) => app.store.getById(store, id));
         }
 
-        const content = props.post.content();
+        const content = attrs.post.content();
 
         // For event posts existing before groups functionality.
         if (!content['new'] && content.length == 2) {
-            const oldRecipients = props.post.content()[0];
-            const newRecipients = props.post.content()[1];
-            props.added = diff(newRecipients, oldRecipients, 'users');
-            props.removed = diff(oldRecipients, newRecipients, 'users');
+            const oldRecipients = attrs.post.content()[0];
+            const newRecipients = attrs.post.content()[1];
+            attrs.added = diff(newRecipients, oldRecipients, 'users');
+            attrs.removed = diff(oldRecipients, newRecipients, 'users');
         } else {
             var usersAdded = diff(content['new']['users'], content['old']['users'], 'users');
             var usersRemoved = diff(content['old']['users'], content['new']['users'], 'users');
             var groupsAdded = diff(content['new']['groups'], content['old']['groups'], 'groups');
             var groupsRemoved = diff(content['old']['groups'], content['new']['groups'], 'groups');
 
-            props.added = usersAdded.concat(groupsAdded);
-            props.removed = usersRemoved.concat(groupsRemoved);
+            attrs.added = usersAdded.concat(groupsAdded);
+            attrs.removed = usersRemoved.concat(groupsRemoved);
         }
     }
 
@@ -35,8 +35,8 @@ export default class RecipientsModified extends EventPost {
     descriptionKey() {
         var localeBase = 'fof-byobu.forum.post.recipients_modified.';
 
-        if (this.props.added.length) {
-            if (this.props.removed.length) {
+        if (this.attrs.added.length) {
+            if (this.attrs.removed.length) {
                 return localeBase + 'added_and_removed';
             }
 
@@ -49,12 +49,12 @@ export default class RecipientsModified extends EventPost {
     descriptionData() {
         const data = {};
 
-        if (this.props.added.length) {
-            data.added = recipientsLabel(this.props.added, { link: true });
+        if (this.attrs.added.length) {
+            data.added = recipientsLabel(this.attrs.added, { link: true });
         }
 
-        if (this.props.removed.length) {
-            data.removed = recipientsLabel(this.props.removed, { link: true });
+        if (this.attrs.removed.length) {
+            data.removed = recipientsLabel(this.attrs.removed, { link: true });
         }
 
         return data;

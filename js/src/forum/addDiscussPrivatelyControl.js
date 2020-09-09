@@ -16,35 +16,30 @@ export default function () {
             items.add(
                 'private-discussion',
                 Button.component({
-                    children: app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() }),
                     icon: 'far fa-map',
                     onclick: (e) => {
                         e.preventDefault();
 
-                        const deferred = m.deferred();
+                        return new Promise((resolve) => {
+                            let recipients = new ItemList();
+                            recipients.add('users:' + app.session.user.id(), app.session.user);
+                            recipients.add('users:' + user.id(), user);
 
-                        let recipients = new ItemList();
-                        recipients.add('users:' + app.session.user.id(), app.session.user);
-                        recipients.add('users:' + user.id(), user);
+                            PrivateDiscussionComposer.prototype.recipients = recipients;
 
-                        PrivateDiscussionComposer.prototype.recipients = recipients;
+                            app.composer.load(PrivateDiscussionComposer, {
+                                user: app.session.user,
+                                recipients: recipients,
+                                recipientUsers: recipients,
+                                titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                                submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
+                            });
+                            app.composer.show();
 
-                        const component = new PrivateDiscussionComposer({
-                            user: app.session.user,
-                            recipients: recipients,
-                            recipientUsers: recipients,
-                            titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                            submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
-                        });
-
-                        app.composer.load(component);
-                        app.composer.show();
-
-                        deferred.resolve(component);
-
-                        return deferred.promise;
+                            return resolve(app.composer);
+                        })
                     },
-                })
+                }, app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() }))
             );
         }
 

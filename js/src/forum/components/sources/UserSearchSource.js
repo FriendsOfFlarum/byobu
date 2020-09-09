@@ -27,13 +27,13 @@ export default class UserSearchSource {
                 <li className="Dropdown-header">{app.translator.trans('core.forum.search.users_heading')}</li>,
                 app.cache.byobuResults[this.query].map((user) => {
                     const name = username(user);
-                    name.children[0] = highlight(name.children[0], this.query);
+                    const children = [highlight(name.text, this.query)];
 
                     return (
                         <li className="SearchResult" data-index={'users:' + user.id()}>
                             <a data-index={'users:' + user.id()}>
                                 {avatar(user)}
-                                {name}
+                                {{...name, text: undefined, children}}
                             </a>
                         </li>
                     );

@@ -11,9 +11,8 @@ export default () => {
             'privateDiscussions',
             LinkButton.component({
                 icon: 'fas fa-map',
-                children: app.translator.trans('fof-byobu.forum.user.dropdown_label'),
                 href: app.route('user.byobu', { username: user.username() }),
-            }),
+            }, app.translator.trans('fof-byobu.forum.user.dropdown_label')),
             99
         );
     });
@@ -26,9 +25,8 @@ export default () => {
                 'privateDiscussions',
                 LinkButton.component({
                     icon: 'fas fa-map',
-                    children: app.translator.trans('fof-byobu.forum.user.dropdown_label'),
                     href: app.route('user.byobu', { username: user.username() }),
-                }),
+                }, app.translator.trans('fof-byobu.forum.user.dropdown_label')),
                 75
             );
         }
