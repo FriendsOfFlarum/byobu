@@ -2,6 +2,7 @@ import Modal from 'flarum/components/Modal';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 import Button from 'flarum/components/Button';
 import ItemList from 'flarum/utils/ItemList';
+import Stream from 'flarum/utils/Stream';
 import SearchState from 'flarum/states/SearchState';
 import RecipientSearch from './RecipientSearch';
 import User from 'flarum/models/User';
@@ -11,7 +12,7 @@ export default class AddRecipientModal extends Modal {
     oninit(vnode) {
         super.oninit(vnode);
 
-        this.selected = m.stream(new ItemList());
+        this.selected = Stream(new ItemList());
 
         if (this.attrs.discussion) {
             // Adds recipients of the currently viewed discussion.
