@@ -24,7 +24,6 @@ use Flarum\User\User;
 use FoF\Components\Extend\AddFofComponents;
 use FoF\Split\Events\DiscussionWasSplit;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\View\Factory;
 
 return [
     new AddFofComponents(),
