@@ -10,8 +10,8 @@ import User from 'flarum/models/User';
 import Group from 'flarum/models/Group';
 
 export default class RecipientSearch extends Search {
-    config(isInitialized) {
-        if (isInitialized) return;
+    oncreate(vnode) {
+        super.oncreate(vnode);
 
         const $search = this;
 
@@ -42,15 +42,16 @@ export default class RecipientSearch extends Search {
                 clearTimeout(this.typingTimer);
             });
 
-        super.config(isInitialized);
+
+        super.oncreate(vnode);
     }
 
     view() {
-        if (typeof this.value() === 'undefined') {
-            this.value('');
+        if (typeof this.state.getValue() === 'undefined') {
+            this.state.setValue('');
         }
 
-        const loading = this.value() && this.value().length >= 3;
+        const loading = this.state.getValue() && this.state.getValue().length >= 3;
 
         if (!this.sources) {
             this.sources = this.sourceItems().toArray();
@@ -67,7 +68,7 @@ export default class RecipientSearch extends Search {
                     {
                         className: 'RecipientsInput-selected RecipientsLabel',
                     },
-                    this.props
+                    this.attrs
                         .selected()
                         .toArray()
                         .map((recipient) =>
@@ -82,18 +83,18 @@ export default class RecipientSearch extends Search {
                     className:
                         'RecipientsInput FormControl ' +
                         classList({
-                            open: !!this.value(),
-                            focused: !!this.value(),
-                            active: !!this.value(),
+                            open: !!this.state.getValue(),
+                            focused: !!this.state.getValue(),
+                            active: !!this.state.getValue(),
                             loading: !!this.loadingSources,
                         }),
-                    config: function (element) {
-                        element.focus();
+                    oncreate: function (vnode) {
+                        vnode.dom.focus();
                     },
                     type: 'search',
                     placeholder: extractText(app.translator.trans('fof-byobu.forum.input.search_recipients')),
-                    value: this.value(),
-                    oninput: m.withAttr('value', this.value),
+                    value: this.state.getValue(),
+                    oninput: e => this.state.setValue(e.target.value),
                     onfocus: () => (this.hasFocus = true),
                     onblur: () => (this.hasFocus = false),
                 }),
@@ -108,7 +109,7 @@ export default class RecipientSearch extends Search {
                     },
                     !this.doSearch
                         ? LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' })
-                        : this.sources.map((source) => source.view(this.value()))
+                        : this.sources.map((source) => source.view(this.state.getValue()))
                 ),
             ]
         );
@@ -124,30 +125,21 @@ export default class RecipientSearch extends Search {
 
         // Add user source based on permissions.
         if (
-            (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithUsers')) ||
-            (this.props.discussion && this.props.discussion.canEditUserRecipients())
+            (!this.attrs.discussion && app.forum.attribute('canStartPrivateDiscussionWithUsers')) ||
+            (this.attrs.discussion && this.attrs.discussion.canEditUserRecipients())
         ) {
             items.add('users', new UserSearchSource());
         }
 
         // Add group source based on permissions.
         if (
-            (!this.props.discussion && app.forum.attribute('canStartPrivateDiscussionWithGroups')) ||
-            (this.props.discussion && this.props.discussion.canEditGroupRecipients())
+            (!this.attrs.discussion && app.forum.attribute('canStartPrivateDiscussionWithGroups')) ||
+            (this.attrs.discussion && this.attrs.discussion.canEditGroupRecipients())
         ) {
             items.add('groups', new GroupSearchSource());
         }
 
         return items;
-    }
-
-    /**
-     * Clear the search input and the current controller's active search.
-     */
-    clear() {
-        this.value('');
-
-        m.redraw();
     }
 
     /**
@@ -162,9 +154,9 @@ export default class RecipientSearch extends Search {
 
         let recipient = this.findRecipient(type, id);
 
-        this.props.selected().add(value, recipient);
+        this.attrs.selected().add(value, recipient);
 
-        this.clear();
+        this.state.clear();
     }
 
     /**
@@ -182,7 +174,7 @@ export default class RecipientSearch extends Search {
             type = 'groups';
         }
 
-        this.props.selected().remove(type + ':' + recipient.id());
+        this.attrs.selected().remove(type + ':' + recipient.id());
 
         m.redraw();
     }

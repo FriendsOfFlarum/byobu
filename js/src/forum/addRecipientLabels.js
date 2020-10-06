@@ -2,7 +2,7 @@ import { extend } from 'flarum/extend';
 import DiscussionListItem from 'flarum/components/DiscussionListItem';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 import DiscussionHero from 'flarum/components/DiscussionHero';
-import DiscussionList from 'flarum/components/DiscussionList';
+import DiscussionListState from 'flarum/states/DiscussionListState';
 import recipientsLabel from '../common/helpers/recipientsLabel';
 
 export default function () {
@@ -30,7 +30,7 @@ export default function () {
      * Adds User labels on the discussion index page.
      */
     extend(DiscussionListItem.prototype, 'infoItems', function (items) {
-        const discussion = this.props.discussion;
+        const discussion = this.attrs.discussion;
 
         addToDiscussion(discussion, items, true);
     });
@@ -42,7 +42,7 @@ export default function () {
         params.include.push('recipientUsers');
         params.include.push('recipientGroups');
     });
-    extend(DiscussionList.prototype, 'requestParams', function (params) {
+    extend(DiscussionListState.prototype, 'requestParams', function (params) {
         params.include.push('recipientUsers');
         params.include.push('recipientGroups');
     });
@@ -51,7 +51,7 @@ export default function () {
      * Adds User labels on the discussion Hero.
      */
     extend(DiscussionHero.prototype, 'items', function (items) {
-        const discussion = this.props.discussion;
+        const discussion = this.attrs.discussion;
 
         addToDiscussion(discussion, items, false);
     });
@@ -59,12 +59,10 @@ export default function () {
     /**
      * Adds 'hasPrivateMessages' to the class, if we're looking at a private discussion.
      */
-    extend(DiscussionHero.prototype, 'config', function (isInitialized, context, items) {
-        if (isInitialized || context || !app.forum.attribute('byobuTag')) {
-            return;
-        }
+    extend(DiscussionHero.prototype, 'oncreate', function () {
+        if (!app.forum.attribute('byobuTag')) return;
 
-        const { discussion } = this.props;
+        const { discussion } = this.attrs;
 
         if (discussion.recipientUsers().length || discussion.recipientGroups().length) {
             const items = document.getElementsByClassName('DiscussionHero-items');
@@ -87,10 +85,8 @@ export default function () {
     /**
      * Remove tag from private discussions in discussion list
      */
-    extend(DiscussionListItem.prototype, 'config', (isInitialized, context) => {
-        if (isInitialized || context || !app.forum.attribute('byobuTag')) {
-            return;
-        }
+    extend(DiscussionListItem.prototype, 'oncreate', () => {
+        if (!app.forum.attribute('byobuTag')) return;
 
         const tagsClassName = '.item-tags';
         const recipientsClassName = '.DiscussionListItem-info > .item-recipients';

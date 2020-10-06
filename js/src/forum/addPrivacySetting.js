@@ -7,10 +7,17 @@ export default function () {
         items.add(
             'byobu-block-dm',
             Switch.component({
-                children: app.translator.trans('fof-byobu.forum.user.settings.block_pd'),
                 state: this.user.preferences().blocksPd,
-                onchange: (value, component) => this.preferenceSaver('blocksPd')(value, component),
-            })
+                onchange: (value) => {
+                    this.blocksPdLoading = true;
+
+                    this.user.savePreferences({ blocksPd: value }).then(() => {
+                        this.blocksPdLoading = false;
+                        m.redraw();
+                    });
+                },
+                loading: this.blocksPdLoading
+            }, app.translator.trans('fof-byobu.forum.user.settings.block_pd'))
         );
     });
 }

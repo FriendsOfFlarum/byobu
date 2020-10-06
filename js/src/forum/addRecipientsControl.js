@@ -14,10 +14,9 @@ export default function () {
             items.add(
                 'recipients',
                 Button.component({
-                    children: app.translator.trans('fof-byobu.forum.buttons.edit_recipients'),
                     icon: 'far fa-map',
-                    onclick: () => app.modal.show(new AddRecipientModal({ discussion })),
-                })
+                    onclick: () => app.modal.show(AddRecipientModal, { discussion }),
+                }, app.translator.trans('fof-byobu.forum.buttons.edit_recipients'))
             );
         }
 
@@ -25,7 +24,6 @@ export default function () {
             items.add(
                 'make_public',
                 Button.component({
-                    children: app.translator.trans('fof-byobu.forum.buttons.make_public'),
                     icon: 'far fa-eye',
                     onclick: () => {
                         if (discussion && confirm(app.translator.trans('fof-byobu.forum.confirm.make_public'))) {
@@ -35,7 +33,7 @@ export default function () {
                             discussion.save({ relationships: { recipientUsers, recipientGroups } }).then(() => m.redraw());
                         }
                     },
-                })
+                }, app.translator.trans('fof-byobu.forum.buttons.make_public'))
             );
         }
 
@@ -43,7 +41,6 @@ export default function () {
             items.add(
                 'remove',
                 Button.component({
-                    children: app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion'),
                     icon: 'fas fa-user-slash',
                     onclick: () => {
                         if (discussion) {
@@ -69,7 +66,7 @@ export default function () {
                             discussion.save({ relationships: { recipientUsers, recipientGroups } }).then(() => app.history.back());
                         }
                     },
-                })
+                }, app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion'))
             );
         }
     });

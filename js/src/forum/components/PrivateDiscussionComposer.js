@@ -1,11 +1,13 @@
 import { extend } from 'flarum/extend';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 import AddRecipientModal from './AddRecipientModal';
+import ItemList from 'flarum/utils/ItemList';
 
 export default class PrivateDiscussionComposer extends DiscussionComposer {
-    init() {
-        super.init();
-        this.chooseRecipients();
+    oninit(vnode) {
+        super.oninit(vnode);
+
+        app.composer.fields.recipients = app.composer.fields.recipients = new ItemList();
 
         const username = m.route.param('username');
 
@@ -20,17 +22,32 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
         }
     }
 
+    getRecipientArr() {
+        return app.composer.fields.recipients ? app.composer.fields.recipients.toArray() : [];
+    }
+
+    chooseRecipients() {
+        //const actorRecipientClassName = '.RecipientsInput-selected > .RecipientLabel:first-child';
+        app.modal.show(AddRecipientModal, {
+            selectedRecipients: app.composer.fields.recipients,
+            onsubmit: (recipients) => {
+                app.composer.fields.recipients = recipients;
+
+                // Focus on recipient autocomplete field.
+                this.$('.RecipientsInput').focus();
+            },
+        }
+        );
+        //$(actorRecipientClassName).css('display', 'none');
+    }
+
     onsubmit() {
         this.loading = true;
 
-        const recipients = this.recipients.toArray();
+        const recipients = app.composer.fields.recipients.toArray();
 
         if (recipients.length < 2) {
-            app.modal.show(
-                new AddRecipientModal({
-                    selectedRecipients: this.recipients,
-                })
-            );
+            app.modal.show(AddRecipientModal, { selectedRecipients: app.composer.fields.recipients });
 
             this.loading = false;
         } else {
@@ -62,7 +79,7 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
                         app.cache.discussionList.refresh();
                     }
                     //this.loading = false;
-                    m.route(app.route.discussion(discussion));
+                    m.route.set(app.route.discussion(discussion));
 
                     app.composer.hide();
                 }, this.loaded.bind(this));

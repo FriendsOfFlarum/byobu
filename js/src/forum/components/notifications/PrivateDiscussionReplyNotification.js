@@ -6,7 +6,7 @@ export default class PrivateDiscussionReplyNotification extends Notification {
     }
 
     href() {
-        const notification = this.props.notification;
+        const notification = this.attrs.notification;
         const discussion = notification.subject();
         const content = notification.content() || {};
 
@@ -14,7 +14,7 @@ export default class PrivateDiscussionReplyNotification extends Notification {
     }
 
     content() {
-        const user = this.props.notification.fromUser();
+        const user = this.attrs.notification.fromUser();
         return app.translator.trans('fof-byobu.forum.notifications.pd_reply_text', {
             user: user,
         });

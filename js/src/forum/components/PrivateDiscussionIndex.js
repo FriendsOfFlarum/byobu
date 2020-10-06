@@ -14,8 +14,8 @@ import LinkButton from 'flarum/components/LinkButton';
 import SelectDropdown from 'flarum/components/SelectDropdown';
 
 export default class PrivateDiscussionIndex extends Page {
-    init() {
-        super.init();
+    oninit(vnode) {
+        super.oninit(vnode);
 
         // If the user is returning from a discussion page, then take note of which
         // discussion they have just visited. After the view is rendered, we will
@@ -40,7 +40,7 @@ export default class PrivateDiscussionIndex extends Page {
             // will clear the cache and set up a new discussion list component with
             // the new parameters.
             Object.keys(params).some((key) => {
-                if (app.cache.privateDiscussionList.props.params[key] !== params[key]) {
+                if (app.cache.privateDiscussionList.attrs.params[key] !== params[key]) {
                     app.cache.privateDiscussionList = null;
                     return true;
                 }
@@ -54,12 +54,6 @@ export default class PrivateDiscussionIndex extends Page {
         app.history.push('private-index', icon('far fa-map'));
 
         this.bodyClass = 'App--index';
-    }
-
-    onunload() {
-        // Save the scroll position so we can restore it when we return to the
-        // discussion list.
-        app.cache.scrollTop = $(window).scrollTop();
     }
 
     view() {
@@ -82,12 +76,8 @@ export default class PrivateDiscussionIndex extends Page {
         );
     }
 
-    config(isInitialized, context) {
-        super.config(...arguments);
-
-        if (isInitialized) return;
-
-        extend(context, 'onunload', () => $('#app').css('min-height', ''));
+    oncreate(vnode) {
+        super.oncreate(vnode);
 
         app.setTitle('');
         app.setTitleCount(0);
@@ -127,6 +117,16 @@ export default class PrivateDiscussionIndex extends Page {
         }
     }
 
+    onremove(vnode) {
+        super.onremove(vnode);
+
+        $('#app').css('min-height', '');
+
+        // Save the scroll position so we can restore it when we return to the
+        // discussion list.
+        app.cache.scrollTop = $(window).scrollTop();
+    }
+
     /**
      * Get the component to display as the hero.
      *
@@ -150,24 +150,22 @@ export default class PrivateDiscussionIndex extends Page {
         items.add(
             'newDiscussion',
             Button.component({
-                children: app.translator.trans(
-                    canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'
-                ),
                 icon: 'fas fa-edit',
                 className: 'Button Button--primary IndexPage-newDiscussion',
                 itemClassName: 'App-primaryControl',
                 onclick: this.newDiscussion.bind(this),
                 disabled: !canStartDiscussion,
-            })
+            }, app.translator.trans(
+                canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'
+            ))
         );
 
         items.add(
             'nav',
             SelectDropdown.component({
-                children: this.navItems(this).toArray(),
                 buttonClassName: 'Button',
                 className: 'App-titleControl',
-            })
+            }, this.navItems(this).toArray())
         );
 
         return items;
@@ -187,9 +185,8 @@ export default class PrivateDiscussionIndex extends Page {
             'allDiscussions',
             LinkButton.component({
                 href: app.route('index', params),
-                children: app.translator.trans('core.forum.index.all_discussions_link'),
                 icon: 'far fa-comments',
-            }),
+            }, app.translator.trans('core.forum.index.all_discussions_link')),
             100
         );
 
@@ -279,7 +276,7 @@ export default class PrivateDiscussionIndex extends Page {
         const params = this.params();
         delete params.q;
 
-        m.route(app.route(this.props.routeName, params));
+        m.route.set(app.route(this.attrs.routeName, params));
     }
 
     /**
@@ -296,7 +293,7 @@ export default class PrivateDiscussionIndex extends Page {
             params.sort = sort;
         }
 
-        m.route(app.route(this.props.routeName, params));
+        m.route.set(app.route(this.attrs.routeName, params));
     }
 
     /**
@@ -330,19 +327,11 @@ export default class PrivateDiscussionIndex extends Page {
      * @return {Promise}
      */
     newDiscussion() {
-        const deferred = m.deferred();
-
         if (app.session.user) {
-            this.composeNewDiscussion(deferred);
+            return this.composeNewDiscussion(deferred);
         } else {
-            app.modal.show(
-                new LogInModal({
-                    onlogin: this.composeNewDiscussion.bind(this, deferred),
-                })
-            );
+            app.modal.show(LogInModal, { onlogin: this.composeNewDiscussion.bind(this) });
         }
-
-        return deferred.promise;
     }
 
     /**
@@ -351,15 +340,13 @@ export default class PrivateDiscussionIndex extends Page {
      * @param {Deferred} deferred
      * @return {Promise}
      */
-    composeNewDiscussion(deferred) {
-        const component = new PrivateDiscussionComposer({ user: app.session.user });
+    composeNewDiscussion() {
+        return new Promise(resolve => {
+            app.composer.load(PrivateDiscussionComposer, { user: app.session.user });
+            app.composer.show();
 
-        app.composer.load(component);
-        app.composer.show();
-
-        deferred.resolve(component);
-
-        return deferred.promise;
+            return resolve(app.composer);
+        });
     }
 
     /**

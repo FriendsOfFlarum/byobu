@@ -1,27 +1,26 @@
 import UserPage from 'flarum/components/UserPage';
-import PrivateDiscussionList from './PrivateDiscussionList';
+import PrivateDiscussionListState from '../states/PrivateDiscussionListState';
 import Button from 'flarum/components/Button';
 import Dropdown from 'flarum/components/Dropdown';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
 import PrivateDiscussionComposer from './PrivateDiscussionComposer';
 import LogInModal from 'flarum/components/LogInModal';
+import PrivateDiscussionList from './PrivateDiscussionList';
 
 export default class PrivateDiscussionsUserPage extends UserPage {
-    init() {
-        super.init();
+    oninit(vnode) {
+        super.oninit(vnode);
 
         this.changeSort('latest');
     }
 
     show(user) {
         // We can not create the list in init because the user will not be available if it has to be loaded asynchronously
-        this.list = new PrivateDiscussionList({
-            params: {
+        this.list = new PrivateDiscussionListState({
                 q: `byobu:${user.username()} is:private`,
                 sort: this.sort,
-            },
-        });
+            });
 
         this.list.refresh();
 
@@ -44,36 +43,34 @@ export default class PrivateDiscussionsUserPage extends UserPage {
     newDiscussionAction(e) {
         e.preventDefault();
 
-        const deferred = m.deferred();
+        return new Promise((resolve, reject) => {
+            if (app.session.user) {
+                let recipients = new ItemList();
+                recipients.add('users:' + app.session.user.id(), app.session.user);
 
-        if (app.session.user) {
-            let recipients = new ItemList();
-            recipients.add('users:' + app.session.user.id(), app.session.user);
+                if (this.user !== null && app.session.user.id() !== this.user.id()) {
+                    recipients.add('users:' + this.user.id(), this.user);
+                }
 
-            if (this.user !== null && app.session.user.id() !== this.user.id()) {
-                recipients.add('users:' + this.user.id(), this.user);
+                PrivateDiscussionComposer.prototype.recipients = recipients;
+
+                app.composer.load(PrivateDiscussionComposer, {
+                    user: app.session.user,
+                    recipients: recipients,
+                    recipientUsers: recipients,
+                    titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                    submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
+                });
+
+                PrivateDiscussionComposer.prototype.chooseRecipients();
+
+                return resolve(app.composer);
+            } else {
+                app.modal.show(LogInModal);
+
+                return reject();
             }
-
-            PrivateDiscussionComposer.prototype.recipients = recipients;
-
-            const component = new PrivateDiscussionComposer({
-                user: app.session.user,
-                recipients: recipients,
-                recipientUsers: recipients,
-                titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
-            });
-
-            app.composer.load(component);
-
-            deferred.resolve(component);
-        } else {
-            deferred.reject();
-
-            app.modal.show(new LogInModal());
-        }
-
-        return deferred.promise;
+        });
     }
 
     content() {
@@ -83,7 +80,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                     <ul className="DiscussionsUserPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
                     <ul className="DiscussionsUserPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
                 </div>
-                {this.list.render()}
+                <PrivateDiscussionList state={this.list}></PrivateDiscussionList>
             </div>
         );
     }
@@ -96,15 +93,14 @@ export default class PrivateDiscussionsUserPage extends UserPage {
             items.add(
                 'start_private',
                 Button.component({
-                    children: app.translator.trans(
-                        canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'
-                    ),
                     icon: 'fas fa-pen',
                     className: 'Button Button--primary IndexPage-newDiscussion',
                     itemClassName: 'fof-byobu_primaryControl',
                     onclick: this.newDiscussionAction.bind(this),
                     disabled: !canStartDiscussion,
-                })
+                }, app.translator.trans(
+                    canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'
+                ))
             );
         }
 
@@ -125,18 +121,16 @@ export default class PrivateDiscussionsUserPage extends UserPage {
             Dropdown.component({
                 buttonClassName: 'Button',
                 label: sortOptions[this.sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0],
-                children: Object.keys(sortOptions).map((value) => {
-                    const label = sortOptions[value];
-                    const active = (this.sort || Object.keys(sortMap)[0]) === value;
+            }, Object.keys(sortOptions).map((value) => {
+                const label = sortOptions[value];
+                const active = (this.sort || Object.keys(sortMap)[0]) === value;
 
-                    return Button.component({
-                        children: label,
-                        icon: active ? 'fas fa-check' : true,
-                        onclick: this.handleChangeSort.bind(this, value),
-                        active: active,
-                    });
-                }),
-            })
+                return Button.component({
+                    icon: active ? 'fas fa-check' : true,
+                    onclick: this.handleChangeSort.bind(this, value),
+                    active: active,
+                }, label);
+            }))
         );
 
         return items;

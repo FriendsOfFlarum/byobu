@@ -2,31 +2,30 @@ import Modal from 'flarum/components/Modal';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 import Button from 'flarum/components/Button';
 import ItemList from 'flarum/utils/ItemList';
+import Stream from 'flarum/utils/Stream';
+import SearchState from 'flarum/states/SearchState';
 import RecipientSearch from './RecipientSearch';
 import User from 'flarum/models/User';
 import Group from 'flarum/models/Group';
 
 export default class AddRecipientModal extends Modal {
-    init() {
-        super.init();
+    oninit(vnode) {
+        super.oninit(vnode);
 
-        this.selected = m.prop(new ItemList());
+        this.selected = Stream(new ItemList());
 
-        if (this.props.discussion) {
+        if (this.attrs.discussion) {
             // Adds recipients of the currently viewed discussion.
-            this.assignInitialRecipients(this.props.discussion);
-        } else if (this.props.selectedRecipients.toArray().length > 0) {
+            this.assignInitialRecipients(this.attrs.discussion);
+        } else if (this.attrs.selectedRecipients && this.attrs.selectedRecipients.toArray().length > 0) {
             // Adds previously selected recipients.
-            this.selected().merge(this.props.selectedRecipients);
+            this.selected().merge(this.attrs.selectedRecipients);
         } else {
             // Adds the current user in case there are no selected recipients yet and this is a new discussion.
             this.selected().add('users:' + app.session.user.id(), app.session.user);
         }
 
-        this.recipientSearch = RecipientSearch.component({
-            selected: this.selected,
-            discussion: this.props.discussion,
-        });
+        this.recipientSearch = new SearchState;
     }
 
     isDismissible() {
@@ -47,13 +46,13 @@ export default class AddRecipientModal extends Modal {
     }
 
     title() {
-        return this.props.discussion
-            ? app.translator.trans('fof-byobu.forum.modal.titles.update_recipients', { title: <em>{this.props.discussion.title()}</em> })
+        return this.attrs.discussion
+            ? app.translator.trans('fof-byobu.forum.modal.titles.update_recipients', { title: <em>{this.attrs.discussion.title()}</em> })
             : app.translator.trans('fof-byobu.forum.modal.titles.add_recipients');
     }
 
     helpText() {
-        return this.props.discussion
+        return this.attrs.discussion
             ? app.translator.trans('fof-byobu.forum.modal.help.update_recipients')
             : app.translator.trans('fof-byobu.forum.modal.help.add_recipients');
     }
@@ -65,21 +64,22 @@ export default class AddRecipientModal extends Modal {
             <div className="Modal-body">
                 <div class="AddRecipientModal-help">{this.helpText()}</div>
                 <div className="AddRecipientModal-form">
-                    {this.recipientSearch}
+                    {RecipientSearch.component({
+                        state: this.recipientSearch,
+                        selected: this.selected,
+                        discussion: this.attrs.discussion,
+                    })}
                     <div className="AddRecipientModal-form-submit App-primaryControl">
                         {Button.component({
                             type: 'submit',
                             className: 'Button Button--primary',
                             disabled: isDisabled,
                             icon: 'fas fa-check',
-                            children: app.translator.trans('fof-byobu.forum.buttons.submit'),
-                        })}
+                        }, app.translator.trans('fof-byobu.forum.buttons.submit'))}
                         {Button.component({
                             onclick: this.hide.bind(this),
                             className: 'Button Button--cancel',
-                            icon: 'fas fa-times',
-                            children: app.translator.trans('fof-byobu.forum.buttons.cancel'),
-                        })}
+                        }, app.translator.trans('fof-byobu.forum.buttons.cancel'))}
                     </div>
                 </div>
             </div>,
@@ -98,7 +98,7 @@ export default class AddRecipientModal extends Modal {
     onsubmit(e) {
         e.preventDefault();
 
-        const discussion = this.props.discussion;
+        const discussion = this.attrs.discussion;
         const recipients = this.selected();
 
         let recipientGroups = [];
@@ -124,11 +124,11 @@ export default class AddRecipientModal extends Modal {
         }
 
         // Use the onsubmit callback to trigger an update in the DiscussionComposer
-        if (this.props.onsubmit) this.props.onsubmit(recipients);
+        if (this.attrs.onsubmit) this.attrs.onsubmit(recipients);
 
         app.modal.close();
 
         app.composer.show();
-        m.redraw.strategy('none');
+        e.redraw = false;
     }
 }
