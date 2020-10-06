@@ -83,7 +83,7 @@ return [
         }),
 
     (new Native\View())
-        ->namespace('fof-byobu', __DIR__ . '/resources/views'),
+        ->namespace('fof-byobu', __DIR__.'/resources/views'),
 
     function (Dispatcher $events) {
         $events->subscribe(Access\DiscussionPolicy::class);
