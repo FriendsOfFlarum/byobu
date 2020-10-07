@@ -18,6 +18,7 @@ use Flarum\User\User;
 use Flarum\User\UserRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Expression;
 use LogicException;
 
 class ByobuGambit extends AbstractRegexGambit
@@ -86,6 +87,7 @@ class ByobuGambit extends AbstractRegexGambit
             ->flatten();
 
         $search->getQuery()
+            ->distinct()
             ->join('recipients', 'discussions.id', '=', 'recipients.discussion_id')
             ->where(function (Builder $query) use ($userIds, $groupIds) {
                 $query

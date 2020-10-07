@@ -2,7 +2,6 @@ import { extend } from 'flarum/extend';
 import Model from 'flarum/Model';
 import Discussion from 'flarum/models/Discussion';
 import User from 'flarum/models/User';
-import addRecipientComposer from './addRecipientComposer';
 import addRecipientLabels from './addRecipientLabels';
 import addRecipientsControl from './addRecipientsControl';
 import addHasRecipientsBadge from './addHasRecipientsBadge';
@@ -15,7 +14,6 @@ import PrivateDiscussionRepliedNotification from './components/notifications/Pri
 import PrivateDiscussionUserLeftNotification from './components/notifications/PrivateDiscussionUserLeftNotification';
 import PrivateDiscussionAddedNotification from './components/notifications/PrivateDiscussionAddedNotification';
 import PrivateDiscussionMadePublicNotification from './components/notifications/PrivateDiscussionMadePublicNotification';
-import PrivateDiscussionIndex from './components/PrivateDiscussionIndex';
 import RecipientsModified from './components/RecipientsModified';
 import RecipientLeft from './components/RecipientLeft';
 import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessionDropdown';
@@ -43,7 +41,6 @@ app.initializers.add('fof-byobu', function (app) {
     app.postComponents.recipientsModified = RecipientsModified;
     app.postComponents.recipientLeft = RecipientLeft;
 
-    addRecipientComposer(app);
     addRecipientLabels();
     addRecipientsControl();
     addHasRecipientsBadge();

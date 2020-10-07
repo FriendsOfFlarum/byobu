@@ -1,73 +1,116 @@
-import { extend } from 'flarum/extend';
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
 import AddRecipientModal from './AddRecipientModal';
 import ItemList from 'flarum/utils/ItemList';
+import recipientCountLabel from "../../common/helpers/recipientCountLabel";
 
 export default class PrivateDiscussionComposer extends DiscussionComposer {
     oninit(vnode) {
         super.oninit(vnode);
 
-        app.composer.fields.recipients = app.composer.fields.recipients = new ItemList();
+        this.recipients = this.attrs.recipients || new ItemList();
+
+        this.recipientUsers = this.attrs.recipientUsers || [];
+        this.recipientGroups = this.attrs.recipientGroups || [];
 
         const username = m.route.param('username');
 
         if (typeof username !== 'undefined') {
             this.addDefaultRecipients(username);
         }
+    }
 
-        if (app.forum.attribute('byobuTag') && app.forum.attribute('byobuTag').length > 0) {
-            extend(PrivateDiscussionComposer.prototype, 'headerItems', function (items) {
-                items.remove('tags');
-            });
+    oncreate(vnode) {
+        super.oncreate(vnode);
+
+        if (this.recipients.length < 0) {
+            this.chooseRecipients();
         }
     }
 
-    getRecipientArr() {
-        return app.composer.fields.recipients ? app.composer.fields.recipients.toArray() : [];
+    data() {
+        let data = super.data();
+
+        const users = [];
+        const groups = [];
+        this.recipients.forEach((recipient) => {
+            if (recipient instanceof User) {
+                users.push(recipient);
+            }
+
+            if (recipient instanceof Group) {
+                groups.push(recipient);
+            }
+        });
+
+        data.relationships = data.relationships || {};
+
+        if (users.length) {
+            data.relationships.recipientUsers = users;
+        }
+
+        if (groups.length) {
+            data.relationships.recipientGroups = groups;
+        }
+
+        return data;
     }
 
     chooseRecipients() {
-        //const actorRecipientClassName = '.RecipientsInput-selected > .RecipientLabel:first-child';
         app.modal.show(AddRecipientModal, {
-            selectedRecipients: app.composer.fields.recipients,
+            selectedRecipients: this.recipients,
             onsubmit: (recipients) => {
-                app.composer.fields.recipients = recipients;
+                this.recipients = recipients;
 
                 // Focus on recipient autocomplete field.
                 this.$('.RecipientsInput').focus();
             },
-        }
-        );
-        //$(actorRecipientClassName).css('display', 'none');
+        });
     }
+
+    headerItems() {
+        let items = super.headerItems();
+
+        items.remove('tags');
+
+        if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+            const recipients = this.recipients;
+
+            items.add(
+                'recipients',
+                <a className="PrivateDiscussionComposer-changeRecipients" onclick={this.chooseRecipients.bind(this)}>
+                    {recipients.length ? (
+                        recipientCountLabel(recipients.length)
+                    ) : (
+                        <span className="RecipientLabel none">{app.translator.trans('fof-byobu.forum.buttons.add_recipients')}</span>
+                    )}
+                </a>,
+                5
+            );
+        }
+
+        return items;
+    }
+
+    addDefaultRecipients(username) {
+        const user = app.store.getBy('users', 'username', username);
+
+        this.recipients.add('users:' + app.session.user.id(), app.session.user);
+
+        if (user.id() !== app.session.user.id()) {
+            this.recipients.add('users:' + user.id(), user);
+        }
+    };
 
     onsubmit() {
         this.loading = true;
 
-        const recipients = app.composer.fields.recipients.toArray();
+        const recipients = this.recipients.toArray();
 
         if (recipients.length < 2) {
-            app.modal.show(AddRecipientModal, { selectedRecipients: app.composer.fields.recipients });
+            app.modal.show(AddRecipientModal, { selectedRecipients: recipients });
 
             this.loading = false;
         } else {
-            const tag = app.store.getBy('tags', 'slug', app.forum.attribute('byobuTag'));
-
-            if (tag) {
-                if (tag.data.attributes.isChild) {
-                    // This is a secondary tag! We also need the primary! :)
-
-                    const parentTagId = tag.data.relationships.parent.data.id;
-                    const parentTag = app.store.getBy('tags', 'id', parentTagId);
-
-                    this.tags = [parentTag, tag];
-                } else {
-                    this.tags = [tag];
-                }
-            } else {
-                console.error('fof/byobu: Could not find tag with slug ' + app.forum.attribute('byobuTag'));
-            }
-
             const data = this.data();
 
             app.store
@@ -75,10 +118,8 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
                 .save(data)
                 .then((discussion) => {
                     if (app.cache.discussionList) {
-                        //app.cache.discussionList.addDiscussion(discussion);
                         app.cache.discussionList.refresh();
                     }
-                    //this.loading = false;
                     m.route.set(app.route.discussion(discussion));
 
                     app.composer.hide();

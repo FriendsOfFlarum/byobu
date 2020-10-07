@@ -52,8 +52,6 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                     recipients.add('users:' + this.user.id(), this.user);
                 }
 
-                PrivateDiscussionComposer.prototype.recipients = recipients;
-
                 app.composer.load(PrivateDiscussionComposer, {
                     user: app.session.user,
                     recipients: recipients,
@@ -61,8 +59,6 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                     titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
                     submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
                 });
-
-                PrivateDiscussionComposer.prototype.chooseRecipients();
 
                 return resolve(app.composer);
             } else {

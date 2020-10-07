@@ -13,7 +13,7 @@ export default class AddRecipientModal extends Modal {
         super.oninit(vnode);
 
         this.selected = Stream(new ItemList());
-
+console.log(this.attrs)
         if (this.attrs.discussion) {
             // Adds recipients of the currently viewed discussion.
             this.assignInitialRecipients(this.attrs.discussion);
@@ -128,7 +128,10 @@ export default class AddRecipientModal extends Modal {
 
         app.modal.close();
 
-        app.composer.show();
+        if (! this.attrs.discussion) {
+            app.composer.show();
+        }
+
         e.redraw = false;
     }
 }

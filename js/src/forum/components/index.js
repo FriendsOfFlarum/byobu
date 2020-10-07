@@ -1,7 +1,6 @@
 import PrivateDiscussionComposer from './PrivateDiscussionComposer';
 import AddRecipientModal from './AddRecipientModal';
 import PrivateDiscussionAddedNotification from './notifications/PrivateDiscussionAddedNotification';
-import PrivateDiscussionIndex from './PrivateDiscussionIndex';
 import PrivateDiscussionList from './PrivateDiscussionList';
 import PrivateDiscussionNotification from './notifications/PrivateDiscussionNotification';
 import PrivateDiscussionReplyNotification from './notifications/PrivateDiscussionReplyNotification';
@@ -17,7 +16,6 @@ export const components = {
     AddRecipientModal: AddRecipientModal,
     PrivateDiscussionAddedNotification: PrivateDiscussionAddedNotification,
     PrivateDiscussionComposer: PrivateDiscussionComposer,
-    PrivateDiscussionIndex: PrivateDiscussionIndex,
     PrivateDiscussionList: PrivateDiscussionList,
     PrivateDiscussionNotification: PrivateDiscussionNotification,
     PrivateDiscussionReplyNotification: PrivateDiscussionReplyNotification,

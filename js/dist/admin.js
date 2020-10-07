@@ -1,2 +1,235 @@
-module.exports=function(t){var e={};function n(i){if(e[i])return e[i].exports;var a=e[i]={i:i,l:!1,exports:{}};return t[i].call(a.exports,a,a.exports,n),a.l=!0,a.exports}return n.m=t,n.c=e,n.d=function(t,e,i){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:i})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var i=Object.create(null);if(n.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var a in t)n.d(i,a,function(e){return t[e]}.bind(null,a));return i},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=48)}({0:function(t,e){t.exports=flarum.core.compat.extend},11:function(t,e){},12:function(t,e){t.exports=flarum.core.compat["components/Badge"]},20:function(t,e){t.exports=flarum.core.compat["components/PermissionGrid"]},24:function(t,e){t.exports=flarum.extensions["fof-components"]},26:function(t,e,n){"use strict";var i=n(46),a=n.n(i),s=n(0),r=n(20),o=n.n(r),u=function(){Object(s.extend)(o.a.prototype,"startItems",(function(t){t.add("startPrivateUsers",{icon:"far fa-map",label:app.translator.trans("fof-byobu.admin.permission.create_private_discussions_with_users"),permission:"discussion.startPrivateDiscussionWithUsers"},95),t.add("startPrivateGroups",{icon:"far fa-map",label:app.translator.trans("fof-byobu.admin.permission.create_private_discussions_with_groups"),permission:"discussion.startPrivateDiscussionWithGroups"},95),t.add("startPrivateBlockers",{icon:"far fa-map",label:app.translator.trans("fof-byobu.admin.permission.create_private_discussions_with_blocking_users"),permission:"startPrivateDiscussionWithBlockers"},95)})),Object(s.extend)(o.a.prototype,"replyItems",(function(t){t.add("makePrivatePublic",{icon:"far fa-map",label:app.translator.trans("fof-byobu.admin.permission.make_private_into_public"),permission:"discussion.makePublic"},95)})),Object(s.extend)(o.a.prototype,"moderateItems",(function(t){t.add("editUserRecipients",{icon:"far fa-map",label:app.translator.trans("fof-byobu.admin.permission.edit_user_recipients"),permission:"discussion.editUserRecipients"},95),t.add("editGroupRecipients",{icon:"far fa-map",label:app.translator.trans("fof-byobu.admin.permission.edit_group_recipients"),permission:"discussion.editGroupRecipients"},95),t.add("actor-can-view-private-discussions-when-flagged",{icon:"fas fa-flag",label:app.translator.trans("fof-byobu.admin.permission.view_private_discussions-when-flagged"),permission:"user.viewPrivateDiscussionsWhenFlagged"},95)}))},p=n(24),d=(n(12),p.settings.SettingsModal),f=p.settings.items,c=f.BooleanItem,l=(f.StringItem,f.SelectItem);function b(){var t={},e=app.store.all("tags").sort((function(t,e){return t.data.attributes.position-e.data.attributes.position})).reduce((function(e,n){return null===n.position()||(n.isChild()?void 0===t[n.data.relationships.parent.data.id]?t[n.data.relationships.parent.data.id]=[n.data.id]:t[n.data.relationships.parent.data.id].push(n.data.id):e[n.slug()]=n.name()),e}),{}),n={"":app.translator.trans("fof-byobu.admin.settings.use_tag_slug_no_restriction")};for(var i in e){n[i]=e[i];var a=app.store.getBy("tags","slug",i);a.isPrimary()&&void 0!==t[a.data.id]&&t[a.data.id].forEach((function(t){var e=app.store.getBy("tags","id",t);n[e.slug()]=" └─ "+e.name()}))}return n}var _=function(){app.extensionSettings["fof-byobu"]=function(){return app.modal.show(new d({title:"FoF Byōbu",size:"medium",items:[m(c,{key:"fof-byobu.index_link"},app.translator.trans("fof-byobu.admin.settings.byobu_index")),m("p",null,app.translator.trans("fof-byobu.admin.settings.byobu_index_help")),m("div",{className:"Form-group"},m("label",null,app.translator.trans("fof-byobu.admin.settings.use_tag_slug")),l.component({options:b(),key:"fof-byobu.use_tag_slug",required:!1})),m("p",null,app.translator.trans("fof-byobu.admin.settings.use_tag_slug_help",{no_restriction:app.translator.trans("fof-byobu.admin.settings.use_tag_slug_no_restriction")}))]}))}};app.initializers.add("fof-byobu",(function(t){t.store.models.recipients=a.a,u(),_()}))},46:function(t,e){t.exports=flarum.core.compat["core/models/User"]},48:function(t,e,n){"use strict";n.r(e);var i=n(11);for(var a in i)"default"!==a&&function(t){n.d(e,t,(function(){return i[t]}))}(a);n(26)}});
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./admin.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./admin.js":
+/*!******************!*\
+  !*** ./admin.js ***!
+  \******************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _src_common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/common */ "./src/common/index.js");
+/* harmony import */ var _src_common__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_src_common__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _src_common__WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _src_common__WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _src_admin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/admin */ "./src/admin/index.js");
+/* empty/unused harmony star reexport */
+
+
+/***/ }),
+
+/***/ "./src/admin/addPrivateDiscussionPermission.js":
+/*!*****************************************************!*\
+  !*** ./src/admin/addPrivateDiscussionPermission.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/PermissionGrid */ "flarum/components/PermissionGrid");
+/* harmony import */ var flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1__);
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'startItems', function (items) {
+    items.add('startPrivateUsers', {
+      icon: 'far fa-map',
+      label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_users'),
+      permission: 'discussion.startPrivateDiscussionWithUsers'
+    }, 95);
+    items.add('startPrivateGroups', {
+      icon: 'far fa-map',
+      label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_groups'),
+      permission: 'discussion.startPrivateDiscussionWithGroups'
+    }, 95);
+    items.add('startPrivateBlockers', {
+      icon: 'far fa-map',
+      label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_blocking_users'),
+      permission: 'startPrivateDiscussionWithBlockers'
+    }, 95);
+  });
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'replyItems', function (items) {
+    items.add('makePrivatePublic', {
+      icon: 'far fa-map',
+      label: app.translator.trans('fof-byobu.admin.permission.make_private_into_public'),
+      permission: 'discussion.makePublic'
+    }, 95);
+  });
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'moderateItems', function (items) {
+    items.add('editUserRecipients', {
+      icon: 'far fa-map',
+      label: app.translator.trans('fof-byobu.admin.permission.edit_user_recipients'),
+      permission: 'discussion.editUserRecipients'
+    }, 95);
+    items.add('editGroupRecipients', {
+      icon: 'far fa-map',
+      label: app.translator.trans('fof-byobu.admin.permission.edit_group_recipients'),
+      permission: 'discussion.editGroupRecipients'
+    }, 95);
+    items.add('actor-can-view-private-discussions-when-flagged', {
+      icon: 'fas fa-flag',
+      label: app.translator.trans('fof-byobu.admin.permission.view_private_discussions-when-flagged'),
+      permission: 'user.viewPrivateDiscussionsWhenFlagged'
+    }, 95);
+  });
+});
+
+/***/ }),
+
+/***/ "./src/admin/index.js":
+/*!****************************!*\
+  !*** ./src/admin/index.js ***!
+  \****************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var flarum_core_models_User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/core/models/User */ "flarum/core/models/User");
+/* harmony import */ var flarum_core_models_User__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_core_models_User__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _addPrivateDiscussionPermission__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./addPrivateDiscussionPermission */ "./src/admin/addPrivateDiscussionPermission.js");
+
+
+app.initializers.add('fof-byobu', function (app) {
+  app.store.models.recipients = flarum_core_models_User__WEBPACK_IMPORTED_MODULE_0___default.a;
+  Object(_addPrivateDiscussionPermission__WEBPACK_IMPORTED_MODULE_1__["default"])();
+});
+
+/***/ }),
+
+/***/ "./src/common/index.js":
+/*!*****************************!*\
+  !*** ./src/common/index.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+/***/ "flarum/components/PermissionGrid":
+/*!******************************************************************!*\
+  !*** external "flarum.core.compat['components/PermissionGrid']" ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/PermissionGrid'];
+
+/***/ }),
+
+/***/ "flarum/core/models/User":
+/*!*********************************************************!*\
+  !*** external "flarum.core.compat['core/models/User']" ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['core/models/User'];
+
+/***/ }),
+
+/***/ "flarum/extend":
+/*!***********************************************!*\
+  !*** external "flarum.core.compat['extend']" ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['extend'];
+
+/***/ })
+
+/******/ });
 //# sourceMappingURL=admin.js.map
