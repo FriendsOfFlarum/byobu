@@ -112,12 +112,6 @@ class SaveRecipientsToDatabase
 
         $removingSelf = (!$newUserIds->contains($actor->id) && $newUserIds->count() >= 1 && $discussion->recipientUsers()->get()->contains($actor->id));
 
-        if ($makingPublic) {
-            if (!$actor->can('makePublic', $discussion)) {
-                throw new PermissionDeniedException('Not allowed to make discussion public');
-            }
-        }
-
         if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
             $newUserIds->each(function (int $userId) use ($actor) {
                 if ($actor->id === $userId) {
@@ -145,11 +139,6 @@ class SaveRecipientsToDatabase
             if (!$newGroupIds->isEmpty() && !$actor->hasPermission('discussion.startPrivateDiscussionWithGroups')) {
                 throw new PermissionDeniedException('Not allowed to add groups to a private discussion');
             }
-        }
-
-        // Removing self
-        if ($discussion->exists && $removingSelf && !$addsRecipients) {
-            throw new PermissionDeniedException('Not allowed to remove the final recipient');
         }
 
         if ($addsRecipients || $makingPublic) {

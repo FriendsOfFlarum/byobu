@@ -94,7 +94,7 @@ return [
         $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
         $events->subscribe(Listeners\QueueNotificationJobs::class);
 
-        $events->listen(Saving::class, Listeners\CheckTags::class);
+        $events->listen(Saving::class, Listeners\DropTagsOnPrivateDiscussions::class);
         $events->listen(UserSaving::class, Listeners\SaveBlocksPdPreference::class);
 
         // Support for fof/split

@@ -13,7 +13,6 @@ import PrivateDiscussionNotification from './components/notifications/PrivateDis
 import PrivateDiscussionRepliedNotification from './components/notifications/PrivateDiscussionReplyNotification';
 import PrivateDiscussionUserLeftNotification from './components/notifications/PrivateDiscussionUserLeftNotification';
 import PrivateDiscussionAddedNotification from './components/notifications/PrivateDiscussionAddedNotification';
-import PrivateDiscussionMadePublicNotification from './components/notifications/PrivateDiscussionMadePublicNotification';
 import RecipientsModified from './components/RecipientsModified';
 import RecipientLeft from './components/RecipientLeft';
 import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessionDropdown';
@@ -33,7 +32,6 @@ app.initializers.add('fof-byobu', function (app) {
     Discussion.prototype.canEditUserRecipients = Model.attribute('canEditUserRecipients');
     Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
     Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
-    Discussion.prototype.canMakePublic = Model.attribute('canMakePublic');
 
     User.prototype.blocksPd = Model.attribute('blocksPd');
     User.prototype.cannotBeDirectMessaged = Model.attribute('cannotBeDirectMessaged');
@@ -55,7 +53,6 @@ app.initializers.add('fof-byobu', function (app) {
     app.notificationComponents.byobuPrivateDiscussionReplied = PrivateDiscussionRepliedNotification;
     app.notificationComponents.byobuRecipientRemoved = PrivateDiscussionUserLeftNotification;
     app.notificationComponents.byobuPrivateDiscussionAdded = PrivateDiscussionAddedNotification;
-    app.notificationComponents.byobuMadePublic = PrivateDiscussionMadePublicNotification;
 
     // Add notification preferences.
     extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
@@ -78,11 +75,6 @@ app.initializers.add('fof-byobu', function (app) {
             name: 'byobuRecipientRemoved',
             icon: 'fas fa-map',
             label: app.translator.trans('fof-byobu.forum.notifications.pd_user_left_label'),
-        });
-        items.add('byobuMadePublic', {
-            name: 'byobuMadePublic',
-            icon: 'fas fa-map',
-            label: app.translator.trans('fof-byobu.forum.notifications.pd_made_public_label'),
         });
     });
 });

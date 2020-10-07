@@ -2,15 +2,17 @@ import DiscussionComposer from 'flarum/components/DiscussionComposer';
 import AddRecipientModal from './AddRecipientModal';
 import ItemList from 'flarum/utils/ItemList';
 import recipientCountLabel from "../../common/helpers/recipientCountLabel";
+import User from 'flarum/models/User';
+import Group from 'flarum/models/Group';
 
 export default class PrivateDiscussionComposer extends DiscussionComposer {
     oninit(vnode) {
         super.oninit(vnode);
 
-        this.recipients = this.attrs.recipients || new ItemList();
+        this.composer.fields.recipients = this.attrs.recipients || new ItemList();
 
-        this.recipientUsers = this.attrs.recipientUsers || [];
-        this.recipientGroups = this.attrs.recipientGroups || [];
+        this.composer.fields.recipientUsers = this.attrs.recipientUsers || [];
+        this.composer.fields.recipientGroups = this.attrs.recipientGroups || [];
 
         const username = m.route.param('username');
 
@@ -19,20 +21,12 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
         }
     }
 
-    oncreate(vnode) {
-        super.oncreate(vnode);
-
-        if (this.recipients.length < 0) {
-            this.chooseRecipients();
-        }
-    }
-
     data() {
         let data = super.data();
 
         const users = [];
         const groups = [];
-        this.recipients.forEach((recipient) => {
+        this.composer.fields.recipients.toArray().forEach((recipient) => {
             if (recipient instanceof User) {
                 users.push(recipient);
             }
@@ -52,14 +46,16 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
             data.relationships.recipientGroups = groups;
         }
 
+        delete data.relationships.tags;
+
         return data;
     }
 
     chooseRecipients() {
         app.modal.show(AddRecipientModal, {
-            selectedRecipients: this.recipients,
+            selectedRecipients: this.composer.fields.recipients,
             onsubmit: (recipients) => {
-                this.recipients = recipients;
+                this.composer.fields.recipients = recipients;
 
                 // Focus on recipient autocomplete field.
                 this.$('.RecipientsInput').focus();
@@ -73,7 +69,7 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
         items.remove('tags');
 
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
-            const recipients = this.recipients;
+            const recipients = this.composer.fields.recipients.toArray();
 
             items.add(
                 'recipients',
@@ -94,25 +90,25 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
     addDefaultRecipients(username) {
         const user = app.store.getBy('users', 'username', username);
 
-        this.recipients.add('users:' + app.session.user.id(), app.session.user);
+        this.composer.fields.recipients.add('users:' + app.session.user.id(), app.session.user);
 
         if (user.id() !== app.session.user.id()) {
-            this.recipients.add('users:' + user.id(), user);
+            this.composer.fields.recipients.add('users:' + user.id(), user);
         }
     };
 
     onsubmit() {
         this.loading = true;
 
-        const recipients = this.recipients.toArray();
+        const recipients = this.composer.fields.recipients.toArray();
 
         if (recipients.length < 2) {
-            app.modal.show(AddRecipientModal, { selectedRecipients: recipients });
+            this.chooseRecipients();
 
             this.loading = false;
         } else {
             const data = this.data();
-
+console.log({data})
             app.store
                 .createRecord('discussions')
                 .save(data)

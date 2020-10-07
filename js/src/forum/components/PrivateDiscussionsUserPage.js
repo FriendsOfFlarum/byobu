@@ -46,6 +46,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         return new Promise((resolve, reject) => {
             if (app.session.user) {
                 let recipients = new ItemList();
+
                 recipients.add('users:' + app.session.user.id(), app.session.user);
 
                 if (this.user !== null && app.session.user.id() !== this.user.id()) {
@@ -60,7 +61,9 @@ export default class PrivateDiscussionsUserPage extends UserPage {
                     submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
                 });
 
-                return resolve(app.composer);
+                app.composer.show();
+
+                return resolve();
             } else {
                 app.modal.show(LogInModal);
 
