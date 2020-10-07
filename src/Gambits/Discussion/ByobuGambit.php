@@ -18,7 +18,6 @@ use Flarum\User\User;
 use Flarum\User\UserRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\Expression;
 use LogicException;
 
 class ByobuGambit extends AbstractRegexGambit
