@@ -31,7 +31,7 @@ class Screener extends Fluent
 {
     public static function fromDiscussion(Discussion $discussion): Screener
     {
-        $screener = new Self;
+        $screener = new self();
 
         $screener->users = $screener->currentUsers = $discussion->recipientUsers()->get();
         $screener->groups = $screener->currentGroups = $discussion->recipientGroups()->get();
@@ -68,6 +68,7 @@ class Screener extends Fluent
     {
         return $this->users->isNotEmpty() || $this->users->isNotEmpty();
     }
+
     public function wasPrivate(): bool
     {
         return $this->currentUsers->isNotEmpty() || $this->currentGroups->isNotEmpty();

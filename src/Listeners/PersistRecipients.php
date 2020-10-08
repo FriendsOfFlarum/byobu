@@ -54,7 +54,7 @@ class PersistRecipients
 
         // Private discussions that used to be private but no longer have any recipients
         // now by default will be soft deleted/hidden.
-        if ($this->screener->wasPrivate() && ! $this->screener->isPrivate()) {
+        if ($this->screener->wasPrivate() && !$this->screener->isPrivate()) {
             $event->discussion->hide($event->actor);
         }
 
@@ -88,7 +88,7 @@ class PersistRecipients
             $this->screener->currentGroups->pluck('id'),
         ];
 
-        if ($this->screener->isPrivate() && ! $discussion->exists) {
+        if ($this->screener->isPrivate() && !$discussion->exists) {
             $event = new Events\PrivateDiscussionCreated(...$args);
         } elseif ($this->screener->actorRemoved()) {
             $event = new Events\DiscussionRecipientRemovedSelf(...$args);

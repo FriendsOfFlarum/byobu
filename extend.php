@@ -17,7 +17,6 @@ use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving;
 use Flarum\Event\ConfigureNotificationTypes;
-use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend as Native;
 use Flarum\Group\Group;
 use Flarum\User\Event\Saving as UserSaving;
