@@ -16,13 +16,12 @@ import PrivateDiscussionAddedNotification from './components/notifications/Priva
 import RecipientsModified from './components/RecipientsModified';
 import RecipientLeft from './components/RecipientLeft';
 import addPrivateDiscussionSessionDropdown from './addPrivateDiscussionsToSessionDropdown';
+import addPrivateDiscussionsToIndexNav from './addPrivateDiscussionsToIndexNav';
 
 export * from '../common/helpers';
 export * from './components';
 
 app.initializers.add('fof-byobu', function (app) {
-    //app.routes['private_discussions'] = { path: '/private-discussions', component: PrivateDiscussionIndex.component() };
-
     Discussion.prototype.recipientUsers = Model.hasMany('recipientUsers');
     Discussion.prototype.oldRecipientUsers = Model.hasMany('oldRecipientUsers');
     Discussion.prototype.recipientGroups = Model.hasMany('recipientGroups');
@@ -48,6 +47,7 @@ app.initializers.add('fof-byobu', function (app) {
 
     addPrivateDiscussionsPage();
     addPrivateDiscussionSessionDropdown();
+    addPrivateDiscussionsToIndexNav(app);
 
     app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
     app.notificationComponents.byobuPrivateDiscussionReplied = PrivateDiscussionRepliedNotification;

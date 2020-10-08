@@ -17,6 +17,7 @@ use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving;
 use Flarum\Event\ConfigureNotificationTypes;
+use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend as Native;
 use Flarum\Group\Group;
 use Flarum\User\Event\Saving as UserSaving;
@@ -82,6 +83,10 @@ return [
                 ->wherePivot('removed_at', null);
         }),
 
+    (new Native\Event())
+        ->listen(Saving::class, Listeners\PersistRecipients::class)
+        ->listen(GetModelIsPrivate::class, Listeners\GetModelIsPrivate::class),
+
     (new Native\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
 
@@ -91,7 +96,6 @@ return [
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
-        $events->subscribe(Listeners\SaveRecipientsToDatabase::class);
         $events->subscribe(Listeners\QueueNotificationJobs::class);
 
         $events->listen(Saving::class, Listeners\DropTagsOnPrivateDiscussions::class);
@@ -106,7 +110,6 @@ return [
             $event->add(Notifications\DiscussionRepliedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
             $event->add(Notifications\DiscussionRecipientRemovedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
             $event->add(Notifications\DiscussionAddedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
-            $event->add(Notifications\DiscussionMadePublicBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
     },
 ];

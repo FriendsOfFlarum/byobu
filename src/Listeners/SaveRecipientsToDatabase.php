@@ -20,8 +20,6 @@ use Flarum\Foundation\ValidationException;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Exception\PermissionDeniedException;
 use Flarum\User\UserRepository;
-use FoF\Byobu\Events\DiscussionMadePrivate;
-use FoF\Byobu\Events\DiscussionMadePublic;
 use FoF\Byobu\Events\DiscussionRecipientRemovedSelf;
 use FoF\Byobu\Events\DiscussionRecipientsChanged;
 use Illuminate\Contracts\Events\Dispatcher;

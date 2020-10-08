@@ -12,7 +12,7 @@
 namespace FoF\Byobu\Listeners;
 
 use Flarum\Post\Event\Saving;
-use FoF\Byobu\Events\DiscussionMadePrivate;
+use FoF\Byobu\Events\PrivateDiscussionCreated;
 use FoF\Byobu\Events\DiscussionMadePublic;
 use FoF\Byobu\Events\DiscussionRecipientRemovedSelf;
 use FoF\Byobu\Events\DiscussionRecipientsChanged;
@@ -24,14 +24,13 @@ class QueueNotificationJobs
 {
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(DiscussionMadePrivate::class, [$this, 'discussionMadePrivate']);
+        $events->listen(PrivateDiscussionCreated::class, [$this, 'discussionMadePrivate']);
         $events->listen(Saving::class, [$this, 'postMadeInPrivateDiscussion']);
         $events->listen(DiscussionRecipientRemovedSelf::class, [$this, 'discussionRecipientRemovedSelf']);
         $events->listen(DiscussionRecipientsChanged::class, [$this, 'discussionRecipientsChanged']);
-        $events->listen(DiscussionMadePublic::class, [$this, 'discussionMadePublic']);
     }
 
-    public function discussionMadePrivate(DiscussionMadePrivate $event)
+    public function discussionMadePrivate(PrivateDiscussionCreated $event)
     {
         app('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenPrivateDiscussionStarted($event->discussion, $event->newUsers, $event->newGroups)

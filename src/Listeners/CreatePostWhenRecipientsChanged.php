@@ -13,7 +13,7 @@ namespace FoF\Byobu\Listeners;
 
 use Flarum\Event\ConfigurePostTypes;
 use FoF\Byobu\Events\AbstractRecipientsEvent;
-use FoF\Byobu\Events\DiscussionMadePrivate;
+use FoF\Byobu\Events\PrivateDiscussionCreated;
 use FoF\Byobu\Events\DiscussionMadePublic;
 use FoF\Byobu\Events\DiscussionRecipientRemovedSelf;
 use FoF\Byobu\Events\DiscussionRecipientsChanged;
@@ -29,7 +29,7 @@ class CreatePostWhenRecipientsChanged
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigurePostTypes::class, [$this, 'addPostType']);
-        $events->listen(DiscussionMadePrivate::class, [$this, 'whenDiscussionWasTagged']);
+        $events->listen(PrivateDiscussionCreated::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(DiscussionMadePublic::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(DiscussionRecipientsChanged::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(DiscussionRecipientRemovedSelf::class, [$this, 'whenActorRemovedSelf']);
