@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Discussion;
 
 use Flarum\Discussion\Event\Saving;
@@ -11,21 +20,21 @@ use Illuminate\Support\Fluent;
 use Illuminate\Support\Str;
 
 /**
- * @property Saving $event
- * @property Collection|User[] $currentUsers
+ * @property Saving             $event
+ * @property Collection|User[]  $currentUsers
  * @property Collection|Group[] $currentGroups
- * @property bool $wasPrivate
- * @property Collection|User[] $users
+ * @property bool               $wasPrivate
+ * @property Collection|User[]  $users
  * @property Collection|Group[] $groups
- * @property bool $isPrivate
- * @property bool $nothingChanged
- * @property User $actor
+ * @property bool               $isPrivate
+ * @property bool               $nothingChanged
+ * @property User               $actor
  */
 class Screener extends Fluent
 {
     public static function whenSavingDiscussions(Saving $event): Screener
     {
-        $screener = new Self;
+        $screener = new self();
         $screener->currentUsers = $event->discussion->recipientUsers()->get();
         $screener->currentGroups = $event->discussion->recipientGroups()->get();
         $screener->wasPrivate = $screener->currentUsers->isNotEmpty() || $screener->currentGroups->isNotEmpty();
@@ -47,7 +56,7 @@ class Screener extends Fluent
     {
         $ids = collect(Arr::get(
             $event->data,
-            "relationships.".static::relationName($type).".data",
+            'relationships.'.static::relationName($type).'.data',
             []
         ))->pluck('id');
 
@@ -60,7 +69,7 @@ class Screener extends Fluent
 
     protected static function relationName(string $type)
     {
-        return "recipient" . Str::ucfirst($type);
+        return 'recipient'.Str::ucfirst($type);
     }
 
     public function hasBlockingUsers(): bool

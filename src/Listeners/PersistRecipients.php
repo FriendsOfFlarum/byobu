@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Listeners;
 
 use Carbon\Carbon;
@@ -30,7 +39,7 @@ class PersistRecipients
             throw new PermissionDeniedException('Not allowed to add users that blocked receiving private discussions');
         }
 
-        if (! $event->discussion->exists) {
+        if (!$event->discussion->exists) {
             $this->checkPermissionsForNewDiscussion($event->actor);
         } else {
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
@@ -45,7 +54,7 @@ class PersistRecipients
 
         // Private discussions that used to be private but no longer have any recipients
         // now by default will be soft deleted/hidden.
-        if ($this->screener->wasPrivate && ! $this->screener->isPrivate) {
+        if ($this->screener->wasPrivate && !$this->screener->isPrivate) {
             $event->discussion->hide($event->actor);
         }
 
@@ -53,7 +62,7 @@ class PersistRecipients
 
         $event->discussion->afterSave(function (Discussion $discussion) {
             foreach (['users', 'groups'] as $type) {
-                $relation = "recipient" . Str::ucfirst($type);
+                $relation = 'recipient'.Str::ucfirst($type);
 
                 $discussion->{$relation}()->saveMany(
                     $this->screener->deleted($type),
@@ -79,7 +88,7 @@ class PersistRecipients
             $this->screener->currentGroups->pluck('id'),
         ];
 
-        if ($this->screener->isPrivate && ! $discussion->exists) {
+        if ($this->screener->isPrivate && !$discussion->exists) {
             $event = new Events\PrivateDiscussionCreated(...$args);
         } elseif ($this->screener->actorRemoved()) {
             $event = new Events\DiscussionRecipientRemovedSelf(...$args);

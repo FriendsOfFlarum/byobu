@@ -13,10 +13,10 @@ namespace FoF\Byobu\Listeners;
 
 use Flarum\Event\ConfigurePostTypes;
 use FoF\Byobu\Events\AbstractRecipientsEvent;
-use FoF\Byobu\Events\PrivateDiscussionCreated;
 use FoF\Byobu\Events\DiscussionMadePublic;
 use FoF\Byobu\Events\DiscussionRecipientRemovedSelf;
 use FoF\Byobu\Events\DiscussionRecipientsChanged;
+use FoF\Byobu\Events\PrivateDiscussionCreated;
 use FoF\Byobu\Posts\RecipientLeft;
 use FoF\Byobu\Posts\RecipientsModified;
 use Illuminate\Contracts\Events\Dispatcher;
