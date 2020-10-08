@@ -32,6 +32,7 @@ return [
         ->js(__DIR__.'/js/dist/admin.js'),
 
     (new Native\Frontend('forum'))
+        ->route('/private', 'byobuPrivate', Content\PrivateDiscussionsPage::class)
         ->css(__DIR__.'/resources/less/forum/extension.less')
         ->js(__DIR__.'/js/dist/forum.js'),
 
