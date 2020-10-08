@@ -1,5 +1,5 @@
 import EventPost from 'flarum/components/EventPost';
-import recipientsLabel from '../../common/helpers/recipientsLabel';
+import recipientsLabel from '../pages/labels/recipientsLabel';
 
 export default class RecipientsModified extends EventPost {
     static initAttrs(attrs) {

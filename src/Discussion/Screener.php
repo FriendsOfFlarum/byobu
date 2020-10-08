@@ -11,6 +11,7 @@
 
 namespace FoF\Byobu\Discussion;
 
+use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving;
 use Flarum\Group\Group;
 use Flarum\User\User;
@@ -20,36 +21,56 @@ use Illuminate\Support\Fluent;
 use Illuminate\Support\Str;
 
 /**
- * @property Saving             $event
+ * @property Saving|null        $event
  * @property Collection|User[]  $currentUsers
  * @property Collection|Group[] $currentGroups
- * @property bool               $wasPrivate
  * @property Collection|User[]  $users
  * @property Collection|Group[] $groups
- * @property bool               $isPrivate
- * @property bool               $nothingChanged
- * @property User               $actor
  */
 class Screener extends Fluent
 {
+    public static function fromDiscussion(Discussion $discussion): Screener
+    {
+        $screener = new Self;
+
+        $screener->users = $screener->currentUsers = $discussion->recipientUsers()->get();
+        $screener->groups = $screener->currentGroups = $discussion->recipientGroups()->get();
+
+        return $screener;
+    }
+
     public static function whenSavingDiscussions(Saving $event): Screener
     {
         $screener = new self();
         $screener->currentUsers = $event->discussion->recipientUsers()->get();
         $screener->currentGroups = $event->discussion->recipientGroups()->get();
-        $screener->wasPrivate = $screener->currentUsers->isNotEmpty() || $screener->currentGroups->isNotEmpty();
 
         $screener->users = static::getRecipientsFromPayload($event, 'users');
         $screener->groups = static::getRecipientsFromPayload($event, 'groups');
-        $screener->isPrivate = $screener->users->isNotEmpty() || $screener->groups->isNotEmpty();
 
-        $screener->nothingChanged = $screener->users->diff($screener->currentUsers)->isEmpty()
-            && $screener->groups->diff($screener->currentGroups)->isEmpty();
-
-        $screener->actor = $event->actor;
         $screener->event = $event;
 
         return $screener;
+    }
+
+    public function actor(): ?User
+    {
+        return $this->event->actor ?? null;
+    }
+
+    public function nothingChanged(): bool
+    {
+        return $this->users->diff($this->currentUsers)->isEmpty()
+            && $this->groups->diff($this->currentGroups)->isEmpty();
+    }
+
+    public function isPrivate(): bool
+    {
+        return $this->users->isNotEmpty() || $this->users->isNotEmpty();
+    }
+    public function wasPrivate(): bool
+    {
+        return $this->currentUsers->isNotEmpty() || $this->currentGroups->isNotEmpty();
     }
 
     protected static function getRecipientsFromPayload(Saving $event, string $type): Collection

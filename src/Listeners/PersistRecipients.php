@@ -31,7 +31,7 @@ class PersistRecipients
     {
         $this->screener = Screener::whenSavingDiscussions($event);
 
-        if ($this->screener->nothingChanged) {
+        if ($this->screener->nothingChanged()) {
             return;
         }
 
@@ -48,13 +48,13 @@ class PersistRecipients
         // If discussions are or were private, we'll set the is_private flag.
         // This is a Flarum native flag that prevents access to it unless given
         // by a Gate.
-        if ($this->screener->isPrivate || $this->screener->wasPrivate) {
+        if ($this->screener->isPrivate() || $this->screener->wasPrivate()) {
             $event->discussion->is_private = true;
         }
 
         // Private discussions that used to be private but no longer have any recipients
         // now by default will be soft deleted/hidden.
-        if ($this->screener->wasPrivate && !$this->screener->isPrivate) {
+        if ($this->screener->wasPrivate() && ! $this->screener->isPrivate()) {
             $event->discussion->hide($event->actor);
         }
 
@@ -81,14 +81,14 @@ class PersistRecipients
     {
         $args = [
             $discussion,
-            $this->screener->actor,
+            $this->screener->actor(),
             $this->screener->users->pluck('id'),
             $this->screener->groups->pluck('id'),
             $this->screener->currentUsers->pluck('id'),
             $this->screener->currentGroups->pluck('id'),
         ];
 
-        if ($this->screener->isPrivate && !$discussion->exists) {
+        if ($this->screener->isPrivate() && ! $discussion->exists) {
             $event = new Events\PrivateDiscussionCreated(...$args);
         } elseif ($this->screener->actorRemoved()) {
             $event = new Events\DiscussionRecipientRemovedSelf(...$args);

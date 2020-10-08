@@ -84,8 +84,7 @@ return [
         }),
 
     (new Native\Event())
-        ->listen(Saving::class, Listeners\PersistRecipients::class)
-        ->listen(GetModelIsPrivate::class, Listeners\GetModelIsPrivate::class),
+        ->listen(Saving::class, Listeners\PersistRecipients::class),
 
     (new Native\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),

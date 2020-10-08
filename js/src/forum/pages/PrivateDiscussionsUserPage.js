@@ -4,9 +4,9 @@ import Button from 'flarum/components/Button';
 import Dropdown from 'flarum/components/Dropdown';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
-import PrivateDiscussionComposer from './PrivateDiscussionComposer';
+import PrivateDiscussionComposer from './discussions/PrivateDiscussionComposer';
 import LogInModal from 'flarum/components/LogInModal';
-import PrivateDiscussionList from './PrivateDiscussionList';
+import PrivateDiscussionList from './discussions/PrivateDiscussionList';
 
 export default class PrivateDiscussionsUserPage extends UserPage {
     oninit(vnode) {

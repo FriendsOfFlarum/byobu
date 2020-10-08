@@ -1,7 +1,7 @@
 import DiscussionComposer from 'flarum/components/DiscussionComposer';
-import AddRecipientModal from './AddRecipientModal';
+import AddRecipientModal from '../../modals/AddRecipientModal';
 import ItemList from 'flarum/utils/ItemList';
-import recipientCountLabel from "../../common/helpers/recipientCountLabel";
+import recipientCountLabel from "../labels/recipientCountLabel";
 import User from 'flarum/models/User';
 import Group from 'flarum/models/Group';
 
@@ -108,7 +108,7 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
             this.loading = false;
         } else {
             const data = this.data();
-console.log({data})
+
             app.store
                 .createRecord('discussions')
                 .save(data)

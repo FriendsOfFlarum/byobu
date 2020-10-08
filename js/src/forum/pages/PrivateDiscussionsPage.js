@@ -4,8 +4,6 @@ import IndexPage from 'flarum/components/IndexPage';
 import DiscussionListState from 'flarum/states/DiscussionListState';
 
 export default (app) => {
-    app.routes.byobuPrivate = {path: '/private', component: IndexPage};
-
     extend(IndexPage.prototype, 'navItems', (items) => {
         const user = app.session.user;
 
@@ -32,4 +30,4 @@ export default (app) => {
             params.filter.q = (params.filter.q || '') + ' is:private';
         }
     });
-};
+}

@@ -1,11 +1,20 @@
 import { extend } from 'flarum/extend';
+import Model from "flarum/Model";
+import User from "flarum/models/User";
 import UserControls from 'flarum/utils/UserControls';
-import PrivateDiscussionComposer from './components/PrivateDiscussionComposer';
+import PrivateDiscussionComposer from './../pages/discussions/PrivateDiscussionComposer';
 import Button from 'flarum/components/Button';
 import ItemList from 'flarum/utils/ItemList';
+import UserPage from 'flarum/components/UserPage';
+import LinkButton from 'flarum/components/LinkButton';
 
-export default function () {
-    // Add a control allowing the discussion to be moved to another category.
+export default (app) => {
+    attributes();
+    message(app);
+    sharedMessageHistory(app);
+}
+
+function message(app) {
     extend(UserControls, 'userControls', function (items, user) {
         if (
             app.session.user &&
@@ -45,4 +54,29 @@ export default function () {
 
         return items;
     });
+}
+
+function sharedMessageHistory(app) {
+    extend(UserPage.prototype, 'navItems', function (items) {
+        const href = app.route('byobuUserPrivate', { username: this.user.username() });
+
+        // Hide links from guests if they are not already on the page
+        if (!app.session.user && m.route.get() !== href) return;
+        // Hide link for your own page.
+        if (app.session.user && app.session.user.username() === this.user.username()) return;
+
+        items.add(
+            'byobu',
+            LinkButton.component({
+                href,
+                icon: 'fas fa-map',
+            }, app.translator.trans('fof-byobu.forum.user.byobu_link')),
+            85
+        );
+    });
+}
+
+function attributes() {
+    User.prototype.blocksPd = Model.attribute('blocksPd');
+    User.prototype.cannotBeDirectMessaged = Model.attribute('cannotBeDirectMessaged');
 }

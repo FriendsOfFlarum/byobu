@@ -5,7 +5,7 @@ import ItemList from 'flarum/utils/ItemList';
 import classList from 'flarum/utils/classList';
 import extractText from 'flarum/utils/extractText';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
-import recipientLabel from '../../common/helpers/recipientLabel';
+import recipientLabel from '../pages/labels/recipientLabel';
 import User from 'flarum/models/User';
 import Group from 'flarum/models/Group';
 
