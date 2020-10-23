@@ -38,7 +38,7 @@ class PrivacyGambit extends AbstractRegexGambit
         $actor = $search->getActor();
 
         $search->getQuery()->where(function (Builder $query) use ($negate) {
-            $query->where('is_private', ! $negate);
+            $query->where('is_private', !$negate);
         });
 //
 //        // Flag to indicate whether public discussions should be shown.

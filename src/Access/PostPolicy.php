@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Access;
 
 use Flarum\Post\Post;
@@ -27,8 +36,8 @@ class PostPolicy extends AbstractPolicy
                 $query->where('is_private', true);
             });
             // Unless you're not a guest we'll look at recipient users and groups.
-            if (! $actor->isGuest()) {
-                $query->orWhereHas('discussion',  function (Builder $query) use ($actor) {
+            if (!$actor->isGuest()) {
+                $query->orWhereHas('discussion', function (Builder $query) use ($actor) {
                     $query->where('is_private', true);
                     $query->where(function (Builder $query) use ($actor) {
                         $query->whereHas('recipientUsers', function (Builder $query) use ($actor) {
