@@ -40,6 +40,7 @@ fof-byobu:
         user:
             settings:
                 block_pd: Block private discussions
+                unified_index: Combine private discussions inside unified index
 
             byobu_link: Private Discussions
             dropdown_label: Private Discussions

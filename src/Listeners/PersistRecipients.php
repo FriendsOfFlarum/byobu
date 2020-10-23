@@ -45,13 +45,6 @@ class PersistRecipients
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
         }
 
-        // If discussions are or were private, we'll set the is_private flag.
-        // This is a Flarum native flag that prevents access to it unless given
-        // by a Gate.
-        if ($this->screener->isPrivate() || $this->screener->wasPrivate()) {
-            $event->discussion->is_private = true;
-        }
-
         // Private discussions that used to be private but no longer have any recipients
         // now by default will be soft deleted/hidden.
         if ($this->screener->wasPrivate() && !$this->screener->isPrivate()) {

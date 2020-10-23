@@ -78,5 +78,6 @@ function sharedMessageHistory(app) {
 
 function attributes() {
     User.prototype.blocksPd = Model.attribute('blocksPd');
+    User.prototype.unifiedIndex = Model.attribute('unifiedIndex');
     User.prototype.cannotBeDirectMessaged = Model.attribute('cannotBeDirectMessaged');
 }

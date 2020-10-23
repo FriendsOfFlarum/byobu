@@ -25,6 +25,7 @@ class UserAttributes
         $user = $event->model;
 
         $event->attributes['blocksPd'] = (bool) $user->blocks_byobu_pd;
+        $event->attributes['unifiedIndex'] = (bool) $user->unified_index_with_byobu;
         $event->attributes['cannotBeDirectMessaged'] = $event->actor->can('cannotBeDirectMessaged', $user);
     }
 }

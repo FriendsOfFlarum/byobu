@@ -16,7 +16,9 @@ use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving;
+use Flarum\Discussion\Event\Searching;
 use Flarum\Event\ConfigureNotificationTypes;
+use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend as Native;
 use Flarum\Group\Group;
 use Flarum\User\Event\Saving as UserSaving;
@@ -37,10 +39,6 @@ return [
         ->js(__DIR__.'/js/dist/forum.js'),
 
     new Native\Locales(__DIR__.'/resources/locale'),
-
-    new Extend\UserPreference('blocksPd', function ($value) {
-        return boolval($value);
-    }, false),
 
     (new Extend\ApiAttribute())
         ->add(ForumSerializer::class, Api\PermissionAttributes::class)
@@ -84,7 +82,9 @@ return [
         }),
 
     (new Native\Event())
-        ->listen(Saving::class, Listeners\PersistRecipients::class),
+        ->listen(Saving::class, Listeners\PersistRecipients::class)
+        ->listen(GetModelIsPrivate::class, Listeners\GetModelIsPrivate::class)
+        ->listen(Searching::class, Listeners\UnifiedIndex::class),
 
     (new Native\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
@@ -92,14 +92,13 @@ return [
     function (Dispatcher $events) {
         $events->subscribe(Access\DiscussionPolicy::class);
         $events->subscribe(Access\PostPolicy::class);
-        $events->subscribe(Listeners\AddApiAttributes::class);
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\QueueNotificationJobs::class);
 
         $events->listen(Saving::class, Listeners\DropTagsOnPrivateDiscussions::class);
-        $events->listen(UserSaving::class, Listeners\SaveBlocksPdPreference::class);
+        $events->listen(UserSaving::class, Listeners\SaveUserPreferences::class);
 
         // Support for fof/split
         $events->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class);
