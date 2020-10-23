@@ -40,27 +40,27 @@ class DiscussionPolicy extends AbstractPolicy
      */
     public function findPrivate(User $actor, EloquentBuilder $query)
     {
-        if ($actor->exists) {
-            $query->orWhereIn('discussions.id', function ($query) use ($actor) {
-                $query->select('discussion_id')
-                    ->from('recipients')
-                    ->whereNull('removed_at')
-                    ->where('user_id', $actor->id)
-                    ->orWhereIn('group_id', $actor->groups->pluck('id')->all());
-            });
-
-            if (
-                $this->extensions->isEnabled('flarum-flags') &&
-                $actor->hasPermission('user.viewPrivateDiscussionsWhenFlagged') &&
-                $actor->hasPermission('discussion.viewFlags')
-            ) {
-                $query->orWhereIn('discussions.id', function ($query) {
-                    $query->select('posts.discussion_id')
-                        ->from('flags')
-                        ->leftJoin('posts', 'flags.post_id', 'posts.id');
-                });
-            }
-        }
+//        if ($actor->exists) {
+//            $query->orWhereIn('discussions.id', function ($query) use ($actor) {
+//                $query->select('discussion_id')
+//                    ->from('recipients')
+//                    ->whereNull('removed_at')
+//                    ->where('user_id', $actor->id)
+//                    ->orWhereIn('group_id', $actor->groups->pluck('id')->all());
+//            });
+//
+//            if (
+//                $this->extensions->isEnabled('flarum-flags') &&
+//                $actor->hasPermission('user.viewPrivateDiscussionsWhenFlagged') &&
+//                $actor->hasPermission('discussion.viewFlags')
+//            ) {
+//                $query->orWhereIn('discussions.id', function ($query) {
+//                    $query->select('posts.discussion_id')
+//                        ->from('flags')
+//                        ->leftJoin('posts', 'flags.post_id', 'posts.id');
+//                });
+//            }
+//        }
     }
 
     /**

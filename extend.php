@@ -91,6 +91,7 @@ return [
 
     function (Dispatcher $events) {
         $events->subscribe(Access\DiscussionPolicy::class);
+        $events->subscribe(Access\PostPolicy::class);
         $events->subscribe(Listeners\AddApiAttributes::class);
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
