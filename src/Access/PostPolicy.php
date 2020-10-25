@@ -32,11 +32,11 @@ class PostPolicy extends AbstractPolicy
 
     public function find(User $actor, Builder $query)
     {
-        $query->orWhereHas('discussion', function ($query) use ($actor) {
+        $query->whereHas('discussion', function ($query) use ($actor) {
             $this->constraint(
                 $query,
                 $actor,
-                false
+                true
             );
         });
     }
