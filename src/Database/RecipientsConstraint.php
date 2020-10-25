@@ -26,7 +26,9 @@ trait RecipientsConstraint
      */
     public function constraint($query, User $user, bool $unify = false)
     {
-        if ($user->isGuest()) return;
+        if ($user->isGuest()) {
+            return;
+        }
 
         $method = $unify ? 'orWhere' : 'where';
 

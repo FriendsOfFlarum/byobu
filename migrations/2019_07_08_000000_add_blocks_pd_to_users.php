@@ -36,7 +36,8 @@ return [
                 });
 
             $db->table('users')->whereIn('id', $blocks)->update(['blocks_byobu_pd' => 1]);
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
     },
     'down' => function (Builder $schema) {
         $schema->table('users', function (Blueprint $table) {

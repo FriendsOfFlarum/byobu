@@ -14,8 +14,6 @@ namespace FoF\Byobu\Gambits\Discussion;
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
 use FoF\Byobu\Database\RecipientsConstraint;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\Expression;
 
 class PrivacyGambit extends AbstractRegexGambit
 {
