@@ -15,6 +15,7 @@ use Flarum\Post\Post;
 use Flarum\User\AbstractPolicy;
 use Flarum\User\Guest;
 use Flarum\User\User;
+use FoF\Byobu\Database\RecipientsConstraint;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -26,33 +27,18 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class PostPolicy extends AbstractPolicy
 {
+    use RecipientsConstraint;
+
     protected $model = Post::class;
 
     public function find(User $actor, Builder $query)
     {
-        $query->where(function (Builder $query) use ($actor) {
-            // Block every post that is part of a private discussion.
-            $query->whereDoesntHave('discussion', function (Builder $query) {
-                $query->where('is_private', true);
-            });
-            // Unless you're not a guest we'll look at recipient users and groups.
-            if (!$actor->isGuest()) {
-                $query->orWhereHas('discussion', function (Builder $query) use ($actor) {
-                    $query->where('is_private', true);
-                    $query->where(function (Builder $query) use ($actor) {
-                        $query->whereHas('recipientUsers', function (Builder $query) use ($actor) {
-                            $query
-                                ->where('user_id', $actor->id)
-                                ->whereNull('removed_at');
-                        });
-                        $query->orWhereHas('recipientGroups', function (Builder $query) use ($actor) {
-                            $query
-                                ->whereIn('group_id', $actor->groups->pluck('id'))
-                                ->whereNull('removed_at');
-                        });
-                    });
-                });
-            }
+        $query->orWhereHas('discussion', function ($query) use ($actor) {
+            $this->constraint(
+                $query,
+                $actor,
+                true
+            );
         });
     }
 }

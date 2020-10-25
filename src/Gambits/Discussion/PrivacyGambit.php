@@ -13,11 +13,13 @@ namespace FoF\Byobu\Gambits\Discussion;
 
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
+use FoF\Byobu\Database\RecipientsConstraint;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 
 class PrivacyGambit extends AbstractRegexGambit
 {
+    use RecipientsConstraint;
     /**
      * {@inheritdoc}
      */
@@ -37,9 +39,10 @@ class PrivacyGambit extends AbstractRegexGambit
     {
         $actor = $search->getActor();
 
-        $search->getQuery()->where(function (Builder $query) use ($negate) {
-            $query->where('is_private', !$negate);
+        $search->getQuery()->where(function ($query) use ($actor) {
+            $this->constraint($query, $actor, false);
         });
+
 //
 //        // Flag to indicate whether public discussions should be shown.
 //        $showPublic = empty($matches) || $negate;

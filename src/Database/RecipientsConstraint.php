@@ -11,29 +11,77 @@
 
 namespace FoF\Byobu\Database;
 
+use Flarum\Discussion\Discussion;
+use Flarum\Extension\ExtensionManager;
 use Flarum\User\User;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Builder as Query;
+use Illuminate\Database\Eloquent\Builder as Eloquent;
 
-class RecipientsConstraint
+trait RecipientsConstraint
 {
-    public function __invoke(Builder $query, User $user, bool $unify = false)
+    /**
+     * @param Query|Eloquent $query
+     * @param User $user
+     * @param bool $unify
+     */
+    public function constraint($query, User $user, bool $unify = false)
     {
         $method = $unify ? 'orWhere' : 'where';
 
         $query
-            // Removes duplicates from results.
-            ->distinct()
-            // Join the recipient table with the query for performance.
-            ->join('recipients', 'discussions.id', '=', 'recipients.discussion_id')
             // Do a subquery where for filtering.
-            ->{$method}(function (Builder $query) use ($user) {
-                $groupIds = $user->groups->pluck('id')->all();
+            ->{$method}(function ($query) use ($user) {
+                // Open access for is_private discussions when the user is
+                // part of the recipients either directly or through a group.
+                if ($user->isGuest() === false) {
+                    $this->forRecipient($query, $user->groups->pluck('id')->all(), $user->id);
+                }
 
-                $query
-                    ->whereIn('recipients.user_id', [$user->id])
-                    ->when(count($groupIds) > 0, function (Builder $query) use ($groupIds) {
-                        $query->orWhereIn('recipients.group_id', $groupIds);
-                    });
+                // Open access for is_private discussions when the user handles
+                // flags and any of the posts inside the discussion is flagged.
+                if ($user->isGuest() === false
+                    && $this->flagsInstalled()
+                    && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
+                    && $user->hasPermission('discussion.viewFlags')
+                ) {
+                    $this->whenFlagged($query);
+                }
             });
+    }
+
+    protected function forRecipient($query, array $groupIds, int $userId)
+    {
+        $query->orWhereIn('discussions.id', function ($query) use ($groupIds, $userId) {
+            $query->select('recipients.discussion_id')
+                ->from('recipients')
+                ->where(function ($query) use ($groupIds, $userId) {
+                    $query
+                        ->whereNull('recipients.removed_at')
+                        ->where(function ($query) use ($groupIds, $userId) {
+                            $query
+                                ->whereIn('recipients.user_id', [$userId])
+                                ->when(count($groupIds) > 0, function ($query) use ($groupIds) {
+                                    $query->orWhereIn('recipients.group_id', $groupIds);
+                                });
+                        });
+                });
+        });
+    }
+
+    protected function whenFlagged($query)
+    {
+        $query->orWhereIn('discussions.id', function ($query) {
+            Discussion::query()
+                ->select('discussions.id')
+                ->whereHas('posts.flags');
+        });
+    }
+
+    protected function flagsInstalled(): bool
+    {
+        /** @var ExtensionManager $manager */
+        $manager = app(ExtensionManager::class);
+
+        return $manager->isEnabled('flarum-flags');
     }
 }
