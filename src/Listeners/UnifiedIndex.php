@@ -27,7 +27,6 @@ class UnifiedIndex
         if ($actor->isGuest() === false
             && empty($event->criteria->query)
             && $actor->unified_index_with_byobu) {
-
             $this->unify($event->search->getQuery(), $actor);
         } elseif ($actor->isGuest() || !count($event->search->getActiveGambits())) {
             $event->search->getQuery()->where('is_private', false);

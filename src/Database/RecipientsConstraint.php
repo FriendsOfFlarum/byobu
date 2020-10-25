@@ -14,15 +14,15 @@ namespace FoF\Byobu\Database;
 use Flarum\Discussion\Discussion;
 use Flarum\Extension\ExtensionManager;
 use Flarum\User\User;
-use Illuminate\Database\Query\Builder as Query;
 use Illuminate\Database\Eloquent\Builder as Eloquent;
+use Illuminate\Database\Query\Builder as Query;
 
 trait RecipientsConstraint
 {
     /**
      * @param Query|Eloquent $query
-     * @param User $user
-     * @param bool $unify
+     * @param User           $user
+     * @param bool           $unify
      */
     public function constraint($query, User $user, bool $unify = false)
     {

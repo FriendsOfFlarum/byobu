@@ -13,7 +13,6 @@ namespace FoF\Byobu\Access;
 
 use Flarum\Post\Post;
 use Flarum\User\AbstractPolicy;
-use Flarum\User\Guest;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
 use Illuminate\Database\Eloquent\Builder;
