@@ -12,6 +12,7 @@
 namespace FoF\Byobu;
 
 use Flarum\Api\Serializer\BasicUserSerializer;
+use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Discussion\Discussion;
@@ -43,7 +44,8 @@ return [
     (new Extend\ApiAttribute())
         ->add(ForumSerializer::class, Api\PermissionAttributes::class)
         ->add(DiscussionSerializer::class, Api\PermissionAttributes::class)
-        ->add(BasicUserSerializer::class, Api\UserAttributes::class),
+        ->add(BasicUserSerializer::class, Api\UserAttributes::class)
+        ->add(CurrentUserSerializer::class, Api\CurrentUserAttributes::class),
 
     (new Native\Model(Discussion::class))
         ->relationship('recipientUsers', function ($discussion) {
