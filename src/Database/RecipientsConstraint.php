@@ -26,6 +26,8 @@ trait RecipientsConstraint
      */
     public function constraint($query, User $user, bool $unify = false)
     {
+        if ($user->isGuest()) return;
+
         $method = $unify ? 'orWhere' : 'where';
 
         $query
@@ -33,14 +35,11 @@ trait RecipientsConstraint
             ->{$method}(function ($query) use ($user) {
                 // Open access for is_private discussions when the user is
                 // part of the recipients either directly or through a group.
-                if ($user->isGuest() === false) {
-                    $this->forRecipient($query, $user->groups->pluck('id')->all(), $user->id);
-                }
+                $this->forRecipient($query, $user->groups->pluck('id')->all(), $user->id);
 
                 // Open access for is_private discussions when the user handles
                 // flags and any of the posts inside the discussion is flagged.
-                if ($user->isGuest() === false
-                    && $this->flagsInstalled()
+                if ($this->flagsInstalled()
                     && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
                     && $user->hasPermission('discussion.viewFlags')
                 ) {

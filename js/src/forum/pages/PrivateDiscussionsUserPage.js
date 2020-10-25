@@ -4,9 +4,8 @@ import Button from 'flarum/components/Button';
 import Dropdown from 'flarum/components/Dropdown';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
-import PrivateDiscussionComposer from './discussions/PrivateDiscussionComposer';
-import LogInModal from 'flarum/components/LogInModal';
 import PrivateDiscussionList from './discussions/PrivateDiscussionList';
+import PrivateComposing from "./PrivateComposing";
 
 export default class PrivateDiscussionsUserPage extends UserPage {
     oninit(vnode) {
@@ -40,38 +39,6 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         this.loadUser(m.route.param('username'));
     }
 
-    newDiscussionAction(e) {
-        e.preventDefault();
-
-        return new Promise((resolve, reject) => {
-            if (app.session.user) {
-                let recipients = new ItemList();
-
-                recipients.add('users:' + app.session.user.id(), app.session.user);
-
-                if (this.user !== null && app.session.user.id() !== this.user.id()) {
-                    recipients.add('users:' + this.user.id(), this.user);
-                }
-
-                app.composer.load(PrivateDiscussionComposer, {
-                    user: app.session.user,
-                    recipients: recipients,
-                    recipientUsers: recipients,
-                    titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                    submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
-                });
-
-                app.composer.show();
-
-                return resolve();
-            } else {
-                app.modal.show(LogInModal);
-
-                return reject();
-            }
-        });
-    }
-
     content() {
         return (
             <div className="DiscussionsUserPage">
@@ -85,21 +52,14 @@ export default class PrivateDiscussionsUserPage extends UserPage {
     }
 
     actionItems() {
+        let composing = new PrivateComposing(this.user());
+
         const items = new ItemList();
-        const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
 
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
             items.add(
                 'start_private',
-                Button.component({
-                    icon: 'fas fa-pen',
-                    className: 'Button Button--primary IndexPage-newDiscussion',
-                    itemClassName: 'fof-byobu_primaryControl',
-                    onclick: this.newDiscussionAction.bind(this),
-                    disabled: !canStartDiscussion,
-                }, app.translator.trans(
-                    canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'
-                ))
+                composing.component()
             );
         }
 

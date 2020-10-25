@@ -19,6 +19,8 @@ fof-byobu:
             user_deleted: -deleted-
         nav:
             start_button: New Private Discussion
+            nav_item_with_unread: "Private Discussions ({count})"
+            nav_item_no_unread: "Private Discussions"
         input:
             search_recipients: Search recipient by typing first three characters...
         search:
@@ -41,7 +43,6 @@ fof-byobu:
             settings:
                 block_pd: Block private discussions
                 unified_index: Combine private discussions inside unified index
-
             byobu_link: Private Discussions
             dropdown_label: Private Discussions
 

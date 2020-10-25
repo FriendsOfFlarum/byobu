@@ -26,7 +26,7 @@ class AddGambits
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigureDiscussionGambits::class, [$this, 'addDiscussionGambit']);
-//        $events->listen(ConfigureUserGambits::class, [$this, 'addUserGambits']);
+        $events->listen(ConfigureUserGambits::class, [$this, 'addUserGambits']);
     }
 
     /**

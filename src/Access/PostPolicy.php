@@ -36,7 +36,7 @@ class PostPolicy extends AbstractPolicy
             $this->constraint(
                 $query,
                 $actor,
-                true
+                false
             );
         });
     }

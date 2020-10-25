@@ -12,8 +12,10 @@
 namespace FoF\Byobu\Api;
 
 use Flarum\Api\Event\Serializing;
+use Flarum\Discussion\Discussion;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
+use Illuminate\Database\Query\JoinClause;
 
 class CurrentUserAttributes
 {
@@ -27,13 +29,27 @@ class CurrentUserAttributes
         /** @var User $user */
         $user = $event->model;
 
-        $query = $user->read()
+        $query = Discussion::query()
+            ->distinct()
+            ->leftJoin('discussion_user', function (JoinClause $join) use ($user) {
+                $join
+                    ->on('discussions.id', '=', 'discussion_user.discussion_id')
+                    ->where('discussion_user.user_id', $user->id);
+            })
             ->where('is_private', true)
-            ->where('last_read_post_number', '<', 'last_post_number')
-            ->getQuery();
+            ->where(function ($query) {
+                $query
+                    ->where('discussion_user.last_read_post_number', '<', 'discussions.last_post_number')
+                    ->orWhereNull('discussion_user.last_read_post_number');
+            })
+            ->whereVisibleTo($user);
+//
+//        $query = $user->read()
+//            ->wherePivot('last_read_post_number', '<', 'discussions.last_post_number')
+//            ->where('is_private', true);
+//
+//        $this->constraint($query, $user, false);
 
-        $this->constraint($query, $user, false);
-
-        $event->attributes['unreadPrivateMessages'] = (bool) $query->count();
+        $event->attributes['unreadPrivateMessagesCount'] = $query->count();
     }
 }
