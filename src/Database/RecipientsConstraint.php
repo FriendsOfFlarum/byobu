@@ -71,11 +71,7 @@ trait RecipientsConstraint
 
     protected function whenFlagged($query)
     {
-        $query->orWhereIn('discussions.id', function ($query) {
-            Discussion::query()
-                ->select('discussions.id')
-                ->whereHas('posts.flags');
-        });
+        $query->orWhereHas('posts.flags');
     }
 
     protected function flagsInstalled(): bool
