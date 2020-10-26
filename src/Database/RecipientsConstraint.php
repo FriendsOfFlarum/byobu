@@ -11,7 +11,6 @@
 
 namespace FoF\Byobu\Database;
 
-use Flarum\Discussion\Discussion;
 use Flarum\Extension\ExtensionManager;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder as Eloquent;
