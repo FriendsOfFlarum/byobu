@@ -28,7 +28,9 @@ class GetModelIsPrivate
         }
 
         if ($discussion) {
-            $screener = Screener::fromDiscussion($discussion);
+            /** @var Screener $screener */
+            $screener = app('byobu.screener');
+            $screener = $screener->fromDiscussion($discussion);
 
             // Unless we think it's private, delegate the check further
             // along the pipeline to other listeners.

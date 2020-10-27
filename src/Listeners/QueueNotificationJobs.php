@@ -13,9 +13,9 @@ namespace FoF\Byobu\Listeners;
 
 use Flarum\Post\Event\Saving;
 use FoF\Byobu\Events\DiscussionMadePublic;
-use FoF\Byobu\Events\DiscussionRecipientRemovedSelf;
-use FoF\Byobu\Events\DiscussionRecipientsChanged;
-use FoF\Byobu\Events\PrivateDiscussionCreated;
+use FoF\Byobu\Events\RemovedSelf;
+use FoF\Byobu\Events\RecipientsChanged;
+use FoF\Byobu\Events\Created;
 use FoF\Byobu\Jobs;
 use Illuminate\Events\Dispatcher;
 use s9e\TextFormatter\Utils;
@@ -24,13 +24,13 @@ class QueueNotificationJobs
 {
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(PrivateDiscussionCreated::class, [$this, 'discussionMadePrivate']);
+        $events->listen(Created::class, [$this, 'discussionMadePrivate']);
         $events->listen(Saving::class, [$this, 'postMadeInPrivateDiscussion']);
-        $events->listen(DiscussionRecipientRemovedSelf::class, [$this, 'discussionRecipientRemovedSelf']);
-        $events->listen(DiscussionRecipientsChanged::class, [$this, 'discussionRecipientsChanged']);
+        $events->listen(RemovedSelf::class, [$this, 'discussionRecipientRemovedSelf']);
+        $events->listen(RecipientsChanged::class, [$this, 'discussionRecipientsChanged']);
     }
 
-    public function discussionMadePrivate(PrivateDiscussionCreated $event)
+    public function discussionMadePrivate(Created $event)
     {
         app('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenPrivateDiscussionStarted($event->discussion, $event->newUsers, $event->newGroups)
@@ -61,14 +61,14 @@ class QueueNotificationJobs
         });
     }
 
-    public function discussionRecipientRemovedSelf(DiscussionRecipientRemovedSelf $event)
+    public function discussionRecipientRemovedSelf(RemovedSelf $event)
     {
         app('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenRecipientRemoved($event->actor, $event->discussion, $event->newUsers)
         );
     }
 
-    public function discussionRecipientsChanged(DiscussionRecipientsChanged $event)
+    public function discussionRecipientsChanged(RecipientsChanged $event)
     {
         app('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenRecipientAdded($event->actor, $event->discussion, $event->newUsers, $event->oldUsers)

@@ -24,8 +24,10 @@ use Flarum\Extend as Native;
 use Flarum\Group\Group;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
+use FoF\Byobu\Discussion\Screener;
 use FoF\Components\Extend\AddFofComponents;
 use FoF\Split\Events\DiscussionWasSplit;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
@@ -91,7 +93,9 @@ return [
     (new Native\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
 
-    function (Dispatcher $events) {
+    function (Dispatcher $events, Container $container) {
+        $container->bind('byobu.screener', Screener::class);
+
         $events->subscribe(Access\DiscussionPolicy::class);
         $events->subscribe(Access\PostPolicy::class);
         $events->subscribe(Listeners\AddGambits::class);

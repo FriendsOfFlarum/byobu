@@ -76,7 +76,9 @@ class DiscussionPolicy extends AbstractPolicy
      */
     private function approveIfPrivate(Discussion $discussion)
     {
-        $screener = new Screener($discussion);
+        /** @var Screener $screener */
+        $screener = app('byobu.screener');
+        $screener = $screener->fromDiscussion($discussion);
 
         return $screener->isPrivate();
     }

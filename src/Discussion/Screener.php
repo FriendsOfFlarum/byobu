@@ -29,7 +29,7 @@ use Illuminate\Support\Str;
  */
 class Screener extends Fluent
 {
-    public static function fromDiscussion(Discussion $discussion): Screener
+    public function fromDiscussion(Discussion $discussion): Screener
     {
         $screener = new self();
 
@@ -39,7 +39,7 @@ class Screener extends Fluent
         return $screener;
     }
 
-    public static function whenSavingDiscussions(Saving $event): Screener
+    public function whenSavingDiscussions(Saving $event): Screener
     {
         $screener = new self();
         $screener->currentUsers = $event->discussion->recipientUsers()->get();
@@ -74,7 +74,7 @@ class Screener extends Fluent
         return $this->currentUsers->isNotEmpty() || $this->currentGroups->isNotEmpty();
     }
 
-    protected static function getRecipientsFromPayload(Saving $event, string $type): Collection
+    protected function getRecipientsFromPayload(Saving $event, string $type): Collection
     {
         $ids = collect(Arr::get(
             $event->data,
@@ -89,7 +89,7 @@ class Screener extends Fluent
         return User::query()->whereIn('id', $ids)->get();
     }
 
-    protected static function relationName(string $type)
+    final protected static function relationName(string $type)
     {
         return 'recipient'.Str::ucfirst($type);
     }

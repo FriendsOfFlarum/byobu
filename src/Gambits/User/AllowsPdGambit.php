@@ -13,7 +13,7 @@ namespace FoF\Byobu\Gambits\User;
 
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
-use FoF\Byobu\Events\SearchingForRecipients;
+use FoF\Byobu\Events\SearchingRecipient;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AllowsPdGambit extends AbstractRegexGambit
@@ -44,7 +44,7 @@ class AllowsPdGambit extends AbstractRegexGambit
     {
         $actor = $search->getActor();
 
-        $this->dispatcher->dispatch(new SearchingForRecipients($search, $matches, $negate));
+        $this->dispatcher->dispatch(new SearchingRecipient($search, $matches, $negate));
 
         if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
             $search

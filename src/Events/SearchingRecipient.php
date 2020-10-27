@@ -13,7 +13,7 @@ namespace FoF\Byobu\Events;
 
 use Flarum\Search\AbstractSearch;
 
-class SearchingForRecipients
+class SearchingRecipient
 {
     /**
      * @var AbstractSearch

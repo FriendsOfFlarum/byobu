@@ -18,6 +18,7 @@ use Flarum\User\Exception\PermissionDeniedException;
 use Flarum\User\User;
 use FoF\Byobu\Discussion\Screener;
 use FoF\Byobu\Events;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Str;
 
 class PersistRecipients
@@ -29,7 +30,9 @@ class PersistRecipients
 
     public function handle(Saving $event)
     {
-        $this->screener = Screener::whenSavingDiscussions($event);
+        /** @var Screener $screener */
+        $screener = app('byobu.screener');
+        $this->screener = $screener->whenSavingDiscussions($event);
 
         if ($this->screener->nothingChanged()) {
             return;
@@ -47,8 +50,16 @@ class PersistRecipients
 
         // Private discussions that used to be private but no longer have any recipients
         // now by default will be soft deleted/hidden.
+        // The Deleting event is dispatched, if a listener interferes with by returning
+        // a non-null response the discussion will not be soft deleted.
         if ($this->screener->wasPrivate() && !$this->screener->isPrivate()) {
-            $event->discussion->hide($event->actor);
+            /** @var Dispatcher $events */
+            $events = app(Dispatcher::class);
+            $eventArgs = $this->eventArguments($event->discussion);
+
+            if ($events->until(new Events\Deleting(...$eventArgs)) === null) {
+                $event->discussion->hide($event->actor);
+            }
         }
 
         $this->raiseEvent($event->discussion);
@@ -70,9 +81,9 @@ class PersistRecipients
         });
     }
 
-    protected function raiseEvent(Discussion $discussion)
+    protected function eventArguments(Discussion $discussion): array
     {
-        $args = [
+        return [
             $discussion,
             $this->screener->actor(),
             $this->screener->users->pluck('id'),
@@ -80,13 +91,18 @@ class PersistRecipients
             $this->screener->currentUsers->pluck('id'),
             $this->screener->currentGroups->pluck('id'),
         ];
+    }
+
+    protected function raiseEvent(Discussion $discussion)
+    {
+        $args = $this->eventArguments($discussion);
 
         if ($this->screener->isPrivate() && !$discussion->exists) {
-            $event = new Events\PrivateDiscussionCreated(...$args);
+            $event = new Events\Created(...$args);
         } elseif ($this->screener->actorRemoved()) {
-            $event = new Events\DiscussionRecipientRemovedSelf(...$args);
+            $event = new Events\RemovedSelf(...$args);
         } else {
-            $event = new Events\DiscussionRecipientsChanged(...$args);
+            $event = new Events\RecipientsChanged(...$args);
         }
 
         $discussion->raise($event);

@@ -11,6 +11,6 @@
 
 namespace FoF\Byobu\Events;
 
-class DiscussionRecipientsChanged extends AbstractRecipientsEvent
+class RecipientsChanged extends AbstractRecipientsEvent
 {
 }
