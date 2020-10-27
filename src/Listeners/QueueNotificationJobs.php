@@ -12,10 +12,10 @@
 namespace FoF\Byobu\Listeners;
 
 use Flarum\Post\Event\Saving;
-use FoF\Byobu\Events\DiscussionMadePublic;
-use FoF\Byobu\Events\RemovedSelf;
-use FoF\Byobu\Events\RecipientsChanged;
 use FoF\Byobu\Events\Created;
+use FoF\Byobu\Events\DiscussionMadePublic;
+use FoF\Byobu\Events\RecipientsChanged;
+use FoF\Byobu\Events\RemovedSelf;
 use FoF\Byobu\Jobs;
 use Illuminate\Events\Dispatcher;
 use s9e\TextFormatter\Utils;
