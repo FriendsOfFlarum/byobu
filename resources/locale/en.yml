@@ -18,7 +18,7 @@ fof-byobu:
             recipients: "{count} Recipient|{count} Recipients"
             user_deleted: -deleted-
         nav:
-            start_button: New Private Discussion
+            start_button: Discuss Privately
             nav_item_with_unread: "Private Discussions ({count})"
             nav_item_no_unread: "Private Discussions"
         input:
