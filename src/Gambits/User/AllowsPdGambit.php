@@ -51,11 +51,11 @@ class AllowsPdGambit extends AbstractRegexGambit
             $search
                 ->getQuery()
                 ->when(
-                    $this->extensionEnabled('flarum-suspend') && ! $negate,
-                    function ($query) {$query->whereNull('suspended_until');}
+                    $this->extensionEnabled('flarum-suspend') && !$negate,
+                    function ($query) {$query->whereNull('suspended_until'); }
                 )
                 ->where(function ($query) use ($negate) {
-                    $query->where('blocks_byobu_pd', ! $negate);
+                    $query->where('blocks_byobu_pd', !$negate);
                 })
                 ->orderBy('username', 'asc');
         }
@@ -65,7 +65,6 @@ class AllowsPdGambit extends AbstractRegexGambit
     {
         /** @var ExtensionManager $manager */
         $manager = app(ExtensionManager::class);
-
 
         return $manager->isEnabled($extension);
     }
