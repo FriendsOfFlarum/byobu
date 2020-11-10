@@ -19,7 +19,6 @@ use Flarum\User\User;
 use FoF\Byobu\Discussion\Screener;
 use FoF\Byobu\Events;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -92,11 +91,7 @@ class PersistRecipients
     {
         return [
             $discussion,
-            $this->screener->actor(),
-            $this->screener->users->pluck('id'),
-            $this->screener->groups->pluck('id'),
-            $this->screener->currentUsers->pluck('id'),
-            $this->screener->currentGroups->pluck('id'),
+            $this->screener
         ];
     }
 

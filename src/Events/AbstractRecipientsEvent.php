@@ -12,9 +12,7 @@
 namespace FoF\Byobu\Events;
 
 use Flarum\Discussion\Discussion;
-use Flarum\Group\Group;
-use Flarum\User\User;
-use Illuminate\Support\Collection;
+use FoF\Byobu\Discussion\Screener;
 
 abstract class AbstractRecipientsEvent
 {
@@ -24,44 +22,13 @@ abstract class AbstractRecipientsEvent
     public $discussion;
 
     /**
-     * @var User
+     * @var Screener
      */
-    public $actor;
+    public $screener;
 
-    /**
-     * @var Collection|int[]
-     */
-    public $newUsers;
-    /**
-     * @var Collection|int[]
-     */
-    public $newGroups;
-    /**
-     * @var User[]|Collection
-     */
-    public $oldUsers;
-    /**
-     * @var Group[]|Collection
-     */
-    public $oldGroups;
-
-    /**
-     * AbstractRecipientsEvent constructor.
-     *
-     * @param Discussion         $discussion
-     * @param User               $actor
-     * @param Collection|int[]   $newUsers
-     * @param Collection|int[]   $newGroups
-     * @param Collection|User[]  $oldUsers
-     * @param Collection|Group[] $oldGroups
-     */
-    public function __construct(Discussion $discussion, User $actor, Collection $newUsers, Collection $newGroups, Collection $oldUsers, Collection $oldGroups)
+    public function __construct(Discussion $discussion, Screener $screener)
     {
         $this->discussion = $discussion;
-        $this->actor = $actor;
-        $this->newUsers = $newUsers;
-        $this->newGroups = $newGroups;
-        $this->oldUsers = $oldUsers;
-        $this->oldGroups = $oldGroups;
+        $this->screener = $screener;
     }
 }

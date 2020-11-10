@@ -97,36 +97,43 @@ function controls() {
                 }, app.translator.trans('fof-byobu.forum.buttons.edit_recipients'))
             );
         }
-        items.add(
-            'remove',
-            Button.component({
-                icon: 'fas fa-user-slash',
-                onclick: () => {
-                    if (discussion) {
-                        let recipients = new ItemList();
-                        discussion.recipientUsers().map((user) => {
-                            if (app.session.user.id() !== user.id()) {
-                                recipients.add('users:' + user.id(), user);
-                            }
-                        });
+        if (discussion && discussion.recipientUsers().find(user => user.id() === app.session.user.id())) {
+            items.add(
+                'remove',
+                Button.component({
+                    icon: 'fas fa-user-slash',
+                    onclick: () => {
+                        if (discussion) {
+                            let recipients = new ItemList();
+                            discussion.recipientUsers().map((user) => {
+                                if (app.session.user.id() !== user.id()) {
+                                    recipients.add('users:' + user.id(), user);
+                                }
+                            });
 
-                        let recipientGroups = [];
-                        let recipientUsers = [];
+                            let recipientGroups = [];
+                            let recipientUsers = [];
 
-                        recipients.toArray().forEach((recipient) => {
-                            if (recipient instanceof User) {
-                                recipientUsers.push(recipient);
-                            }
-                            if (recipient instanceof Group) {
-                                recipientGroups.push(recipient);
-                            }
-                        });
+                            recipients.toArray().forEach((recipient) => {
+                                if (recipient instanceof User) {
+                                    recipientUsers.push(recipient);
+                                }
+                                if (recipient instanceof Group) {
+                                    recipientGroups.push(recipient);
+                                }
+                            });
 
-                        discussion.save({ relationships: { recipientUsers, recipientGroups } }).then(() => app.history.back());
-                    }
-                },
-            }, app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion'))
-        );
+                            discussion.save({
+                                relationships: {
+                                    recipientUsers,
+                                    recipientGroups
+                                }
+                            }).then(() => app.history.back());
+                        }
+                    },
+                }, app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion'))
+            );
+        }
     });
 }
 
