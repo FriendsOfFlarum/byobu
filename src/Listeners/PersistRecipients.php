@@ -31,7 +31,9 @@ class PersistRecipients
 
     public function handle(Saving $event)
     {
-        if (! $this->eventSubmitsRelationships($event->data)) return;
+        if (!$this->eventSubmitsRelationships($event->data)) {
+            return;
+        }
 
         /** @var Screener $screener */
         $screener = app('byobu.screener');
@@ -91,7 +93,7 @@ class PersistRecipients
     {
         return [
             $discussion,
-            $this->screener
+            $this->screener,
         ];
     }
 
@@ -123,7 +125,9 @@ class PersistRecipients
     protected function checkPermissionsForExistingDiscussion(User $user, Discussion $discussion)
     {
         // Actor should always be able to remove themself.
-        if ($this->screener->onlyActorRemoved()) return;
+        if ($this->screener->onlyActorRemoved()) {
+            return;
+        }
 
         if ($this->screener->users->isNotEmpty() && $user->cannot('discussion.editUserRecipients', $discussion)) {
             throw new PermissionDeniedException('Not allowed to change users in a private discussion');

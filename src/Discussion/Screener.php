@@ -137,15 +137,25 @@ class Screener extends Fluent
     public function onlyActorRemoved(): bool
     {
         // Actor hasn't been removed.
-        if (! $this->actorRemoved()) return false;
+        if (!$this->actorRemoved()) {
+            return false;
+        }
         // More than just the actor removed.
-        if ($this->deleted('users')->count() > 1) return false;
+        if ($this->deleted('users')->count() > 1) {
+            return false;
+        }
         // Users were added.
-        if ($this->added('users')->count() > 0) return false;
+        if ($this->added('users')->count() > 0) {
+            return false;
+        }
         // Groups were removed.
-        if ($this->deleted('groups')->count() > 0) return false;
+        if ($this->deleted('groups')->count() > 0) {
+            return false;
+        }
         // Groups were added.
-        if ($this->added('groups')->count() > 0) return false;
+        if ($this->added('groups')->count() > 0) {
+            return false;
+        }
 
         return true;
     }
