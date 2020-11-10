@@ -19,6 +19,8 @@ use Flarum\User\User;
 use FoF\Byobu\Discussion\Screener;
 use FoF\Byobu\Events;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class PersistRecipients
@@ -30,12 +32,14 @@ class PersistRecipients
 
     public function handle(Saving $event)
     {
+        if (! $this->eventSubmitsRelationships($event->data)) return;
+
         /** @var Screener $screener */
         $screener = app('byobu.screener');
         $this->screener = $screener->whenSavingDiscussions($event);
 
         if ($this->screener->nothingChanged()) {
-            return;
+            return null;
         }
 
         if ($event->actor->cannot('startPrivateDiscussionWithBlockers') && $this->screener->hasBlockingUsers()) {
@@ -50,7 +54,7 @@ class PersistRecipients
 
         // Private discussions that used to be private but no longer have any recipients
         // now by default will be soft deleted/hidden.
-        // The Deleting event is dispatched, if a listener interferes with by returning
+        // The Deleting event is dispatched, if a listener interferes by returning
         // a non-null response the discussion will not be soft deleted.
         if ($this->screener->wasPrivate() && !$this->screener->isPrivate()) {
             /** @var Dispatcher $events */
@@ -68,15 +72,18 @@ class PersistRecipients
             foreach (['users', 'groups'] as $type) {
                 $relation = 'recipient'.Str::ucfirst($type);
 
-                $discussion->{$relation}()->saveMany(
-                    $this->screener->deleted($type),
-                    ['removed_at' => Carbon::now()]
-                );
-
+                // Add models that weren't stored yet.
                 $discussion->{$relation}()->saveMany(
                     $this->screener->added($type),
                     ['removed_at' => null]
                 );
+
+                $this->screener->deleted($type)->each(function ($model) use ($discussion, $relation) {
+                    $discussion->{$relation}()->updateExistingPivot(
+                        $model,
+                        ['removed_at' => Carbon::now()]
+                    );
+                });
             }
         });
     }
@@ -120,11 +127,27 @@ class PersistRecipients
 
     protected function checkPermissionsForExistingDiscussion(User $user, Discussion $discussion)
     {
+        // Actor should always be able to remove themself.
+        if ($this->screener->onlyActorRemoved()) return;
+
         if ($this->screener->users->isNotEmpty() && $user->cannot('discussion.editUserRecipients', $discussion)) {
             throw new PermissionDeniedException('Not allowed to change users in a private discussion');
         }
         if ($this->screener->groups->isNotEmpty() && $user->cannot('discussion.editGroupRecipients')) {
             throw new PermissionDeniedException('Not allowed to change groups in a private discussion');
         }
+    }
+
+    protected function eventSubmitsRelationships(array $data): bool
+    {
+        $valid = false;
+
+        foreach (['users', 'groups'] as $type) {
+            $relation = Screener::relationName($type);
+
+            $valid = $valid || Arr::has($data, "relationships.$relation");
+        }
+
+        return $valid;
     }
 }

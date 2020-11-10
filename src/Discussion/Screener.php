@@ -60,8 +60,17 @@ class Screener extends Fluent
 
     public function nothingChanged(): bool
     {
-        return $this->users->diff($this->currentUsers)->isEmpty()
-            && $this->groups->diff($this->currentGroups)->isEmpty();
+        $nothingChanged = true;
+
+        foreach (['users', 'groups'] as $type) {
+            foreach (['added', 'deleted'] as $action) {
+                if ($this->{$action}($type)->isNotEmpty()) {
+                    return false;
+                }
+            }
+        }
+
+        return $nothingChanged;
     }
 
     public function isPrivate(): bool
@@ -89,7 +98,7 @@ class Screener extends Fluent
         return User::query()->whereIn('id', $ids)->get();
     }
 
-    final protected static function relationName(string $type)
+    final public static function relationName(string $type)
     {
         return 'recipient'.Str::ucfirst($type);
     }
@@ -122,6 +131,22 @@ class Screener extends Fluent
 
     public function actorRemoved(): bool
     {
-        return $this->deleted('users')->find($this->actor) !== null;
+        return $this->deleted('users')->find($this->actor()) !== null;
+    }
+
+    public function onlyActorRemoved(): bool
+    {
+        // Actor hasn't been removed.
+        if (! $this->actorRemoved()) return false;
+        // More than just the actor removed.
+        if ($this->deleted('users')->count() > 1) return false;
+        // Users were added.
+        if ($this->added('users')->count() > 0) return false;
+        // Groups were removed.
+        if ($this->deleted('groups')->count() > 0) return false;
+        // Groups were added.
+        if ($this->added('groups')->count() > 0) return false;
+
+        return true;
     }
 }
