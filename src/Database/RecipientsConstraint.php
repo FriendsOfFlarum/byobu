@@ -70,7 +70,11 @@ trait RecipientsConstraint
 
     protected function whenFlagged($query)
     {
-        $query->orWhereHas('posts.flags');
+        $query->orWhereIn('discussions.id', function ($query) {
+            $query->select('posts.discussion_id')
+                ->from('flags')
+                ->leftJoin('posts', 'flags.post_id', 'posts.id');
+        });
     }
 
     protected function flagsInstalled(): bool
