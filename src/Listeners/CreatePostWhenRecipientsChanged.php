@@ -49,10 +49,6 @@ class CreatePostWhenRecipientsChanged
      */
     public function whenDiscussionWasTagged(AbstractRecipientsEvent $event)
     {
-        if ($event->oldUsers->isEmpty() && $event->oldGroups->isEmpty()) {
-            return;
-        }
-
         $post = RecipientsModified::reply($event);
 
         $event->discussion->mergePost($post);
@@ -60,10 +56,6 @@ class CreatePostWhenRecipientsChanged
 
     public function whenActorRemovedSelf(RemovedSelf $event)
     {
-        if ($event->oldUsers->isEmpty() && $event->oldGroups->isEmpty()) {
-            return;
-        }
-
         $post = RecipientLeft::reply($event);
 
         $event->discussion->mergePost($post);

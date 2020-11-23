@@ -34,8 +34,8 @@ class QueueNotificationJobs
         app('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenPrivateDiscussionStarted(
                 $event->discussion,
-                $event->screener->users->pluck('id'),
-                $event->screener->groups->pluck('id')
+                $event->screener->users,
+                $event->screener->groups
             )
         );
     }
@@ -70,7 +70,7 @@ class QueueNotificationJobs
             new Jobs\SendNotificationWhenRecipientRemoved(
                 $event->screener->actor(),
                 $event->discussion,
-                $event->screener->users->pluck('id')
+                $event->screener->users
             )
         );
     }
@@ -81,8 +81,8 @@ class QueueNotificationJobs
             new Jobs\SendNotificationWhenRecipientAdded(
                 $event->screener->actor(),
                 $event->discussion,
-                $event->screener->users->pluck('id'),
-                $event->screener->currentUsers->pluck('id')
+                $event->screener->users,
+                $event->screener->currentUsers
             )
         );
     }

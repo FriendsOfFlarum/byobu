@@ -53,7 +53,7 @@ class SendNotificationWhenRecipientRemoved implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
-        $recipients = User::whereIn('id', $this->newUsers)->get();
+        $recipients = $this->newUsers;
 
         $notifications->sync(new DiscussionRecipientRemovedBlueprint($this->actor, $this->discussion), $recipients->all());
 

@@ -58,8 +58,6 @@ export default class AddRecipientModal extends Modal {
     }
 
     content() {
-        const isDisabled = this.selected().toArray().length < 2;
-
         return [
             <div className="Modal-body">
                 <div class="AddRecipientModal-help">{this.helpText()}</div>
@@ -73,7 +71,6 @@ export default class AddRecipientModal extends Modal {
                         {Button.component({
                             type: 'submit',
                             className: 'Button Button--primary',
-                            disabled: isDisabled,
                             icon: 'fas fa-check',
                         }, app.translator.trans('fof-byobu.forum.buttons.submit'))}
                         {Button.component({

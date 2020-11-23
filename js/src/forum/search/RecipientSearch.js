@@ -73,9 +73,7 @@ export default class RecipientSearch extends Search {
                         .toArray()
                         .map((recipient) =>
                             recipientLabel(recipient, {
-                                onclick: () => {
-                                    this.removeRecipient(recipient);
-                                },
+                                onclick: (e) => this.removeRecipient(recipient, e)
                             })
                         )
                 ),
@@ -164,7 +162,9 @@ export default class RecipientSearch extends Search {
      *
      * @param recipient
      */
-    removeRecipient(recipient) {
+    removeRecipient(recipient, e) {
+        e.preventDefault();
+
         let type;
 
         if (recipient instanceof User) {
@@ -175,8 +175,6 @@ export default class RecipientSearch extends Search {
         }
 
         this.attrs.selected().remove(type + ':' + recipient.id());
-
-        m.redraw();
     }
 
     /**

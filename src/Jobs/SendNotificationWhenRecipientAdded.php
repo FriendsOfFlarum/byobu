@@ -59,8 +59,7 @@ class SendNotificationWhenRecipientAdded implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
-        $newUsers = User::whereIn('id', $this->newUsers)->get();
-        $recipients = $newUsers->diff($this->oldUsers);
+        $recipients = $this->newUsers->diff($this->oldUsers);
 
         $notifications->sync(new DiscussionAddedBlueprint($this->actor, $this->discussion), $recipients->all());
     }

@@ -1,5 +1,5 @@
-import EventPost from 'flarum/components/EventPost';
-import recipientsLabel from '../pages/labels/recipientsLabel';
+import EventPost from "flarum/components/EventPost";
+import recipientsLabel from "../pages/labels/recipientsLabel";
 
 export default class RecipientsModified extends EventPost {
     static initAttrs(attrs) {
@@ -18,10 +18,10 @@ export default class RecipientsModified extends EventPost {
             attrs.added = diff(newRecipients, oldRecipients, 'users');
             attrs.removed = diff(oldRecipients, newRecipients, 'users');
         } else {
-            var usersAdded = diff(content['new']['users'], content['old']['users'], 'users');
-            var usersRemoved = diff(content['old']['users'], content['new']['users'], 'users');
-            var groupsAdded = diff(content['new']['groups'], content['old']['groups'], 'groups');
-            var groupsRemoved = diff(content['old']['groups'], content['new']['groups'], 'groups');
+            let usersAdded = diff(content['new']['users'], content['old']['users'], 'users');
+            let usersRemoved = diff(content['old']['users'], content['new']['users'], 'users');
+            let groupsAdded = diff(content['new']['groups'], content['old']['groups'], 'groups');
+            let groupsRemoved = diff(content['old']['groups'], content['new']['groups'], 'groups');
 
             attrs.added = usersAdded.concat(groupsAdded);
             attrs.removed = usersRemoved.concat(groupsRemoved);

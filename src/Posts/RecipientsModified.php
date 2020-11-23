@@ -59,12 +59,12 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
 
         $post->content = [
             'new' => [
-                'users'  => $event->newUsers->all(),
-                'groups' => $event->newGroups->all(),
+                'users'  => $event->screener->users->pluck('id')->all(),
+                'groups' => $event->screener->groups->pluck('id')->all(),
             ],
             'old' => [
-                'users'  => $event->oldUsers->pluck('id')->all(),
-                'groups' => $event->oldGroups->pluck('id')->all(),
+                'users'  => $event->screener->currentUsers->pluck('id')->all(),
+                'groups' => $event->screener->currentGroups->pluck('id')->all(),
             ],
         ];
         $post->created_at = time();

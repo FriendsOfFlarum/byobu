@@ -1,4 +1,4 @@
-import EventPost from 'flarum/components/EventPost';
+import EventPost from "flarum/components/EventPost";
 
 export default class RecipientLeft extends EventPost {
     static initAttrs(attrs) {
