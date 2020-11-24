@@ -14,10 +14,7 @@ export default (app) => {
                 LinkButton.component({
                     icon: 'fas fa-map',
                     href: app.route('byobuPrivate'),
-                }, user.unreadPrivateMessagesCount() > 0
-                    ? app.translator.trans('fof-byobu.forum.nav.nav_item_with_unread', {count: user.unreadPrivateMessagesCount()})
-                    : app.translator.trans('fof-byobu.forum.nav.nav_item_no_unread')
-                ),
+                }, app.translator.trans('fof-byobu.forum.nav.nav_item')),
                 75
             );
         }

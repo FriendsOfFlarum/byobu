@@ -19,8 +19,7 @@ fof-byobu:
             user_deleted: -deleted-
         nav:
             start_button: Discuss Privately
-            nav_item_with_unread: "Private Discussions ({count})"
-            nav_item_no_unread: "Private Discussions"
+            nav_item: "Private Discussions"
         input:
             search_recipients: Search recipient by typing first three characters...
         search:
