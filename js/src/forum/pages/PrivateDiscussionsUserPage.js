@@ -52,7 +52,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
     }
 
     actionItems() {
-        let composing = new PrivateComposing(this.user());
+        let composing = new PrivateComposing(this.user);
 
         const items = new ItemList();
 
