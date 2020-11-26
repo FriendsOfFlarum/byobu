@@ -1,3 +1,9 @@
+# 0.6.0-beta.2
+
+### Fixed
+
+- Issue with profile private discussions erroring.
+
 # 0.6.0-beta.1
 
 ### Changed
