@@ -15,6 +15,7 @@ use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\User\User;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, MailableInterface
 {
@@ -105,9 +106,9 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      *
      * @return string
      */
-    public function getEmailSubject()
+    public function getEmailSubject(TranslatorInterface $translator)
     {
-        return app('translator')->trans('fof-byobu.notifications.recipient_removed.title', [
+        return $translator->trans('fof-byobu.notifications.recipient_removed.title', [
             'user'       => $this->user->username,
             'title'      => $this->discussion->title,
         ]);
