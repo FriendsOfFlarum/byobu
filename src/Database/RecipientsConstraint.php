@@ -19,6 +19,7 @@ use Illuminate\Database\Query\Builder as Query;
 trait RecipientsConstraint
 {
     use ExtensionsDiscovery;
+
     /**
      * @param Query|Eloquent $query
      * @param User           $user
