@@ -35,8 +35,8 @@ class AllowsPdGambit extends AbstractRegexGambit
      * Apply conditions to the search, given that the gambit was matched.
      *
      * @param AbstractSearch $search  The search object.
-     * @param array          $matches An array of matches from the search bit.
-     * @param bool           $negate  Whether or not the bit was negated, and thus whether
+     * @param array $matches          An array of matches from the search bit.
+     * @param bool $negate            Whether or not the bit was negated, and thus whether
      *                                or not the conditions should be negated.
      *
      * @return mixed
@@ -47,18 +47,24 @@ class AllowsPdGambit extends AbstractRegexGambit
 
         $this->dispatcher->dispatch(new SearchingRecipient($search, $matches, $negate));
 
-        if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
-            $search
-                ->getQuery()
-                ->when(
-                    $this->extensionEnabled('flarum-suspend') && !$negate,
-                    function ($query) {$query->whereNull('suspended_until'); }
-                )
-                ->where(function ($query) use ($negate) {
-                    $query->where('blocks_byobu_pd', !$negate);
-                })
-                ->orderBy('username', 'asc');
+        if ($actor->can('startPrivateDiscussionWithBlockers')) {
+            return;
         }
+
+        $search
+            ->getQuery()
+            // Always prevent PD's by non-privileged users to suspended users.
+            ->when(
+                $this->extensionEnabled('flarum-suspend') && ! $negate,
+                function ($query) {
+                    $query->whereNull('suspended_until');
+                }
+            )
+            // Always prevent PD's by non-privileged users to users that block PD's.
+            ->where(function ($query) use ($negate) {
+                $query->where('blocks_byobu_pd', $negate ? '1' : '0');
+            })
+            ->orderBy('username', 'asc');
     }
 
     protected function extensionEnabled(string $extension)
