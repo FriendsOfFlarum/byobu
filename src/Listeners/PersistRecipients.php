@@ -16,6 +16,7 @@ use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving;
 use Flarum\User\Exception\PermissionDeniedException;
 use Flarum\User\User;
+use FoF\Byobu\Concerns\ExtensionsDiscovery;
 use FoF\Byobu\Discussion\Screener;
 use FoF\Byobu\Events;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -24,6 +25,8 @@ use Illuminate\Support\Str;
 
 class PersistRecipients
 {
+    use ExtensionsDiscovery;
+
     /**
      * @var Screener
      */
@@ -51,6 +54,11 @@ class PersistRecipients
             $this->checkPermissionsForNewDiscussion($event->actor);
         } else {
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
+        }
+
+        // When discussions need approval and this is a private disucussion, ignore approvals.
+        if ($this->screener->isPrivate() && $this->extensionIsEnabled('flarum-approval')) {
+            $event->discussion->is_approved = true;
         }
 
         // Private discussions that used to be private but no longer have any recipients
