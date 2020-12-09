@@ -16,12 +16,13 @@ use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Discussion\Discussion;
-use Flarum\Discussion\Event\Saving;
+use Flarum\Discussion\Event\Saving as DiscussionSaving;
 use Flarum\Discussion\Event\Searching;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend as Native;
 use Flarum\Group\Group;
+use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
 use FoF\Byobu\Discussion\Screener;
@@ -86,9 +87,13 @@ return [
         }),
 
     (new Native\Event())
-        ->listen(Saving::class, Listeners\PersistRecipients::class)
+        ->listen(DiscussionSaving::class, Listeners\PersistRecipients::class)
+        ->listen(DiscussionSaving::class, Listeners\DropTagsOnPrivateDiscussions::class)
+        ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)
+        ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
         ->listen(GetModelIsPrivate::class, Listeners\GetModelIsPrivate::class)
-        ->listen(Searching::class, Listeners\UnifiedIndex::class),
+        ->listen(Searching::class, Listeners\UnifiedIndex::class)
+        ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class),
 
     (new Native\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
@@ -102,12 +107,6 @@ return [
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\QueueNotificationJobs::class);
-
-        $events->listen(Saving::class, Listeners\DropTagsOnPrivateDiscussions::class);
-        $events->listen(UserSaving::class, Listeners\SaveUserPreferences::class);
-
-        // Support for fof/split
-        $events->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class);
 
         // Add notifications
         $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {

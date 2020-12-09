@@ -47,18 +47,24 @@ class AllowsPdGambit extends AbstractRegexGambit
 
         $this->dispatcher->dispatch(new SearchingRecipient($search, $matches, $negate));
 
-        if ($actor->cannot('startPrivateDiscussionWithBlockers')) {
-            $search
-                ->getQuery()
-                ->when(
-                    $this->extensionEnabled('flarum-suspend') && !$negate,
-                    function ($query) {$query->whereNull('suspended_until'); }
-                )
-                ->where(function ($query) use ($negate) {
-                    $query->where('blocks_byobu_pd', !$negate);
-                })
-                ->orderBy('username', 'asc');
+        if ($actor->can('startPrivateDiscussionWithBlockers')) {
+            return;
         }
+
+        $search
+            ->getQuery()
+            // Always prevent PD's by non-privileged users to suspended users.
+            ->when(
+                $this->extensionEnabled('flarum-suspend') && !$negate,
+                function ($query) {
+                    $query->whereNull('suspended_until');
+                }
+            )
+            // Always prevent PD's by non-privileged users to users that block PD's.
+            ->where(function ($query) use ($negate) {
+                $query->where('blocks_byobu_pd', $negate ? '1' : '0');
+            })
+            ->orderBy('username', 'asc');
     }
 
     protected function extensionEnabled(string $extension)
