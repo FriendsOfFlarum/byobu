@@ -35,8 +35,8 @@ class AllowsPdGambit extends AbstractRegexGambit
      * Apply conditions to the search, given that the gambit was matched.
      *
      * @param AbstractSearch $search  The search object.
-     * @param array $matches          An array of matches from the search bit.
-     * @param bool $negate            Whether or not the bit was negated, and thus whether
+     * @param array          $matches An array of matches from the search bit.
+     * @param bool           $negate  Whether or not the bit was negated, and thus whether
      *                                or not the conditions should be negated.
      *
      * @return mixed
@@ -55,7 +55,7 @@ class AllowsPdGambit extends AbstractRegexGambit
             ->getQuery()
             // Always prevent PD's by non-privileged users to suspended users.
             ->when(
-                $this->extensionEnabled('flarum-suspend') && ! $negate,
+                $this->extensionEnabled('flarum-suspend') && !$negate,
                 function ($query) {
                     $query->whereNull('suspended_until');
                 }
