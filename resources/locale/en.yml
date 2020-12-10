@@ -77,14 +77,56 @@ fof-byobu:
             byobu_index: Display a link to Private Discussions on the index page
             byobu_index_help: When this option is enabled, a link from the forum main nav items to Private Discussions will be displayed
 
-    notifications:
-        private_discussion_created:
-            title: "[Private Discussion] user started a new private discussion with you"
-        private_discussion_replied:
-            title: "[Private Discussion] user posted in a private discussion"
-        recipient_removed:
-            title: "[Private Discussion] user left the discussion"
-        private_discussion_added:
-            title: "[Private Discussion] user added you to a private discussion"
-        made_public:
-            title: "[Private Discussion] user made the discussion public"
+    email:
+        subject:
+            private_discussion_created: "[Private Discussion] {display_name} started a new private discussion with you"
+            private_discussion_replied: "[Private Discussion] {display_name} posted in a private discussion"
+            recipient_removed: "[Private Discussion] {display_name} left the discussion"
+            private_discussion_added: "[Private Discussion] {display_name} added you to a private discussion"
+            made_public: "[Private Discussion] {display_name} made the discussion public"
+        body:
+            private_discussion_created: |
+                Hey {recipient_display_name},
+
+                {actor_display_name} started a new private discussion with you as a recipient, titled '{discussion_title}'.
+
+                View it here:
+                {discussion_url}
+
+                You may need to login first before being able to access this link.
+            private_discussion_replied: |
+                Hey {recipient_display_name},
+
+                {actor_display_name} posted in a private discussion with you as a recipient, titled '{discussion_title}'.
+
+                View it here:
+                {post_url}
+
+                You may need to login first before being able to access this link.
+            recipient_removed: |
+                Hey {recipient_display_name},
+
+                {actor_display_name} left the private discussion '{discussion_title}'. They'll no longer be able to view any of it's content.
+
+                View it here:
+                {discussion_url}
+
+                You may need to login first before being able to access this link.
+            private_discussion_added: |
+                Hey {recipient_display_name},
+
+                {actor_display_name} added you to an existing private discussion, titled '{discussion_title}'.
+
+                View it here:
+                {discussion_url}
+
+                You may need to login first before being able to access this link.
+            made_public: |
+                Hey {recipient_display_name},
+
+                {actor_display_name} made the private discussion '{discussion_title}' public. It's contents are now visible by anyone who can see the tag it's under.
+
+                View it here:
+                {discussion_url}
+
+                You may need to login first before being able to access this link.

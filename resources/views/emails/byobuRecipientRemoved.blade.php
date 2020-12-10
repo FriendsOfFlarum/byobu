@@ -1,5 +1,6 @@
-Hey {{ $user->username }},
-
-{{ $blueprint->user->username }} left the private discussion '{{ $blueprint->discussion->title }}'. They'll no longer be able to view any of it's content.
-
-View it here: {{ $url->to('forum')->route('discussion', ['id' => $blueprint->discussion->id]) }} (You may need to login first)
+{!! $translator->trans('fof-byobu.email.body.recipient_removed', [
+    '{recipient_display_name}' => $user->display_name,
+    '{actor_display_name}' => $blueprint->user->display_name,
+    '{discussion_title}' => $blueprint->discussion->title,
+    '{discussion_url}' => $url->to('forum')->route('discussion', ['id' => $blueprint->discussion->id]),
+]) !!}

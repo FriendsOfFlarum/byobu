@@ -1,5 +1,6 @@
-Hey {{ $user->username }},
-
-{{ $blueprint->actor->username }} added you to an existing private discussion, titled '{{ $blueprint->discussion->title }}'.
-
-View it here: {{ $url->to('forum')->route('discussion', ['id' => $blueprint->discussion->id]) }} (You may need to login first)
+{!! $translator->trans('fof-byobu.email.body.private_discussion_added', [
+    '{recipient_display_name}' => $user->display_name,
+    '{actor_display_name}' => $blueprint->actor->display_name,
+    '{discussion_title}' => $blueprint->discussion->title,
+    '{discussion_url}' => $url->to('forum')->route('discussion', ['id' => $blueprint->discussion->id]),
+]) !!}
