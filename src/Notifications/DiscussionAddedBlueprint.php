@@ -103,7 +103,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
     {
         return app('translator')->trans('fof-byobu.email.subject.private_discussion_added', [
             '{display_name}'       => $this->actor->username,
-            '{title}'      => $this->discussion->title,
+            '{title}'              => $this->discussion->title,
         ]);
     }
 }

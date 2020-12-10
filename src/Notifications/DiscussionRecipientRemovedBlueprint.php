@@ -109,7 +109,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
     {
         return app('translator')->trans('fof-byobu.email.subject.recipient_removed', [
             '{display_name}'       => $this->user->display_name,
-            '{title}'      => $this->discussion->title,
+            '{title}'              => $this->discussion->title,
         ]);
     }
 }
