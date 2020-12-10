@@ -108,9 +108,9 @@ class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInter
      */
     public function getEmailSubject()
     {
-        return app('translator')->trans('fof-byobu.notifications.made_public.title', [
-            'user'       => $this->actor->username,
-            'title'      => $this->discussion->title,
+        return app('translator')->trans('fof-byobu.email.subject.made_public', [
+            '{display_name}'    => $this->actor->display_name,
+            '{title}'           => $this->discussion->title,
         ]);
     }
 }
