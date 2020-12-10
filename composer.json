@@ -3,8 +3,10 @@
     "description": "Well integrated, advanced private discussions.",
     "keywords": [
         "pm",
-        "flarum", "fof",
-        "messaging", "private discussions"
+        "flarum",
+        "fof",
+        "messaging",
+        "private discussions"
     ],
     "type": "flarum-extension",
     "license": "MIT",
@@ -25,8 +27,7 @@
         "source": "https://github.com/FriendsOfFlarum/byobu"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.14",
-        "fof/components": ">=0.1.1"
+        "flarum/core": "^0.1.0-beta.14"
     },
     "extra": {
         "flarum-extension": {
