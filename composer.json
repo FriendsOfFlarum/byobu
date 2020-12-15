@@ -25,12 +25,12 @@
         "source": "https://github.com/FriendsOfFlarum/byobu"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.15",
-        "fof/components": ">=0.1.1"
+        "flarum/core": "^0.1.0-beta.15"
     },
     "extra": {
         "flarum-extension": {
             "title": "FoF Byōbu",
+            "category": "discussion",
             "icon": {
                 "image": "resources/logo.svg",
                 "backgroundColor": "#e74c3c",
@@ -39,7 +39,7 @@
                 "backgroundPosition": "center"
             }
         },
-        "fof": {
+        "extiverse": {
             "discuss": "https://discuss.flarum.org/d/4762"
         }
     },
