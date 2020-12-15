@@ -5,5 +5,5 @@ import addPrivateDiscussionPermission from './addPrivateDiscussionPermission';
 app.initializers.add('fof-byobu', (app) => {
     app.store.models.recipients = User;
 
-    addPrivateDiscussionPermission();
+    addPrivateDiscussionPermission(app);
 });

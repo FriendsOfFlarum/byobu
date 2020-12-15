@@ -26,14 +26,11 @@ use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
 use FoF\Byobu\Discussion\Screener;
-use FoF\Components\Extend\AddFofComponents;
 use FoF\Split\Events\DiscussionWasSplit;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
-    new AddFofComponents(),
-
     (new Native\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),
 

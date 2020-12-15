@@ -16,6 +16,7 @@ use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
 use Flarum\User\User;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterface
 {
@@ -99,7 +100,7 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
      *
      * @return string
      */
-    public function getEmailSubject()
+    public function getEmailSubject(TranslatorInterface $translator)
     {
         return app('translator')->trans('fof-byobu.email.subject.private_discussion_replied', [
             '{display_name}'       => $this->actor->display_name,
