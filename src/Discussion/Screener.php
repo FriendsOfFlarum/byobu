@@ -75,7 +75,7 @@ class Screener extends Fluent
 
     public function isPrivate(): bool
     {
-        return $this->users->isNotEmpty() || $this->users->isNotEmpty();
+        return $this->users->isNotEmpty() || $this->groups->isNotEmpty();
     }
 
     public function wasPrivate(): bool
