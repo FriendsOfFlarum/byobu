@@ -11,7 +11,6 @@
 
 namespace FoF\Byobu\Listeners;
 
-use Flarum\Event\ConfigurePostTypes;
 use FoF\Byobu\Events\AbstractRecipientsEvent;
 use FoF\Byobu\Events\Created;
 use FoF\Byobu\Events\DiscussionMadePublic;
@@ -28,22 +27,11 @@ class CreatePostWhenRecipientsChanged
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigurePostTypes::class, [$this, 'addPostType']);
         $events->listen(Created::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(DiscussionMadePublic::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(RecipientsChanged::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(RemovedSelf::class, [$this, 'whenActorRemovedSelf']);
     }
-
-    /**
-     * @param ConfigurePostTypes $event
-     */
-    public function addPostType(ConfigurePostTypes $event)
-    {
-        $event->add(RecipientsModified::class);
-        $event->add(RecipientLeft::class);
-    }
-
     /**
      * @param AbstractRecipientsEvent $event
      */
