@@ -12,40 +12,14 @@
 namespace FoF\Byobu\Access;
 
 use Flarum\Discussion\Discussion;
-use Flarum\Extension\ExtensionManager;
-use Flarum\User\AbstractPolicy;
+use Flarum\User\Access\AbstractPolicy;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
 use FoF\Byobu\Discussion\Screener;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class DiscussionPolicy extends AbstractPolicy
 {
     use RecipientsConstraint;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $model = Discussion::class;
-
-    /**
-     * @var ExtensionManager
-     */
-    protected $extensions;
-
-    public function __construct(ExtensionManager $extensions)
-    {
-        $this->extensions = $extensions;
-    }
-
-    /**
-     * @param User            $actor
-     * @param EloquentBuilder $query
-     */
-    public function findPrivate(User $actor, EloquentBuilder $query)
-    {
-        $this->constraint($query, $actor, true);
-    }
 
     /**
      * @param User       $actor
@@ -80,6 +54,6 @@ class DiscussionPolicy extends AbstractPolicy
         $screener = app('byobu.screener');
         $screener = $screener->fromDiscussion($discussion);
 
-        return $screener->isPrivate();
+        return $screener->isPrivate() ? $this->allow() : $this->deny();
     }
 }
