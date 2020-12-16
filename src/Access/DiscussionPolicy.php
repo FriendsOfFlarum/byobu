@@ -54,6 +54,6 @@ class DiscussionPolicy extends AbstractPolicy
         $screener = app('byobu.screener');
         $screener = $screener->fromDiscussion($discussion);
 
-        return $screener->isPrivate() ? $this->allow() : $this->deny();
+        return $screener->isPrivate() ? $this->allow() : null;
     }
 }
