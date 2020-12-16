@@ -18,16 +18,16 @@ class SaveUserPreferences
 {
     public function handle(Saving $event)
     {
-        $event->user->blocks_byobu_pd = (bool) Arr::pull(
-            $event->data,
-            'attributes.blocksPd',
-            $event->user->blocks_byobu_pd
-        );
+        $actor = $event->actor;
+        $user = $event->user;
 
-        $event->user->unified_index_with_byobu = (bool) Arr::pull(
-            $event->data,
-            'attributes.unifiedIndex',
-            $event->user->unified_index_with_byobu
-        );
+        $blocksPd = Arr::pull($event->data, 'attributes.blocksPd');
+        $unifiedIndex = Arr::pull($event->data, 'attributes.unifiedIndex');
+        if ($blocksPd !== null || $unifiedIndex !== null) {
+            $actor->assertPermission($actor->id === $user->id);
+
+            $user->blocks_byobu_pd = (bool) ($blocksPd ?? $user->blocks_byobu_pd);
+            $user->unified_index_with_byobu = (bool) ($unifiedIndex ?? $user->unified_index_with_byobu);
+        }
     }
 }
