@@ -110,15 +110,6 @@ return [
     (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
         ->attribute('unreadPrivateMessagesCount', Api\CurrentUserUnreadPrivateMessageCount::class),
 
-    (new Extend\Event())
-        ->listen(DiscussionSaving::class, Listeners\PersistRecipients::class)
-        ->listen(DiscussionSaving::class, Listeners\DropTagsOnPrivateDiscussions::class)
-        ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)
-        ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
-        ->listen(GetModelIsPrivate::class, Listeners\GetModelIsPrivate::class)
-        ->listen(Searching::class, Listeners\UnifiedIndex::class)
-        ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class),
-
     (new Extend\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
 
@@ -141,11 +132,22 @@ return [
         ->type(Notifications\DiscussionRecipientRemovedBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\DiscussionAddedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']),
 
+    (new Extend\Event())
+        ->listen(DiscussionSaving::class, Listeners\PersistRecipients::class)
+        ->listen(DiscussionSaving::class, Listeners\DropTagsOnPrivateDiscussions::class)
+        ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)
+        ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
+        ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class),
+
     function (Dispatcher $events, Container $container) {
         $container->bind('byobu.screener', Screener::class);
 
-        $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\QueueNotificationJobs::class);
+
+        // Listeners for old-style events, will be removed in future betas
+        $events->listen(GetModelIsPrivate::class, Listeners\GetModelIsPrivate::class);
+        $events->listen(Searching::class, Listeners\UnifiedIndex::class);
+        $events->subscribe(Listeners\AddGambits::class);
     },
 ];
