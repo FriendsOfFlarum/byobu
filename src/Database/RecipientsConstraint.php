@@ -51,20 +51,22 @@ trait RecipientsConstraint
             });
     }
 
+    /**
+     * @param Query|Eloquent $query
+     * @param array $groupIds
+     * @param int $userId
+     */
     protected function forRecipient($query, array $groupIds, int $userId)
     {
         $query->orWhereIn('discussions.id', function ($query) use ($groupIds, $userId) {
             $query->select('recipients.discussion_id')
                 ->from('recipients')
+                ->whereNull('recipients.removed_at')
                 ->where(function ($query) use ($groupIds, $userId) {
                     $query
-                        ->whereNull('recipients.removed_at')
-                        ->where(function ($query) use ($groupIds, $userId) {
-                            $query
-                                ->whereIn('recipients.user_id', [$userId])
-                                ->when(count($groupIds) > 0, function ($query) use ($groupIds) {
-                                    $query->orWhereIn('recipients.group_id', $groupIds);
-                                });
+                        ->whereIn('recipients.user_id', [$userId])
+                        ->when(count($groupIds) > 0, function ($query) use ($groupIds) {
+                            $query->orWhereIn('recipients.group_id', $groupIds);
                         });
                 });
         });

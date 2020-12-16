@@ -40,7 +40,5 @@ class PrivacyGambit extends AbstractRegexGambit
         $search->getQuery()->where(function ($query) use ($actor) {
             $this->constraint($query, $actor, false);
         });
-
-//        dd($search->getQuery()->toSql(), $search->getQuery()->getBindings());
     }
 }
