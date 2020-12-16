@@ -74,10 +74,19 @@ trait RecipientsConstraint
 
     protected function whenFlagged($query)
     {
-        $query->orWhereIn('discussions.id', function ($query) {
-            $query->select('posts.discussion_id')
-                ->from('flags')
-                ->leftJoin('posts', 'flags.post_id', 'posts.id');
+        // In case posts have been flagged, open them up..
+        $query->orWhere(function ($query) {
+            // .. but only if they have recipients (are private discussions)
+            $query->whereIn('discussions.id', function ($query) {
+                $query->select('recipients.discussion_id')
+                    ->from('recipients')
+                    ->whereNull('recipients.removed_at');
+            // .. and only if any of the contained posts are flagged
+            })->whereIn('discussions.id', function ($query) {
+                $query->select('posts.discussion_id')
+                    ->from('flags')
+                    ->leftJoin('posts', 'flags.post_id', 'posts.id');
+            });
         });
     }
 
