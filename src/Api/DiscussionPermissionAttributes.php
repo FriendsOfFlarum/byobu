@@ -17,10 +17,10 @@ use Flarum\Discussion\Discussion;
 class DiscussionPermissionAttributes
 {
     /**
-     *
      * @param Flarum\Api\Serializer\UserSerializer $serializer
-     * @param Flarum\Discussion\Discussion $discussion
-     * @param array $attributes
+     * @param Flarum\Discussion\Discussion         $discussion
+     * @param array                                $attributes
+     *
      * @return mixed
      */
     public function __invoke(DiscussionSerializer $serializer, Discussion $model, array $attributes)

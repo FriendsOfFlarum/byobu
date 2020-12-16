@@ -32,6 +32,7 @@ class CreatePostWhenRecipientsChanged
         $events->listen(RecipientsChanged::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(RemovedSelf::class, [$this, 'whenActorRemovedSelf']);
     }
+
     /**
      * @param AbstractRecipientsEvent $event
      */

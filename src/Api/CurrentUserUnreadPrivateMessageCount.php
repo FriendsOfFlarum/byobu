@@ -22,9 +22,9 @@ class CurrentUserUnreadPrivateMessageCount
     use RecipientsConstraint;
 
     /**
-     *
      * @param Flarum\Api\Serializer\CurrentUserSerializer $serializer
-     * @param Flarum\User\User $user
+     * @param Flarum\User\User                            $user
+     *
      * @return mixed
      */
     public function __invoke(CurrentUserSerializer $serializer, User $user)

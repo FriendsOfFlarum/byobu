@@ -16,10 +16,10 @@ use Flarum\Api\Serializer\ForumSerializer;
 class ForumPermissionAttributes
 {
     /**
-     *
      * @param Flarum\Api\Serializer\ForumSerializer $serializer
-     * @param mixed $model
-     * @param array $attributes
+     * @param mixed                                 $model
+     * @param array                                 $attributes
+     *
      * @return mixed
      */
     public function __invoke(ForumSerializer $serializer, $model, array $attributes)
