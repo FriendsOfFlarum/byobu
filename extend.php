@@ -118,19 +118,21 @@ return [
     (new Native\ModelVisibility(Post::class))
         ->scope(Access\ScopePostVisibility::class),
 
+    (new Native\Post())
+        ->type(Posts\RecipientLeft::class)
+        ->type(Posts\RecipientsModified::class),
+
+    (new Native\Notification())
+        ->type(Notifications\DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionRepliedBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionRecipientRemovedBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionAddedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']),
+
     function (Dispatcher $events, Container $container) {
         $container->bind('byobu.screener', Screener::class);
 
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\QueueNotificationJobs::class);
-
-        // Add notifications
-        $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
-            $event->add(Notifications\DiscussionCreatedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
-            $event->add(Notifications\DiscussionRepliedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
-            $event->add(Notifications\DiscussionRecipientRemovedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
-            $event->add(Notifications\DiscussionAddedBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
-        });
     },
 ];
