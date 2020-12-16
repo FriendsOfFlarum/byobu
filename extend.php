@@ -23,9 +23,7 @@ use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\Post\Post;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
-use FoF\Byobu\Discussion\Screener;
 use FoF\Split\Events\DiscussionWasSplit;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
@@ -139,9 +137,10 @@ return [
         ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
         ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class),
 
-    function (Dispatcher $events, Container $container) {
-        $container->bind('byobu.screener', Screener::class);
+    (new Extend\ServiceProvider())
+        ->register(Provider\ByobuProvider::class),
 
+    function (Dispatcher $events) {
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\QueueNotificationJobs::class);
 
