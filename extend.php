@@ -11,10 +11,8 @@
 
 namespace FoF\Byobu;
 
-use Flarum\Api\Serializer\BasicUserSerializer;
-use Flarum\Api\Serializer\CurrentUserSerializer;
-use Flarum\Api\Serializer\DiscussionSerializer;
-use Flarum\Api\Serializer\ForumSerializer;
+use Flarum\Api\Controller;
+use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
 use Flarum\Discussion\Event\Searching;
@@ -43,10 +41,10 @@ return [
     new Native\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\ApiAttribute())
-        ->add(ForumSerializer::class, Api\PermissionAttributes::class)
-        ->add(DiscussionSerializer::class, Api\PermissionAttributes::class)
-        ->add(BasicUserSerializer::class, Api\UserAttributes::class)
-        ->add(CurrentUserSerializer::class, Api\CurrentUserAttributes::class),
+        ->add(Serializer\ForumSerializer::class, Api\PermissionAttributes::class)
+        ->add(Serializer\DiscussionSerializer::class, Api\PermissionAttributes::class)
+        ->add(Serializer\BasicUserSerializer::class, Api\UserAttributes::class)
+        ->add(Serializer\CurrentUserSerializer::class, Api\CurrentUserAttributes::class),
 
     (new Native\Model(Discussion::class))
         ->relationship('recipientUsers', function ($discussion) {
@@ -84,6 +82,21 @@ return [
                 ->wherePivot('removed_at', null);
         }),
 
+    (new Native\ApiController(Controller\ListDiscussionsController::class))
+        ->addInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups']),
+
+    (new Native\ApiController(Controller\ShowDiscussionController::class))
+        ->addInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups']),
+
+    (new Native\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
+        ->hasMany('recipientUsers', Serializer\UserSerializer::class)
+        ->hasMany('oldRecipientUsers', Serializer\UserSerializer::class)
+        ->hasMany('recipientGroups', Serializer\GroupSerializer::class)
+        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
+
+    (new Native\ApiSerializer(Serializer\UserSerializer::class))
+        ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class),
+
     (new Native\Event())
         ->listen(DiscussionSaving::class, Listeners\PersistRecipients::class)
         ->listen(DiscussionSaving::class, Listeners\DropTagsOnPrivateDiscussions::class)
@@ -109,7 +122,6 @@ return [
         $container->bind('byobu.screener', Screener::class);
 
         $events->subscribe(Listeners\AddGambits::class);
-        $events->subscribe(Listeners\AddRecipientsRelationships::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
         $events->subscribe(Listeners\QueueNotificationJobs::class);
 
