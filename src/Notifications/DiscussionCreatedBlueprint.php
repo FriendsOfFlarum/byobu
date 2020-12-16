@@ -98,7 +98,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getEmailSubject(TranslatorInterface $translator)
     {
-        return app('translator')->trans('fof-byobu.email.subject.private_discussion_created', [
+        return $translator->trans('fof-byobu.email.subject.private_discussion_created', [
             '{display_name}'       => $this->discussion->user->display_name,
             '{title}'              => $this->discussion->title,
         ]);

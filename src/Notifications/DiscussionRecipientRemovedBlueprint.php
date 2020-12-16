@@ -108,7 +108,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      */
     public function getEmailSubject(TranslatorInterface $translator)
     {
-        return app('translator')->trans('fof-byobu.email.subject.recipient_removed', [
+        return $translator->trans('fof-byobu.email.subject.recipient_removed', [
             '{display_name}'       => $this->user->display_name,
             '{title}'              => $this->discussion->title,
         ]);
