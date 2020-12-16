@@ -53,8 +53,8 @@ trait RecipientsConstraint
 
     /**
      * @param Query|Eloquent $query
-     * @param array $groupIds
-     * @param int $userId
+     * @param array          $groupIds
+     * @param int            $userId
      */
     protected function forRecipient($query, array $groupIds, int $userId)
     {
