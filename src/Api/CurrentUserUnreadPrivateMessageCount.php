@@ -11,24 +11,24 @@
 
 namespace FoF\Byobu\Api;
 
-use Flarum\Api\Event\Serializing;
+use Flarum\Api\Serializer\CurrentUserSerializer;
 use Flarum\Discussion\Discussion;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
 use Illuminate\Database\Query\JoinClause;
 
-class CurrentUserAttributes
+class CurrentUserUnreadPrivateMessageCount
 {
     use RecipientsConstraint;
 
     /**
-     * @param Serializing $event
+     *
+     * @param Flarum\Api\Serializer\CurrentUserSerializer $serializer
+     * @param Flarum\User\User $user
+     * @return mixed
      */
-    public function __invoke(Serializing $event)
+    public function __invoke(CurrentUserSerializer $serializer, User $user)
     {
-        /** @var User $user */
-        $user = $event->model;
-
         $query = Discussion::query()
             ->distinct()
             ->leftJoin('discussion_user', function (JoinClause $join) use ($user) {
@@ -50,6 +50,6 @@ class CurrentUserAttributes
 //
 //        $this->constraint($query, $user, false);
 
-        $event->attributes['unreadPrivateMessagesCount'] = $query->count();
+        return $query->count();
     }
 }
