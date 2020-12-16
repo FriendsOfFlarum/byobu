@@ -23,6 +23,7 @@ use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend as Native;
 use Flarum\Group\Group;
 use Flarum\Post\Event\Saving as PostSaving;
+use Flarum\Post\Post;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
 use FoF\Byobu\Discussion\Screener;
@@ -95,11 +96,18 @@ return [
     (new Native\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
 
+    (new Native\Policy())
+        ->modelPolicy(Discussion::class, Access\DiscussionPolicy::class),
+
+    (new Native\ModelVisibility(Discussion::class))
+        ->scope(Access\ScopeDiscussionVisibility::class, 'viewPrivate'),
+
+    (new Native\ModelVisibility(Post::class))
+        ->scope(Access\ScopePostVisibility::class),
+
     function (Dispatcher $events, Container $container) {
         $container->bind('byobu.screener', Screener::class);
 
-        $events->subscribe(Access\DiscussionPolicy::class);
-        $events->subscribe(Access\PostPolicy::class);
         $events->subscribe(Listeners\AddGambits::class);
         $events->subscribe(Listeners\AddRecipientsRelationships::class);
         $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);

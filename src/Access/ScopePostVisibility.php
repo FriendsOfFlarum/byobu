@@ -11,8 +11,6 @@
 
 namespace FoF\Byobu\Access;
 
-use Flarum\Post\Post;
-use Flarum\User\AbstractPolicy;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,13 +22,11 @@ use Illuminate\Database\Eloquent\Builder;
  * is mentioned by someone and the replied to link shows the
  * private content.
  */
-class PostPolicy extends AbstractPolicy
+class ScopePostVisibility
 {
     use RecipientsConstraint;
 
-    protected $model = Post::class;
-
-    public function find(User $actor, Builder $query)
+    public function __invoke(User $actor, Builder $query)
     {
         $query->whereHas('discussion', function ($query) use ($actor) {
             $this->constraint(
