@@ -81,7 +81,7 @@ trait RecipientsConstraint
                 $query->select('recipients.discussion_id')
                     ->from('recipients')
                     ->whereNull('recipients.removed_at');
-            // .. and only if any of the contained posts are flagged
+                // .. and only if any of the contained posts are flagged
             })->whereIn('discussions.id', function ($query) {
                 $query->select('posts.discussion_id')
                     ->from('flags')
