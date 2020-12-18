@@ -14,7 +14,6 @@ Private discussions for your forum. Allows you to select specific recipients for
 
 ## Installation
 
-Use [Bazaar](https://discuss.flarum.org/d/5151-fof-bazaar-the-extension-marketplace) or install manually:
 
     composer require "fof/byobu:*"
 
