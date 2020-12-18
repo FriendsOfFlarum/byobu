@@ -24,8 +24,16 @@
     ],
     "support": {
         "issues": "https://github.com/FriendsOfFlarum/byobu/issues",
-        "source": "https://github.com/FriendsOfFlarum/byobu"
+        "source": "https://github.com/FriendsOfFlarum/byobu",
+        "forum": "https://discuss.flarum.org/d/4762"
     },
+    "homepage": "https://friendsofflarum.org",
+    "funding": [
+        {
+            "type": "website",
+            "url": "https://opencollective.com/fof/donate"
+        }
+    ],
     "require": {
         "flarum/core": "^0.1.0-beta.15"
     },
