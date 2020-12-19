@@ -1,3 +1,22 @@
+# 0.6.0-beta.3
+
+### Fixed
+
+- New private discussions required approval
+- 'Alert' notifications were not triggered
+- Prevent private discussion started notifications from being delivered to the discussion author
+- Flagged private discussions appeared in 'All discussions'
+
+### Added
+
+- Admins can now customize the icon used for Byobu discussion badges and post events
+- Fully translatable email notification templates
+- Flarum beta 15 support
+
+### Changed
+
+- Support for Flarum beta 14 dropped, minimum requirement is now beta 15
+
 # 0.6.0-beta.2
 
 ### Fixed
