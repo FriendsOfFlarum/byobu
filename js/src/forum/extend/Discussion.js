@@ -51,7 +51,7 @@ function badges(app) {
                 Badge.component({
                     type: 'private',
                     label: app.translator.trans('fof-byobu.forum.badges.is_private.tooltip'),
-                    icon: 'fas fa-map',
+                    icon: app.forum.data.attributes['byobu.icon-badge'],
                 }),
                 10
             );
@@ -92,7 +92,7 @@ function controls() {
             items.add(
                 'recipients',
                 Button.component({
-                    icon: 'far fa-map',
+                    icon: app.forum.data.attributes['byobu.icon-badge'],
                     onclick: () => app.modal.show(AddRecipientModal, { discussion }),
                 }, app.translator.trans('fof-byobu.forum.buttons.edit_recipients'))
             );

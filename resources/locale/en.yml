@@ -67,11 +67,8 @@ fof-byobu:
             view_private_discussions-when-flagged: View private discussions of other users if flagged
 
         settings:
-            use_tag_slug: Specify the tag that all private discussions must use
-            use_tag_slug_help: 'Select "{no_restriction}" to allow users to select their own tag. This applies to newly created private discussions only.'
-            use_tag_slug_no_restriction: "- No restriction -"
-            byobu_index: Display a link to Private Discussions on the index page
-            byobu_index_help: When this option is enabled, a link from the forum main nav items to Private Discussions will be displayed
+            badge-icon: Byobu Discussion Badge
+            post-event-icon: Byobu Post Events
 
     email:
         subject:

@@ -23,11 +23,15 @@ use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\Post\Post;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
+use FoF\Components\Extend\AddFofComponents;
 use FoF\Split\Events\DiscussionWasSplit;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
+    (new AddFofComponents()),
+
     (new Extend\Frontend('admin'))
+        ->css(__DIR__.'/resources/less/admin.less')
         ->js(__DIR__.'/js/dist/admin.js'),
 
     (new Extend\Frontend('forum'))
@@ -149,4 +153,18 @@ return [
         $events->listen(Searching::class, Listeners\UnifiedIndex::class);
         $events->subscribe(Listeners\AddGambits::class);
     },
+
+    (new Extend\Settings())
+        ->serializeToForum('byobu.icon-badge', 'fof-byobu.icon-badge', function ($value) {
+            if (null || '' === $value) {
+                $value = 'fas fa-map';
+            }
+            return $value;
+        })
+        ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value) {
+            if (null || '' === $value) {
+                $value = 'far fa-map';
+            }
+            return $value;
+        }),
 ];

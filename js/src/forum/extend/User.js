@@ -25,7 +25,7 @@ function message(app) {
             items.add(
                 'private-discussion',
                 Button.component({
-                    icon: 'far fa-map',
+                    icon: app.forum.data.attributes['byobu.icon-badge'],
                     onclick: (e) => {
                         e.preventDefault();
 
@@ -69,7 +69,7 @@ function sharedMessageHistory(app) {
             'byobu',
             LinkButton.component({
                 href,
-                icon: 'fas fa-map',
+                icon: app.forum.data.attributes['byobu.icon-badge'],
             }, app.translator.trans('fof-byobu.forum.user.byobu_link')),
             85
         );

@@ -29,7 +29,7 @@ export default class RecipientsModified extends EventPost {
     }
 
     icon() {
-        return 'far fa-map';
+        return app.forum.data.attributes['byobu.icon-postAction'];
     }
 
     descriptionKey() {

@@ -12,7 +12,7 @@ export default (app) => {
             items.add(
                 'privateDiscussions',
                 LinkButton.component({
-                    icon: 'fas fa-map',
+                    icon: app.forum.data.attributes['byobu.icon-badge'],
                     href: app.route('byobuPrivate'),
                 }, app.translator.trans('fof-byobu.forum.nav.nav_item')),
                 75
