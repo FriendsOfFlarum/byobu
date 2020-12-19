@@ -57,12 +57,8 @@ class SendNotificationWhenPostedInPrivateDiscussion implements ShouldQueue
             ->whereNotIn('users.id', [$this->actor->id])
             ->get();
 
-        if ($recipientUsers) {
-            $notifications->sync(new DiscussionRepliedBlueprint($this->post, $this->actor), $recipientUsers->all());
-        }
+        $recipients = $recipientUsers->merge($recipientGroupUsers);
 
-        if ($recipientGroupUsers) {
-            $notifications->sync(new DiscussionRepliedBlueprint($this->post, $this->actor), $recipientGroupUsers->all());
-        }
+        $notifications->sync(new DiscussionRepliedBlueprint($this->post, $this->actor), $recipients->all());
     }
 }
