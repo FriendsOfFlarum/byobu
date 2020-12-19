@@ -156,14 +156,14 @@ return [
 
     (new Extend\Settings())
         ->serializeToForum('byobu.icon-badge', 'fof-byobu.icon-badge', function ($value) {
-            if (null || '' === $value) {
+            if ($value === null || $value === '') {
                 $value = 'fas fa-map';
             }
 
             return $value;
         })
         ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value) {
-            if (null || '' === $value) {
+            if ($value === null || $value === '') {
                 $value = 'far fa-map';
             }
 
