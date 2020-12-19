@@ -25,7 +25,7 @@ Private discussions for your forum. Allows you to select specific recipients for
 
 ## Configuration
 
-Enable the extension under the extensions tab in the admin area. By default, Byōbu will prompt users to specify a tag for their private discussion (if `flarum/tags` is enabled). To keep all private discussions under one tag, you may specify the tag's `slug` in the extension settings. At this point in time, this *must* be a primary tag.
+Enable the extension under the extensions tab in the admin area.
 
 Make sure you configure the private discussions permission on the Admin Permissions tab to your needs;
 
@@ -34,7 +34,6 @@ Make sure you configure the private discussions permission on the Admin Permissi
 - Create private discussions with blockers
 - Edit recipient users of private discussions
 - Edit recipient groups of private discussions
-- Transform a private discussion into a public discussion
 
 ## Notifications
 
@@ -44,7 +43,6 @@ Browser alert and email notifications are available for `user` recipients of pri
 - Private discussion replied
 - User added to private discussion
 - User left the private discussion
-- Private discussion was made public
 
 Notifications for `group` recipients are available for:
 
