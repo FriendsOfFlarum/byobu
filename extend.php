@@ -159,12 +159,14 @@ return [
             if (null || '' === $value) {
                 $value = 'fas fa-map';
             }
+
             return $value;
         })
         ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value) {
             if (null || '' === $value) {
                 $value = 'far fa-map';
             }
+
             return $value;
         }),
 ];
