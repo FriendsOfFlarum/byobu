@@ -32,9 +32,6 @@ class DiscussionPermissionAttributes
         $attributes['canEditRecipients'] = $users || $groups;
         $attributes['canEditUserRecipients'] = $users;
         $attributes['canEditGroupRecipients'] = $groups;
-        if ($model->is_private) {
-            $attributes['canMakePublic'] = $actor->can('makePublic', $model);
-        }
 
         return $attributes;
     }
