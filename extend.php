@@ -109,11 +109,6 @@ return [
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
         ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class),
 
-    // Disabled as it's not currently used, and is also a performance hit too...
-    // TODO: Find a better way
-    // (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
-    //     ->attribute('unreadPrivateMessagesCount', Api\CurrentUserUnreadPrivateMessageCount::class),
-
     (new Extend\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
 
