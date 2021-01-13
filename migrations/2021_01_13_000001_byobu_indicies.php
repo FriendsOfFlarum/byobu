@@ -14,7 +14,6 @@ use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
-
         $schema->table('recipients', function (Blueprint $table) {
             $table->index('removed_at');
             $table->index(['discussion_id', 'user_id']);
@@ -22,7 +21,6 @@ return [
         });
     },
     'down' => function (Builder $schema) {
-
         $schema->table('recipients', function (Blueprint $table) {
             $table->dropIndex(['removed_at']);
         });
