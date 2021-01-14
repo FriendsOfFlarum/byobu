@@ -32,7 +32,8 @@ class ScopePostVisibility
             $this->constraint(
                 $query,
                 $actor,
-                true
+                true,
+                false
             );
         });
     }
