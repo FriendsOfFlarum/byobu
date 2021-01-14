@@ -42,7 +42,7 @@ trait RecipientsConstraint
 
                 // Open access for is_private discussions when the user handles
                 // flags and any of the posts inside the discussion is flagged.
-                // We don't need this check when checking from ScopePostVisibility, 
+                // We don't need this check when checking from ScopePostVisibility,
                 // so $checkFlags is made available here to skip when required.
                 if ($this->flagsInstalled()
                     && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
