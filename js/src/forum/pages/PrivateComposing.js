@@ -26,8 +26,6 @@ export default class PrivateComposing {
                     user: app.session.user,
                     recipients: recipients,
                     recipientUsers: recipients,
-                    titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                    submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
                 });
 
                 app.composer.show();

@@ -6,6 +6,13 @@ import User from 'flarum/models/User';
 import Group from 'flarum/models/Group';
 
 export default class PrivateDiscussionComposer extends DiscussionComposer {
+    static initAttrs(attrs) {
+        super.initAttrs(attrs);
+    
+        attrs.titlePlaceholder = app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder');
+        attrs.submitLabel = app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button');
+      }
+
     oninit(vnode) {
         super.oninit(vnode);
 
