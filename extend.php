@@ -18,6 +18,7 @@ use Flarum\Discussion\Event\Saving as DiscussionSaving;
 use Flarum\Discussion\Event\Searching;
 use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend;
+use Flarum\Flags\Event\FlagsWillBeDeleted;
 use Flarum\Group\Group;
 use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\Post\Post;
@@ -118,8 +119,8 @@ return [
     (new Extend\ModelVisibility(Discussion::class))
         ->scope(Access\ScopeDiscussionVisibility::class, 'viewPrivate'),
 
-    (new Extend\ModelVisibility(Post::class))
-        ->scope(Access\ScopePostVisibility::class),
+    // (new Extend\ModelVisibility(Post::class))
+    //     ->scope(Access\ScopePostVisibility::class),
 
     (new Extend\Post())
         ->type(Posts\RecipientLeft::class)
@@ -136,7 +137,8 @@ return [
         ->listen(DiscussionSaving::class, Listeners\DropTagsOnPrivateDiscussions::class)
         ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)
         ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
-        ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class),
+        ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class)
+        ->listen(FlagsWillBeDeleted::class, Listeners\RemoveByobuMarkerWhenFlagsDismissed::class),
 
     (new Extend\ServiceProvider())
         ->register(Provider\ByobuProvider::class),

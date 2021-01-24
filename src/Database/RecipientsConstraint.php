@@ -11,6 +11,7 @@
 
 namespace FoF\Byobu\Database;
 
+use Flarum\Flags\Flag;
 use Flarum\User\User;
 use FoF\Byobu\Concerns\ExtensionsDiscovery;
 use Illuminate\Database\Eloquent\Builder as Eloquent;
@@ -77,24 +78,13 @@ trait RecipientsConstraint
 
     protected function whenFlagged($query)
     {
-        // In case posts have been flagged, open them up..
         $query->orWhere(function ($query) {
-            // .. but only if they have recipients (are private discussions)
-            $query->whereIn('discussions.id', function ($query) {
-                $query->select('recipients.discussion_id')
-                    ->from('recipients')
-                    ->whereNull('recipients.removed_at');
-                // .. and only if any of the contained posts are flagged
-            })->whereIn('discussions.id', function ($query) {
-                $query->select('posts.discussion_id')
-                    ->from('flags')
-                    ->leftJoin('posts', 'flags.post_id', 'posts.id');
-            });
+            $query->where('discussions.byobu_flagged', true);
         });
     }
 
     protected function flagsInstalled(): bool
     {
-        return $this->extensionIsEnabled('flarum-flags');
+        return $this->extensionIsEnabled('flarum-flags') && class_exists(Flag::class);
     }
 }

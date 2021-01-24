@@ -28,13 +28,13 @@ class ScopePostVisibility
 
     public function __invoke(User $actor, Builder $query)
     {
-        $query->whereHas('discussion', function ($query) use ($actor) {
-            $this->constraint(
-                $query,
-                $actor,
-                true,
-                false
-            );
-        });
+        // $query->whereHas('discussion', function ($query) use ($actor) {
+        //     $this->constraint(
+        //         $query,
+        //         $actor,
+        //         true,
+        //         false
+        //     );
+        // });
     }
 }

@@ -13,6 +13,7 @@ namespace FoF\Byobu\Listeners;
 
 use Flarum\Discussion\Event\Saving;
 use Flarum\Extension\ExtensionManager;
+use Flarum\Flags\Flag;
 use Illuminate\Support\Arr;
 
 class DropTagsOnPrivateDiscussions
@@ -34,7 +35,8 @@ class DropTagsOnPrivateDiscussions
 
         if ($isByobu
             && $hasTags
-            && $this->extensions->isEnabled('flarum-tags')
+            && $this->extensions->isEnabled('flarum-tags'
+            && class_exists(Flag::class))
         ) {
             Arr::forget($event->data, 'relationships.tags');
         }
