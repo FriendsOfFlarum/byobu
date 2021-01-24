@@ -20,7 +20,6 @@ use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend;
 use Flarum\Group\Group;
 use Flarum\Post\Event\Saving as PostSaving;
-use Flarum\Post\Post;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
 use FoF\Components\Extend\AddFofComponents;
