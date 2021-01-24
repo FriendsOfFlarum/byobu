@@ -118,9 +118,6 @@ return [
     (new Extend\ModelVisibility(Discussion::class))
         ->scope(Access\ScopeDiscussionVisibility::class, 'viewPrivate'),
 
-    (new Extend\ModelVisibility(Post::class))
-        ->scope(Access\ScopePostVisibility::class),
-
     (new Extend\Post())
         ->type(Posts\RecipientLeft::class)
         ->type(Posts\RecipientsModified::class),

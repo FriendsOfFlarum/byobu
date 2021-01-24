@@ -70,8 +70,8 @@ trait RecipientsConstraint
                         ->whereIn('recipients.user_id', [$userId])
                         ->when(count($groupIds) > 0, function ($query) use ($groupIds) {
                             $query->orWhereIn('recipients.group_id', $groupIds);
-                        });
-                });
+                        })->distinct();
+                })->distinct();
         });
     }
 
@@ -88,7 +88,8 @@ trait RecipientsConstraint
             })->whereIn('discussions.id', function ($query) {
                 $query->select('posts.discussion_id')
                     ->from('flags')
-                    ->leftJoin('posts', 'flags.post_id', 'posts.id');
+                    ->leftJoin('posts', 'flags.post_id', 'posts.id')
+                    ->distinct();
             });
         });
     }
