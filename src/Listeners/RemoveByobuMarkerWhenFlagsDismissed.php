@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) 2019 - 2021 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Listeners;
 
 use Flarum\Discussion\Discussion;
@@ -14,10 +23,12 @@ class RemoveByobuMarkerWhenFlagsDismissed
         $discussion = Discussion::find($event->post->discussion_id);
 
         if ($discussion && $discussion->is_private) {
-            $otherFlagsInDiscussion = Flag::whereIn('post_id', 
+            $otherFlagsInDiscussion = Flag::whereIn(
+                'post_id',
                 Post::where('discussion_id', $discussion->id)
                     ->where('id', '!=', $event->post->id)
-                    ->pluck('id'))
+                    ->pluck('id')
+            )
                     ->count();
 
             if ($otherFlagsInDiscussion === 0) {
