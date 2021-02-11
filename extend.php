@@ -86,7 +86,13 @@ return [
         ->hasMany('recipientUsers', Serializer\UserSerializer::class)
         ->hasMany('oldRecipientUsers', Serializer\UserSerializer::class)
         ->hasMany('recipientGroups', Serializer\GroupSerializer::class)
-        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
+        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class)
+        ->attribute('blocksPd', function ($serializer, $user) {
+            return (bool) $user->blocks_byobu_pd;
+        })
+        ->attribute('cannotBeDirectMessaged', function ($serializer, $user) {
+            return (bool) $serializer->getActor()->can('cannotBeDirectMessaged', $user);
+        }),
 
     (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
         ->mutate(Api\DiscussionPermissionAttributes::class),
@@ -94,15 +100,9 @@ return [
     (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
         ->mutate(Api\ForumPermissionAttributes::class),
 
-    (new Extend\ApiSerializer(Serializer\BasicUserSerializer::class))
-        ->attribute('blocksPd', function ($serializer, $user) {
-            return (bool) $user->blocks_byobu_pd;
-        })
+    (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
         ->attribute('unifiedIndex', function ($serializer, $user) {
             return  (bool) $user->unified_index_with_byobu;
-        })
-        ->attribute('cannotBeDirectMessaged', function ($serializer, $user) {
-            return (bool) $serializer->getActor()->can('cannotBeDirectMessaged', $user);
         }),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
