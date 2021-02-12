@@ -83,8 +83,8 @@ return [
         ->addInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups']),
 
     (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
-        ->hasMany('recipientUsers', Serializer\UserSerializer::class)
-        ->hasMany('oldRecipientUsers', Serializer\UserSerializer::class)
+        ->hasMany('recipientUsers', Serializer\BasicUserSerializer::class)
+        ->hasMany('oldRecipientUsers', Serializer\BasicUserSerializer::class)
         ->hasMany('recipientGroups', Serializer\GroupSerializer::class)
         ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
 
