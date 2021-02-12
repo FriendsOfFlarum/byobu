@@ -20,7 +20,6 @@ use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend;
 use Flarum\Group\Group;
 use Flarum\Post\Event\Saving as PostSaving;
-use Flarum\Post\Post;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
 use FoF\Components\Extend\AddFofComponents;
@@ -87,7 +86,13 @@ return [
         ->hasMany('recipientUsers', Serializer\UserSerializer::class)
         ->hasMany('oldRecipientUsers', Serializer\UserSerializer::class)
         ->hasMany('recipientGroups', Serializer\GroupSerializer::class)
-        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
+        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class)
+        ->attribute('blocksPd', function ($serializer, $user) {
+            return (bool) $user->blocks_byobu_pd;
+        })
+        ->attribute('cannotBeDirectMessaged', function ($serializer, $user) {
+            return (bool) $serializer->getActor()->can('cannotBeDirectMessaged', $user);
+        }),
 
     (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
         ->mutate(Api\DiscussionPermissionAttributes::class),
@@ -95,15 +100,9 @@ return [
     (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
         ->mutate(Api\ForumPermissionAttributes::class),
 
-    (new Extend\ApiSerializer(Serializer\BasicUserSerializer::class))
-        ->attribute('blocksPd', function ($serializer, $user) {
-            return (bool) $user->blocks_byobu_pd;
-        })
+    (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
         ->attribute('unifiedIndex', function ($serializer, $user) {
             return  (bool) $user->unified_index_with_byobu;
-        })
-        ->attribute('cannotBeDirectMessaged', function ($serializer, $user) {
-            return (bool) $serializer->getActor()->can('cannotBeDirectMessaged', $user);
         }),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
@@ -117,9 +116,6 @@ return [
 
     (new Extend\ModelVisibility(Discussion::class))
         ->scope(Access\ScopeDiscussionVisibility::class, 'viewPrivate'),
-
-    (new Extend\ModelVisibility(Post::class))
-        ->scope(Access\ScopePostVisibility::class),
 
     (new Extend\Post())
         ->type(Posts\RecipientLeft::class)

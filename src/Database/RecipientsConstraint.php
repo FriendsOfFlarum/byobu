@@ -11,6 +11,7 @@
 
 namespace FoF\Byobu\Database;
 
+use Flarum\Flags\Flag;
 use Flarum\User\User;
 use FoF\Byobu\Concerns\ExtensionsDiscovery;
 use Illuminate\Database\Eloquent\Builder as Eloquent;
@@ -42,8 +43,6 @@ trait RecipientsConstraint
 
                 // Open access for is_private discussions when the user handles
                 // flags and any of the posts inside the discussion is flagged.
-                // We don't need this check when checking from ScopePostVisibility,
-                // so $checkFlags is made available here to skip when required.
                 if ($this->flagsInstalled()
                     && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
                     && $user->hasPermission('discussion.viewFlags')
@@ -70,8 +69,8 @@ trait RecipientsConstraint
                         ->whereIn('recipients.user_id', [$userId])
                         ->when(count($groupIds) > 0, function ($query) use ($groupIds) {
                             $query->orWhereIn('recipients.group_id', $groupIds);
-                        });
-                });
+                        })->distinct();
+                })->distinct();
         });
     }
 
@@ -88,13 +87,14 @@ trait RecipientsConstraint
             })->whereIn('discussions.id', function ($query) {
                 $query->select('posts.discussion_id')
                     ->from('flags')
-                    ->leftJoin('posts', 'flags.post_id', 'posts.id');
+                    ->leftJoin('posts', 'flags.post_id', 'posts.id')
+                    ->distinct();
             });
         });
     }
 
     protected function flagsInstalled(): bool
     {
-        return $this->extensionIsEnabled('flarum-flags');
+        return $this->extensionIsEnabled('flarum-flags') && class_exists(Flag::class);
     }
 }
