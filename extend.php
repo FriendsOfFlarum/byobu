@@ -86,13 +86,7 @@ return [
         ->hasMany('recipientUsers', Serializer\UserSerializer::class)
         ->hasMany('oldRecipientUsers', Serializer\UserSerializer::class)
         ->hasMany('recipientGroups', Serializer\GroupSerializer::class)
-        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class)
-        ->attribute('blocksPd', function ($serializer, $user) {
-            return (bool) $user->blocks_byobu_pd;
-        })
-        ->attribute('cannotBeDirectMessaged', function ($serializer, $user) {
-            return (bool) $serializer->getActor()->can('cannotBeDirectMessaged', $user);
-        }),
+        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
 
     (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
         ->mutate(Api\DiscussionPermissionAttributes::class),
@@ -106,7 +100,13 @@ return [
         }),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
-        ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class),
+        ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class)
+        ->attribute('blocksPd', function ($serializer, $user) {
+            return (bool) $user->blocks_byobu_pd;
+        })
+        ->attribute('cannotBeDirectMessaged', function ($serializer, $user) {
+            return (bool) $serializer->getActor()->can('cannotBeDirectMessaged', $user);
+        }),
 
     (new Extend\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
