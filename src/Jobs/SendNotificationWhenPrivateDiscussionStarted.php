@@ -56,7 +56,7 @@ class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
         });
 
         $groupRecipientUsers = User::leftJoin('group_user', 'users.id', 'group_user.user_id')
-            ->whereIn('group_user.group_id', $this->newGroups)
+            ->whereIn('group_user.group_id', $this->newGroups->pluck('id'))
             ->whereNotIn('users.id', [$this->discussion->user_id])
             ->get();
 
