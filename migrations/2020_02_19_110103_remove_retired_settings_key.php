@@ -16,7 +16,7 @@ return [
         /**
          * @var \Flarum\Settings\SettingsRepositoryInterface
          */
-        $settings = app('flarum.settings');
+        $settings = resolve('flarum.settings');
         $settings->delete('fof-byobu.enable_byobu_user_page');
     },
 
