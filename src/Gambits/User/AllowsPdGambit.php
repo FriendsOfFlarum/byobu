@@ -19,8 +19,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class AllowsPdGambit extends AbstractRegexGambit
 {
-    protected $pattern = 'allows-pd';
-
     /**
      * @var Dispatcher
      */
@@ -29,6 +27,11 @@ class AllowsPdGambit extends AbstractRegexGambit
     public function __construct(Dispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
+    }
+
+    public function getGambitPattern()
+    {
+        return 'allows-pd';
     }
 
     protected function conditions(SearchState $search, array $matches, $negate)
