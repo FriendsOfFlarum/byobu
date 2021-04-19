@@ -18,10 +18,11 @@ use FoF\Byobu\Database\RecipientsConstraint;
 class PrivacyGambit extends AbstractRegexGambit
 {
     use RecipientsConstraint;
-    /**
-     * {@inheritdoc}
-     */
-    protected $pattern = 'is:private';
+
+    public function getGambitPattern()
+    {
+        return 'is:private';
+    }
 
     /**
      * Apply conditions to the search, given that the gambit was matched.

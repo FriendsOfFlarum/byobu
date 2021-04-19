@@ -14,6 +14,7 @@ namespace FoF\Byobu\Gambits\Discussion;
 use Flarum\Discussion\Search\DiscussionSearch;
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
+use Flarum\Search\SearchState;
 use Flarum\User\User;
 use Flarum\User\UserRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,10 +23,6 @@ use LogicException;
 
 class ByobuGambit extends AbstractRegexGambit
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $pattern = 'byobu:(.+)';
 
     /**
      * @var UserRepository
@@ -40,6 +37,11 @@ class ByobuGambit extends AbstractRegexGambit
         $this->users = $users;
     }
 
+    public function getGambitPattern()
+    {
+        return 'byobu:(.+)';
+    }
+
     /**
      * Apply conditions to the search, given that the gambit was matched.
      *
@@ -50,7 +52,7 @@ class ByobuGambit extends AbstractRegexGambit
      *
      * @return mixed
      */
-    protected function conditions(AbstractSearch $search, array $matches, $negate)
+    protected function conditions(SearchState $search, array $matches, $negate)
     {
         if (!$search instanceof DiscussionSearch) {
             throw new LogicException('This gambit can only be applied on a DiscussionSearch');
