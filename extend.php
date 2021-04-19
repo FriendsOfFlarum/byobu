@@ -15,8 +15,6 @@ use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
-use Flarum\Discussion\Event\Searching;
-use Flarum\Event\GetModelIsPrivate;
 use Flarum\Extend;
 use Flarum\Group\Group;
 use Flarum\Post\Event\Saving as PostSaving;
@@ -24,7 +22,6 @@ use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
 use FoF\Components\Extend\AddFofComponents;
 use FoF\Split\Events\DiscussionWasSplit;
-use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     (new AddFofComponents()),
@@ -89,10 +86,10 @@ return [
         ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
 
     (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
-        ->mutate(Api\DiscussionPermissionAttributes::class),
+        ->attributes(Api\DiscussionPermissionAttributes::class),
 
     (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
-        ->mutate(Api\ForumPermissionAttributes::class),
+        ->attributes(Api\ForumPermissionAttributes::class),
 
     (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
         ->attribute('unifiedIndex', function ($serializer, $user) {
@@ -137,15 +134,17 @@ return [
     (new Extend\ServiceProvider())
         ->register(Provider\ByobuProvider::class),
 
-    function (Dispatcher $events) {
-        $events->subscribe(Listeners\CreatePostWhenRecipientsChanged::class);
-        $events->subscribe(Listeners\QueueNotificationJobs::class);
+    (new Extend\ModelPrivate(Discussion::class))
+        ->checker(Listeners\GetModelIsPrivate::class),
 
-        // Listeners for old-style events, will be removed in future betas
-        $events->listen(GetModelIsPrivate::class, Listeners\GetModelIsPrivate::class);
-        $events->listen(Searching::class, Listeners\UnifiedIndex::class);
-        $events->subscribe(Listeners\AddGambits::class);
-    },
+    (new Extend\SimpleFlarumSearch(Discussion::class))
+        ->addGambit(Gambits\Discussion\PrivacyGambit::class),
+    (new Extend\SimpleFlarumSearch(User::class))
+        ->addGambit(Gambits\User\AllowsPdGambit::class),
+
+    (new Extend\Event())
+        ->subscribe(Listeners\CreatePostWhenRecipientsChanged::class)
+        ->subscribe(Listeners\QueueNotificationJobs::class),
 
     (new Extend\Settings())
         ->serializeToForum('byobu.icon-badge', 'fof-byobu.icon-badge', function ($value) {

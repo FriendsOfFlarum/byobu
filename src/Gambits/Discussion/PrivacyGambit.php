@@ -12,7 +12,7 @@
 namespace FoF\Byobu\Gambits\Discussion;
 
 use Flarum\Search\AbstractRegexGambit;
-use Flarum\Search\AbstractSearch;
+use Flarum\Search\SearchState;
 use FoF\Byobu\Database\RecipientsConstraint;
 
 class PrivacyGambit extends AbstractRegexGambit
@@ -33,7 +33,7 @@ class PrivacyGambit extends AbstractRegexGambit
      *
      * @return mixed
      */
-    protected function conditions(AbstractSearch $search, array $matches, $negate)
+    protected function conditions(SearchState $search, array $matches, $negate)
     {
         $actor = $search->getActor();
 

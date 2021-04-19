@@ -13,7 +13,7 @@ namespace FoF\Byobu\Gambits\User;
 
 use Flarum\Extension\ExtensionManager;
 use Flarum\Search\AbstractRegexGambit;
-use Flarum\Search\AbstractSearch;
+use Flarum\Search\SearchState;
 use FoF\Byobu\Events\SearchingRecipient;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -31,17 +31,7 @@ class AllowsPdGambit extends AbstractRegexGambit
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * Apply conditions to the search, given that the gambit was matched.
-     *
-     * @param AbstractSearch $search  The search object.
-     * @param array          $matches An array of matches from the search bit.
-     * @param bool           $negate  Whether or not the bit was negated, and thus whether
-     *                                or not the conditions should be negated.
-     *
-     * @return mixed
-     */
-    protected function conditions(AbstractSearch $search, array $matches, $negate)
+    protected function conditions(SearchState $search, array $matches, $negate)
     {
         $actor = $search->getActor();
 

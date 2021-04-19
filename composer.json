@@ -35,8 +35,11 @@
         }
     ],
     "require": {
-        "flarum/core": ">=0.1.0-beta.15 <0.1.0-beta.16",
+        "flarum/core": "^0.1.0-beta.16",
         "fof/components": "^0.2.0"
+    },
+    "require-dev": {
+        "flarum/testing": "^0.1.0-beta.16"
     },
     "extra": {
         "flarum-extension": {
