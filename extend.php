@@ -15,10 +15,12 @@ use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
+use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Group\Group;
 use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\User\Event\Saving as UserSaving;
+use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
 use FoF\Components\Extend\AddFofComponents;
 use FoF\Split\Events\DiscussionWasSplit;
@@ -134,10 +136,11 @@ return [
     (new Extend\ModelPrivate(Discussion::class))
         ->checker(Listeners\GetModelIsPrivate::class),
 
-    (new Extend\SimpleFlarumSearch(Discussion::class))
-        ->addGambit(Gambits\Discussion\PrivacyGambit::class),
+    (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
+        ->addGambit(Gambits\Discussion\PrivacyGambit::class)
+        ->addGambit(Gambits\Discussion\ByobuGambit::class),
 
-    (new Extend\SimpleFlarumSearch(User::class))
+    (new Extend\SimpleFlarumSearch(UserSearcher::class))
         ->addGambit(Gambits\User\AllowsPdGambit::class),
 
     (new Extend\Settings())
