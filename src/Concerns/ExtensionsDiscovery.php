@@ -23,7 +23,7 @@ trait ExtensionsDiscovery
     public function extensionIsEnabled(string $extension): bool
     {
         /** @var ExtensionManager $manager */
-        $manager = app(ExtensionManager::class);
+        $manager = resolve(ExtensionManager::class);
 
         return $manager->isEnabled($extension);
     }
