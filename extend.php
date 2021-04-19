@@ -134,7 +134,7 @@ return [
         ->register(Provider\ByobuProvider::class),
 
     (new Extend\ModelPrivate(Discussion::class))
-        ->checker(Listeners\GetModelIsPrivate::class),
+        ->checker([Listeners\GetModelIsPrivate::class]),
 
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
         ->addGambit(Gambits\Discussion\PrivacyGambit::class),

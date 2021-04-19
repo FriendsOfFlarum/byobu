@@ -53,10 +53,6 @@ class ByobuGambit extends AbstractRegexGambit
      */
     protected function conditions(SearchState $search, array $matches, $negate)
     {
-        if (!$search instanceof DiscussionSearch) {
-            throw new LogicException('This gambit can only be applied on a DiscussionSearch');
-        }
-
         $usernames = explode(',', trim($matches[1], '"'));
 
         $actor = $search->getActor();

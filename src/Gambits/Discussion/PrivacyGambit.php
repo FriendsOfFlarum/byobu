@@ -43,7 +43,7 @@ class PrivacyGambit extends AbstractRegexGambit
         }
 
         $search->getQuery()->where(function ($query) use ($actor) {
-            $this->constraint($query, $actor, false);
+            $this->constraint($query, $actor, true);
         });
     }
 }
