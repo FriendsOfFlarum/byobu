@@ -11,7 +11,6 @@
 
 namespace FoF\Byobu\Gambits\Discussion;
 
-use Flarum\Discussion\Search\DiscussionSearch;
 use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\AbstractSearch;
 use Flarum\Search\SearchState;
@@ -19,7 +18,6 @@ use Flarum\User\User;
 use Flarum\User\UserRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
-use LogicException;
 
 class ByobuGambit extends AbstractRegexGambit
 {

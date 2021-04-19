@@ -51,7 +51,8 @@ trait RecipientsConstraint
         //             $this->whenFlagged($query);
         //         }
         //     });
-        var_dump($query->toSql());exit;
+        var_dump($query->toSql());
+        exit;
     }
 
     /**
