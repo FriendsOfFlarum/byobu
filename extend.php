@@ -91,11 +91,6 @@ return [
     (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
         ->attributes(Api\ForumPermissionAttributes::class),
 
-    (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
-        ->attribute('unifiedIndex', function ($serializer, $user) {
-            return  (bool) $user->unified_index_with_byobu;
-        }),
-
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
         ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class)
         ->attribute('blocksPd', function ($serializer, $user) {
