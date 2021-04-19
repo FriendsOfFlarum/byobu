@@ -129,7 +129,9 @@ return [
         ->listen(DiscussionSaving::class, Listeners\DropTagsOnPrivateDiscussions::class)
         ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)
         ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
-        ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class),
+        ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class)
+        ->subscribe(Listeners\CreatePostWhenRecipientsChanged::class)
+        ->subscribe(Listeners\QueueNotificationJobs::class),
 
     (new Extend\ServiceProvider())
         ->register(Provider\ByobuProvider::class),
@@ -139,12 +141,9 @@ return [
 
     (new Extend\SimpleFlarumSearch(Discussion::class))
         ->addGambit(Gambits\Discussion\PrivacyGambit::class),
+
     (new Extend\SimpleFlarumSearch(User::class))
         ->addGambit(Gambits\User\AllowsPdGambit::class),
-
-    (new Extend\Event())
-        ->subscribe(Listeners\CreatePostWhenRecipientsChanged::class)
-        ->subscribe(Listeners\QueueNotificationJobs::class),
 
     (new Extend\Settings())
         ->serializeToForum('byobu.icon-badge', 'fof-byobu.icon-badge', function ($value) {
