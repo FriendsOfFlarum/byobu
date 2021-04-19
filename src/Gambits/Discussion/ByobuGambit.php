@@ -23,7 +23,6 @@ use LogicException;
 
 class ByobuGambit extends AbstractRegexGambit
 {
-
     /**
      * @var UserRepository
      */
