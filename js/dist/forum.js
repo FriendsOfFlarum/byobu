@@ -548,43 +548,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = (function (app) {
   privacyToggle(app);
-  unifiedIndexToggle(app);
 });
-
-function unifiedIndexToggle(app) {
-  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_SettingsPage__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'privacyItems', function (items) {
-    var _this = this;
-
-    items.add('byobu-unified-index', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_2___default.a.component({
-      state: this.user.unifiedIndex(),
-      onchange: function onchange(value) {
-        _this.unifiedIndexLoading = true;
-
-        _this.user.save({
-          unifiedIndex: value
-        }).then(function () {
-          _this.unifiedIndexLoading = false;
-          m.redraw();
-        });
-      },
-      loading: this.unifiedIndexLoading
-    }, app.translator.trans('fof-byobu.forum.user.settings.unified_index')));
-  });
-}
 
 function privacyToggle(app) {
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_SettingsPage__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'privacyItems', function (items) {
-    var _this2 = this;
+    var _this = this;
 
     items.add('byobu-block-dm', flarum_components_Switch__WEBPACK_IMPORTED_MODULE_2___default.a.component({
       state: this.user.blocksPd(),
       onchange: function onchange(value) {
-        _this2.blocksPdLoading = true;
+        _this.blocksPdLoading = true;
 
-        _this2.user.save({
+        _this.user.save({
           blocksPd: value
         }).then(function () {
-          _this2.blocksPdLoading = false;
+          _this.blocksPdLoading = false;
           m.redraw();
         });
       },
@@ -686,7 +664,6 @@ function sharedMessageHistory(app) {
 
 function attributes() {
   flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.blocksPd = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('blocksPd');
-  flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.unifiedIndex = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('unifiedIndex');
   flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.cannotBeDirectMessaged = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('cannotBeDirectMessaged');
   flarum_models_User__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.unreadPrivateMessagesCount = flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('unreadPrivateMessagesCount');
 }

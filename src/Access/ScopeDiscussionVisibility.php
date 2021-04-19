@@ -25,6 +25,6 @@ class ScopeDiscussionVisibility
      */
     public function __invoke(User $actor, EloquentBuilder $query)
     {
-        $this->constraint($query, $actor, true);
+        $this->constraint($query, $actor, false);
     }
 }

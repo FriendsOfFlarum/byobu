@@ -22,12 +22,11 @@ class SaveUserPreferences
         $user = $event->user;
 
         $blocksPd = Arr::pull($event->data, 'attributes.blocksPd');
-        $unifiedIndex = Arr::pull($event->data, 'attributes.unifiedIndex');
-        if ($blocksPd !== null || $unifiedIndex !== null) {
+
+        if ($blocksPd !== null) {
             $actor->assertPermission($actor->id === $user->id);
 
             $user->blocks_byobu_pd = (bool) ($blocksPd ?? $user->blocks_byobu_pd);
-            $user->unified_index_with_byobu = (bool) ($unifiedIndex ?? $user->unified_index_with_byobu);
         }
     }
 }
