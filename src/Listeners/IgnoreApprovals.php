@@ -22,7 +22,7 @@ class IgnoreApprovals
     public function handle(Saving $event)
     {
         /** @var Screener $screener */
-        $screener = app('byobu.screener');
+        $screener = resolve('byobu.screener');
         $screener = $screener->fromDiscussion($event->post->discussion);
 
         if ($this->extensionIsEnabled('flarum-approval') && $screener->isPrivate()) {

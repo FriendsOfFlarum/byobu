@@ -39,7 +39,7 @@ class PersistRecipients
         }
 
         /** @var Screener $screener */
-        $screener = app('byobu.screener');
+        $screener = resolve('byobu.screener');
         $this->screener = $screener->whenSavingDiscussions($event);
 
         if ($this->screener->nothingChanged()) {
@@ -67,7 +67,7 @@ class PersistRecipients
         // a non-null response the discussion will not be soft deleted.
         if ($this->screener->wasPrivate() && !$this->screener->isPrivate()) {
             /** @var Dispatcher $events */
-            $events = app(Dispatcher::class);
+            $events = resolve(Dispatcher::class);
             $eventArgs = $this->eventArguments($event->discussion);
 
             if ($events->until(new Events\Deleting(...$eventArgs)) === null) {

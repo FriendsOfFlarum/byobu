@@ -18,6 +18,6 @@ class ByobuProvider extends AbstractServiceProvider
 {
     public function register()
     {
-        $this->app->bind('byobu.screener', Screener::class);
+        $this->container->bind('byobu.screener', Screener::class);
     }
 }

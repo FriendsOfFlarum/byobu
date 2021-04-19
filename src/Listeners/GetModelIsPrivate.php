@@ -19,7 +19,7 @@ class GetModelIsPrivate
     public function __invoke(Discussion $discussion)
     {
         /** @var Screener $screener */
-        $screener = app('byobu.screener');
+        $screener = resolve('byobu.screener');
         $screener = $screener->fromDiscussion($discussion);
 
         // Unless we think it's private, delegate the check further
