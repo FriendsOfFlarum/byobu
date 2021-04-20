@@ -26,7 +26,7 @@ trait RecipientsConstraint
      * @param User           $user
      * @param bool           $unify
      */
-    public function constraint($query, User $user, bool $unify = false, bool $checkFlags = true)
+    public function constraint($query, User $user)
     {
         if ($user->isGuest()) {
             return;
@@ -34,7 +34,7 @@ trait RecipientsConstraint
 
         $query
             // Do a subquery where for filtering.
-            ->orWhere(function ($query) use ($user, $checkFlags) {
+            ->orWhere(function ($query) use ($user) {
                 // Open access for is_private discussions when the user is
                 // part of the recipients either directly or through a group.
                 $this->forRecipient($query, $user->groups->pluck('id')->all(), $user->id);
@@ -44,7 +44,6 @@ trait RecipientsConstraint
                 if ($this->flagsInstalled()
                     && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
                     && $user->hasPermission('discussion.viewFlags')
-                    && $checkFlags
                 ) {
                     $this->whenFlagged($query);
                 }
