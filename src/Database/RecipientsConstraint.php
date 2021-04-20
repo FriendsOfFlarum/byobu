@@ -32,27 +32,27 @@ trait RecipientsConstraint
             return;
         }
 
-        // $method = $unify ? 'orWhere' : 'where';
-        $query->where('is_private', false);
-        // $query
-        //     // Do a subquery where for filtering.
-        //     ->{$method}(function ($query) use ($user, $checkFlags) {
-        //         // Open access for is_private discussions when the user is
-        //         // part of the recipients either directly or through a group.
-        //         $this->forRecipient($query, $user->groups->pluck('id')->all(), $user->id);
+        $method = $unify ? 'orWhere' : 'where';
 
-        //         // Open access for is_private discussions when the user handles
-        //         // flags and any of the posts inside the discussion is flagged.
-        //         if ($this->flagsInstalled()
-        //             && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
-        //             && $user->hasPermission('discussion.viewFlags')
-        //             && $checkFlags
-        //         ) {
-        //             $this->whenFlagged($query);
-        //         }
-        //     });
-        $query->dd();
-        exit;
+        $query
+            // Do a subquery where for filtering.
+            ->{$method}(function ($query) use ($user, $checkFlags) {
+                // Open access for is_private discussions when the user is
+                // part of the recipients either directly or through a group.
+                $this->forRecipient($query, $user->groups->pluck('id')->all(), $user->id);
+
+                // Open access for is_private discussions when the user handles
+                // flags and any of the posts inside the discussion is flagged.
+                if ($this->flagsInstalled()
+                    && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
+                    && $user->hasPermission('discussion.viewFlags')
+                    && $checkFlags
+                ) {
+                    $this->whenFlagged($query);
+                }
+            });
+        //$query->dd();
+        //exit;
     }
 
     /**
