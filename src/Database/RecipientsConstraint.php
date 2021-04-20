@@ -15,6 +15,7 @@ use Flarum\Flags\Flag;
 use Flarum\User\User;
 use FoF\Byobu\Concerns\ExtensionsDiscovery;
 use Illuminate\Database\Eloquent\Builder as Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as Query;
 
 trait RecipientsConstraint
@@ -62,7 +63,7 @@ trait RecipientsConstraint
      */
     protected function forRecipient($query, array $groupIds, int $userId)
     {
-        $query->whereIn('discussions.id', function ($query) use ($groupIds, $userId) {
+        $query->where('is_private', true)->whereIn('discussions.id', function ($query) use ($groupIds, $userId) {
             $query->select('recipients.discussion_id')
                 ->from('recipients')
                 ->whereNull('recipients.removed_at')
