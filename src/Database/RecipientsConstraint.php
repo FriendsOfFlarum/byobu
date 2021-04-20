@@ -15,7 +15,6 @@ use Flarum\Flags\Flag;
 use Flarum\User\User;
 use FoF\Byobu\Concerns\ExtensionsDiscovery;
 use Illuminate\Database\Eloquent\Builder as Eloquent;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as Query;
 
 trait RecipientsConstraint
