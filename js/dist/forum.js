@@ -464,6 +464,7 @@ function apiInclude() {
 }
 
 function controls() {
+  if (!app.session) return;
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_utils_DiscussionControls__WEBPACK_IMPORTED_MODULE_12___default.a, 'moderationControls', function (items, discussion) {
     if (discussion.canEditRecipients()) {
       items.add('recipients', flarum_components_Button__WEBPACK_IMPORTED_MODULE_6___default.a.component({

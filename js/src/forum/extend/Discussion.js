@@ -87,6 +87,8 @@ function apiInclude() {
 }
 
 function controls() {
+    if (!app.session) return;
+    
     extend(DiscussionControls, 'moderationControls', function (items, discussion) {
         if (discussion.canEditRecipients()) {
             items.add(

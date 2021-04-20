@@ -32,11 +32,9 @@ trait RecipientsConstraint
             return;
         }
 
-        $method = $unify ? 'orWhere' : 'where';
-
         $query
             // Do a subquery where for filtering.
-            ->{$method}(function ($query) use ($user, $checkFlags) {
+            ->orWhere(function ($query) use ($user, $checkFlags) {
                 // Open access for is_private discussions when the user is
                 // part of the recipients either directly or through a group.
                 $this->forRecipient($query, $user->groups->pluck('id')->all(), $user->id);
@@ -51,8 +49,6 @@ trait RecipientsConstraint
                     $this->whenFlagged($query);
                 }
             });
-        //$query->dd();
-        //exit;
     }
 
     /**
@@ -62,7 +58,7 @@ trait RecipientsConstraint
      */
     protected function forRecipient($query, array $groupIds, int $userId)
     {
-        $query->where('is_private', true)->whereIn('discussions.id', function ($query) use ($groupIds, $userId) {
+        $query->whereIn('discussions.id', function ($query) use ($groupIds, $userId) {
             $query->select('recipients.discussion_id')
                 ->from('recipients')
                 ->whereNull('recipients.removed_at')
