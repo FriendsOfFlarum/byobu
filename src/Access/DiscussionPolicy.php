@@ -61,6 +61,7 @@ class DiscussionPolicy extends AbstractPolicy
     {
         $isByobu = $discussion['isByobu'];
         unset($discussion['isByobu']);
+
         return $isByobu;
     }
 }
