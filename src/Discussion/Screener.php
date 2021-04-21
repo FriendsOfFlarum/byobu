@@ -28,7 +28,7 @@ use Illuminate\Support\Str;
  * @property Collection|Group[] $groups
  */
 class Screener extends Fluent
-{
+{    
     public function fromDiscussion(Discussion $discussion): Screener
     {
         $screener = new self();

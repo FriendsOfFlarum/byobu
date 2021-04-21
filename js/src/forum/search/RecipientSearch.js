@@ -60,7 +60,7 @@ export default class RecipientSearch extends Search {
         return m(
             'div',
             {
-                className: 'AddRecipientModal-form-input',
+                className: 'AddRecipientModal-form-input Search-input',
             },
             [
                 m(

@@ -56,4 +56,13 @@ class DiscussionPolicy extends AbstractPolicy
 
         return $screener->isPrivate() ? $this->allow() : null;
     }
+
+    public function bypassTagCounts(User $actor, Discussion $discussion)
+    {
+        /** @var Screener $screener */
+        $screener = resolve('byobu.screener');
+        $screener = $screener->fromDiscussion($discussion);
+
+        return $screener->isPrivate() ? $this->allow() : null;
+    }
 }
