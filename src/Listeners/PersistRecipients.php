@@ -38,8 +38,6 @@ class PersistRecipients
             return;
         }
 
-        $event->discussion['isByobu'] = true;
-
         /** @var Screener $screener */
         $screener = resolve('byobu.screener');
         $this->screener = $screener->whenSavingDiscussions($event);
@@ -54,6 +52,7 @@ class PersistRecipients
 
         if (!$event->discussion->exists) {
             $this->checkPermissionsForNewDiscussion($event->actor);
+            $event->discussion['isByobu'] = true;
         } else {
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
         }
