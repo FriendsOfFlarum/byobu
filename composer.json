@@ -54,7 +54,8 @@
             },
             "optional-dependencies": [
                 "flarum/suspend",
-                "flarum/flags"
+                "flarum/flags",
+                "flarum/tags"
               ]
         },
         "extiverse": {
