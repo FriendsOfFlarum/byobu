@@ -19,7 +19,7 @@ use FoF\Byobu\Listeners\PersistRecipients;
 use Illuminate\Events\Dispatcher;
 
 class ByobuProvider extends AbstractServiceProvider
-{   
+{
     public function register()
     {
         $this->container->bind('byobu.screener', Screener::class);
@@ -39,10 +39,10 @@ class ByobuProvider extends AbstractServiceProvider
         // add byobu's persist recipients as the first listener, then add drop tags
         $events->listen(Saving::class, PersistRecipients::class);
         $events->listen(Saving::class, DropTagsOnPrivateDiscussions::class);
-        
+
         // then re-add everything else
         foreach ($listeners as $listener) {
-            $callable = function($event, $payload = []) use ($listener) {
+            $callable = function ($event, $payload = []) use ($listener) {
                 return $listener($event, [$event, $payload]);
             };
             $events->listen(Saving::class, $callable);

@@ -14,7 +14,6 @@ namespace FoF\Byobu;
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
-use Flarum\Discussion\Event\Saving as DiscussionSaving;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Group\Group;
