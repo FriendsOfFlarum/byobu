@@ -59,10 +59,8 @@ class DiscussionPolicy extends AbstractPolicy
 
     public function bypassTagCounts(User $actor, Discussion $discussion)
     {
-        /** @var Screener $screener */
-        $screener = resolve('byobu.screener');
-        $screener = $screener->fromDiscussion($discussion);
-
-        return $screener->isPrivate() ? $this->allow() : null;
+        $isByobu = $discussion['isByobu'];
+        unset($discussion['isByobu']);
+        return $isByobu;
     }
 }

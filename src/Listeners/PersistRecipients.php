@@ -38,6 +38,8 @@ class PersistRecipients
             return;
         }
 
+        $event->discussion['isByobu'] = true;
+
         /** @var Screener $screener */
         $screener = resolve('byobu.screener');
         $this->screener = $screener->whenSavingDiscussions($event);
