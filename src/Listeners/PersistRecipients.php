@@ -52,7 +52,7 @@ class PersistRecipients
 
         if (!$event->discussion->exists) {
             $this->checkPermissionsForNewDiscussion($event->actor);
-            $event->discussion['isByobu'] = true;
+            $event->discussion->isByobu = true;
         } else {
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
         }
@@ -77,6 +77,10 @@ class PersistRecipients
         }
 
         $this->raiseEvent($event->discussion);
+
+        Discussion::saving(function (Discussion $discussion) {
+            $discussion->offsetUnset('isByobu');
+        });
 
         $event->discussion->afterSave(function (Discussion $discussion) {
             foreach (['users', 'groups'] as $type) {

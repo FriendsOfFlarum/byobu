@@ -59,8 +59,9 @@ class DiscussionPolicy extends AbstractPolicy
 
     public function bypassTagCounts(User $actor, Discussion $discussion)
     {
-        $isByobu = $discussion['isByobu'];
-        unset($discussion['isByobu']);
+        $isByobu = $discussion->isByobu;
+
+        $discussion->offsetUnset('isByobu');
 
         return $isByobu ? $this->allow() : null;
     }
