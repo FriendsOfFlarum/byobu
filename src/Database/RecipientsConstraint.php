@@ -43,8 +43,8 @@ trait RecipientsConstraint
                 // flags and any of the posts inside the discussion is flagged.
                 if ($this->flagsInstalled()
                     && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
-                    && $user->hasPermission('discussion.viewFlags'
-                    && $includeFlagged)
+                    && $user->hasPermission('discussion.viewFlags')
+                    && $includeFlagged
                 ) {
                     $this->whenFlagged($query);
                 }
