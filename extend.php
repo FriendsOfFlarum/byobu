@@ -28,15 +28,15 @@ return [
     (new AddFofComponents()),
 
     (new Extend\Frontend('admin'))
-        ->css(__DIR__ . '/resources/less/admin.less')
-        ->js(__DIR__ . '/js/dist/admin.js'),
+        ->css(__DIR__.'/resources/less/admin.less')
+        ->js(__DIR__.'/js/dist/admin.js'),
 
     (new Extend\Frontend('forum'))
         ->route('/private', 'byobuPrivate', Content\PrivateDiscussionsPage::class)
-        ->css(__DIR__ . '/resources/less/forum/extension.less')
-        ->js(__DIR__ . '/js/dist/forum.js'),
+        ->css(__DIR__.'/resources/less/forum/extension.less')
+        ->js(__DIR__.'/js/dist/forum.js'),
 
-    new Extend\Locales(__DIR__ . '/resources/locale'),
+    new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(Discussion::class))
         ->relationship('recipientUsers', function ($discussion) {
@@ -99,7 +99,7 @@ return [
         ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class),
 
     (new Extend\View())
-        ->namespace('fof-byobu', __DIR__ . '/resources/views'),
+        ->namespace('fof-byobu', __DIR__.'/resources/views'),
 
     (new Extend\Policy())
         ->modelPolicy(Discussion::class, Access\DiscussionPolicy::class),
