@@ -28,57 +28,52 @@ return [
     (new AddFofComponents()),
 
     (new Extend\Frontend('admin'))
-        ->css(__DIR__.'/resources/less/admin.less')
-        ->js(__DIR__.'/js/dist/admin.js'),
+        ->css(__DIR__ . '/resources/less/admin.less')
+        ->js(__DIR__ . '/js/dist/admin.js'),
 
     (new Extend\Frontend('forum'))
         ->route('/private', 'byobuPrivate', Content\PrivateDiscussionsPage::class)
-        ->css(__DIR__.'/resources/less/forum/extension.less')
-        ->js(__DIR__.'/js/dist/forum.js'),
+        ->css(__DIR__ . '/resources/less/forum/extension.less')
+        ->js(__DIR__ . '/js/dist/forum.js'),
 
-    new Extend\Locales(__DIR__.'/resources/locale'),
+    new Extend\Locales(__DIR__ . '/resources/locale'),
 
     (new Extend\Model(Discussion::class))
         ->relationship('recipientUsers', function ($discussion) {
             return $discussion->belongsToMany(User::class, 'recipients')
-                ->withTimestamps()
                 ->wherePivot('removed_at', null);
         })
         ->relationship('oldRecipientUsers', function ($discussion) {
             return $discussion->belongsToMany(User::class, 'recipients')
-                ->withTimestamps()
                 ->wherePivot('removed_at', '!=', null);
         })
         ->relationship('recipientGroups', function ($discussion) {
             return $discussion->belongsToMany(Group::class, 'recipients')
-                ->withTimestamps()
                 ->wherePivot('removed_at', null);
         })
         ->relationship('oldRecipientGroups', function ($discussion) {
             return $discussion->belongsToMany(Group::class, 'recipients')
-                ->withTimestamps()
                 ->wherePivot('removed_at', '!=', null);
         }),
 
     (new Extend\Model(User::class))
         ->relationship('privateDiscussions', function ($user) {
             return $user->belongsToMany(Discussion::class, 'recipients')
-                ->withTimestamps()
                 ->wherePivot('removed_at', null);
         }),
 
     (new Extend\Model(Group::class))
         ->relationship('privateDiscussions', function ($group) {
             return $group->belongsToMany(Discussion::class, 'recipients')
-                ->withTimestamps()
                 ->wherePivot('removed_at', null);
         }),
 
     (new Extend\ApiController(Controller\ListDiscussionsController::class))
-        ->addInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups']),
+        ->addInclude(['recipientUsers', 'recipientGroups'])
+        ->addOptionalInclude(['oldRecipientUsers', 'oldRecipientGroups']),
 
     (new Extend\ApiController(Controller\ShowDiscussionController::class))
-        ->addInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups']),
+        ->addOptionalInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups']),
 
     (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
         ->hasMany('recipientUsers', Serializer\BasicUserSerializer::class)
@@ -93,7 +88,6 @@ return [
         ->attributes(Api\ForumPermissionAttributes::class),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
-        ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class)
         ->attribute('blocksPd', function ($serializer, $user) {
             return (bool) $user->blocks_byobu_pd;
         })
@@ -101,8 +95,11 @@ return [
             return (bool) $serializer->getActor()->can('cannotBeDirectMessaged', $user);
         }),
 
+    (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
+        ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class),
+
     (new Extend\View())
-        ->namespace('fof-byobu', __DIR__.'/resources/views'),
+        ->namespace('fof-byobu', __DIR__ . '/resources/views'),
 
     (new Extend\Policy())
         ->modelPolicy(Discussion::class, Access\DiscussionPolicy::class),

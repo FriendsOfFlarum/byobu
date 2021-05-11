@@ -41,7 +41,8 @@ trait RecipientsConstraint
 
                 // Open access for is_private discussions when the user handles
                 // flags and any of the posts inside the discussion is flagged.
-                if ($this->flagsInstalled()
+                if (
+                    $this->flagsInstalled()
                     && $user->hasPermission('user.viewPrivateDiscussionsWhenFlagged')
                     && $user->hasPermission('discussion.viewFlags')
                     && $includeFlagged
@@ -66,7 +67,7 @@ trait RecipientsConstraint
                     $query
                         ->select('recipients.discussion_id')
                         ->where('recipients.user_id', $userId)
-                        ->when(count($groupIds) > 0, function ($query) use ($groupIds) {
+                        ->when(!empty($groupIds), function ($query) use ($groupIds) {
                             $query->orWhereIn('recipients.group_id', $groupIds);
                         })->distinct();
                 })->distinct();
@@ -78,17 +79,21 @@ trait RecipientsConstraint
         // In case posts have been flagged, open them up..
         $query->orWhere(function ($query) {
             // .. but only if they have recipients (are private discussions)
-            $query->whereIn('discussions.id', function ($query) {
-                $query->select('recipients.discussion_id')
-                    ->from('recipients')
-                    ->whereNull('recipients.removed_at');
-                // .. and only if any of the contained posts are flagged
-            })->whereIn('discussions.id', function ($query) {
-                $query->select('posts.discussion_id')
-                    ->from('flags')
-                    ->leftJoin('posts', 'flags.post_id', 'posts.id')
-                    ->distinct();
-            });
+            $query
+                ->whereIn('discussions.id', function ($query) {
+                    $query
+                        ->select('recipients.discussion_id')
+                        ->from('recipients')
+                        ->whereNull('recipients.removed_at');
+                    // .. and only if any of the contained posts are flagged
+                })
+                ->whereIn('discussions.id', function ($query) {
+                    $query
+                        ->select('posts.discussion_id')
+                        ->from('flags')
+                        ->Join('posts', 'flags.post_id', 'posts.id')
+                        ->distinct();
+                });
         });
     }
 
