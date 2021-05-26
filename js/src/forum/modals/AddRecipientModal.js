@@ -1,12 +1,12 @@
-import Modal from 'flarum/components/Modal';
-import DiscussionPage from 'flarum/components/DiscussionPage';
-import Button from 'flarum/components/Button';
-import ItemList from 'flarum/utils/ItemList';
-import Stream from 'flarum/utils/Stream';
-import SearchState from 'flarum/states/SearchState';
+import Modal from 'flarum/common/components/Modal';
+import DiscussionPage from 'flarum/forum/components/DiscussionPage';
+import Button from 'flarum/common/components/Button';
+import ItemList from 'flarum/common/utils/ItemList';
+import Stream from 'flarum/common/utils/Stream';
+import SearchState from 'flarum/forum/states/SearchState';
 import RecipientSearch from '../search/RecipientSearch';
-import User from 'flarum/models/User';
-import Group from 'flarum/models/Group';
+import User from 'flarum/common/models/User';
+import Group from 'flarum/common/models/Group';
 
 export default class AddRecipientModal extends Modal {
     oninit(vnode) {

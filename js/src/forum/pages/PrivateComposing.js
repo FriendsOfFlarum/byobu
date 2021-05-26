@@ -1,7 +1,7 @@
 
-import Button from 'flarum/components/Button';
-import LogInModal from 'flarum/components/LogInModal';
-import ItemList from 'flarum/utils/ItemList';
+import Button from 'flarum/common/components/Button';
+import LogInModal from 'flarum/forum/components/LogInModal';
+import ItemList from 'flarum/common/utils/ItemList';
 import PrivateDiscussionComposer from "./discussions/PrivateDiscussionComposer";
 
 export default class PrivateComposing {

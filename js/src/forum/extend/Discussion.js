@@ -1,17 +1,17 @@
-import { extend } from 'flarum/extend';
-import Model from 'flarum/Model';
-import Badge from 'flarum/components/Badge';
-import Discussion from 'flarum/models/Discussion';
-import User from 'flarum/models/User';
-import Group from 'flarum/models/Group';
-import Button from 'flarum/components/Button';
-import DiscussionListItem from 'flarum/components/DiscussionListItem';
-import DiscussionPage from 'flarum/components/DiscussionPage';
-import DiscussionHero from 'flarum/components/DiscussionHero';
-import DiscussionListState from 'flarum/states/DiscussionListState';
+import { extend } from 'flarum/common/extend';
+import Model from 'flarum/common/Model';
+import Badge from 'flarum/common/components/Badge';
+import Discussion from 'flarum/common/models/Discussion';
+import User from 'flarum/common/models/User';
+import Group from 'flarum/common/models/Group';
+import Button from 'flarum/common/components/Button';
+import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
+import DiscussionPage from 'flarum/forum/components/DiscussionPage';
+import DiscussionHero from 'flarum/forum/components/DiscussionHero';
+import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import recipientsLabel from '../pages/labels/recipientsLabel';
-import DiscussionControls from 'flarum/utils/DiscussionControls';
-import ItemList from 'flarum/utils/ItemList';
+import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
+import ItemList from 'flarum/common/utils/ItemList';
 import AddRecipientModal from './../modals/AddRecipientModal';
 
 export default (app) => {

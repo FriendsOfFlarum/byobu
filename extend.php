@@ -70,10 +70,11 @@ return [
 
     (new Extend\ApiController(Controller\ListDiscussionsController::class))
         ->addInclude(['recipientUsers', 'recipientGroups'])
-        ->addOptionalInclude(['oldRecipientUsers', 'oldRecipientGroups']),
+        ->load(['recipientUsers', 'recipientGroups']),
 
     (new Extend\ApiController(Controller\ShowDiscussionController::class))
-        ->addOptionalInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups']),
+        ->addOptionalInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups'])
+        ->load(['recipientUsers', 'recipientGroups']),
 
     (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
         ->hasMany('recipientUsers', Serializer\BasicUserSerializer::class)

@@ -1,8 +1,8 @@
-import extract from 'flarum/utils/extract';
-import username from 'flarum/helpers/username';
-import User from 'flarum/models/User';
-import Group from 'flarum/models/Group';
-import LinkButton from 'flarum/components/LinkButton';
+import extract from 'flarum/common/utils/extract';
+import username from 'flarum/common/helpers/username';
+import User from 'flarum/common/models/User';
+import Group from 'flarum/common/models/Group';
+import LinkButton from 'flarum/common/components/LinkButton';
 
 export default function recipientLabel(recipient, attrs = {}) {
     attrs.style = attrs.style || {};

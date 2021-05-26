@@ -1,9 +1,9 @@
-import DiscussionComposer from 'flarum/components/DiscussionComposer';
+import DiscussionComposer from 'flarum/forum/components/DiscussionComposer';
 import AddRecipientModal from '../../modals/AddRecipientModal';
-import ItemList from 'flarum/utils/ItemList';
+import ItemList from 'flarum/common/utils/ItemList';
 import recipientCountLabel from "../labels/recipientCountLabel";
-import User from 'flarum/models/User';
-import Group from 'flarum/models/Group';
+import User from 'flarum/common/models/User';
+import Group from 'flarum/common/models/Group';
 
 export default class PrivateDiscussionComposer extends DiscussionComposer {
     static initAttrs(attrs) {

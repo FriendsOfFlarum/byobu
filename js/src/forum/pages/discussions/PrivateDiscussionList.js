@@ -1,3 +1,3 @@
-import DiscussionList from 'flarum/components/DiscussionList';
+import DiscussionList from 'flarum/forum/components/DiscussionList';
 
 export default class PrivateDiscussionList extends DiscussionList {}

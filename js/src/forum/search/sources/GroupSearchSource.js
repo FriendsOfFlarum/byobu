@@ -1,4 +1,4 @@
-import highlight from 'flarum/helpers/highlight';
+import highlight from 'flarum/common/helpers/highlight';
 
 export default class GroupSearchSource {
     search(query) {

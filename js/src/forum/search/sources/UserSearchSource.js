@@ -1,6 +1,6 @@
-import highlight from 'flarum/helpers/highlight';
-import avatar from 'flarum/helpers/avatar';
-import username from 'flarum/helpers/username';
+import highlight from 'flarum/common/helpers/highlight';
+import avatar from 'flarum/common/helpers/avatar';
+import username from 'flarum/common/helpers/username';
 
 export default class UserSearchSource {
     view(query) {

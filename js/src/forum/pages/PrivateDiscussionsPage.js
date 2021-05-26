@@ -1,7 +1,7 @@
-import { extend } from 'flarum/extend';
-import LinkButton from 'flarum/components/LinkButton';
-import IndexPage from 'flarum/components/IndexPage';
-import DiscussionListState from 'flarum/states/DiscussionListState';
+import { extend } from 'flarum/common/extend';
+import LinkButton from 'flarum/common/components/LinkButton';
+import IndexPage from 'flarum/forum/components/IndexPage';
+import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import PrivateComposing from "./PrivateComposing";
 
 export default (app) => {

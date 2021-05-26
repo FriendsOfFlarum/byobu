@@ -1,4 +1,4 @@
-import EventPost from "flarum/components/EventPost";
+import EventPost from "flarum/forum/components/EventPost";
 import recipientsLabel from "../pages/labels/recipientsLabel";
 
 export default class RecipientsModified extends EventPost {

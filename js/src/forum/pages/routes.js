@@ -1,4 +1,4 @@
-import IndexPage from "flarum/components/IndexPage";
+import IndexPage from "flarum/forum/components/IndexPage";
 import PrivateDiscussionsUserPage from "./PrivateDiscussionsUserPage";
 
 export default (app) => {

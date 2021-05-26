@@ -1,6 +1,6 @@
-import ExtensionPage from 'flarum/components/ExtensionPage';
-import Badge from 'flarum/components/Badge';
-import icon from 'flarum/helpers/icon';
+import ExtensionPage from 'flarum/admin/components/ExtensionPage';
+import Badge from 'flarum/common/components/Badge';
+import icon from 'flarum/common/helpers/icon';
 import { settings } from '@fof-components';
 
 const {

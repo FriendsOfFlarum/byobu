@@ -35,8 +35,8 @@
         }
     ],
     "require": {
-        "flarum/core": "^0.1.0-beta.16",
-        "fof/components": "^0.2.0"
+        "flarum/core": "^1.0.0",
+        "fof/components": "^1.0.0"
     },
     "require-dev": {
         "flarum/testing": "^0.1.0-beta.16"

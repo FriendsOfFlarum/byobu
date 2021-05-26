@@ -1,4 +1,4 @@
-import extract from 'flarum/utils/extract';
+import extract from 'flarum/common/utils/extract';
 import recipientLabel from './recipientLabel';
 
 export default function recipientsLabel(recipients, attrs = {}) {

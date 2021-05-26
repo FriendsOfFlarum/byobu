@@ -14,7 +14,7 @@ fof-byobu:
             submit_button: Post Private Discussion
             title_placeholder: Private Discussion Title
         labels:
-            recipients: "{count} Recipient|{count} Recipients"
+            recipients: "{count, plural, one {{count} Recipient} other {{count} Recipients}}"
             user_deleted: -deleted-
         nav:
             start_button: Discuss Privately
@@ -76,7 +76,7 @@ fof-byobu:
             private_discussion_created: |
                 Hey {recipient_display_name},
 
-                {actor_display_name} started a new private discussion with you as a recipient, titled '{discussion_title}'.
+                {actor_display_name} started a new private discussion with you as a recipient: {discussion_title}.
 
                 View it here:
                 {discussion_url}
@@ -85,7 +85,7 @@ fof-byobu:
             private_discussion_replied: |
                 Hey {recipient_display_name},
 
-                {actor_display_name} posted in a private discussion with you as a recipient, titled '{discussion_title}'.
+                {actor_display_name} posted in a private discussion with you as a recipient: {discussion_title}.
 
                 View it here:
                 {post_url}
@@ -94,7 +94,7 @@ fof-byobu:
             recipient_removed: |
                 Hey {recipient_display_name},
 
-                {actor_display_name} left the private discussion '{discussion_title}'. They'll no longer be able to view any of it's content.
+                {actor_display_name} left the private discussion: {discussion_title}. They'll no longer be able to view any of it's content.
 
                 View it here:
                 {discussion_url}
@@ -103,7 +103,7 @@ fof-byobu:
             private_discussion_added: |
                 Hey {recipient_display_name},
 
-                {actor_display_name} added you to an existing private discussion, titled '{discussion_title}'.
+                {actor_display_name} added you to an existing private discussion: {discussion_title}.
 
                 View it here:
                 {discussion_url}

@@ -1,4 +1,4 @@
-import Notification from 'flarum/components/Notification';
+import Notification from 'flarum/forum/components/Notification';
 
 export default class PrivateDiscussionAddedNotification extends Notification {
     icon() {

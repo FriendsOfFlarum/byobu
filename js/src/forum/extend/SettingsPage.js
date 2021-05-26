@@ -1,6 +1,6 @@
-import { extend } from 'flarum/extend';
-import SettingsPage from 'flarum/components/SettingsPage';
-import Switch from 'flarum/components/Switch';
+import { extend } from 'flarum/common/extend';
+import SettingsPage from 'flarum/forum/components/SettingsPage';
+import Switch from 'flarum/common/components/Switch';
 
 export default (app) => {
     privacyToggle(app);

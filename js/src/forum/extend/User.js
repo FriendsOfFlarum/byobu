@@ -1,12 +1,12 @@
-import { extend } from 'flarum/extend';
-import Model from "flarum/Model";
-import User from "flarum/models/User";
-import UserControls from 'flarum/utils/UserControls';
+import { extend } from 'flarum/common/extend';
+import Model from "flarum/common/Model";
+import User from "flarum/common/models/User";
+import UserControls from 'flarum/forum/utils/UserControls';
 import PrivateDiscussionComposer from './../pages/discussions/PrivateDiscussionComposer';
-import Button from 'flarum/components/Button';
-import ItemList from 'flarum/utils/ItemList';
-import UserPage from 'flarum/components/UserPage';
-import LinkButton from 'flarum/components/LinkButton';
+import Button from 'flarum/common/components/Button';
+import ItemList from 'flarum/common/utils/ItemList';
+import UserPage from 'flarum/forum/components/UserPage';
+import LinkButton from 'flarum/common/components/LinkButton';
 
 export default (app) => {
     attributes();

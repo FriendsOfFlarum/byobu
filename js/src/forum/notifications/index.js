@@ -1,5 +1,5 @@
-import { extend } from 'flarum/extend';
-import NotificationGrid from "flarum/components/NotificationGrid";
+import { extend } from 'flarum/common/extend';
+import NotificationGrid from "flarum/forum/components/NotificationGrid";
 import PrivateDiscussionNotification from "./PrivateDiscussionNotification";
 import PrivateDiscussionRepliedNotification from "./PrivateDiscussionReplyNotification";
 import PrivateDiscussionUserLeftNotification from "./PrivateDiscussionUserLeftNotification";

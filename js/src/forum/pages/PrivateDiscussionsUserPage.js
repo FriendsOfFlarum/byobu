@@ -1,9 +1,9 @@
-import UserPage from 'flarum/components/UserPage';
+import UserPage from 'flarum/forum/components/UserPage';
 import PrivateDiscussionListState from '../states/PrivateDiscussionListState';
-import Button from 'flarum/components/Button';
-import Dropdown from 'flarum/components/Dropdown';
-import ItemList from 'flarum/utils/ItemList';
-import listItems from 'flarum/helpers/listItems';
+import Button from 'flarum/common/components/Button';
+import Dropdown from 'flarum/common/components/Dropdown';
+import ItemList from 'flarum/common/utils/ItemList';
+import listItems from 'flarum/common/helpers/listItems';
 import PrivateDiscussionList from './discussions/PrivateDiscussionList';
 import PrivateComposing from "./PrivateComposing";
 
