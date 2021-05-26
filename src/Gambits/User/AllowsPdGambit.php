@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/byobu.
  *
- * Copyright (c) 2019 - 2021 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,14 +13,12 @@ namespace FoF\Byobu\Gambits\User;
 
 use Flarum\Extension\ExtensionManager;
 use Flarum\Search\AbstractRegexGambit;
-use Flarum\Search\AbstractSearch;
+use Flarum\Search\SearchState;
 use FoF\Byobu\Events\SearchingRecipient;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AllowsPdGambit extends AbstractRegexGambit
 {
-    protected $pattern = 'allows-pd';
-
     /**
      * @var Dispatcher
      */
@@ -31,17 +29,12 @@ class AllowsPdGambit extends AbstractRegexGambit
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * Apply conditions to the search, given that the gambit was matched.
-     *
-     * @param AbstractSearch $search  The search object.
-     * @param array          $matches An array of matches from the search bit.
-     * @param bool           $negate  Whether or not the bit was negated, and thus whether
-     *                                or not the conditions should be negated.
-     *
-     * @return mixed
-     */
-    protected function conditions(AbstractSearch $search, array $matches, $negate)
+    public function getGambitPattern()
+    {
+        return 'allows-pd';
+    }
+
+    protected function conditions(SearchState $search, array $matches, $negate)
     {
         $actor = $search->getActor();
 
@@ -70,7 +63,7 @@ class AllowsPdGambit extends AbstractRegexGambit
     protected function extensionEnabled(string $extension)
     {
         /** @var ExtensionManager $manager */
-        $manager = app(ExtensionManager::class);
+        $manager = resolve(ExtensionManager::class);
 
         return $manager->isEnabled($extension);
     }

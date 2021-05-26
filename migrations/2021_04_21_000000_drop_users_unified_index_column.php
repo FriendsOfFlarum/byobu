@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\Byobu\Events;
+use Flarum\Database\Migration;
 
-class RemovedSelf extends AbstractRecipientsEvent
-{
-}
+return Migration::dropColumns('users', [
+    'unified_index_with_byobu' => ['boolean', 'default' => false],
+]);

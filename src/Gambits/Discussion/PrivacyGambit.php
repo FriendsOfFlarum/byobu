@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/byobu.
  *
- * Copyright (c) 2019 - 2021 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,16 +12,17 @@
 namespace FoF\Byobu\Gambits\Discussion;
 
 use Flarum\Search\AbstractRegexGambit;
-use Flarum\Search\AbstractSearch;
+use Flarum\Search\SearchState;
 use FoF\Byobu\Database\RecipientsConstraint;
 
 class PrivacyGambit extends AbstractRegexGambit
 {
     use RecipientsConstraint;
-    /**
-     * {@inheritdoc}
-     */
-    protected $pattern = 'is:private';
+
+    public function getGambitPattern()
+    {
+        return 'is:private';
+    }
 
     /**
      * Apply conditions to the search, given that the gambit was matched.
@@ -33,7 +34,7 @@ class PrivacyGambit extends AbstractRegexGambit
      *
      * @return mixed
      */
-    protected function conditions(AbstractSearch $search, array $matches, $negate)
+    protected function conditions(SearchState $search, array $matches, $negate)
     {
         $actor = $search->getActor();
 
@@ -42,7 +43,7 @@ class PrivacyGambit extends AbstractRegexGambit
         }
 
         $search->getQuery()->where(function ($query) use ($actor) {
-            $this->constraint($query, $actor, false);
+            $this->constraint($query, $actor);
         });
     }
 }

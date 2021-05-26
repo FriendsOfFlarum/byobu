@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/byobu.
  *
- * Copyright (c) 2019 - 2021 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,26 +11,15 @@
 
 namespace FoF\Byobu\Events;
 
-use Flarum\Search\AbstractSearch;
+use Flarum\Search\SearchState;
 
 class SearchingRecipient
 {
-    /**
-     * @var AbstractSearch
-     */
-    public $search;
+    public SearchState $search;
+    public array $matches;
+    public bool $negate;
 
-    /**
-     * @var array
-     */
-    public $matches;
-
-    /**
-     * @var bool
-     */
-    public $negate;
-
-    public function __construct(AbstractSearch $search, array $matches, $negate)
+    public function __construct(SearchState $search, array $matches, $negate)
     {
         $this->search = $search;
         $this->matches = $matches;

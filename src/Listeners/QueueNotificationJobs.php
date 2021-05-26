@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/byobu.
  *
- * Copyright (c) 2019 - 2021 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -31,7 +31,7 @@ class QueueNotificationJobs
 
     public function discussionMadePrivate(Created $event)
     {
-        app('flarum.queue.connection')->push(
+        resolve('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenPrivateDiscussionStarted(
                 $event->discussion,
                 $event->screener->users,
@@ -57,7 +57,7 @@ class QueueNotificationJobs
 
         $event->post->afterSave(function ($post) use ($actor) {
             if ($post->discussion->recipientUsers->count() && $post->number !== 1) {
-                app('flarum.queue.connection')->push(
+                resolve('flarum.queue.connection')->push(
                     new Jobs\SendNotificationWhenPostedInPrivateDiscussion($post, $actor)
                 );
             }
@@ -66,7 +66,7 @@ class QueueNotificationJobs
 
     public function discussionRecipientRemovedSelf(RemovedSelf $event)
     {
-        app('flarum.queue.connection')->push(
+        resolve('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenRecipientRemoved(
                 $event->screener->actor(),
                 $event->discussion,
@@ -77,7 +77,7 @@ class QueueNotificationJobs
 
     public function discussionRecipientsChanged(RecipientsChanged $event)
     {
-        app('flarum.queue.connection')->push(
+        resolve('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenRecipientAdded(
                 $event->screener->actor(),
                 $event->discussion,

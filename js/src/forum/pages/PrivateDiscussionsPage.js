@@ -29,6 +29,9 @@ export default (app) => {
     extend(DiscussionListState.prototype, 'requestParams', function(params) {
         if (app.current.get('routeName') === 'byobuPrivate') {
             params.filter.q = (params.filter.q || '') + ' is:private';
+
+            params.include.push('recipientUsers');
+            params.include.push('recipientGroups');
         }
     });
 

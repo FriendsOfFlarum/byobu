@@ -40,7 +40,6 @@ fof-byobu:
         user:
             settings:
                 block_pd: Block private discussions
-                unified_index: Combine private discussions inside unified index
             byobu_link: Private Discussions
             dropdown_label: Private Discussions
 
@@ -53,9 +52,6 @@ fof-byobu:
             pd_user_left_text: "{username} left the private discussion"
             pd_added_text: "{username} added you to a private discussion"
             pd_added_label: "Someone adds me to an existing private discussion"
-
-        confirm:
-            make_public: This will make this private discussion visible to everyone. Consider if this is the correct action before proceeding.
 
     admin:
         permission:

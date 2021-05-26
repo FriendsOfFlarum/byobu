@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/byobu.
  *
- * Copyright (c) 2019 - 2021 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -51,9 +51,18 @@ class DiscussionPolicy extends AbstractPolicy
     private function approveIfPrivate(Discussion $discussion)
     {
         /** @var Screener $screener */
-        $screener = app('byobu.screener');
+        $screener = resolve('byobu.screener');
         $screener = $screener->fromDiscussion($discussion);
 
         return $screener->isPrivate() ? $this->allow() : null;
+    }
+
+    public function bypassTagCounts(User $actor, Discussion $discussion)
+    {
+        $isByobu = $discussion->isByobu;
+
+        $discussion->offsetUnset('isByobu');
+
+        return $isByobu ? $this->allow() : null;
     }
 }

@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/byobu.
  *
- * Copyright (c) 2019 - 2021 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -39,7 +39,7 @@ class PersistRecipients
         }
 
         /** @var Screener $screener */
-        $screener = app('byobu.screener');
+        $screener = resolve('byobu.screener');
         $this->screener = $screener->whenSavingDiscussions($event);
 
         if ($this->screener->nothingChanged()) {
@@ -52,6 +52,7 @@ class PersistRecipients
 
         if (!$event->discussion->exists) {
             $this->checkPermissionsForNewDiscussion($event->actor);
+            $event->discussion->isByobu = true;
         } else {
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
         }
@@ -67,7 +68,7 @@ class PersistRecipients
         // a non-null response the discussion will not be soft deleted.
         if ($this->screener->wasPrivate() && !$this->screener->isPrivate()) {
             /** @var Dispatcher $events */
-            $events = app(Dispatcher::class);
+            $events = resolve(Dispatcher::class);
             $eventArgs = $this->eventArguments($event->discussion);
 
             if ($events->until(new Events\Deleting(...$eventArgs)) === null) {
@@ -76,6 +77,10 @@ class PersistRecipients
         }
 
         $this->raiseEvent($event->discussion);
+
+        Discussion::saving(function (Discussion $discussion) {
+            $discussion->offsetUnset('isByobu');
+        });
 
         $event->discussion->afterSave(function (Discussion $discussion) {
             foreach (['users', 'groups'] as $type) {
