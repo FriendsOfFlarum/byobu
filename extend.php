@@ -74,7 +74,8 @@ return [
 
     (new Extend\ApiController(Controller\ShowDiscussionController::class))
         ->addOptionalInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups'])
-        ->load(['recipientUsers', 'recipientGroups']),
+        ->load(['recipientUsers', 'recipientGroups'])
+        ->addInclude(['recipientUsers', 'recipientGroups']),
 
     (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
         ->hasMany('recipientUsers', Serializer\BasicUserSerializer::class)
