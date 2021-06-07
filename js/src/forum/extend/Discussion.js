@@ -14,9 +14,9 @@ import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import ItemList from 'flarum/common/utils/ItemList';
 import AddRecipientModal from './../modals/AddRecipientModal';
 
-export default (app) => {
+export default () => {
     attributes();
-    badges(app);
+    badges();
     index();
     hero();
     apiInclude();
@@ -43,7 +43,7 @@ const add = function (discussion, items, long) {
     }
 };
 
-function badges(app) {
+function badges() {
     extend(Discussion.prototype, 'badges', function (badges) {
         if (this.recipientUsers().length || this.recipientGroups().length) {
             badges.add(
@@ -76,9 +76,10 @@ function hero() {
 }
 
 function apiInclude() {
-    extend(DiscussionPage.prototype, 'params', function (params) {
-        params.include.push('recipientUsers');
-        params.include.push('recipientGroups');
+    extend(DiscussionPage.prototype, 'requestParams', function (params) {
+        // @todo this removes posts from the discussion :'(
+        if (! params.include) params.include = 'recipientUsers,recipientGroups';
+        else params.include = params.include + ',recipientUsers,recipientGroups';
     });
     extend(DiscussionListState.prototype, 'requestParams', function (params) {
         params.include.push('recipientUsers');
@@ -87,8 +88,7 @@ function apiInclude() {
 }
 
 function controls() {
-    if (!app.session) return;
-    
+
     extend(DiscussionControls, 'moderationControls', function (items, discussion) {
         if (discussion.canEditRecipients()) {
             items.add(
