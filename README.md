@@ -15,7 +15,7 @@ Private discussions for your forum. Allows you to select specific recipients for
 ## Installation
 
 
-    composer require "fof/byobu:*"
+    composer require fof/byobu:"*"
 
 ## Updating
 
