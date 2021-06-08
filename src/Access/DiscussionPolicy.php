@@ -80,17 +80,6 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * @param User       $actor
-     * @param Discussion $discussion
-     *
-     * @return bool|void
-     */
-    public function sticky(User $actor, Discussion $discussion)
-    {
-        return $this->isPrivate($discussion) ? $this->deny() : null;
-    }
-
-    /**
      * Determine if the supplied discussion is a byobu private discussion or not.
      *
      * @param Discussion $discussion
