@@ -73,14 +73,16 @@ return [
         ->load(['recipientUsers', 'recipientGroups']),
 
     (new Extend\ApiController(Controller\ShowDiscussionController::class))
-        ->addOptionalInclude(['recipientUsers', 'oldRecipientUsers', 'recipientGroups', 'oldRecipientGroups'])
-        ->load(['recipientUsers', 'recipientGroups'])
-        ->addInclude(['recipientUsers', 'recipientGroups']),
+        ->addOptionalInclude(['oldRecipientUsers', 'oldRecipientGroups'])
+        ->addInclude(['recipientUsers', 'recipientGroups'])
+        ->load(['recipientUsers', 'recipientGroups']),
 
     (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
         ->hasMany('recipientUsers', Serializer\BasicUserSerializer::class)
+        ->hasMany('recipientGroups', Serializer\GroupSerializer::class),
+
+    (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
         ->hasMany('oldRecipientUsers', Serializer\BasicUserSerializer::class)
-        ->hasMany('recipientGroups', Serializer\GroupSerializer::class)
         ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
 
     (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))

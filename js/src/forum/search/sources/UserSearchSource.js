@@ -33,7 +33,7 @@ export default class UserSearchSource {
                         <li className="SearchResult" data-index={'users:' + user.id()}>
                             <a data-index={'users:' + user.id()}>
                                 {avatar(user)}
-                                {{...name, text: undefined, children}}
+                                {{ ...name, text: undefined, children }}
                             </a>
                         </li>
                     );

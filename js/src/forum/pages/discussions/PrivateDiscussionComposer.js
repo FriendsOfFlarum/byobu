@@ -1,17 +1,17 @@
 import DiscussionComposer from 'flarum/forum/components/DiscussionComposer';
 import AddRecipientModal from '../../modals/AddRecipientModal';
 import ItemList from 'flarum/common/utils/ItemList';
-import recipientCountLabel from "../labels/recipientCountLabel";
+import recipientCountLabel from '../labels/recipientCountLabel';
 import User from 'flarum/common/models/User';
 import Group from 'flarum/common/models/Group';
 
 export default class PrivateDiscussionComposer extends DiscussionComposer {
     static initAttrs(attrs) {
         super.initAttrs(attrs);
-    
+
         attrs.titlePlaceholder = app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder');
         attrs.submitLabel = app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button');
-      }
+    }
 
     oninit(vnode) {
         super.oninit(vnode);
@@ -102,7 +102,7 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
         if (user.id() !== app.session.user.id()) {
             this.composer.fields.recipients.add('users:' + user.id(), user);
         }
-    };
+    }
 
     onsubmit() {
         this.loading = true;

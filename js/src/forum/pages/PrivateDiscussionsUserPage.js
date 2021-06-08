@@ -5,7 +5,7 @@ import Dropdown from 'flarum/common/components/Dropdown';
 import ItemList from 'flarum/common/utils/ItemList';
 import listItems from 'flarum/common/helpers/listItems';
 import PrivateDiscussionList from './discussions/PrivateDiscussionList';
-import PrivateComposing from "./PrivateComposing";
+import PrivateComposing from './PrivateComposing';
 
 export default class PrivateDiscussionsUserPage extends UserPage {
     oninit(vnode) {
@@ -17,9 +17,9 @@ export default class PrivateDiscussionsUserPage extends UserPage {
     show(user) {
         // We can not create the list in init because the user will not be available if it has to be loaded asynchronously
         this.list = new PrivateDiscussionListState({
-                q: `byobu:${user.username()} is:private`,
-                sort: this.sort,
-            });
+            q: `byobu:${user.username()} is:private`,
+            sort: this.sort,
+        });
 
         this.list.refresh();
 
@@ -57,10 +57,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
         const items = new ItemList();
 
         if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
-            items.add(
-                'start_private',
-                composing.component()
-            );
+            items.add('start_private', composing.component());
         }
 
         return items;
@@ -77,19 +74,25 @@ export default class PrivateDiscussionsUserPage extends UserPage {
 
         items.add(
             'sort',
-            Dropdown.component({
-                buttonClassName: 'Button',
-                label: sortOptions[this.sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0],
-            }, Object.keys(sortOptions).map((value) => {
-                const label = sortOptions[value];
-                const active = (this.sort || Object.keys(sortMap)[0]) === value;
+            Dropdown.component(
+                {
+                    buttonClassName: 'Button',
+                    label: sortOptions[this.sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0],
+                },
+                Object.keys(sortOptions).map((value) => {
+                    const label = sortOptions[value];
+                    const active = (this.sort || Object.keys(sortMap)[0]) === value;
 
-                return Button.component({
-                    icon: active ? 'fas fa-check' : true,
-                    onclick: this.handleChangeSort.bind(this, value),
-                    active: active,
-                }, label);
-            }))
+                    return Button.component(
+                        {
+                            icon: active ? 'fas fa-check' : true,
+                            onclick: this.handleChangeSort.bind(this, value),
+                            active: active,
+                        },
+                        label
+                    );
+                })
+            )
         );
 
         return items;

@@ -1,8 +1,7 @@
-
 import Button from 'flarum/common/components/Button';
 import LogInModal from 'flarum/forum/components/LogInModal';
 import ItemList from 'flarum/common/utils/ItemList';
-import PrivateDiscussionComposer from "./discussions/PrivateDiscussionComposer";
+import PrivateDiscussionComposer from './discussions/PrivateDiscussionComposer';
 
 export default class PrivateComposing {
     constructor(recipient) {
@@ -40,15 +39,16 @@ export default class PrivateComposing {
     }
 
     component() {
-        return Button.component({
-            icon: 'fas fa-pen',
-            className: 'Button Button--primary IndexPage-newDiscussion',
-            itemClassName: 'fof-byobu_primaryControl',
-            onclick: this.action.bind(this),
-            disabled: ! this.canStartDiscussion,
-        }, app.translator.trans(
-            this.canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button'
-        ))
+        return Button.component(
+            {
+                icon: 'fas fa-pen',
+                className: 'Button Button--primary IndexPage-newDiscussion',
+                itemClassName: 'fof-byobu_primaryControl',
+                onclick: this.action.bind(this),
+                disabled: !this.canStartDiscussion,
+            },
+            app.translator.trans(this.canStartDiscussion ? 'fof-byobu.forum.nav.start_button' : 'core.forum.index.cannot_start_discussion_button')
+        );
     }
 
     get canStartDiscussion() {
