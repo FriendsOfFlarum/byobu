@@ -33,19 +33,18 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
 
         const users = [];
         const groups = [];
-        
+
         if (this.composer.fields.recipients !== undefined) {
             this.composer.fields.recipients.toArray().forEach((recipient) => {
                 if (recipient instanceof User) {
                     users.push(recipient);
                 }
-    
+
                 if (recipient instanceof Group) {
                     groups.push(recipient);
                 }
             });
         }
-        
 
         data.relationships = data.relationships || {};
 

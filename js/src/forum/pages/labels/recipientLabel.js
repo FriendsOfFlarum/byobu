@@ -19,7 +19,7 @@ export default function recipientLabel(recipient, attrs = {}) {
             attrs.href = app.route.user(recipient);
         }
     } else if (recipient instanceof Group) {
-        return <span class={attrs.className}>{recipient.namePlural()}</span>
+        return <span class={attrs.className}>{recipient.namePlural()}</span>;
     } else {
         attrs.className += ' none';
         label = app.translator.trans('fof-byobu.forum.labels.user_deleted');
