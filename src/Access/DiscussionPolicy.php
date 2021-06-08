@@ -54,8 +54,9 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * @param User $actor
+     * @param User       $actor
      * @param Discussion $discussion
+     *
      * @return bool|void
      */
     public function bypassTagCounts(User $actor, Discussion $discussion)
@@ -68,8 +69,9 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * @param User $actor
+     * @param User       $actor
      * @param Discussion $discussion
+     *
      * @return bool|void
      */
     public function tag(User $actor, Discussion $discussion)
@@ -78,8 +80,9 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * @param User $actor
+     * @param User       $actor
      * @param Discussion $discussion
+     *
      * @return bool|void
      */
     public function sticky(User $actor, Discussion $discussion)
@@ -91,7 +94,8 @@ class DiscussionPolicy extends AbstractPolicy
      * Determine if the supplied discussion is a byobu private discussion or not.
      *
      * @param Discussion $discussion
-     * @return boolean
+     *
+     * @return bool
      */
     private function isPrivate(Discussion $discussion): bool
     {
