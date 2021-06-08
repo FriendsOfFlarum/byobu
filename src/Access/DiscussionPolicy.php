@@ -74,4 +74,13 @@ class DiscussionPolicy extends AbstractPolicy
 
         return $screener->isPrivate() ? $this->deny() : null;
     }
+
+    public function sticky(User $actor, Discussion $discussion)
+    {
+        /** @var Screener $screener */
+        $screener = resolve('byobu.screener');
+        $screener = $screener->fromDiscussion($discussion);
+
+        return $screener->isPrivate() ? $this->deny() : null;
+    }
 }
