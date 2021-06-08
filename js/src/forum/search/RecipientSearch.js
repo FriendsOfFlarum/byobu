@@ -42,7 +42,6 @@ export default class RecipientSearch extends Search {
                 clearTimeout(this.typingTimer);
             });
 
-
         super.oncreate(vnode);
     }
 
@@ -73,7 +72,7 @@ export default class RecipientSearch extends Search {
                         .toArray()
                         .map((recipient) =>
                             recipientLabel(recipient, {
-                                onclick: (e) => this.removeRecipient(recipient, e)
+                                onclick: (e) => this.removeRecipient(recipient, e),
                             })
                         )
                 ),
@@ -92,7 +91,7 @@ export default class RecipientSearch extends Search {
                     type: 'search',
                     placeholder: extractText(app.translator.trans('fof-byobu.forum.input.search_recipients')),
                     value: this.state.getValue(),
-                    oninput: e => this.state.setValue(e.target.value),
+                    oninput: (e) => this.state.setValue(e.target.value),
                     onfocus: () => (this.hasFocus = true),
                     onblur: () => (this.hasFocus = false),
                 }),

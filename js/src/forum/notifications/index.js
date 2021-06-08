@@ -1,9 +1,9 @@
 import { extend } from 'flarum/common/extend';
-import NotificationGrid from "flarum/forum/components/NotificationGrid";
-import PrivateDiscussionNotification from "./PrivateDiscussionNotification";
-import PrivateDiscussionRepliedNotification from "./PrivateDiscussionReplyNotification";
-import PrivateDiscussionUserLeftNotification from "./PrivateDiscussionUserLeftNotification";
-import PrivateDiscussionAddedNotification from "./PrivateDiscussionAddedNotification";
+import NotificationGrid from 'flarum/forum/components/NotificationGrid';
+import PrivateDiscussionNotification from './PrivateDiscussionNotification';
+import PrivateDiscussionRepliedNotification from './PrivateDiscussionReplyNotification';
+import PrivateDiscussionUserLeftNotification from './PrivateDiscussionUserLeftNotification';
+import PrivateDiscussionAddedNotification from './PrivateDiscussionAddedNotification';
 
 export default function (app) {
     app.notificationComponents.byobuPrivateDiscussionCreated = PrivateDiscussionNotification;
