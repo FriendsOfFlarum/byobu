@@ -65,4 +65,13 @@ class DiscussionPolicy extends AbstractPolicy
 
         return $isByobu ? $this->allow() : null;
     }
+
+    public function tag(User $actor, Discussion $discussion)
+    {
+        /** @var Screener $screener */
+        $screener = resolve('byobu.screener');
+        $screener = $screener->fromDiscussion($discussion);
+
+        return $screener->isPrivate() ? $this->deny() : null;
+    }
 }
