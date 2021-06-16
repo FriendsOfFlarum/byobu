@@ -34,5 +34,13 @@
         &:first-of-type:last-of-type {
             border-radius: @border-radius;
         }
+
+        // Merge borders together without removing them.
+        //
+        // Fully removing a border could result in a missing border if the list of
+        // recipients spans multiple lines.
+        &:not(:first-of-type) {
+            margin-left: -1px;
+        }
     }
 }
