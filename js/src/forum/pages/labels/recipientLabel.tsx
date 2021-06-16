@@ -1,3 +1,4 @@
+import type * as Mithril from 'mithril';
 import username from 'flarum/common/helpers/username';
 import User from 'flarum/common/models/User';
 import Group from 'flarum/common/models/Group';
@@ -6,31 +7,36 @@ import classList from 'flarum/common/utils/classList';
 import app from 'flarum/forum/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
 
-export default class RecipientLabel extends Component<{} extends ComponentAttrs> {
-  view(vnode){
-    console.log(this.attrs);
+export interface IRecipientLabelAttrs extends ComponentAttrs, Mithril.Attributes {
+    recipient: User | Group;
+    link: string;
+}
 
-    const { recipient, link, ...newAttrs } = this.attrs;
+export default class RecipientLabel extends Component<IRecipientLabelAttrs> {
+    view(vnode: Mithril.Vnode) {
+        console.log(this.attrs);
 
-    newAttrs.style = newAttrs.style || {};
-    newAttrs.className = classList('RecipientLabel', newAttrs.className);
-    newAttrs.href = link;
+        const { recipient, link, ...newAttrs } = this.attrs;
 
-    let label;
+        newAttrs.style = newAttrs.style || {};
+        newAttrs.className = classList('RecipientLabel', newAttrs?.className);
+        newAttrs.href = link;
 
-    if (recipient instanceof User) {
-        label = username(recipient);
+        let label: string;
 
-        if (!newAttrs.href && recipient.id() !== app?.session?.user?.id()) {
-            newAttrs.href = app.route.user(recipient);
+        if (recipient instanceof User) {
+            label = username(recipient);
+
+            if (!newAttrs.href && recipient.id() !== app?.session?.user?.id()) {
+                newAttrs.href = app.route.user(recipient);
+            }
+        } else if (recipient instanceof Group) {
+            return <span class={newAttrs.className}>{recipient.namePlural()}</span>;
+        } else {
+            newAttrs.className += ' none';
+            label = app.translator.trans('flarum.core.lib.username.deleted_text');
         }
-    } else if (recipient instanceof Group) {
-        return <span class={newAttrs.className}>{recipient.namePlural()}</span>;
-    } else {
-        newAttrs.className += ' none';
-        label = app.translator.trans('fof-byobu.forum.labels.user_deleted');
-    }
 
-    return <LinkButton {...newAttrs}>{label}</LinkButton>;
-  }
+        return <LinkButton {...newAttrs}>{label}</LinkButton>;
+    }
 }
