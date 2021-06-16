@@ -6,7 +6,7 @@ import ItemList from 'flarum/common/utils/ItemList';
 import classList from 'flarum/common/utils/classList';
 import extractText from 'flarum/common/utils/extractText';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
-import RecipientLabel from '../pages/labels/recipientLabel';
+import RecipientLabel from '../pages/labels/RecipientLabel';
 import User from 'flarum/common/models/User';
 import Group from 'flarum/common/models/Group';
 import Tooltip from 'flarum/common/components/Tooltip';
