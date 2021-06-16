@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import Search from 'flarum/forum/components/Search';
 import UserSearchSource from './sources/UserSearchSource';
 import GroupSearchSource from './sources/GroupSearchSource';
@@ -5,11 +6,23 @@ import ItemList from 'flarum/common/utils/ItemList';
 import classList from 'flarum/common/utils/classList';
 import extractText from 'flarum/common/utils/extractText';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
-import recipientLabel from '../pages/labels/recipientLabel';
+import RecipientLabel from '../pages/labels/recipientLabel';
 import User from 'flarum/common/models/User';
 import Group from 'flarum/common/models/Group';
+import Tooltip from 'flarum/common/components/Tooltip';
 
 export default class RecipientSearch extends Search {
+    /**
+     * Used to prevent duplicate IDs. Doesn't remove the possibility, but is extremely low.
+     */
+    inputUuid;
+
+    oninit(vnode) {
+        super.oninit(vnode);
+
+        this.inputUuid = Math.random().toString(36).substring(2);
+    }
+
     oncreate(vnode) {
         super.oncreate(vnode);
 
@@ -30,7 +43,7 @@ export default class RecipientSearch extends Search {
         });
 
         $('.RecipientsInput')
-            .on('keyup', () => {
+            .on('input', () => {
                 clearTimeout(this.typingTimer);
                 this.doSearch = false;
                 this.typingTimer = setTimeout(() => {
@@ -56,59 +69,58 @@ export default class RecipientSearch extends Search {
             this.sources = this.sourceItems().toArray();
         }
 
-        return m(
-            'div',
-            {
-                className: 'AddRecipientModal-form-input Search-input',
-            },
-            [
-                m(
-                    'div',
-                    {
-                        className: 'RecipientsInput-selected RecipientsLabel',
-                    },
-                    this.attrs
+        return (
+            <div role="search" className="Search">
+                <div className="RecipientsInput-selected RecipientsLabel" aria-live="polite">
+                    <h4>{app.translator.trans('fof-byobu.forum.modal.labels.selected_users')}</h4>
+                    <p>{app.translator.trans('fof-byobu.forum.modal.help.selected_users')}</p>
+
+                    {this.attrs
                         .selected()
                         .toArray()
-                        .map((recipient) =>
-                            recipientLabel(recipient, {
-                                onclick: (e) => this.removeRecipient(recipient, e),
-                            })
-                        )
-                ),
-                m('input', {
-                    className:
-                        'RecipientsInput FormControl ' +
-                        classList({
-                            open: !!this.state.getValue(),
-                            focused: !!this.state.getValue(),
-                            active: !!this.state.getValue(),
-                            loading: !!this.loadingSources,
-                        }),
-                    oncreate: function (vnode) {
-                        vnode.dom.focus();
-                    },
-                    type: 'search',
-                    placeholder: extractText(app.translator.trans('fof-byobu.forum.input.search_recipients')),
-                    value: this.state.getValue(),
-                    oninput: (e) => this.state.setValue(e.target.value),
-                    onfocus: () => (this.hasFocus = true),
-                    onblur: () => (this.hasFocus = false),
-                }),
-                m(
-                    'ul',
-                    {
-                        className:
-                            'Dropdown-menu Search-results fade ' +
-                            classList({
+                        .map((recipient) => {
+                            return (
+                                <Tooltip text={app.translator.trans('fof-byobu.forum.modal.help.click_user_to_remove_tooltip')}>
+                                    <RecipientLabel data-container="body" recipient={recipient} onclick={(e) => this.removeRecipient(recipient, e)} />
+                                </Tooltip>
+                            );
+                        })}
+                </div>
+
+                <div className="Form-group">
+                    <label for={`byobu-addrecipient-search-input-${this.inputUuid}`}>
+                        {app.translator.trans('fof-byobu.forum.modal.labels.search_field')}
+                    </label>
+
+                    <div className="AddRecipientModal-form-input Search-input">
+                        <input
+                            id={`byobu-addrecipient-search-input-${this.inputUuid}`}
+                            className={classList('RecipientsInput', 'FormControl', {
+                                open: !!this.state.getValue(),
+                                focused: !!this.state.getValue(),
+                                active: !!this.state.getValue(),
+                                loading: !!this.loadingSources,
+                            })}
+                            oncreate={(vnode) => vnode.dom.focus()}
+                            type="search"
+                            placeholder={extractText(app.translator.trans('fof-byobu.forum.input.search_recipients'))}
+                            value={this.state.getValue()}
+                            oninput={(e) => this.state.setValue(e.target.value)}
+                            onfocus={() => (this.hasFocus = true)}
+                            onblur={() => (this.hasFocus = false)}
+                        />
+                        <ul
+                            className={classList('Dropdown-menu', 'Search-results', 'fade', {
                                 in: !!loading,
-                            }),
-                    },
-                    !this.doSearch
-                        ? LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' })
-                        : this.sources.map((source) => source.view(this.state.getValue()))
-                ),
-            ]
+                            })}
+                        >
+                            {!this.doSearch
+                                ? LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' })
+                                : this.sources.map((source) => source.view(this.state.getValue()))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
         );
     }
 

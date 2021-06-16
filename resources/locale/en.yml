@@ -15,7 +15,7 @@ fof-byobu:
             title_placeholder: Private Discussion Title
         labels:
             recipients: "{count, plural, one {{count} Recipient} other {{count} Recipients}}"
-            user_deleted: -deleted-
+            user_deleted: "[deleted]"
         nav:
             start_button: Discuss Privately
             nav_item: "Private Discussions"
@@ -28,9 +28,14 @@ fof-byobu:
             titles:
                 update_recipients: Update recipients of {title}
                 add_recipients: Add recipients to your discussion
+            labels:
+                selected_users: Selected users
+                search_field: Search for user
             help:
                 add_recipients: This discussion will only be visible to the users you choose here. At least 1 recipient (other than yourself) is required.
                 update_recipients: This discussion will only be visible to the users you choose here.
+                selected_users: Click a user's name to remove them.
+                click_user_to_remove_tooltip: Click to remove
         post:
             recipients_modified:
                 added_and_removed: "{username} added recipients {added} and removed {removed}."
