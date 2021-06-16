@@ -14,8 +14,6 @@ export interface IRecipientLabelAttrs extends ComponentAttrs, Mithril.Attributes
 
 export default class RecipientLabel extends Component<IRecipientLabelAttrs> {
     view(vnode: Mithril.Vnode) {
-        console.log(this.attrs);
-
         const { recipient, link, ...newAttrs } = this.attrs;
 
         newAttrs.style = newAttrs.style || {};
