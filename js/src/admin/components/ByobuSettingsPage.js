@@ -33,11 +33,13 @@ export default class ByobuSetingsPage extends ExtensionPage {
                             <h2>{icon(this.setting('fof-byobu.icon-postAction').toJSON() || this.postActionDefault)}</h2>
                         </StringItem>
                     </div>
-                    <p>
-                        {app.translator.trans('flarum-tags.admin.edit_tag.icon_text', {
-                            a: <a href="https://fontawesome.com/icons?m=free" tabindex="-1" />,
-                        })}
-                    </p>
+                    {flarum.extensions['flarum-tags'] && (
+                        <p>
+                            {app.translator.trans('flarum-tags.admin.edit_tag.icon_text', {
+                                a: <a href="https://fontawesome.com/icons?m=free" tabindex="-1" />,
+                            })}
+                        </p>
+                    )}
                     <div className="Form-group">{this.submitButton()}</div>
                 </div>
             </div>,

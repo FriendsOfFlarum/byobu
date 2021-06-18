@@ -3,6 +3,7 @@ fof-byobu:
         badges:
             is_private:
                 tooltip: Private discussion
+
         buttons:
             add_recipients: Recipients
             submit: OK
@@ -10,33 +11,47 @@ fof-byobu:
             send_pd: "Send {username} a message"
             cancel: Cancel
             remove_from_discussion: Leave this private discussion
+
         composer_private_discussion:
             submit_button: Post Private Discussion
             title_placeholder: Private Discussion Title
+
         labels:
             recipients: "{count, plural, one {{count} Recipient} other {{count} Recipients}}"
-            user_deleted: -deleted-
+
         nav:
             start_button: Discuss Privately
             nav_item: "Private Discussions"
+
         input:
             search_recipients: Search recipient by typing first three characters...
+
         search:
             headings:
                 groups: Permission Groups
+
         modal:
             titles:
                 update_recipients: Update recipients of {title}
                 add_recipients: Add recipients to your discussion
+
+            labels:
+                selected_users: Selected users
+                search_field: Search for user
+
             help:
                 add_recipients: This discussion will only be visible to the users you choose here. At least 1 recipient (other than yourself) is required.
                 update_recipients: This discussion will only be visible to the users you choose here.
+                selected_users: Click a user's name to remove them.
+                click_user_to_remove_tooltip: Click to remove
+
         post:
             recipients_modified:
                 added_and_removed: "{username} added recipients {added} and removed {removed}."
                 added: "{username} added recipients {added}."
                 removed: "{username} removed recipients {removed}."
                 removed_self: "{username} left the private discussion."
+
         user:
             settings:
                 block_pd: Block private discussions
@@ -72,6 +87,7 @@ fof-byobu:
             private_discussion_replied: "[Private Discussion] {display_name} posted in a private discussion"
             recipient_removed: "[Private Discussion] {display_name} left the discussion"
             private_discussion_added: "[Private Discussion] {display_name} added you to a private discussion"
+
         body:
             private_discussion_created: |
                 Hey {recipient_display_name},
@@ -82,6 +98,7 @@ fof-byobu:
                 {discussion_url}
 
                 You may need to login first before being able to access this link.
+
             private_discussion_replied: |
                 Hey {recipient_display_name},
 
@@ -91,6 +108,7 @@ fof-byobu:
                 {post_url}
 
                 You may need to login first before being able to access this link.
+
             recipient_removed: |
                 Hey {recipient_display_name},
 
@@ -100,6 +118,7 @@ fof-byobu:
                 {discussion_url}
 
                 You may need to login first before being able to access this link.
+
             private_discussion_added: |
                 Hey {recipient_display_name},
 

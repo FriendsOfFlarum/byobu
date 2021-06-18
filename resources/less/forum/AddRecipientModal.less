@@ -1,30 +1,34 @@
-.AddRecipientModal-form-input {
-    display: flex;
-    flex-direction: column;
-    position: relative;
+.AddRecipientModal {
+    &-form-input {
+        input.RecipientsInput {
+            width: 100% !important;
+        }
 
-    input.RecipientsInput {
-        margin: 0 1em;
-        width: auto !important;
+        ul.Search-results.fade:not(.in) {
+            display: none;
+        }
     }
 
-    ul.Search-results.fade:not(.in) {
-        display: none;
-    }
-}
+    &-form-submit {
+        margin-top: 1em;
 
-.AddRecipientModal-form-submit {
-    margin-top: 1em;
-
-    .Button--cancel.hasIcon {
-        .Button-icon {
-            @media (min-width: 768px) {
-                display: none;
+        .Button--cancel.hasIcon {
+            .Button-icon {
+                @media (min-width: 768px) {
+                    display: none;
+                }
             }
         }
     }
-}
 
-.Button--cancel {
-    margin-left: 15px;
+    label[for^="byobu-addrecipient-search-input"] {
+        color: @control-color;
+        display: block;
+        margin-bottom: 4px;
+        margin-top: 1.5em;
+    }
+
+    .Button--cancel {
+        margin-left: 8px;
+    }
 }
