@@ -43,7 +43,7 @@ export default class PrivateComposing {
             {
                 icon: 'fas fa-pen',
                 className: 'Button Button--primary IndexPage-newDiscussion',
-                itemClassName: 'fof-byobu_primaryControl',
+                itemClassName: 'App-primaryControl fof-byobu_primaryControl',
                 onclick: this.action.bind(this),
                 disabled: !this.canStartDiscussion,
             },
