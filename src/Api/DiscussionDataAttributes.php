@@ -22,7 +22,7 @@ class DiscussionDataAttributes
 
     public function __construct(Screener $screener)
     {
-      $this->screener = $screener;
+        $this->screener = $screener;
     }
 
     /**
