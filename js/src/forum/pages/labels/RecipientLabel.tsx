@@ -18,7 +18,10 @@ export default class RecipientLabel extends Component<IRecipientLabelAttrs> {
 
         newAttrs.style = newAttrs.style || {};
         newAttrs.className = classList('RecipientLabel', newAttrs?.className);
-        newAttrs.href = link;
+
+        if (link && recipient instanceof User) {
+            newAttrs.href = app.route.user(recipient);
+        }
 
         let label: string;
 
