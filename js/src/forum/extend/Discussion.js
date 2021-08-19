@@ -150,4 +150,6 @@ function attributes() {
     Discussion.prototype.canEditUserRecipients = Model.attribute('canEditUserRecipients');
     Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
     Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
+
+    Discussion.prototype.isPrivateDiscussion = Model.attribute('isPrivateDiscussion');
 }

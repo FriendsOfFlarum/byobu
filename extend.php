@@ -86,7 +86,8 @@ return [
         ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
 
     (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
-        ->attributes(Api\DiscussionPermissionAttributes::class),
+      ->attributes(Api\DiscussionPermissionAttributes::class)
+      ->attributes(Api\DiscussionDataAttributes::class),
 
     (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
         ->attributes(Api\ForumPermissionAttributes::class),
