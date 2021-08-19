@@ -6,6 +6,11 @@ import User from 'flarum/common/models/User';
 import Group from 'flarum/common/models/Group';
 
 export default class PrivateDiscussionComposer extends DiscussionComposer {
+    /**
+     * Tells other extensions that this composer is a Byobu composer.
+     */
+    _isByobuComposer = true;
+
     static initAttrs(attrs) {
         super.initAttrs(attrs);
 
