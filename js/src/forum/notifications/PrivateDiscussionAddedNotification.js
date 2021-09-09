@@ -1,21 +1,21 @@
 import Notification from 'flarum/forum/components/Notification';
 
 export default class PrivateDiscussionAddedNotification extends Notification {
-    icon() {
-        return app.forum.data.attributes['byobu.icon-badge'];
-    }
+  icon() {
+    return app.forum.data.attributes['byobu.icon-badge'];
+  }
 
-    href() {
-        const notification = this.attrs.notification;
-        const discussion = notification.subject();
+  href() {
+    const notification = this.attrs.notification;
+    const discussion = notification.subject();
 
-        return app.route.discussion(discussion);
-    }
+    return app.route.discussion(discussion);
+  }
 
-    content() {
-        const user = this.attrs.notification.fromUser();
-        return app.translator.trans('fof-byobu.forum.notifications.pd_added_text', {
-            user: user,
-        });
-    }
+  content() {
+    const user = this.attrs.notification.fromUser();
+    return app.translator.trans('fof-byobu.forum.notifications.pd_added_text', {
+      user: user,
+    });
+  }
 }

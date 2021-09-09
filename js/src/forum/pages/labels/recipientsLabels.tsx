@@ -4,18 +4,18 @@ import classList from 'flarum/common/utils/classList';
 import RecipientLabel from './RecipientLabel';
 
 export default function recipientsLabel(recipients?: (User | Group)[], attrs: Record<string, unknown> = {}): JSX.Element {
-    const { link, className, ...otherAttrs } = attrs;
+  const { link, className, ...otherAttrs } = attrs;
 
-    otherAttrs.className = classList('RecipientsLabel', className);
+  otherAttrs.className = classList('RecipientsLabel', className);
 
-    return (
-        <span {...otherAttrs}>
-            {recipients?.map((recipient) => {
-                const type = recipient instanceof User ? 'u' : 'g';
+  return (
+    <span {...otherAttrs}>
+      {recipients?.map((recipient) => {
+        const type = recipient instanceof User ? 'u' : 'g';
 
-                return <RecipientLabel key={`${type}-${recipient.id()}`} recipient={recipient} link={link} />;
-            })}
-            {!recipients && <RecipientLabel />}
-        </span>
-    );
+        return <RecipientLabel key={`${type}-${recipient.id()}`} recipient={recipient} link={link} />;
+      })}
+      {!recipients && <RecipientLabel />}
+    </span>
+  );
 }

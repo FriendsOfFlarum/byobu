@@ -1,15 +1,15 @@
 import EventPost from 'flarum/forum/components/EventPost';
 
 export default class RecipientLeft extends EventPost {
-    static initAttrs(attrs) {
-        super.initAttrs(attrs);
-    }
+  static initAttrs(attrs) {
+    super.initAttrs(attrs);
+  }
 
-    icon() {
-        return app.forum.data.attributes['byobu.icon-postAction'];
-    }
+  icon() {
+    return app.forum.data.attributes['byobu.icon-postAction'];
+  }
 
-    descriptionKey() {
-        return 'fof-byobu.forum.post.recipients_modified.removed_self';
-    }
+  descriptionKey() {
+    return 'fof-byobu.forum.post.recipients_modified.removed_self';
+  }
 }

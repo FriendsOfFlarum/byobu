@@ -7,9 +7,9 @@ export * from './modals';
 export * from './pages/discussions';
 
 app.initializers.add('fof-byobu', function (app) {
-    events(app);
-    extend(app);
+  events(app);
+  extend(app);
 
-    pages(app);
-    notifications(app);
+  pages(app);
+  notifications(app);
 });

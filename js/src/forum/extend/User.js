@@ -9,81 +9,81 @@ import UserPage from 'flarum/forum/components/UserPage';
 import LinkButton from 'flarum/common/components/LinkButton';
 
 export default (app) => {
-    attributes();
-    message(app);
-    sharedMessageHistory(app);
+  attributes();
+  message(app);
+  sharedMessageHistory(app);
 };
 
 function message(app) {
-    extend(UserControls, 'userControls', function (items, user) {
-        if (
-            app.session.user &&
-            app.session.user.id() !== user.id() &&
-            app.forum.attribute('canStartPrivateDiscussion') &&
-            (user.blocksPd() === false || (app.forum.attribute('canStartPrivateDiscussionWithBlockers') && user.cannotBeDirectMessaged()))
-        ) {
-            items.add(
-                'private-discussion',
-                Button.component(
-                    {
-                        icon: app.forum.data.attributes['byobu.icon-badge'],
-                        onclick: (e) => {
-                            e.preventDefault();
+  extend(UserControls, 'userControls', function (items, user) {
+    if (
+      app.session.user &&
+      app.session.user.id() !== user.id() &&
+      app.forum.attribute('canStartPrivateDiscussion') &&
+      (user.blocksPd() === false || (app.forum.attribute('canStartPrivateDiscussionWithBlockers') && user.cannotBeDirectMessaged()))
+    ) {
+      items.add(
+        'private-discussion',
+        Button.component(
+          {
+            icon: app.forum.data.attributes['byobu.icon-badge'],
+            onclick: (e) => {
+              e.preventDefault();
 
-                            return new Promise((resolve) => {
-                                let recipients = new ItemList();
-                                recipients.add('users:' + app.session.user.id(), app.session.user);
-                                recipients.add('users:' + user.id(), user);
+              return new Promise((resolve) => {
+                let recipients = new ItemList();
+                recipients.add('users:' + app.session.user.id(), app.session.user);
+                recipients.add('users:' + user.id(), user);
 
-                                PrivateDiscussionComposer.prototype.recipients = recipients;
+                PrivateDiscussionComposer.prototype.recipients = recipients;
 
-                                app.composer.load(PrivateDiscussionComposer, {
-                                    user: app.session.user,
-                                    recipients: recipients,
-                                    recipientUsers: recipients,
-                                    titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                                    submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
-                                });
-                                app.composer.show();
+                app.composer.load(PrivateDiscussionComposer, {
+                  user: app.session.user,
+                  recipients: recipients,
+                  recipientUsers: recipients,
+                  titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                  submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
+                });
+                app.composer.show();
 
-                                return resolve(app.composer);
-                            });
-                        },
-                    },
-                    app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() })
-                )
-            );
-        }
+                return resolve(app.composer);
+              });
+            },
+          },
+          app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() })
+        )
+      );
+    }
 
-        return items;
-    });
+    return items;
+  });
 }
 
 function sharedMessageHistory(app) {
-    extend(UserPage.prototype, 'navItems', function (items) {
-        const href = app.route('byobuUserPrivate', { username: this.user.username() });
+  extend(UserPage.prototype, 'navItems', function (items) {
+    const href = app.route('byobuUserPrivate', { username: this.user.username() });
 
-        // Hide links from guests if they are not already on the page
-        if (!app.session.user && m.route.get() !== href) return;
-        // Hide link for your own page.
-        if (app.session.user && app.session.user.username() === this.user.username()) return;
+    // Hide links from guests if they are not already on the page
+    if (!app.session.user && m.route.get() !== href) return;
+    // Hide link for your own page.
+    if (app.session.user && app.session.user.username() === this.user.username()) return;
 
-        items.add(
-            'byobu',
-            LinkButton.component(
-                {
-                    href,
-                    icon: app.forum.data.attributes['byobu.icon-badge'],
-                },
-                app.translator.trans('fof-byobu.forum.user.byobu_link')
-            ),
-            85
-        );
-    });
+    items.add(
+      'byobu',
+      LinkButton.component(
+        {
+          href,
+          icon: app.forum.data.attributes['byobu.icon-badge'],
+        },
+        app.translator.trans('fof-byobu.forum.user.byobu_link')
+      ),
+      85
+    );
+  });
 }
 
 function attributes() {
-    User.prototype.blocksPd = Model.attribute('blocksPd');
-    User.prototype.cannotBeDirectMessaged = Model.attribute('cannotBeDirectMessaged');
-    User.prototype.unreadPrivateMessagesCount = Model.attribute('unreadPrivateMessagesCount');
+  User.prototype.blocksPd = Model.attribute('blocksPd');
+  User.prototype.cannotBeDirectMessaged = Model.attribute('cannotBeDirectMessaged');
+  User.prototype.unreadPrivateMessagesCount = Model.attribute('unreadPrivateMessagesCount');
 }
