@@ -35,7 +35,7 @@ export default class RecipientLabel extends Component<IRecipientLabelAttrs> {
       return <span class={newAttrs.className}>{recipient.namePlural()}</span>;
     } else {
       newAttrs.className += ' none';
-      label = app.translator.trans('flarum.core.lib.username.deleted_text');
+      label = app.translator.trans('core.lib.username.deleted_text');
     }
 
     return <LinkButton {...newAttrs}>{label}</LinkButton>;

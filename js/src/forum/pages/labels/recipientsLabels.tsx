@@ -10,10 +10,10 @@ export default function recipientsLabel(recipients?: (User | Group)[], attrs: Re
 
   return (
     <span {...otherAttrs}>
-      {recipients?.map((recipient) => {
+      {recipients?.map((recipient, index) => {
         const type = recipient instanceof User ? 'u' : 'g';
 
-        return <RecipientLabel key={`${type}-${recipient.id()}`} recipient={recipient} link={link} />;
+        return <RecipientLabel key={`${type}-${index}`} recipient={recipient} link={link} />;
       })}
       {!recipients && <RecipientLabel />}
     </span>
