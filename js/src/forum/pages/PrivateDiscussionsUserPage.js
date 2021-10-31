@@ -17,7 +17,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
   show(user) {
     // We can not create the list in init because the user will not be available if it has to be loaded asynchronously
     this.list = new PrivateDiscussionListState({
-      q: `byobu:${user.username()} is:private`,
+      q: `byobu:${user.slug()} is:private`,
       sort: this.sort,
     });
 
