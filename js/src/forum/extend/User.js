@@ -61,12 +61,12 @@ function message(app) {
 
 function sharedMessageHistory(app) {
   extend(UserPage.prototype, 'navItems', function (items) {
-    const href = app.route('byobuUserPrivate', { username: this.user.username() });
+    const href = app.route('byobuUserPrivate', { username: this.user.slug() });
 
     // Hide links from guests if they are not already on the page
     if (!app.session.user && m.route.get() !== href) return;
     // Hide link for your own page.
-    if (app.session.user && app.session.user.username() === this.user.username()) return;
+    if (app.session.user === this.user) return;
 
     items.add(
       'byobu',

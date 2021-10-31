@@ -133,6 +133,7 @@ return [
         ->checker(Listeners\GetModelIsPrivate::class),
 
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
+        ->addGambit(Gambits\Discussion\ByobuGambit::class)
         ->addGambit(Gambits\Discussion\PrivacyGambit::class),
 
     (new Extend\SimpleFlarumSearch(UserSearcher::class))
