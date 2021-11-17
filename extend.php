@@ -69,6 +69,10 @@ return [
         ->addInclude(['recipientUsers', 'recipientGroups'])
         ->load(['recipientUsers', 'recipientGroups']),
 
+    (new Extend\ApiController(Controller\CreateDiscussionController::class))
+        ->addInclude(['recipientUsers', 'recipientGroups'])
+        ->load(['recipientUsers', 'recipientGroups']),
+
     (new Extend\ApiController(Controller\ShowDiscussionController::class))
         ->addOptionalInclude(['oldRecipientUsers', 'oldRecipientGroups'])
         ->addInclude(['recipientUsers', 'recipientGroups'])
