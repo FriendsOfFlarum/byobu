@@ -103,7 +103,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
     public function getEmailSubject(TranslatorInterface $translator)
     {
         return $translator->trans('fof-byobu.email.subject.private_discussion_added', [
-            '{display_name}'       => $this->actor->username,
+            '{display_name}'       => $this->actor->display_name,
             '{title}'              => $this->discussion->title,
         ]);
     }
