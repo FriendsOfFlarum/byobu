@@ -24,14 +24,14 @@ export default class ByobuSetingsPage extends ExtensionPage {
                 setting: 'fof-byobu.icon-badge',
                 label: app.translator.trans('fof-byobu.admin.settings.badge-icon'),
                 help: <Badge icon={this.setting('fof-byobu.icon-badge').toJSON() || this.badgeDefault}></Badge>,
-                placeholder: this.badgeDefault
+                placeholder: this.badgeDefault,
               })}
               {this.buildSettingComponent({
                 type: 'string',
                 setting: 'fof-byobu.icon-postAction',
                 label: app.translator.trans('fof-byobu.admin.settings.post-event-icon'),
                 help: <h2>{icon(this.setting('fof-byobu.icon-postAction').toJSON() || this.postActionDefault)}</h2>,
-                placeholder: this.postActionDefault
+                placeholder: this.postActionDefault,
               })}
             </div>
             {flarum.extensions['flarum-tags'] && (

@@ -1,4 +1,3 @@
-
 import app from 'flarum/admin/app';
 import User from 'flarum/common/models/User';
 
