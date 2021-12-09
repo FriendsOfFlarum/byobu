@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import Model from 'flarum/common/Model';
 import Badge from 'flarum/common/components/Badge';

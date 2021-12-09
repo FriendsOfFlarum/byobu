@@ -3,8 +3,10 @@ import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Badge from 'flarum/common/components/Badge';
 import icon from 'flarum/common/helpers/icon';
 
+import type Mithril from 'mithril';
+
 export default class ByobuSetingsPage extends ExtensionPage {
-  oninit(vnode) {
+  oninit(vnode: Mithril.Vnode<any, any>) {
     super.oninit(vnode);
 
     this.badgeDefault = 'fas fa-map';
@@ -22,12 +24,14 @@ export default class ByobuSetingsPage extends ExtensionPage {
                 setting: 'fof-byobu.icon-badge',
                 label: app.translator.trans('fof-byobu.admin.settings.badge-icon'),
                 help: <Badge icon={this.setting('fof-byobu.icon-badge').toJSON() || this.badgeDefault}></Badge>,
+                placeholder: this.badgeDefault
               })}
               {this.buildSettingComponent({
                 type: 'string',
                 setting: 'fof-byobu.icon-postAction',
                 label: app.translator.trans('fof-byobu.admin.settings.post-event-icon'),
                 help: <h2>{icon(this.setting('fof-byobu.icon-postAction').toJSON() || this.postActionDefault)}</h2>,
+                placeholder: this.postActionDefault
               })}
             </div>
             {flarum.extensions['flarum-tags'] && (

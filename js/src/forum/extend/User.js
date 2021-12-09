@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import Model from 'flarum/common/Model';
 import User from 'flarum/common/models/User';
@@ -8,13 +9,13 @@ import ItemList from 'flarum/common/utils/ItemList';
 import UserPage from 'flarum/forum/components/UserPage';
 import LinkButton from 'flarum/common/components/LinkButton';
 
-export default (app) => {
+export default () => {
   attributes();
-  message(app);
-  sharedMessageHistory(app);
+  message();
+  sharedMessageHistory();
 };
 
-function message(app) {
+function message() {
   extend(UserControls, 'userControls', function (items, user) {
     if (
       app.session.user &&
@@ -26,7 +27,7 @@ function message(app) {
         'private-discussion',
         Button.component(
           {
-            icon: app.forum.data.attributes['byobu.icon-badge'],
+            icon: app.forum.attribute('byobu.icon-badge'),
             onclick: (e) => {
               e.preventDefault();
 
@@ -59,7 +60,7 @@ function message(app) {
   });
 }
 
-function sharedMessageHistory(app) {
+function sharedMessageHistory() {
   extend(UserPage.prototype, 'navItems', function (items) {
     const href = app.route('byobuUserPrivate', { username: this.user.slug() });
 
@@ -73,7 +74,7 @@ function sharedMessageHistory(app) {
       LinkButton.component(
         {
           href,
-          icon: app.forum.data.attributes['byobu.icon-badge'],
+          icon: app.forum.attribute('byobu.icon-badge'),
         },
         app.translator.trans('fof-byobu.forum.user.byobu_link')
       ),

@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import Button from 'flarum/common/components/Button';
 import LogInModal from 'flarum/forum/components/LogInModal';
 import ItemList from 'flarum/common/utils/ItemList';

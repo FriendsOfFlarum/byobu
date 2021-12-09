@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import EventPost from 'flarum/forum/components/EventPost';
 import recipientsLabel from '../pages/labels/recipientsLabels';
 
@@ -29,7 +30,7 @@ export default class RecipientsModified extends EventPost {
   }
 
   icon() {
-    return app.forum.data.attributes['byobu.icon-postAction'];
+    return app.forum.attribute('byobu.icon-postAction');
   }
 
   descriptionKey() {

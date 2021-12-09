@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import Notification from 'flarum/forum/components/Notification';
 
 export default class PrivateDiscussionReplyNotification extends Notification {

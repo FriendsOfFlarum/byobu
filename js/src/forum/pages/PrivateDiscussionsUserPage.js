@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import UserPage from 'flarum/forum/components/UserPage';
 import PrivateDiscussionListState from '../states/PrivateDiscussionListState';
 import Button from 'flarum/common/components/Button';

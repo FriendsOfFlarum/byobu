@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import DiscussionComposer from 'flarum/forum/components/DiscussionComposer';
 import AddRecipientModal from '../../modals/AddRecipientModal';
 import ItemList from 'flarum/common/utils/ItemList';

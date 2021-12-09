@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import highlight from 'flarum/common/helpers/highlight';
 import avatar from 'flarum/common/helpers/avatar';
 import username from 'flarum/common/helpers/username';

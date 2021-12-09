@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import highlight from 'flarum/common/helpers/highlight';
 
 export default class GroupSearchSource {

@@ -1,3 +1,5 @@
+import app from 'flarum/forum/app';
+
 export default function recipientCountLabel(count, attrs = {}) {
   attrs.style = attrs.style || {};
   attrs.className = 'RecipientLabel ' + (attrs.className || '');

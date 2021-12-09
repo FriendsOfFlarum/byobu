@@ -1,4 +1,6 @@
-export default function (app) {
+import app from 'flarum/admin/app';
+
+export default function () {
   app.extensionData
     .for('fof-byobu')
     .registerPermission(

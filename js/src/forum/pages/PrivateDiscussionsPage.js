@@ -1,10 +1,11 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import LinkButton from 'flarum/common/components/LinkButton';
 import IndexPage from 'flarum/forum/components/IndexPage';
 import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import PrivateComposing from './PrivateComposing';
 
-export default (app) => {
+export default () => {
   extend(IndexPage.prototype, 'navItems', (items) => {
     const user = app.session.user;
 

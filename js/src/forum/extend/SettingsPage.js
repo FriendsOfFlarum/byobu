@@ -1,12 +1,13 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import SettingsPage from 'flarum/forum/components/SettingsPage';
 import Switch from 'flarum/common/components/Switch';
 
-export default (app) => {
-  privacyToggle(app);
+export default () => {
+  privacyToggle();
 };
 
-function privacyToggle(app) {
+function privacyToggle() {
   extend(SettingsPage.prototype, 'privacyItems', function (items) {
     items.add(
       'byobu-block-dm',

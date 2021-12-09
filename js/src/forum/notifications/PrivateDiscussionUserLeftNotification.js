@@ -1,8 +1,9 @@
+import app from 'flarum/forum/app';
 import Notification from 'flarum/forum/components/Notification';
 
 export default class PrivateDiscussionUserLeftNotification extends Notification {
   icon() {
-    return app.forum.data.attributes['byobu.icon-badge'];
+    return app.forum.attribute('byobu.icon-badge');
   }
 
   href() {
