@@ -50,7 +50,7 @@ class PersistRecipients
             throw new PermissionDeniedException('Not allowed to add users that blocked receiving private discussions');
         }
 
-        if ($event->actor->cannot('makePublic', $event->discussion) && $this->screener->makingPublic()) {
+        if ($event->actor->cannot('transformToPublic', $event->discussion) && $this->screener->makingPublic()) {
             throw new PermissionDeniedException('Not allowed to convert to a public discussion');
         }
 
