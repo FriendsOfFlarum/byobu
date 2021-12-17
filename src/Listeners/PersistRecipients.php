@@ -89,7 +89,7 @@ class PersistRecipients
 
         $event->discussion->afterSave(function (Discussion $discussion) {
             foreach (['users', 'groups'] as $type) {
-                $relation = 'recipient' . Str::ucfirst($type);
+                $relation = 'recipient'.Str::ucfirst($type);
 
                 // Add models that weren't stored yet.
                 $discussion->{$relation}()->saveMany(

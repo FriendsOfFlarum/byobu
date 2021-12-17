@@ -100,7 +100,7 @@ class DiscussionPolicy extends AbstractPolicy
     {
         /** @var SettingsRepositoryInterface $settings */
         $settings = resolve('flarum.settings');
-        if (! (bool)$settings->get('fof-byobu.makePublic')) {
+        if (!(bool) $settings->get('fof-byobu.makePublic')) {
             return $this->deny();
         }
 

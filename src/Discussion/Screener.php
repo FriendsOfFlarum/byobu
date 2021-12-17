@@ -165,7 +165,6 @@ class Screener extends Fluent
         $id = Arr::get($this->event->data, 'attributes.public');
 
         //dd($id, $this->event->data);
-        
 
         if ($id && (int) $id === $this->event->discussion->id) {
             return true;

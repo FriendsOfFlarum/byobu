@@ -21,16 +21,16 @@ class DiscussionPermissionAttributes
      * @var Screener
      */
     protected $screener;
-    
+
     public function __construct(Screener $screener)
     {
         $this->screener = $screener;
     }
-    
+
     /**
      * @param \Flarum\Api\Serializer\UserSerializer $serializer
      * @param \Flarum\Discussion\Discussion         $discussion
-     * @param array                                $attributes
+     * @param array                                 $attributes
      *
      * @return array
      */
