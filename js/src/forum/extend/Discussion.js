@@ -137,6 +137,25 @@ function controls() {
           app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion')
         )
       );
+
+      if (discussion?.isPrivateDiscussion?.() && discussion?.canMakePublic?.()) {
+        items.add(
+          'transform-public',
+          <Button
+            icon="far fa-eye"
+            onclick={() => {
+              if (discussion && confirm(app.translator.trans('fof-byobu.forum.confirm.make_public'))) {
+                const recipientGroups = [];
+                const recipientUsers = [];
+
+                discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => m.redraw());
+              }
+            }}
+          >
+            {app.translator.trans('fof-byobu.forum.buttons.make_public')}
+          </Button>
+        );
+      }
     }
   });
 }
@@ -151,6 +170,7 @@ function attributes() {
   Discussion.prototype.canEditUserRecipients = Model.attribute('canEditUserRecipients');
   Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
   Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
+  Discussion.prototype.canMakePublic = Model.attribute('canMakePublic');
 
   Discussion.prototype.isPrivateDiscussion = Model.attribute('isPrivateDiscussion');
 }

@@ -16,6 +16,7 @@ use FoF\Byobu\Events\Created;
 use FoF\Byobu\Events\DiscussionMadePublic;
 use FoF\Byobu\Events\RecipientsChanged;
 use FoF\Byobu\Events\RemovedSelf;
+use FoF\Byobu\Posts\MadePublic;
 use FoF\Byobu\Posts\RecipientLeft;
 use FoF\Byobu\Posts\RecipientsModified;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -28,7 +29,7 @@ class CreatePostWhenRecipientsChanged
     public function subscribe(Dispatcher $events)
     {
         $events->listen(Created::class, [$this, 'whenDiscussionWasTagged']);
-        $events->listen(DiscussionMadePublic::class, [$this, 'whenDiscussionWasTagged']);
+        $events->listen(DiscussionMadePublic::class, [$this, 'whenMadePublic']);
         $events->listen(RecipientsChanged::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(RemovedSelf::class, [$this, 'whenActorRemovedSelf']);
     }
@@ -46,6 +47,13 @@ class CreatePostWhenRecipientsChanged
     public function whenActorRemovedSelf(RemovedSelf $event)
     {
         $post = RecipientLeft::reply($event);
+
+        $event->discussion->mergePost($post);
+    }
+
+    public function whenMadePublic(DiscussionMadePublic $event)
+    {
+        $post = MadePublic::reply($event);
 
         $event->discussion->mergePost($post);
     }
