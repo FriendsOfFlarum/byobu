@@ -31,9 +31,7 @@ export default class ByobuSetingsPage extends ExtensionPage {
                 label: app.translator.trans('fof-byobu.admin.settings.badge-icon'),
                 help: (
                   <div>
-                    <Badge icon={this.setting('fof-byobu.icon-badge').toJSON() || this.badgeDefault}></Badge>
-                    {' '}
-                    {helpText}
+                    <Badge icon={this.setting('fof-byobu.icon-badge').toJSON() || this.badgeDefault}></Badge> {helpText}
                   </div>
                 ),
                 placeholder: this.badgeDefault,
@@ -44,9 +42,7 @@ export default class ByobuSetingsPage extends ExtensionPage {
                 label: app.translator.trans('fof-byobu.admin.settings.post-event-icon'),
                 help: (
                   <div>
-                    {icon(this.setting('fof-byobu.icon-postAction').toJSON() || this.postActionDefault)}
-                    {' '}
-                    {helpText}
+                    {icon(this.setting('fof-byobu.icon-postAction').toJSON() || this.postActionDefault)} {helpText}
                   </div>
                 ),
                 placeholder: this.postActionDefault,
@@ -55,7 +51,7 @@ export default class ByobuSetingsPage extends ExtensionPage {
                 type: 'boolean',
                 setting: 'fof-byobu.makePublic',
                 label: app.translator.trans('fof-byobu.admin.settings.enable-make-public-option'),
-                help: app.translator.trans('fof-byobu.admin.settings.enable-make-public-option-help')
+                help: app.translator.trans('fof-byobu.admin.settings.enable-make-public-option-help'),
               })}
             </div>
             <div className="Form-group">{this.submitButton()}</div>
