@@ -13,7 +13,8 @@ import recipientsLabel from '../pages/labels/recipientsLabels';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import ItemList from 'flarum/common/utils/ItemList';
 import AddRecipientModal from './../modals/AddRecipientModal';
-import TagDiscussionModal from 'flarum/tags/components/TagDiscussionModal';
+import ByobuTagDiscussionModal from '../modals/ByobuTagDiscussionModal';
+import DiscussionPage from 'flarum/components/DiscussionPage';
 
 export default () => {
   attributes();
@@ -150,10 +151,21 @@ function controls() {
                 const recipientUsers = [];
 
                 if (flarum.extensions['flarum-tags']) {
-                  app.modal.show(TagDiscussionModal, { discussion });
+                  new Promise((resolve, reject) => {
+                    app.modal.show(ByobuTagDiscussionModal, { discussion, resolve, reject });
+                  }).then((tags) => {
+                    discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => {
+                      discussion.save({ relationships: { tags } }).then(() => {
+                        if (app.current.matches(DiscussionPage)) {
+                          app.current.get('stream').update();
+                        }
+                        m.redraw();
+                      });
+                    });
+                  });
+                } else {
+                  discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => m.redraw());
                 }
-
-                discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => m.redraw());
               }
             }}
           >
