@@ -17,6 +17,9 @@ fof-byobu:
             submit_button: Post Private Discussion
             title_placeholder: Private Discussion Title
 
+        confirm:
+            make_public: Are you sure you want to remove the recipients and make this discussion visible to anyone who can view the assigned tag?
+
         labels:
             recipients: "{count, plural, one {{count} Recipient} other {{count} Recipients}}"
 
@@ -82,6 +85,8 @@ fof-byobu:
 
         settings:
             badge-icon: Byobu Discussion Badge
+            enable-make-public-option: Enable the "make public" ability
+            enable-make-public-option-help: Adds the ability for those with permission to remove all recipients, assign a new tag and make the discussion publically visible (accoring to the visibility settings of the chosen tag).
             post-event-icon: Byobu Post Events
 
     email:
