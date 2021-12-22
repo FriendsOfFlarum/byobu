@@ -13,6 +13,7 @@ import recipientsLabel from '../pages/labels/recipientsLabels';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import ItemList from 'flarum/common/utils/ItemList';
 import AddRecipientModal from './../modals/AddRecipientModal';
+import TagDiscussionModal from 'flarum/tags/components/TagDiscussionModal';
 
 export default () => {
   attributes();
@@ -147,6 +148,10 @@ function controls() {
               if (discussion && confirm(app.translator.trans('fof-byobu.forum.confirm.make_public'))) {
                 const recipientGroups = [];
                 const recipientUsers = [];
+
+                if (flarum.extensions['flarum-tags']) {
+                  app.modal.show(TagDiscussionModal, { discussion });
+                }
 
                 discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => m.redraw());
               }
