@@ -159,4 +159,15 @@ class Screener extends Fluent
 
         return true;
     }
+
+    public function makingPublic(): bool
+    {
+        $id = Arr::get($this->event->data, 'attributes.public');
+
+        if ($id && (int) $id === $this->event->discussion->id) {
+            return true;
+        }
+
+        return false;
+    }
 }

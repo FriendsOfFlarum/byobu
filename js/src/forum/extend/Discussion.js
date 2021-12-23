@@ -13,6 +13,8 @@ import recipientsLabel from '../pages/labels/recipientsLabels';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import ItemList from 'flarum/common/utils/ItemList';
 import AddRecipientModal from './../modals/AddRecipientModal';
+import ByobuTagDiscussionModal from '../modals/ByobuTagDiscussionModal';
+import DiscussionPage from 'flarum/components/DiscussionPage';
 
 export default () => {
   attributes();
@@ -137,6 +139,40 @@ function controls() {
           app.translator.trans('fof-byobu.forum.buttons.remove_from_discussion')
         )
       );
+
+      if (discussion?.isPrivateDiscussion?.() && discussion?.canMakePublic?.()) {
+        items.add(
+          'transform-public',
+          <Button
+            icon="far fa-eye"
+            onclick={() => {
+              if (discussion && confirm(app.translator.trans('fof-byobu.forum.confirm.make_public'))) {
+                const recipientGroups = [];
+                const recipientUsers = [];
+
+                if (flarum.extensions['flarum-tags']) {
+                  new Promise((resolve, reject) => {
+                    app.modal.show(ByobuTagDiscussionModal, { discussion, resolve, reject });
+                  }).then((tags) => {
+                    discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => {
+                      discussion.save({ relationships: { tags } }).then(() => {
+                        if (app.current.matches(DiscussionPage)) {
+                          app.current.get('stream').update();
+                        }
+                        m.redraw();
+                      });
+                    });
+                  });
+                } else {
+                  discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => m.redraw());
+                }
+              }
+            }}
+          >
+            {app.translator.trans('fof-byobu.forum.buttons.make_public')}
+          </Button>
+        );
+      }
     }
   });
 }
@@ -151,6 +187,7 @@ function attributes() {
   Discussion.prototype.canEditUserRecipients = Model.attribute('canEditUserRecipients');
   Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
   Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
+  Discussion.prototype.canMakePublic = Model.attribute('canMakePublic');
 
   Discussion.prototype.isPrivateDiscussion = Model.attribute('isPrivateDiscussion');
 }

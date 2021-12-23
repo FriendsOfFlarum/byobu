@@ -12,6 +12,7 @@
 namespace FoF\Byobu\Access;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Access\AbstractPolicy;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
@@ -93,5 +94,16 @@ class DiscussionPolicy extends AbstractPolicy
         $screener = $screener->fromDiscussion($discussion);
 
         return $screener->isPrivate();
+    }
+
+    public function transformToPublic(User $actor, Discussion $discussion)
+    {
+        /** @var SettingsRepositoryInterface $settings */
+        $settings = resolve('flarum.settings');
+        if (!(bool) $settings->get('fof-byobu.makePublic')) {
+            return $this->deny();
+        }
+
+        return $actor->can('makePublic', $discussion);
     }
 }

@@ -50,6 +50,10 @@ class PersistRecipients
             throw new PermissionDeniedException('Not allowed to add users that blocked receiving private discussions');
         }
 
+        if ($event->actor->cannot('transformToPublic', $event->discussion) && $this->screener->makingPublic()) {
+            throw new PermissionDeniedException('Not allowed to convert to a public discussion');
+        }
+
         if (!$event->discussion->exists) {
             $this->checkPermissionsForNewDiscussion($event->actor);
             $event->discussion->isByobu = true;
@@ -66,9 +70,10 @@ class PersistRecipients
         // now by default will be soft deleted/hidden.
         // The Deleting event is dispatched, if a listener interferes by returning
         // a non-null response the discussion will not be soft deleted.
-        if ($this->screener->wasPrivate() && !$this->screener->isPrivate()) {
+        if ($this->screener->wasPrivate() && !$this->screener->isPrivate() && !$this->screener->makingPublic()) {
             /** @var Dispatcher $events */
             $events = resolve(Dispatcher::class);
+
             $eventArgs = $this->eventArguments($event->discussion);
 
             if ($events->until(new Events\Deleting(...$eventArgs)) === null) {
@@ -116,6 +121,8 @@ class PersistRecipients
 
         if ($this->screener->isPrivate() && !$discussion->exists) {
             $event = new Events\Created(...$args);
+        } elseif ($this->screener->makingPublic()) {
+            $event = new Events\DiscussionMadePublic(...$args);
         } elseif ($this->screener->actorRemoved()) {
             $event = new Events\RemovedSelf(...$args);
         } else {

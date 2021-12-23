@@ -1,8 +1,9 @@
 import app from 'flarum/admin/app';
 
 export default function () {
-  app.extensionData
-    .for('fof-byobu')
+  const byobuData = app.extensionData.for('fof-byobu');
+
+  byobuData
     .registerPermission(
       {
         icon: 'far fa-map',
@@ -63,4 +64,17 @@ export default function () {
       'moderate',
       95
     );
+
+  if (app.data.settings['fof-byobu.makePublic']) {
+    byobuData.registerPermission(
+      {
+        icon: 'far fa-map',
+        label: app.translator.trans('fof-byobu.admin.permission.make_private_into_public'),
+        permission: 'discussion.makePublic',
+        tagScoped: false,
+      },
+      'reply',
+      95
+    );
+  }
 }

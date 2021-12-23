@@ -13,17 +13,28 @@ namespace FoF\Byobu\Api;
 
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Discussion;
+use FoF\Byobu\Discussion\Screener;
 
 class DiscussionPermissionAttributes
 {
     /**
-     * @param Flarum\Api\Serializer\UserSerializer $serializer
-     * @param Flarum\Discussion\Discussion         $discussion
-     * @param array                                $attributes
-     *
-     * @return mixed
+     * @var Screener
      */
-    public function __invoke(DiscussionSerializer $serializer, Discussion $model, array $attributes)
+    protected $screener;
+
+    public function __construct(Screener $screener)
+    {
+        $this->screener = $screener;
+    }
+
+    /**
+     * @param \Flarum\Api\Serializer\UserSerializer $serializer
+     * @param \Flarum\Discussion\Discussion         $discussion
+     * @param array                                 $attributes
+     *
+     * @return array
+     */
+    public function __invoke(DiscussionSerializer $serializer, Discussion $model, array $attributes): array
     {
         $actor = $serializer->getActor();
         $users = $actor->can('editUserRecipients', $model);
@@ -32,6 +43,10 @@ class DiscussionPermissionAttributes
         $attributes['canEditRecipients'] = $users || $groups;
         $attributes['canEditUserRecipients'] = $users;
         $attributes['canEditGroupRecipients'] = $groups;
+
+        if ($this->screener->fromDiscussion($model)->isPrivate()) {
+            $attributes['canMakePublic'] = $actor->can('transformToPublic', $model);
+        }
 
         return $attributes;
     }

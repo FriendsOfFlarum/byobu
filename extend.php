@@ -115,13 +115,15 @@ return [
 
     (new Extend\Post())
         ->type(Posts\RecipientLeft::class)
-        ->type(Posts\RecipientsModified::class),
+        ->type(Posts\RecipientsModified::class)
+        ->type(Posts\MadePublic::class),
 
     (new Extend\Notification())
         ->type(Notifications\DiscussionCreatedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\DiscussionRepliedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\DiscussionRecipientRemovedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionAddedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email']),
+        ->type(Notifications\DiscussionAddedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionMadePublicBlueprint::class, Serializer\DiscussionSerializer::class, ['alert']),
 
     (new Extend\Event())
         ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)
@@ -144,10 +146,12 @@ return [
         ->addGambit(Gambits\User\AllowsPdGambit::class),
 
     (new Extend\Settings())
-        ->serializeToForum('byobu.icon-badge', 'fof-byobu.icon-badge', function ($value) {
+        // we have to use the callback here, else we risk returning empty values instead of the defaults.
+        // see https://github.com/flarum/core/issues/3209
+        ->serializeToForum('byobu.icon-badge', 'fof-byobu.icon-badge', function ($value): string {
             return empty($value) ? 'fas fa-map' : $value;
         })
-        ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value) {
+        ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value): string {
             return empty($value) ? 'far fa-map' : $value;
         }),
 ];
