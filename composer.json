@@ -52,7 +52,8 @@
                 "flarum/suspend",
                 "flarum/flags",
                 "flarum/tags",
-                "flarum/approval"
+                "flarum/approval",
+                "v17development/flarum-support"
               ]
         },
         "extiverse": {
