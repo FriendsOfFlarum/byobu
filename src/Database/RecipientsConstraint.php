@@ -90,8 +90,12 @@ trait RecipientsConstraint
                 ->whereIn('discussions.id', function ($query) {
                     $query
                         ->select('posts.discussion_id')
-                        ->from('flags')
-                        ->Join('posts', 'flags.post_id', 'posts.id')
+                        ->from('posts')
+                        ->whereIn('posts.id', function ($query) {
+                            $query->select('flags.post_id')
+                                ->from('flags')
+                                ->distinct();
+                        })
                         ->distinct();
                 });
         });
