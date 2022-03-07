@@ -13,12 +13,11 @@
     "authors": [
         {
             "name": "Daniël Klabbers",
-            "email": "daniel@klabbers.email",
-            "homepage": "http://luceos.com"
+            "email": "daniel@blomstra.net"
         },
         {
             "name": "IanM",
-            "homepage": "https://blomstra.net",
+            "email": "ian@blomstra.net",
             "role": "Developer"
         }
     ],
@@ -35,7 +34,7 @@
         }
     ],
     "require": {
-        "flarum/core": "^1.0.2"
+        "flarum/core": "^1.2.0"
     },
     "extra": {
         "flarum-extension": {
