@@ -59,11 +59,11 @@ export default class RecipientSearch extends Search {
   }
 
   view() {
-    if (typeof this.state.getValue() === 'undefined') {
-      this.state.setValue('');
+    if (typeof this.searchState.getValue() === 'undefined') {
+      this.searchState.setValue('');
     }
 
-    const loading = this.state.getValue() && this.state.getValue().length >= 3;
+    const loading = this.searchState.getValue() && this.searchState.getValue().length >= 3;
 
     if (!this.sources) {
       this.sources = this.sourceItems().toArray();
@@ -94,16 +94,16 @@ export default class RecipientSearch extends Search {
             <input
               id={`byobu-addrecipient-search-input-${this.inputUuid}`}
               className={classList('RecipientsInput', 'FormControl', {
-                open: !!this.state.getValue(),
-                focused: !!this.state.getValue(),
-                active: !!this.state.getValue(),
+                open: !!this.searchState.getValue(),
+                focused: !!this.searchState.getValue(),
+                active: !!this.searchState.getValue(),
                 loading: !!this.loadingSources,
               })}
               oncreate={(vnode) => vnode.dom.focus()}
               type="search"
               placeholder={extractText(app.translator.trans('fof-byobu.forum.input.search_recipients'))}
-              value={this.state.getValue()}
-              oninput={(e) => this.state.setValue(e.target.value)}
+              value={this.searchState.getValue()}
+              oninput={(e) => this.searchState.setValue(e.target.value)}
               onfocus={() => (this.hasFocus = true)}
               onblur={() => (this.hasFocus = false)}
             />
@@ -114,7 +114,7 @@ export default class RecipientSearch extends Search {
             >
               {!this.doSearch
                 ? LoadingIndicator.component({ size: 'tiny', className: 'Button Button--icon Button--link' })
-                : this.sources.map((source) => source.view(this.state.getValue()))}
+                : this.sources.map((source) => source.view(this.searchState.getValue()))}
             </ul>
           </div>
         </div>
@@ -163,7 +163,7 @@ export default class RecipientSearch extends Search {
 
     this.attrs.selected().add(value, recipient);
 
-    this.state.clear();
+    this.searchState.clear();
   }
 
   /**
