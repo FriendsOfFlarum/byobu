@@ -19,4 +19,8 @@ export default class PrivateDiscussionMadePublicNotification extends Notificatio
       user: user,
     });
   }
+
+  excerpt() {
+    return null;
+  }
 }

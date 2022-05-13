@@ -19,4 +19,8 @@ export default class PrivateDiscussionUserLeftNotification extends Notification 
       user: user,
     });
   }
+
+  excerpt() {
+    return null;
+  }
 }

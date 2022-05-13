@@ -20,4 +20,8 @@ export default class PrivateDiscussionReplyNotification extends Notification {
       user: user,
     });
   }
+
+  excerpt() {
+    return null;
+  }
 }
