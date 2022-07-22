@@ -7,7 +7,7 @@ import ItemList from 'flarum/common/utils/ItemList';
 import listItems from 'flarum/common/helpers/listItems';
 import PrivateDiscussionList from './discussions/PrivateDiscussionList';
 import PrivateComposing from './PrivateComposing';
-import canStartPrivateDiscussion from "../helpers/canStartPrivateDiscussion";
+import canStartPrivateDiscussion from '../helpers/canStartPrivateDiscussion';
 
 export default class PrivateDiscussionsUserPage extends UserPage {
   oninit(vnode) {
