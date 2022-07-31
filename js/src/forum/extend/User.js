@@ -8,6 +8,7 @@ import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
 import UserPage from 'flarum/forum/components/UserPage';
 import LinkButton from 'flarum/common/components/LinkButton';
+import canStartPrivateDiscussion from '../helpers/canStartPrivateDiscussion';
 
 export default () => {
   attributes();
@@ -17,12 +18,7 @@ export default () => {
 
 function message() {
   extend(UserControls, 'userControls', function (items, user) {
-    if (
-      app.session.user &&
-      app.session.user.id() !== user.id() &&
-      app.forum.attribute('canStartPrivateDiscussion') &&
-      (user.blocksPd() === false || (app.forum.attribute('canStartPrivateDiscussionWithBlockers') && user.cannotBeDirectMessaged()))
-    ) {
+    if (canStartPrivateDiscussion(user)) {
       items.add(
         'private-discussion',
         Button.component(

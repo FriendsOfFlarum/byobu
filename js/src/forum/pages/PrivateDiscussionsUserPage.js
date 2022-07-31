@@ -7,6 +7,7 @@ import ItemList from 'flarum/common/utils/ItemList';
 import listItems from 'flarum/common/helpers/listItems';
 import PrivateDiscussionList from './discussions/PrivateDiscussionList';
 import PrivateComposing from './PrivateComposing';
+import canStartPrivateDiscussion from '../helpers/canStartPrivateDiscussion';
 
 export default class PrivateDiscussionsUserPage extends UserPage {
   oninit(vnode) {
@@ -57,7 +58,7 @@ export default class PrivateDiscussionsUserPage extends UserPage {
 
     const items = new ItemList();
 
-    if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
+    if (canStartPrivateDiscussion(this.user)) {
       items.add('start_private', composing.component());
     }
 
