@@ -81,7 +81,7 @@ export default class RecipientSearch extends Search {
             .map((recipient) => {
               return (
                 <Tooltip text={app.translator.trans('fof-byobu.forum.modal.help.click_user_to_remove_tooltip')}>
-                  <RecipientLabel data-container="body" recipient={recipient} onclick={(e) => this.removeRecipient(recipient, e)} />
+                  <RecipientLabel data-container="[data-modal-number]" recipient={recipient} onclick={(e) => this.removeRecipient(recipient, e)} />
                 </Tooltip>
               );
             })}
