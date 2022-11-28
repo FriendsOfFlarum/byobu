@@ -92,7 +92,36 @@ function controls() {
         Button.component(
           {
             icon: app.forum.data.attributes['byobu.icon-badge'],
-            onclick: () => app.modal.show(AddRecipientModal, { discussion }),
+            onclick: () =>
+              app.modal.show(AddRecipientModal, {
+                discussion,
+                /**
+                 * @param {ItemList<User | Group>} recipients
+                 */
+                onsubmit(recipients) {
+                  if (recipients.isEmpty()) {
+                    // The discussion might have been perma-deleted! Let's check...
+                    app.store
+                      .find(
+                        'discussions',
+                        discussion.id(),
+                        {},
+                        {
+                          errorHandler(err) {
+                            if (err.status === 404) {
+                              // Almost certainly permadeleted, so let's just redirect to the PD list.
+                              m.route.set(app.route('byobuPrivate'));
+                            }
+                          },
+                        }
+                      )
+                      .catch((err) => {
+                        // some other error... assume not deleted
+                        console.error(err);
+                      });
+                  }
+                },
+              }),
           },
           app.translator.trans('fof-byobu.forum.buttons.edit_recipients')
         )

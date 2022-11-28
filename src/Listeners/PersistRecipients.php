@@ -19,6 +19,7 @@ use Flarum\User\User;
 use FoF\Byobu\Concerns\ExtensionsDiscovery;
 use FoF\Byobu\Discussion\Screener;
 use FoF\Byobu\Events;
+use FoF\Byobu\Events\AllRecipientsLeft;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -31,6 +32,14 @@ class PersistRecipients
      * @var Screener
      */
     protected $screener;
+
+    /**
+     * @param Dispatcher $events
+     */
+    public function __construct(Dispatcher $events)
+    {
+        $this->events = $events;
+    }
 
     public function handle(Saving $event)
     {
@@ -66,18 +75,18 @@ class PersistRecipients
             $event->discussion->is_approved = true;
         }
 
+        $allRecipientsLeftAndHidden = false;
+
         // Private discussions that used to be private but no longer have any recipients
         // now by default will be soft deleted/hidden.
         // The Deleting event is dispatched, if a listener interferes by returning
         // a non-null response the discussion will not be soft deleted.
         if ($this->screener->wasPrivate() && !$this->screener->isPrivate() && !$this->screener->makingPublic()) {
-            /** @var Dispatcher $events */
-            $events = resolve(Dispatcher::class);
-
             $eventArgs = $this->eventArguments($event->discussion);
 
-            if ($events->until(new Events\Deleting(...$eventArgs)) === null) {
+            if ($this->events->until(new Events\Deleting(...$eventArgs)) === null) {
                 $event->discussion->hide($event->actor);
+                $allRecipientsLeftAndHidden = true;
             }
         }
 
@@ -105,6 +114,12 @@ class PersistRecipients
                 });
             }
         });
+
+        if ($allRecipientsLeftAndHidden) {
+            $event->discussion->afterSave(function (Discussion $discussion) use ($event) {
+                $this->events->dispatch(new AllRecipientsLeft($discussion, $event->actor));
+            });
+        }
     }
 
     protected function eventArguments(Discussion $discussion): array

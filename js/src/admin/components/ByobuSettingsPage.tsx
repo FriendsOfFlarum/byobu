@@ -53,6 +53,12 @@ export default class ByobuSetingsPage extends ExtensionPage {
                 label: app.translator.trans('fof-byobu.admin.settings.enable-make-public-option'),
                 help: app.translator.trans('fof-byobu.admin.settings.enable-make-public-option-help'),
               })}
+              {this.buildSettingComponent({
+                type: 'boolean',
+                setting: 'fof-byobu.delete_on_last_recipient_left',
+                label: app.translator.trans('fof-byobu.admin.settings.delete_on_last_recipient_left'),
+                help: app.translator.trans('fof-byobu.admin.settings.delete_on_last_recipient_left_help'),
+              })}
             </div>
             <div className="Form-group">{this.submitButton()}</div>
           </div>
