@@ -11,9 +11,9 @@
 
 namespace FoF\Byobu\Listeners;
 
-use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Discussion\Event\Deleting as DiscussionDeleting;
 use Flarum\Foundation\DispatchEventsTrait;
+use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Byobu\Events\AllRecipientsLeft;
 use Illuminate\Contracts\Events\Dispatcher;
 
