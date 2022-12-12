@@ -130,7 +130,8 @@ return [
         ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
         ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class)
         ->subscribe(Listeners\CreatePostWhenRecipientsChanged::class)
-        ->subscribe(Listeners\QueueNotificationJobs::class),
+        ->subscribe(Listeners\QueueNotificationJobs::class)
+        ->subscribe(Listeners\AllRecipientsLeftHandler::class),
 
     (new Extend\ServiceProvider())
         ->register(Provider\ByobuProvider::class),
@@ -153,5 +154,6 @@ return [
         })
         ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value): string {
             return empty($value) ? 'far fa-map' : $value;
-        }),
+        })
+        ->default('fof-byobu.delete_on_last_recipient_left', false),
 ];

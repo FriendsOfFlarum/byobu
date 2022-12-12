@@ -41,6 +41,10 @@ class CreatePostWhenRecipientsChanged
     {
         $post = RecipientsModified::reply($event);
 
+        if (!$event->discussion->exists) {
+            return;
+        }
+
         $event->discussion->mergePost($post);
     }
 
@@ -48,12 +52,20 @@ class CreatePostWhenRecipientsChanged
     {
         $post = RecipientLeft::reply($event);
 
+        if (!$event->discussion->exists) {
+            return;
+        }
+
         $event->discussion->mergePost($post);
     }
 
     public function whenMadePublic(DiscussionMadePublic $event)
     {
         $post = MadePublic::reply($event);
+
+        if (!$event->discussion->exists) {
+            return;
+        }
 
         $event->discussion->mergePost($post);
     }
