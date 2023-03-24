@@ -44,7 +44,7 @@ function message() {
               });
             },
           },
-          app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() })
+          app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.displayName() })
         )
       );
     }
