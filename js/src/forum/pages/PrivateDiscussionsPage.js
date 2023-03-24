@@ -43,7 +43,7 @@ export default () => {
     if (app.current.get('routeName') === 'byobuPrivate') {
       let compose = new PrivateComposing();
 
-      items.replace('newDiscussion', compose.component());
+      items.setContent('newDiscussion', compose.component());
     }
   });
 };

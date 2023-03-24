@@ -1,6 +1,5 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import Model from 'flarum/common/Model';
 import Badge from 'flarum/common/components/Badge';
 import Discussion from 'flarum/common/models/Discussion';
 import User from 'flarum/common/models/User';
@@ -12,12 +11,11 @@ import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import recipientsLabel from '../pages/labels/recipientsLabels';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import ItemList from 'flarum/common/utils/ItemList';
-import AddRecipientModal from './../modals/AddRecipientModal';
+import AddRecipientModal from '../modals/AddRecipientModal';
 import ByobuTagDiscussionModal from '../modals/ByobuTagDiscussionModal';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 
 export default () => {
-  attributes();
   badges();
   index();
   hero();
@@ -204,19 +202,4 @@ function controls() {
       }
     }
   });
-}
-
-function attributes() {
-  Discussion.prototype.recipientUsers = Model.hasMany('recipientUsers');
-  Discussion.prototype.oldRecipientUsers = Model.hasMany('oldRecipientUsers');
-  Discussion.prototype.recipientGroups = Model.hasMany('recipientGroups');
-  Discussion.prototype.oldRecipientGroups = Model.hasMany('oldRecipientGroups');
-
-  Discussion.prototype.canEditRecipients = Model.attribute('canEditRecipients');
-  Discussion.prototype.canEditUserRecipients = Model.attribute('canEditUserRecipients');
-  Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
-  Discussion.prototype.canEditGroupRecipients = Model.attribute('canEditGroupRecipients');
-  Discussion.prototype.canMakePublic = Model.attribute('canMakePublic');
-
-  Discussion.prototype.isPrivateDiscussion = Model.attribute('isPrivateDiscussion');
 }

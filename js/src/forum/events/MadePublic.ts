@@ -7,7 +7,7 @@ export default class MadePublic extends EventPost {
   }
 
   icon() {
-    return app.forum.attribute('byobu.icon-postAction');
+    return app.forum.attribute<string>('byobu.icon-postAction');
   }
 
   descriptionKey() {
