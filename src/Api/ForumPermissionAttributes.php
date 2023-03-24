@@ -20,9 +20,9 @@ class ForumPermissionAttributes
      * @param mixed                                 $model
      * @param array                                 $attributes
      *
-     * @return mixed
+     * @return array
      */
-    public function __invoke(ForumSerializer $serializer, $model, array $attributes)
+    public function __invoke(ForumSerializer $serializer, $model, array $attributes): array
     {
         $actor = $serializer->getActor();
         $users = $actor->can('discussion.startPrivateDiscussionWithUsers');

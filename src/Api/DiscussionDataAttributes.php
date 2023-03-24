@@ -30,9 +30,9 @@ class DiscussionDataAttributes
      * @param Flarum\Discussion\Discussion         $discussion
      * @param array                                $attributes
      *
-     * @return mixed
+     * @return array
      */
-    public function __invoke(DiscussionSerializer $serializer, Discussion $model, array $attributes)
+    public function __invoke(DiscussionSerializer $serializer, Discussion $model, array $attributes): array
     {
         $attributes['isPrivateDiscussion'] = $this->screener->fromDiscussion($model)->isPrivate();
 
