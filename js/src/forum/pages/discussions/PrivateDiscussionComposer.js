@@ -104,7 +104,6 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
   }
 
   addDefaultRecipients(username) {
-    console.log(username);
     const user = app.store.getBy('users', 'slug', username);
 
     this.composer.fields.recipients.add('users:' + app.session.user.id(), app.session.user);
