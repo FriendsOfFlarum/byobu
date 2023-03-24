@@ -24,9 +24,15 @@ class AllowsPdGambit extends AbstractRegexGambit
      */
     public $dispatcher;
 
-    public function __construct(Dispatcher $dispatcher)
+    /**
+     * @var ExtensionManager
+     */
+    public $manager;
+
+    public function __construct(Dispatcher $dispatcher, ExtensionManager $manager)
     {
         $this->dispatcher = $dispatcher;
+        $this->manager = $manager;
     }
 
     public function getGambitPattern()
@@ -60,11 +66,8 @@ class AllowsPdGambit extends AbstractRegexGambit
             ->orderBy('username', 'asc');
     }
 
-    protected function extensionEnabled(string $extension)
+    protected function extensionEnabled(string $extension): bool
     {
-        /** @var ExtensionManager $manager */
-        $manager = resolve(ExtensionManager::class);
-
-        return $manager->isEnabled($extension);
+        return $this->manager->isEnabled($extension);
     }
 }

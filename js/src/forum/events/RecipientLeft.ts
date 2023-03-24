@@ -2,12 +2,12 @@ import app from 'flarum/forum/app';
 import EventPost from 'flarum/forum/components/EventPost';
 
 export default class RecipientLeft extends EventPost {
-  static initAttrs(attrs) {
+  static initAttrs(attrs: any) {
     super.initAttrs(attrs);
   }
 
   icon() {
-    return app.forum.attribute('byobu.icon-postAction');
+    return app.forum.attribute<string>('byobu.icon-postAction');
   }
 
   descriptionKey() {

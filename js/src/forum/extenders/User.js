@@ -1,9 +1,7 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import Model from 'flarum/common/Model';
-import User from 'flarum/common/models/User';
 import UserControls from 'flarum/forum/utils/UserControls';
-import PrivateDiscussionComposer from './../pages/discussions/PrivateDiscussionComposer';
+import PrivateDiscussionComposer from '../pages/discussions/PrivateDiscussionComposer';
 import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
 import UserPage from 'flarum/forum/components/UserPage';
@@ -11,7 +9,6 @@ import LinkButton from 'flarum/common/components/LinkButton';
 import canStartPrivateDiscussion from '../helpers/canStartPrivateDiscussion';
 
 export default () => {
-  attributes();
   message();
   sharedMessageHistory();
 };
@@ -47,7 +44,7 @@ function message() {
               });
             },
           },
-          app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.username() })
+          app.translator.trans('fof-byobu.forum.buttons.send_pd', { username: user.displayName() })
         )
       );
     }
@@ -77,10 +74,4 @@ function sharedMessageHistory() {
       85
     );
   });
-}
-
-function attributes() {
-  User.prototype.blocksPd = Model.attribute('blocksPd');
-  User.prototype.cannotBeDirectMessaged = Model.attribute('cannotBeDirectMessaged');
-  User.prototype.unreadPrivateMessagesCount = Model.attribute('unreadPrivateMessagesCount');
 }

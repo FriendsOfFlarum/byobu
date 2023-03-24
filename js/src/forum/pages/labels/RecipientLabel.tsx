@@ -6,6 +6,7 @@ import LinkButton from 'flarum/common/components/LinkButton';
 import classList from 'flarum/common/utils/classList';
 import app from 'flarum/forum/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
+import { NestedStringArray } from '@askvortsov/rich-icu-message-formatter';
 
 export interface IRecipientLabelAttrs extends ComponentAttrs, Mithril.Attributes {
   recipient: User | Group;
@@ -23,7 +24,7 @@ export default class RecipientLabel extends Component<IRecipientLabelAttrs> {
       newAttrs.href = app.route.user(recipient);
     }
 
-    let label: string;
+    let label: string | NestedStringArray;
 
     if (recipient instanceof User) {
       label = username(recipient);
