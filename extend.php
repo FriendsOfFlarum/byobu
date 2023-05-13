@@ -14,6 +14,7 @@ namespace FoF\Byobu;
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
+use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Group\Group;
@@ -145,6 +146,9 @@ return [
 
     (new Extend\SimpleFlarumSearch(UserSearcher::class))
         ->addGambit(Gambits\User\AllowsPdGambit::class),
+
+    (new Extend\Filter(DiscussionFilterer::class))
+        ->addFilterMutator(Filters\Discussion\HidePrivateDiscussionsFromAllDiscussionsPage::class),
 
     (new Extend\Settings())
         // we have to use the callback here, else we risk returning empty values instead of the defaults.
