@@ -63,6 +63,10 @@ class PersistRecipients
             throw new PermissionDeniedException('Not allowed to convert to a public discussion');
         }
 
+        if ($event->actor->cannot('addMoreThanTwoUserRecipients', $event->discussion) && $this->screener->users->count() > 2) {
+            throw new PermissionDeniedException('Not allowed to add more than 2 user recipients');
+        }
+
         if (!$event->discussion->exists) {
             $this->checkPermissionsForNewDiscussion($event->actor);
             $event->discussion->isByobu = true;

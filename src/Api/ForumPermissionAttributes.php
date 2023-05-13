@@ -30,6 +30,7 @@ class ForumPermissionAttributes
 
         $attributes['canStartPrivateDiscussion'] = $users || $groups;
         $attributes['canStartPrivateDiscussionWithUsers'] = $users;
+        $attributes['canAddMoreThanTwoUserRecipients'] = $actor->can('discussion.addMoreThanTwoUserRecipients');
         $attributes['canStartPrivateDiscussionWithGroups'] = $groups;
         $attributes['canStartPrivateDiscussionWithBlockers'] = $actor->can('discussion.startPrivateDiscussionWithBlockers');
 

@@ -76,6 +76,7 @@ fof-byobu:
     admin:
         permission:
             create_private_discussions_with_users: Create private discussions with users
+            add_more_than_two_user_recipients: Add more than 2 user recipients to private discussion
             create_private_discussions_with_groups: Create private discussions with groups
             create_private_discussions_with_blocking_users: Create private discussions with users that block it
             edit_user_recipients: Edit users partaking in private discussions
