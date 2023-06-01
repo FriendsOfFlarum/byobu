@@ -161,6 +161,19 @@ export default class RecipientSearch extends Search {
 
     let recipient = this.findRecipient(type, id);
 
+    // If the user is only allowed to add another recipient apart themselves
+    // We will remove all other users from the selection when a new value is picked
+    if (type === 'users' && !app.forum.attribute('canAddMoreThanTwoUserRecipients')) {
+      this.attrs
+        .selected()
+        .toArray()
+        .forEach((recipient) => {
+          if (recipient instanceof User && recipient.id() !== app.session.user?.id()) {
+            this.attrs.selected().remove('users:' + recipient.id());
+          }
+        });
+    }
+
     this.attrs.selected().add(value, recipient);
 
     this.searchState.clear();

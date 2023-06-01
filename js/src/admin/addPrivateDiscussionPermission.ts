@@ -17,6 +17,16 @@ export default function () {
     .registerPermission(
       {
         icon: 'far fa-map',
+        label: app.translator.trans('fof-byobu.admin.permission.add_more_than_two_user_recipients'),
+        permission: 'discussion.addMoreThanTwoUserRecipients',
+        tagScoped: false,
+      },
+      'start',
+      95
+    )
+    .registerPermission(
+      {
+        icon: 'far fa-map',
         label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_groups'),
         permission: 'discussion.startPrivateDiscussionWithGroups',
         tagScoped: false,
