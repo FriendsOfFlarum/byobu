@@ -90,6 +90,8 @@ fof-byobu:
             post-event-icon: Byobu Post Events
             delete_on_last_recipient_left: Delete PDs when the last user leaves
             delete_on_last_recipient_left_help: If enabled, PDs will be permanently deleted from the database when the last user leaves. Otherwise, the PD will be soft-deleted/hidden.
+            hide_from_all_discussions_page: Hide PDs from "All Discussions" page
+            hide_from_all_discussions_page_help: Private discussions will only be accessible from the "Private Discussions" page or the user profile
 
     email:
         subject:
