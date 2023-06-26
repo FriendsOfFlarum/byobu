@@ -13,11 +13,11 @@ use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
-        /**
-         * @var \Flarum\Settings\SettingsRepositoryInterface
-         */
-        $settings = resolve('flarum.settings');
-        $settings->delete('fof-byobu.enable_byobu_user_page');
+        $schema->getConnection()
+            ->query()
+            ->from('settings')
+            ->where('key', 'fof-byobu.enable_byobu_user_page')
+            ->delete();
     },
 
     'down' => function (Builder $schema) {
