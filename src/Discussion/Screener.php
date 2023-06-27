@@ -106,6 +106,9 @@ class Screener extends Fluent
     public function hasBlockingUsers(): bool
     {
         return $this->users
+            ->reject(function (User $user) {
+                return $user->id === $this->actor()?->id ?? false;
+            })
             ->first(function (User $user) {
                 return boolval($user->blocks_byobu_pd);
             }) !== null;

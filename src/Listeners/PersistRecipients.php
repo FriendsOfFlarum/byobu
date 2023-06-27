@@ -34,6 +34,11 @@ class PersistRecipients
     protected $screener;
 
     /**
+     * @var Dispatcher
+     */
+    protected $events;
+
+    /**
      * @param Dispatcher $events
      */
     public function __construct(Dispatcher $events)
