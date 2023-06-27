@@ -107,7 +107,8 @@ class Screener extends Fluent
     {
         return $this->users
             ->reject(function (User $user) {
-                return $user->id === $this->actor()?->id ?? false;
+                // Reject currentUsers and allow the actor to create PDs even if they block incoming new PDs
+                return $this->currentUsers->contains($user) || ($user->id === $this->actor()?->id ?? false);
             })
             ->first(function (User $user) {
                 return boolval($user->blocks_byobu_pd);
