@@ -66,5 +66,9 @@
         "psr-4": {
             "FoF\\Byobu\\": "src/"
         }
+    },
+    "require-dev": {
+        "fof/split": "*",
+        "flarum/flags": "*"
     }
 }
