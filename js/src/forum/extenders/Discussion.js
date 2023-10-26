@@ -125,7 +125,7 @@ function controls() {
         )
       );
     }
-    if (discussion && discussion.recipientUsers().find((user) => user.id() === app.session.user.id())) {
+    if (discussion && discussion.recipientUsers().find((user) => user?.id() === app.session.user?.id())) {
       items.add(
         'remove',
         Button.component(
