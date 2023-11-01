@@ -11,6 +11,7 @@
 
 namespace FoF\Byobu\Posts;
 
+use Carbon\Carbon;
 use Flarum\Post\AbstractEventPost;
 use Flarum\Post\MergeableInterface;
 use Flarum\Post\Post;
@@ -29,11 +30,11 @@ class MadePublic extends AbstractEventPost implements MergeableInterface
     /**
      * @param Post|null|RecipientLeft $previous
      *
-     * @return $this|RecipientsLef|Post
+     * @return $this|RecipientLeft|Post
      */
     public function saveAfter(Post $previous = null)
     {
-        /** @var RecipientLeft $previous */
+        /** @var MadePublic $previous */
         if ($previous instanceof static) {
             // .. @todo
         }
@@ -55,7 +56,7 @@ class MadePublic extends AbstractEventPost implements MergeableInterface
         $post = new static();
 
         $post->content = [];
-        $post->created_at = time();
+        $post->created_at = Carbon::now();
         $post->discussion_id = $event->discussion->id;
         $post->user_id = $event->actor->id;
 

@@ -12,23 +12,12 @@
 namespace FoF\Byobu\Events;
 
 use Flarum\Discussion\Discussion;
+use Flarum\User\User;
 use FoF\Byobu\Discussion\Screener;
 
 abstract class AbstractRecipientsEvent
 {
-    /**
-     * @var Discussion
-     */
-    public $discussion;
-
-    /**
-     * @var Screener
-     */
-    public $screener;
-
-    public function __construct(Discussion $discussion, Screener $screener)
+    public function __construct(public Discussion $discussion, public Screener $screener, public User $actor)
     {
-        $this->discussion = $discussion;
-        $this->screener = $screener;
     }
 }

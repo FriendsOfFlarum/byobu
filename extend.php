@@ -37,6 +37,7 @@ return [
     new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(Discussion::class))
+        ->cast('isByobu', 'boolean')
         ->relationship('recipientUsers', function ($discussion) {
             return $discussion->belongsToMany(User::class, 'recipients')
                 ->wherePivot('removed_at', null);
@@ -55,6 +56,7 @@ return [
         }),
 
     (new Extend\Model(User::class))
+        ->cast('blocks_byobu_pd', 'boolean')
         ->relationship('privateDiscussions', function ($user) {
             return $user->belongsToMany(Discussion::class, 'recipients')
                 ->wherePivot('removed_at', null);

@@ -24,16 +24,6 @@ class PrivacyGambit extends AbstractRegexGambit
         return 'is:private';
     }
 
-    /**
-     * Apply conditions to the search, given that the gambit was matched.
-     *
-     * @param AbstractSearch $search  The search object.
-     * @param array          $matches An array of matches from the search bit.
-     * @param bool           $negate  Whether or not the bit was negated, and thus whether
-     *                                or not the conditions should be negated.
-     *
-     * @return mixed
-     */
     protected function conditions(SearchState $search, array $matches, $negate)
     {
         $actor = $search->getActor();

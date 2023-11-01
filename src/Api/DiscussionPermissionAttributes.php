@@ -17,23 +17,10 @@ use FoF\Byobu\Discussion\Screener;
 
 class DiscussionPermissionAttributes
 {
-    /**
-     * @var Screener
-     */
-    protected $screener;
-
-    public function __construct(Screener $screener)
+    public function __construct(protected Screener $screener)
     {
-        $this->screener = $screener;
     }
 
-    /**
-     * @param \Flarum\Api\Serializer\UserSerializer $serializer
-     * @param \Flarum\Discussion\Discussion         $discussion
-     * @param array                                 $attributes
-     *
-     * @return array
-     */
     public function __invoke(DiscussionSerializer $serializer, Discussion $model, array $attributes): array
     {
         $actor = $serializer->getActor();

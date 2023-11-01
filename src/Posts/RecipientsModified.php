@@ -11,6 +11,7 @@
 
 namespace FoF\Byobu\Posts;
 
+use Carbon\Carbon;
 use Flarum\Post\AbstractEventPost;
 use Flarum\Post\MergeableInterface;
 use Flarum\Post\Post;
@@ -67,7 +68,7 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
                 'groups' => $event->screener->currentGroups->pluck('id')->all(),
             ],
         ];
-        $post->created_at = time();
+        $post->created_at = Carbon::now();
         $post->discussion_id = $event->discussion->id;
         $post->user_id = $event->actor->id;
 

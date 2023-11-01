@@ -26,6 +26,7 @@ class IgnoreApprovals
         $screener = $screener->fromDiscussion($event->post->discussion);
 
         if ($this->extensionIsEnabled('flarum-approval') && $screener->isPrivate()) {
+            /** @phpstan-ignore-next-line */
             $event->post->is_approved = true;
         }
     }

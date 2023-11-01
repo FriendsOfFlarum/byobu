@@ -35,21 +35,11 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
         $this->actor = $actor;
     }
 
-    /**
-     * Get the user that sent the notification.
-     *
-     * @return \Flarum\User\User|null
-     */
     public function getFromUser(): ?User
     {
         return $this->actor;
     }
 
-    /**
-     * Get the model that is the subject of this activity.
-     *
-     * @return \Flarum\Database\AbstractModel|null
-     */
     public function getSubject(): ?Discussion
     {
         return $this->post->discussion;
@@ -88,7 +78,7 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
     /**
      * Get the name of the view to construct a notification email with.
      *
-     * @return string
+     * @return array
      */
     public function getEmailView()
     {

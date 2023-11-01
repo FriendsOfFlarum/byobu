@@ -35,31 +35,16 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
         $this->discussion = $discussion;
     }
 
-    /**
-     * Get the user that sent the notification.
-     *
-     * @return \Flarum\User\User|null
-     */
     public function getFromUser(): ?User
     {
         return $this->actor;
     }
 
-    /**
-     * Get the model that is the subject of this activity.
-     *
-     * @return \Flarum\Database\AbstractModel|null
-     */
     public function getSubject(): ?Discussion
     {
         return $this->discussion;
     }
 
-    /**
-     * Get the data to be stored in the notification.
-     *
-     * @return array|null
-     */
     public function getData()
     {
         return [];
@@ -88,7 +73,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
     /**
      * Get the name of the view to construct a notification email with.
      *
-     * @return string
+     * @return array
      */
     public function getEmailView()
     {
