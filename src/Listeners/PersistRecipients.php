@@ -81,6 +81,7 @@ class PersistRecipients
 
         // When discussions need approval and this is a private disucussion, ignore approvals.
         if ($this->screener->isPrivate() && $this->extensionIsEnabled('flarum-approval')) {
+            /** @phpstan-ignore-next-line */
             $event->discussion->is_approved = true;
         }
 

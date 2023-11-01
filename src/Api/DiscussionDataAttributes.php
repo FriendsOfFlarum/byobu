@@ -17,21 +17,10 @@ use FoF\Byobu\Discussion\Screener;
 
 class DiscussionDataAttributes
 {
-    /** @var Screener */
-    private $screener;
-
-    public function __construct(Screener $screener)
+    public function __construct(private Screener $screener)
     {
-        $this->screener = $screener;
     }
 
-    /**
-     * @param Flarum\Api\Serializer\UserSerializer $serializer
-     * @param Flarum\Discussion\Discussion         $discussion
-     * @param array                                $attributes
-     *
-     * @return array
-     */
     public function __invoke(DiscussionSerializer $serializer, Discussion $model, array $attributes): array
     {
         $attributes['isPrivateDiscussion'] = $this->screener->fromDiscussion($model)->isPrivate();

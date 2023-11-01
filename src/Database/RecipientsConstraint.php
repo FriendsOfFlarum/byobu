@@ -24,7 +24,6 @@ trait RecipientsConstraint
     /**
      * @param Query|Eloquent $query
      * @param User           $user
-     * @param bool           $unify
      */
     public function constraint($query, User $user, bool $includeFlagged = true)
     {

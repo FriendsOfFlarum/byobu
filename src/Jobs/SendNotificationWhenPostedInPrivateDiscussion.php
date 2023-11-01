@@ -46,10 +46,12 @@ class SendNotificationWhenPostedInPrivateDiscussion implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
+        /** @phpstan-ignore-next-line */
         $recipientUsers = $this->post->discussion->recipientUsers->reject(function ($user) {
             return $user->id === $this->actor->id;
         });
 
+        /** @phpstan-ignore-next-line */
         $groups = $this->post->discussion->recipientGroups->pluck('id')->toArray();
 
         $recipientGroupUsers = User::leftJoin('group_user', 'users.id', 'group_user.user_id')

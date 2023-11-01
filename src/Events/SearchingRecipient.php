@@ -15,25 +15,7 @@ use Flarum\Search\SearchState;
 
 class SearchingRecipient
 {
-    /**
-     * @var SearchState
-     */
-    public $search;
-
-    /**
-     * @var array
-     */
-    public $matches;
-
-    /**
-     * @var bool
-     */
-    public $negate;
-
-    public function __construct(SearchState $search, array $matches, $negate)
+    public function __construct(public SearchState $search, public array $matches, public bool $negate)
     {
-        $this->search = $search;
-        $this->matches = $matches;
-        $this->negate = $negate;
     }
 }

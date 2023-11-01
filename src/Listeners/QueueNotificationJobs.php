@@ -11,6 +11,7 @@
 
 namespace FoF\Byobu\Listeners;
 
+use Flarum\Post\CommentPost;
 use Flarum\Post\Event\Saving;
 use FoF\Byobu\Events\Created;
 use FoF\Byobu\Events\DiscussionMadePublic;
@@ -45,7 +46,7 @@ class QueueNotificationJobs
     public function postMadeInPrivateDiscussion(Saving $event)
     {
         // stop the notification from firing when events such as flarum/likes or fof/reactions re-save the post.
-        if ($event->post->exists) {
+        if ($event->post->exists || !$event->post instanceof CommentPost) {
             return;
         }
 

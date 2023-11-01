@@ -15,13 +15,6 @@ use Flarum\Api\Serializer\ForumSerializer;
 
 class ForumPermissionAttributes
 {
-    /**
-     * @param Flarum\Api\Serializer\ForumSerializer $serializer
-     * @param mixed                                 $model
-     * @param array                                 $attributes
-     *
-     * @return array
-     */
     public function __invoke(ForumSerializer $serializer, $model, array $attributes): array
     {
         $actor = $serializer->getActor();

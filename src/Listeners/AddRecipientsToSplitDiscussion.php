@@ -11,7 +11,7 @@
 
 namespace FoF\Byobu\Listeners;
 
-use Fof\Split\Events\DiscussionWasSplit;
+use FoF\Split\Events\DiscussionWasSplit;
 
 class AddRecipientsToSplitDiscussion
 {
@@ -20,10 +20,14 @@ class AddRecipientsToSplitDiscussion
      */
     public function handle(DiscussionWasSplit $event)
     {
+        /** @phpstan-ignore-next-line */
         $event->newDiscussion->recipientUsers()->sync(
+            /** @phpstan-ignore-next-line */
             $event->originalDiscussion->recipientUsers()->allRelatedIds()->all()
         );
+        /** @phpstan-ignore-next-line */
         $event->newDiscussion->recipientGroups()->sync(
+            /** @phpstan-ignore-next-line */
             $event->originalDiscussion->recipientGroups()->allRelatedIds()->all()
         );
     }

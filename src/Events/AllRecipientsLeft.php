@@ -16,19 +16,7 @@ use Flarum\User\User;
 
 class AllRecipientsLeft extends AbstractRecipientsEvent
 {
-    /**
-     * @var Discussion
-     */
-    public $discussion;
-
-    /**
-     * @var User
-     */
-    public $actor;
-
-    public function __construct(Discussion $discussion, User $actor)
+    public function __construct(public Discussion $discussion, public User $actor)
     {
-        $this->discussion = $discussion;
-        $this->actor = $actor;
     }
 }
