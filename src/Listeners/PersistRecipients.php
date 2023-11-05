@@ -137,7 +137,7 @@ class PersistRecipients
         return [
             $discussion,
             $this->screener,
-            $this->screener->actor()
+            $this->screener->actor(),
         ];
     }
 
