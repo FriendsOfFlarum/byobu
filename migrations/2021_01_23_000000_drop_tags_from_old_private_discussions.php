@@ -16,7 +16,7 @@ return [
         if ($schema->hasTable('discussion_tag')) {
             $connection = $schema->getConnection();
             $prefix = $connection->getTablePrefix();
-    
+
             $connection->statement("DELETE FROM {$prefix}discussion_tag WHERE discussion_id IN (SELECT DISTINCT(discussion_id) FROM {$prefix}recipients)");
         }
     },
