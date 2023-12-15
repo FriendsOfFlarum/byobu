@@ -27,7 +27,7 @@ class UserPrivacyTest extends TestCase
         $this->prepareDatabase([
             'users' => [
                 $this->normalUser(),
-                ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'password' => 'too-obscure', 'blocks_byobu_pd' => true]
+                ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'password' => 'too-obscure', 'blocks_byobu_pd' => true],
             ],
         ]);
     }
