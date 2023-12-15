@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
@@ -8,7 +17,7 @@ use Flarum\Testing\integration\TestCase;
 class UserPrivacyTest extends TestCase
 {
     use RetrievesAuthorizedUsers;
-    
+
     public function setUp(): void
     {
         parent::setUp();
@@ -18,7 +27,7 @@ class UserPrivacyTest extends TestCase
         $this->prepareDatabase([
             'users' => [
                 $this->normalUser(),
-            ]
+            ],
         ]);
     }
 
@@ -33,7 +42,7 @@ class UserPrivacyTest extends TestCase
                 '/api/users/2',
                 [
                     'authenticatedAs' => 2,
-                    'json' => [
+                    'json'            => [
                         'data' => [
                             'attributes' => [
                                 'blocksPd' => true,
@@ -45,7 +54,7 @@ class UserPrivacyTest extends TestCase
         );
 
         $this->assertEquals(200, $response->getStatusCode());
-        
+
         $json = json_decode($response->getBody()->getContents(), true);
 
         $this->assertTrue($json['data']['attributes']['blocksPd']);
