@@ -13,10 +13,12 @@ use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
-        $connection = $schema->getConnection();
-        $prefix = $connection->getTablePrefix();
+        if ($schema->hasTable('discussion_tag')) {
+            $connection = $schema->getConnection();
+            $prefix = $connection->getTablePrefix();
 
-        $connection->statement("DELETE FROM {$prefix}discussion_tag WHERE discussion_id IN (SELECT DISTINCT(discussion_id) FROM {$prefix}recipients)");
+            $connection->statement("DELETE FROM {$prefix}discussion_tag WHERE discussion_id IN (SELECT DISTINCT(discussion_id) FROM {$prefix}recipients)");
+        }
     },
     'down' => function (Builder $schema) {
         //
