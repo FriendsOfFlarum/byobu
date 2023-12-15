@@ -26,7 +26,7 @@ class SaveUserPreferences
         if ($blocksPd !== null) {
             $actor->assertPermission($actor->id === $user->id);
 
-            $user->blocks_byobu_pd = (bool) ($blocksPd || $user->blocks_byobu_pd);
+            $user->blocks_byobu_pd = (bool) $blocksPd;
         }
     }
 }

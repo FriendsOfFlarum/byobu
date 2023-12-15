@@ -27,6 +27,7 @@ class UserPrivacyTest extends TestCase
         $this->prepareDatabase([
             'users' => [
                 $this->normalUser(),
+                ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'password' => 'too-obscure', 'blocks_byobu_pd' => true]
             ],
         ]);
     }
@@ -58,5 +59,34 @@ class UserPrivacyTest extends TestCase
         $json = json_decode($response->getBody()->getContents(), true);
 
         $this->assertTrue($json['data']['attributes']['blocksPd']);
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_disable_block_pd_setting()
+    {
+        $response = $this->send(
+            $this->request(
+                'PATCH',
+                '/api/users/3',
+                [
+                    'authenticatedAs' => 3,
+                    'json'            => [
+                        'data' => [
+                            'attributes' => [
+                                'blocksPd' => false,
+                            ],
+                        ],
+                    ],
+                ]
+            )
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $json = json_decode($response->getBody()->getContents(), true);
+
+        $this->assertFalse($json['data']['attributes']['blocksPd']);
     }
 }
