@@ -6,6 +6,6 @@ export default function canStartPrivateDiscussion(recipient: User) {
     app.session.user &&
     app.session.user.id() !== recipient.id() &&
     app.forum.attribute<boolean>('canStartPrivateDiscussion') &&
-    (!recipient.blocksPd() || (app.forum.attribute<boolean>('canStartPrivateDiscussionWithBlockers') && recipient.cannotBeDirectMessaged()))
+    (!recipient.blocksPd() || app.forum.attribute<boolean>('canStartPrivateDiscussionWithBlockers'))
   );
 }

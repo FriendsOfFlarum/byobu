@@ -24,5 +24,5 @@ export default [
     .attribute<boolean>('canMakePublic')
     .attribute<boolean>('isPrivateDiscussion'),
 
-  new Extend.Model(User).attribute<boolean>('blocksPd').attribute<boolean>('cannotBeDirectMessaged').attribute<number>('unreadPrivateMessagesCount'),
+  new Extend.Model(User).attribute<boolean>('blocksPd').attribute<number>('unreadPrivateMessagesCount'),
 ];

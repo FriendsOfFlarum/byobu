@@ -99,9 +99,6 @@ return [
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
         ->attribute('blocksPd', function ($serializer, $user) {
             return (bool) $user->blocks_byobu_pd;
-        })
-        ->attribute('cannotBeDirectMessaged', function ($serializer, $user) {
-            return (bool) $serializer->getActor()->can('cannotBeDirectMessaged', $user);
         }),
 
     (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
