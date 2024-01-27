@@ -38,7 +38,7 @@ export default function () {
       {
         icon: 'far fa-map',
         label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_blocking_users'),
-        permission: 'startPrivateDiscussionWithBlockers',
+        permission: 'discussion.startPrivateDiscussionWithBlockers',
         tagScoped: false,
       },
       'start',
