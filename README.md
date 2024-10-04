@@ -59,10 +59,9 @@ In order to do so we rely on voluntary contributions on [OpenCollective](https:/
 
 ## Links
 
-- [Flarum Discuss post](https://discuss.flarum.org/d/4762)
-- [Source code on GitHub](https://github.com/FriendsOfFlarum/byobu)
-- [Changelog](https://github.com/FriendsOfFlarum/byobu/blob/master/CHANGELOG.md)
+- [Discuss](https://discuss.flarum.org/d/4762)
+- [GitHub](https://github.com/FriendsOfFlarum/byobu)
 - [Report an issue](https://github.com/FriendsOfFlarum/byobu/issues)
-- [Download via Packagist](https://packagist.org/packages/fof/byobu)
+- [Packagist](https://packagist.org/packages/fof/byobu)
 
 An extension by FriendsOfFlarum.
