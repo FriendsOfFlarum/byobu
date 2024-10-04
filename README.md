@@ -61,7 +61,7 @@ In order to do so we rely on voluntary contributions on [OpenCollective](https:/
 
 - [Discuss](https://discuss.flarum.org/d/4762)
 - [GitHub](https://github.com/FriendsOfFlarum/byobu)
-- [Report an issue](https://github.com/FriendsOfFlarum/byobu/issues)
+- [Issues](https://github.com/FriendsOfFlarum/byobu/issues)
 - [Packagist](https://packagist.org/packages/fof/byobu)
 
 An extension by FriendsOfFlarum.
