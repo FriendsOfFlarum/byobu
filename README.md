@@ -13,15 +13,16 @@ Private discussions for your forum. Allows you to select specific recipients for
 - Force new posts in these private discussions to show real-time.
 
 ## Installation
-
-
-    composer require fof/byobu:"*"
+```php
+composer require fof/byobu:"*"
+```
 
 ## Updating
-
-    composer update fof/byobu
-    php flarum migrate
-    php flarum cache:clear
+```php
+composer update fof/byobu
+php flarum migrate
+php flarum cache:clear
+```
 
 ## Configuration
 
@@ -58,10 +59,9 @@ In order to do so we rely on voluntary contributions on [OpenCollective](https:/
 
 ## Links
 
-- [Flarum Discuss post](https://discuss.flarum.org/d/4762)
-- [Source code on GitHub](https://github.com/FriendsOfFlarum/byobu)
-- [Changelog](https://github.com/FriendsOfFlarum/byobu/blob/master/CHANGELOG.md)
+- [Discuss](https://discuss.flarum.org/d/4762)
+- [GitHub](https://github.com/FriendsOfFlarum/byobu)
 - [Report an issue](https://github.com/FriendsOfFlarum/byobu/issues)
-- [Download via Packagist](https://packagist.org/packages/fof/byobu)
+- [Packagist](https://packagist.org/packages/fof/byobu)
 
 An extension by FriendsOfFlarum.
