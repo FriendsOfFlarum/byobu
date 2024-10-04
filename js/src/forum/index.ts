@@ -5,6 +5,8 @@ import notifications from './notifications';
 
 export * from './modals';
 export * from './pages/discussions';
+export * from './events';
+export * from './helpers';
 
 export { default as extend } from './extend';
 
