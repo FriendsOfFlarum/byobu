@@ -13,15 +13,16 @@ Private discussions for your forum. Allows you to select specific recipients for
 - Force new posts in these private discussions to show real-time.
 
 ## Installation
-
-
-    composer require fof/byobu:"*"
+```php
+composer require fof/byobu:"*"
+```
 
 ## Updating
-
-    composer update fof/byobu
-    php flarum migrate
-    php flarum cache:clear
+```php
+composer update fof/byobu
+php flarum migrate
+php flarum cache:clear
+```
 
 ## Configuration
 
