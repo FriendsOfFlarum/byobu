@@ -9,9 +9,14 @@ import RecipientsModified from './events/RecipientsModified';
 import PrivateDiscussionsUserPage from './pages/PrivateDiscussionsUserPage';
 
 export default [
-  new Extend.PostTypes().add('recipientsModified', RecipientsModified).add('recipientLeft', RecipientLeft).add('madePublic', MadePublic),
+  new Extend.PostTypes() //
+    .add('recipientsModified', RecipientsModified)
+    .add('recipientLeft', RecipientLeft)
+    .add('madePublic', MadePublic),
 
-  new Extend.Routes().add('byobuUserPrivate', '/u/:username/private', PrivateDiscussionsUserPage).add('byobuPrivate', '/private', IndexPage),
+  new Extend.Routes() //
+    .add('byobuUserPrivate', '/u/:username/private', PrivateDiscussionsUserPage)
+    .add('byobuPrivate', '/private', IndexPage),
 
   new Extend.Model(Discussion)
     .hasMany<User>('recipientUsers')
@@ -24,5 +29,7 @@ export default [
     .attribute<boolean>('canMakePublic')
     .attribute<boolean>('isPrivateDiscussion'),
 
-  new Extend.Model(User).attribute<boolean>('blocksPd').attribute<number>('unreadPrivateMessagesCount'),
+  new Extend.Model(User) //
+    .attribute<boolean>('blocksPd')
+    .attribute<number>('unreadPrivateMessagesCount'),
 ];

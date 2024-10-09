@@ -6,21 +6,17 @@ import icon from 'flarum/common/helpers/icon';
 import type Mithril from 'mithril';
 
 export default class ByobuSetingsPage extends ExtensionPage {
-  oninit(vnode: Mithril.Vnode<any, any>) {
-    super.oninit(vnode);
-
-    this.badgeDefault = 'fas fa-map';
-    this.postActionDefault = 'far fa-map';
-  }
+  badgeDefault: string = 'fas fa-map';
+  postActionDefault: string = 'far fa-map';
 
   content() {
     const helpText = flarum.extensions['flarum-tags']
       ? app.translator.trans('flarum-tags.admin.edit_tag.icon_text', {
-          a: <a href="https://fontawesome.com/icons?m=free" tabindex="-1" />,
+          a: <a href={app.refs.fontawesome} tabindex="-1" />,
         })
       : '';
 
-    return [
+    return (
       <div className="ByobuSettingsPage">
         <div className="container">
           <div className="Form">
@@ -69,7 +65,7 @@ export default class ByobuSetingsPage extends ExtensionPage {
             <div className="Form-group">{this.submitButton()}</div>
           </div>
         </div>
-      </div>,
-    ];
+      </div>
+    );
   }
 }
