@@ -7,8 +7,11 @@ import MadePublic from './events/MadePublic';
 import RecipientLeft from './events/RecipientLeft';
 import RecipientsModified from './events/RecipientsModified';
 import PrivateDiscussionsUserPage from './pages/PrivateDiscussionsUserPage';
+import commonExtend from '../common/extend';
+import PrivateComposerPage from './components/PrivateComposerPage';
 
 export default [
+  ...commonExtend,
   new Extend.PostTypes() //
     .add('recipientsModified', RecipientsModified)
     .add('recipientLeft', RecipientLeft)
@@ -16,7 +19,8 @@ export default [
 
   new Extend.Routes() //
     .add('byobuUserPrivate', '/u/:username/private', PrivateDiscussionsUserPage)
-    .add('byobuPrivate', '/private', IndexPage),
+    .add('byobuPrivate', '/private', IndexPage)
+    .add('byobuComposer', '/private/composer', PrivateComposerPage),
 
   new Extend.Model(Discussion)
     .hasMany<User>('recipientUsers')
