@@ -80,9 +80,10 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
   }
 
   headerItems() {
-    let items = super.headerItems();
+    const items = super.headerItems();
 
     items.remove('tags');
+    items.remove('polls');
 
     if (app.session.user && app.forum.attribute('canStartPrivateDiscussion')) {
       const recipients = this.composer.fields.recipients.toArray();

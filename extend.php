@@ -31,6 +31,7 @@ return [
 
     (new Extend\Frontend('forum'))
         ->route('/private', 'byobuPrivate', Content\PrivateDiscussionsPage::class)
+        ->route('/private/composer', 'byobuPrivateComposer')
         ->css(__DIR__.'/resources/less/forum/extension.less')
         ->js(__DIR__.'/js/dist/forum.js'),
 
