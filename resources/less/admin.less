@@ -1,10 +1,49 @@
 .ByobuSettingsPage {
-    margin-top: 15px;
+  padding-top: 20px;
+
+  .Button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .ByobuSettingsTabPage {
+    background: @control-bg;
+    padding: 20px;
+    border-radius: @border-radius;
+    box-shadow: 0 2px 4px @shadow-color;
+
+    h3 {
+      color: @primary-color;
+      margin-bottom: 10px;
+    }
+
+    .Section {
+      background: @body-bg;
+      border-radius: @border-radius;
+      box-shadow: 0 1px 3px @shadow-color;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .Form {
+      .control {
+        background: @body-bg;
+        border: 1px solid @muted-color;
+        color: @text-color;
+        padding: 6px 12px;
+        border-radius: @border-radius;
+      }
+      input {
+          max-width: 300px;
+      }
+    }
+  }
+
+  &--settings {
+    margin: 0 auto;
 
     @media @desktop-up {
-        .container {
-          max-width: 600px;
-          margin: 0;
-        }
+      margin: 0;
     }
+  }
 }
