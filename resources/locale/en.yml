@@ -85,6 +85,12 @@ fof-byobu:
             view_private_discussions-when-flagged: View private discussions of other users if flagged
 
         settings:
+            general:
+                heading: General Settings
+                help: "These settings control the basic features of the byobu."
+            icon:
+                heading: Icon Settings
+                help: "These settings control the icons used byobu on the forum."
             badge-icon: Byobu Discussion Badge
             enable-make-public-option: Enable the "make public" ability
             enable-make-public-option-help: Adds the ability for those with permission to remove all recipients, assign a new tag and make the discussion publically visible (accoring to the visibility settings of the chosen tag).
