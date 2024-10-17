@@ -1,5 +1,5 @@
-import ByobuSetingsPage from './ByobuSettingsPage';
+import ByobuSettingsPage from './ByobuSettingsPage';
 
 export const components = {
-  ByobuSetingsPage,
+  ByobuSettingsPage,
 };

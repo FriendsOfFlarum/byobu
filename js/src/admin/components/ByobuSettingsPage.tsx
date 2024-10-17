@@ -6,7 +6,7 @@ import ItemList from 'flarum/common/utils/ItemList';
 
 import type Mithril from 'mithril';
 
-export default class ByobuSetingsPage extends ExtensionPage {
+export default class ByobuSettingsPage extends ExtensionPage {
   badgeDefault: string = 'fas fa-map';
   postActionDefault: string = 'far fa-map';
 
