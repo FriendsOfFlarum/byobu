@@ -23,6 +23,10 @@ use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
 use FoF\Split\Events\DiscussionWasSplit;
+use Flarum\Api\Context;
+use Flarum\Api\Endpoint;
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
 
 return [
     (new Extend\Frontend('admin'))
@@ -70,41 +74,25 @@ return [
                 ->wherePivot('removed_at', null);
         }),
 
-    (new Extend\ApiController(Controller\ListDiscussionsController::class))
-        ->addInclude(['recipientUsers', 'recipientGroups'])
-        ->load(['recipientUsers', 'recipientGroups']),
-
-    (new Extend\ApiController(Controller\CreateDiscussionController::class))
-        ->addInclude(['recipientUsers', 'recipientGroups'])
-        ->load(['recipientUsers', 'recipientGroups']),
-
-    (new Extend\ApiController(Controller\ShowDiscussionController::class))
-        ->addOptionalInclude(['oldRecipientUsers', 'oldRecipientGroups'])
-        ->addInclude(['recipientUsers', 'recipientGroups'])
-        ->load(['recipientUsers', 'recipientGroups']),
-
-    (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
-        ->hasMany('recipientUsers', Serializer\BasicUserSerializer::class)
-        ->hasMany('recipientGroups', Serializer\GroupSerializer::class),
-
-    (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
-        ->hasMany('oldRecipientUsers', Serializer\BasicUserSerializer::class)
-        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
-
-    (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
-      ->attributes(Api\DiscussionPermissionAttributes::class)
-      ->attributes(Api\DiscussionDataAttributes::class),
-
-    (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
-        ->attributes(Api\ForumPermissionAttributes::class),
-
-    (new Extend\ApiSerializer(Serializer\UserSerializer::class))
-        ->attribute('blocksPd', function ($serializer, $user) {
-            return (bool) $user->blocks_byobu_pd;
+    (new Extend\ApiResource(Resource\DiscussionResource::class))
+        ->fields(Api\DiscussionResourceFields::class)
+        ->endpoint([Endpoint\Show::class, Endpoint\Create::class, Endpoint\Index::class], function (Endpoint\Show|Endpoint\Create|Endpoint\Index $endpoint) {
+            return $endpoint
+                ->addDefaultInclude(['recipientUsers', 'recipientGroups'])
+                ->eagerLoad(['recipientUsers', 'recipientGroups']);
         }),
 
-    (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
-        ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class),
+    (new Extend\ApiResource(Resource\ForumResource::class))
+        ->fields(Api\ForumResourceFields::class),
+
+    (new Extend\ApiResource(Resource\UserResource::class))
+        ->fields(fn () => [
+            Schema\Boolean::make('blocksPd')
+                ->property('blocks_byobu_pd'),
+            Schema\Relationship\ToMany::make('privateDiscussions')
+                ->type('discussions')
+                ->visible(fn (User $user, Context $context) => $context->getActor()->is($user))
+        ])
 
     (new Extend\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
