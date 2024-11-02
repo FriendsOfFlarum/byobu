@@ -33,7 +33,8 @@ return [
         ->route('/private', 'byobuPrivate', Content\PrivateDiscussionsPage::class)
         ->route('/private/composer', 'byobuPrivateComposer')
         ->css(__DIR__.'/resources/less/forum/extension.less')
-        ->js(__DIR__.'/js/dist/forum.js'),
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->jsDirectory(__DIR__ . '/js/dist/forum'),
 
     new Extend\Locales(__DIR__.'/resources/locale'),
 

@@ -1,8 +1,6 @@
 import app from 'flarum/forum/app';
 import Button from 'flarum/common/components/Button';
-import LogInModal from 'flarum/forum/components/LogInModal';
 import ItemList from 'flarum/common/utils/ItemList';
-import PrivateDiscussionComposer from './discussions/PrivateDiscussionComposer';
 
 export default class PrivateComposing {
   constructor(recipient) {
@@ -12,7 +10,7 @@ export default class PrivateComposing {
   action(e) {
     e.preventDefault();
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       if (app.session.user) {
         let recipients = new ItemList();
 
@@ -22,17 +20,20 @@ export default class PrivateComposing {
           recipients.add('users:' + this.recipient.id(), this.recipient);
         }
 
-        app.composer.load(PrivateDiscussionComposer, {
-          user: app.session.user,
-          recipients: recipients,
-          recipientUsers: recipients,
-        });
+        await app.composer
+          .load(() => import('flarum/forum/components/DiscussionComposer').then(async () => {
+              return await import('./discussions/PrivateDiscussionComposer');
+          }), {
+            user: app.session.user,
+            recipients: recipients,
+            recipientUsers: recipients,
+          });
 
         app.composer.show();
 
         return resolve();
       } else {
-        app.modal.show(LogInModal);
+        await app.modal.show(() => import('flarum/forum/components/LogInModal'));
 
         return reject();
       }

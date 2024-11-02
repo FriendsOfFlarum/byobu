@@ -1,8 +1,6 @@
 import app from 'flarum/forum/app';
 import Page from 'flarum/common/components/Page';
 import type Mithril from 'mithril';
-import LogInModal from 'flarum/forum/components/LogInModal';
-import PrivateDiscussionComposer from '../pages/discussions/PrivateDiscussionComposer';
 import ItemList from 'flarum/common/utils/ItemList';
 import Group from 'flarum/common/models/Group';
 import User from 'flarum/common/models/User';
@@ -16,7 +14,7 @@ export default class PrivateComposerPage extends Page {
 
   configComposer() {
     if (!app.session.user) {
-      setTimeout(() => app.modal.show(LogInModal), 500);
+      setTimeout(() => app.modal.show(() => import('flarum/forum/components/LogInModal')), 500);
       return m.route.set('/');
     }
 
@@ -27,7 +25,7 @@ export default class PrivateComposerPage extends Page {
 
     m.route.set(app.route('byobuPrivate'));
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const composerProps = {
         user: app.session.user,
         recipients: recipients,
@@ -54,7 +52,9 @@ export default class PrivateComposerPage extends Page {
         });
       }
 
-      app.composer.load(PrivateDiscussionComposer, composerProps);
+      await app.composer.load(() => import('flarum/forum/components/DiscussionComposer').then(() => {
+        return import('../pages/discussions/PrivateDiscussionComposer');
+      }), composerProps);
 
       app.composer.show();
 
