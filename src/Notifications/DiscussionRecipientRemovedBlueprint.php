@@ -89,7 +89,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'fof-byobu::emails.byobuRecipientRemoved'];
+        return ['text' => 'fof-byobu::email.plain.byobuRecipientRemoved', 'html' => 'fof-byobu::email.html.byobuRecipientRemoved'];
     }
 
     /**

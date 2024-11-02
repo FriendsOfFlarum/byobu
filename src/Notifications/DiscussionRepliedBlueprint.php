@@ -83,7 +83,7 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'fof-byobu::emails.privateDiscussionReplied'];
+        return ['text' => 'fof-byobu::email.plain.privateDiscussionReplied', 'html' => 'fof-byobu::email.html.privateDiscussionReplied'];
     }
 
     /**

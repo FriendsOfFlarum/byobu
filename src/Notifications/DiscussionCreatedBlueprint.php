@@ -79,7 +79,7 @@ class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterfac
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'fof-byobu::emails.privateDiscussionCreated'];
+        return ['text' => 'fof-byobu::email.plain.privateDiscussionCreated', 'html' => 'fof-byobu::email.html.privateDiscussionCreated'];
     }
 
     /**

@@ -78,7 +78,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface,
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'fof-byobu::emails.privateDiscussionAdded'];
+        return ['text' => 'fof-byobu::email.plain.privateDiscussionAdded', 'html' => 'fof-byobu::email.html.privateDiscussionAdded'];
     }
 
     /**

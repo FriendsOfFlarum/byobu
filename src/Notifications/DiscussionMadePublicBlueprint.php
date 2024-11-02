@@ -90,7 +90,7 @@ class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInter
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'fof-byobu::emails.byobuMadePublic'];
+        return ['text' => 'fof-byobu::email.plain.byobuMadePublic', 'html' => 'fof-byobu::email.html.byobuMadePublic'];
     }
 
     /**
