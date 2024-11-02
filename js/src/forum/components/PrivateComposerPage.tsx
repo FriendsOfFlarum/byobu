@@ -52,9 +52,13 @@ export default class PrivateComposerPage extends Page {
         });
       }
 
-      await app.composer.load(() => import('flarum/forum/components/DiscussionComposer').then(() => {
-        return import('../pages/discussions/PrivateDiscussionComposer');
-      }), composerProps);
+      await app.composer.load(
+        () =>
+          import('flarum/forum/components/DiscussionComposer').then(() => {
+            return import('../pages/discussions/PrivateDiscussionComposer');
+          }),
+        composerProps
+      );
 
       app.composer.show();
 

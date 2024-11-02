@@ -177,18 +177,20 @@ function controls() {
                 const recipientUsers = [];
 
                 if (flarum.extensions['flarum-tags']) {
-                  import('ext:flarum/tags/forum/components/TagDiscussionModal').then(async () => {
-                    await app.modal.show(() => import('../modals/ByobuTagDiscussionModal'), { discussion, resolve, reject });
-                  }).then((tags) => {
-                    discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => {
-                      discussion.save({ relationships: { tags } }).then(() => {
-                        if (app.current.matches(DiscussionPage)) {
-                          app.current.get('stream').update();
-                        }
-                        m.redraw();
+                  import('ext:flarum/tags/forum/components/TagDiscussionModal')
+                    .then(async () => {
+                      await app.modal.show(() => import('../modals/ByobuTagDiscussionModal'), { discussion, resolve, reject });
+                    })
+                    .then((tags) => {
+                      discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => {
+                        discussion.save({ relationships: { tags } }).then(() => {
+                          if (app.current.matches(DiscussionPage)) {
+                            app.current.get('stream').update();
+                          }
+                          m.redraw();
+                        });
                       });
                     });
-                  });
                 } else {
                   discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => m.redraw());
                 }

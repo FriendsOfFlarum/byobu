@@ -20,14 +20,17 @@ export default class PrivateComposing {
           recipients.add('users:' + this.recipient.id(), this.recipient);
         }
 
-        await app.composer
-          .load(() => import('flarum/forum/components/DiscussionComposer').then(async () => {
+        await app.composer.load(
+          () =>
+            import('flarum/forum/components/DiscussionComposer').then(async () => {
               return await import('./discussions/PrivateDiscussionComposer');
-          }), {
+            }),
+          {
             user: app.session.user,
             recipients: recipients,
             recipientUsers: recipients,
-          });
+          }
+        );
 
         app.composer.show();
 

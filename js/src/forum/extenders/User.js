@@ -28,14 +28,13 @@ function message() {
                 recipients.add('users:' + app.session.user.id(), app.session.user);
                 recipients.add('users:' + user.id(), user);
 
-                const PrivateDiscussionComposer = await app.composer
-                  .load(() => import('../pages/discussions/PrivateDiscussionComposer'), {
-                    user: app.session.user,
-                    recipients: recipients,
-                    recipientUsers: recipients,
-                    titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                    submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
-                  });
+                const PrivateDiscussionComposer = await app.composer.load(() => import('../pages/discussions/PrivateDiscussionComposer'), {
+                  user: app.session.user,
+                  recipients: recipients,
+                  recipientUsers: recipients,
+                  titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                  submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
+                });
 
                 PrivateDiscussionComposer.prototype.recipients = recipients;
 
