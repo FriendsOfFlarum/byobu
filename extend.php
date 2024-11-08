@@ -11,10 +11,7 @@
 
 namespace FoF\Byobu;
 
-use Flarum\Api\Controller;
-use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
-use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Group\Group;
@@ -92,7 +89,7 @@ return [
             Schema\Relationship\ToMany::make('privateDiscussions')
                 ->type('discussions')
                 ->visible(fn (User $user, Context $context) => $context->getActor()->is($user))
-        ])
+        ]),
 
     (new Extend\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),

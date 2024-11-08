@@ -13,6 +13,7 @@ namespace FoF\Byobu\Filters\Discussion;
 
 use Flarum\Http\SlugManager;
 use Flarum\Search\SearchState;
+use Flarum\Search\ValidateFilterTrait;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
 use Flarum\Search\Filter\FilterInterface;
@@ -23,6 +24,7 @@ use Flarum\Search\Filter\FilterInterface;
 class ByobuFilter implements FilterInterface
 {
     use RecipientsConstraint;
+    use ValidateFilterTrait;
 
     /**
      * @var SlugManager
@@ -39,7 +41,9 @@ class ByobuFilter implements FilterInterface
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        $user = $this->slugManager->forResource(User::class)->fromSlug(trim($value[1], '"'), $state->getActor());
+        $value = $this->asString($value);
+
+        $user = $this->slugManager->forResource(User::class)->fromSlug(trim($value, '"'), $state->getActor());
 
         $state->getQuery()->where(function ($query) use ($user) {
             $this->forRecipient($query, [], $user->id);
