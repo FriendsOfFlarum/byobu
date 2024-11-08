@@ -33,6 +33,6 @@ class PrivacyFilter implements FilterInterface
     }
     public function getFilterKey(): string
     {
-        return 'byobu';
+        return 'private';
     }
 }

@@ -12,7 +12,7 @@ import recipientsLabel from '../pages/labels/recipientsLabels';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import ItemList from 'flarum/common/utils/ItemList';
 import AddRecipientModal from '../modals/AddRecipientModal';
-import DiscussionPage from 'flarum/components/DiscussionPage';
+import DiscussionPage from 'flarum/forum/components/DiscussionPage';
 
 export default () => {
   badges();

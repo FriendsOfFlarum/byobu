@@ -11,24 +11,24 @@ class ForumResourceFields
     {
         return [
             Schema\Boolean::make('canStartPrivateDiscussion')
-                ->get(function (Context $context) {
+                ->get(function ($forum, Context $context) {
                     return $context->getActor()->can('discussion.startPrivateDiscussionWithUsers')
                         || $context->getActor()->can('discussion.startPrivateDiscussionWithGroups');
                 }),
             Schema\Boolean::make('canStartPrivateDiscussionWithUsers')
-                ->get(function (Context $context) {
+                ->get(function ($forum, Context $context) {
                     return $context->getActor()->can('discussion.startPrivateDiscussionWithUsers');
                 }),
             Schema\Boolean::make('canAddMoreThanTwoUserRecipients')
-                ->get(function (Context $context) {
+                ->get(function ($forum, Context $context) {
                     return $context->getActor()->can('discussion.addMoreThanTwoUserRecipients');
                 }),
             Schema\Boolean::make('canStartPrivateDiscussionWithGroups')
-                ->get(function (Context $context) {
+                ->get(function ($forum, Context $context) {
                     return $context->getActor()->can('discussion.startPrivateDiscussionWithGroups');
                 }),
             Schema\Boolean::make('canStartPrivateDiscussionWithBlockers')
-                ->get(function (Context $context) {
+                ->get(function ($forum, Context $context) {
                     return $context->getActor()->can('discussion.startPrivateDiscussionWithBlockers');
                 }),
         ];

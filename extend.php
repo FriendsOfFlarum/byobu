@@ -24,6 +24,7 @@ use Flarum\Api\Context;
 use Flarum\Api\Endpoint;
 use Flarum\Api\Resource;
 use Flarum\Api\Schema;
+use Illuminate\Support\Arr;
 
 return [
     (new Extend\Frontend('admin'))
@@ -73,6 +74,10 @@ return [
 
     (new Extend\ApiResource(Resource\DiscussionResource::class))
         ->fields(Api\DiscussionResourceFields::class)
+        ->field('tags', fn (Schema\Relationship\ToMany $field) => $field->writable(function (Discussion $discussion, Context $context) {
+            return ! Arr::has($context->body(), 'data.relationships.recipientUsers')
+                && ! Arr::has($context->body(), 'data.relationships.recipientGroups');
+        }))
         ->endpoint([Endpoint\Show::class, Endpoint\Create::class, Endpoint\Index::class], function (Endpoint\Show|Endpoint\Create|Endpoint\Index $endpoint) {
             return $endpoint
                 ->addDefaultInclude(['recipientUsers', 'recipientGroups'])
@@ -85,7 +90,8 @@ return [
     (new Extend\ApiResource(Resource\UserResource::class))
         ->fields(fn () => [
             Schema\Boolean::make('blocksPd')
-                ->property('blocks_byobu_pd'),
+                ->property('blocks_byobu_pd')
+                ->writable(fn (User $user, Context $context) => $context->getActor()->is($user)),
             Schema\Relationship\ToMany::make('privateDiscussions')
                 ->type('discussions')
                 ->visible(fn (User $user, Context $context) => $context->getActor()->is($user))
@@ -114,7 +120,6 @@ return [
 
     (new Extend\Event())
         ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)
-        ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
         ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class)
         ->subscribe(Listeners\CreatePostWhenRecipientsChanged::class)
         ->subscribe(Listeners\QueueNotificationJobs::class)

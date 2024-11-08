@@ -55,9 +55,11 @@ class DiscussionResourceFields
                 ->type('groups'),
             Schema\Relationship\ToMany::make('recipientUsers')
                 ->includable()
+                ->writable()
                 ->type('users'),
             Schema\Relationship\ToMany::make('recipientGroups')
                 ->includable()
+                ->writable()
                 ->type('groups'),
         ];
     }

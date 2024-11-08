@@ -38,7 +38,6 @@ class ByobuProvider extends AbstractServiceProvider
 
         // add byobu's persist recipients as the first listener, then add drop tags
         $events->listen(Saving::class, PersistRecipients::class);
-        $events->listen(Saving::class, DropTagsOnPrivateDiscussions::class);
 
         // then re-add everything else
         foreach ($listeners as $listener) {
