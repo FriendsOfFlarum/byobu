@@ -129,16 +129,6 @@ return [
     (new Extend\ModelPrivate(Discussion::class))
         ->checker(Listeners\GetModelIsPrivate::class),
 
-    (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
-        ->addGambit(Gambits\Discussion\ByobuGambit::class)
-        ->addGambit(Gambits\Discussion\PrivacyGambit::class),
-
-    (new Extend\SimpleFlarumSearch(UserSearcher::class))
-        ->addGambit(Gambits\User\AllowsPdGambit::class),
-
-    (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilterMutator(Filters\Discussion\HidePrivateDiscussionsFromAllDiscussionsPage::class),
-
     (new Extend\Settings())
         // we have to use the callback here, else we risk returning empty values instead of the defaults.
         // see https://github.com/flarum/core/issues/3209
@@ -149,4 +139,10 @@ return [
             return empty($value) ? 'far fa-map' : $value;
         })
         ->default('fof-byobu.delete_on_last_recipient_left', false),
+
+    (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
+        ->addFilter(DiscussionSearcher::class, Filters\Discussion\ByobuFilter::class)
+        ->addFilter(DiscussionSearcher::class, Filters\Discussion\PrivacyFilter::class)
+        ->addMutator(DiscussionSearcher::class, Filters\Discussion\HidePrivateDiscussionsFromAllDiscussionsPage::class)
+        ->addFilter(UserSearcher::class, Filters\User\AllowsPdFilter::class),
 ];

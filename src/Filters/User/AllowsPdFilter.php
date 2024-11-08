@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\Byobu\Gambits\User;
+namespace FoF\Byobu\Filters\User;
 
 use Flarum\Extension\ExtensionManager;
-use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\SearchState;
 use FoF\Byobu\Events\SearchingRecipient;
 use Illuminate\Contracts\Events\Dispatcher;
+use Flarum\Search\Filter\FilterInterface;
 
-class AllowsPdGambit extends AbstractRegexGambit
+class AllowsPdFilter implements FilterInterface
 {
     /**
      * @var Dispatcher
@@ -35,22 +35,17 @@ class AllowsPdGambit extends AbstractRegexGambit
         $this->manager = $manager;
     }
 
-    public function getGambitPattern()
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        return 'allows-pd';
-    }
+        $actor = $state->getActor();
 
-    protected function conditions(SearchState $search, array $matches, $negate)
-    {
-        $actor = $search->getActor();
-
-        $this->dispatcher->dispatch(new SearchingRecipient($search, $matches, $negate));
+        $this->dispatcher->dispatch(new SearchingRecipient($state, $value, $negate));
 
         if ($actor->can('startPrivateDiscussionWithBlockers')) {
             return;
         }
 
-        $search
+        $state
             ->getQuery()
             // Always prevent PD's by non-privileged users to suspended users.
             ->when(
@@ -69,5 +64,9 @@ class AllowsPdGambit extends AbstractRegexGambit
     protected function extensionEnabled(string $extension): bool
     {
         return $this->manager->isEnabled($extension);
+    }
+    public function getFilterKey(): string
+    {
+        return 'byobu';
     }
 }
