@@ -77,7 +77,7 @@ class DiscussionPolicy extends AbstractPolicy
      */
     public function tag(User $actor, Discussion $discussion)
     {
-        return $this->isPrivate($discussion) ? $this->deny() : null;
+        return $this->isPrivate($discussion) && empty($discussion->getAttribute('makingPublic')) ? $this->deny() : null;
     }
 
     /**

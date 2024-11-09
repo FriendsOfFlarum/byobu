@@ -46,6 +46,20 @@ class DiscussionResourceFields
                     return $this->screener->fromDiscussion($discussion)->isPrivate()
                         && $context->getActor()->can('transformToPublic', $discussion);
                 }),
+            Schema\Number::make('public')
+                ->writable(function (Discussion $discussion, Context $context) {
+                    return $this->screener->fromDiscussion($discussion)->isPrivate()
+                        && $context->getActor()->can('transformToPublic', $discussion)
+                        && $context->updating();
+                })
+                ->hidden()
+                ->set(function (Discussion $discussion) {
+                    $discussion->setAttribute('makingPublic', true);
+
+                    Discussion::saving(function (Discussion $discussion) {
+                        $discussion->offsetUnset('makingPublic');
+                    });
+                }),
 
             Schema\Relationship\ToMany::make('oldRecipientUsers')
                 ->includable()
