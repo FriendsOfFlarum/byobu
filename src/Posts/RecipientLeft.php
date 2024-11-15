@@ -25,14 +25,14 @@ class RecipientLeft extends AbstractEventPost implements MergeableInterface
     /**
      * {@inheritdoc}
      */
-    public static $type = 'recipientLeft';
+    public static string $type = 'recipientLeft';
 
     /**
      * @param Post|null|RecipientLeft $previous
      *
      * @return $this|RecipientLeft|Post
      */
-    public function saveAfter(Post $previous = null)
+    public function saveAfter(Post $previous = null): static
     {
         /** @var RecipientLeft $previous */
         if ($previous instanceof static) {

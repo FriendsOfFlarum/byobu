@@ -1,5 +1,5 @@
 import app from 'flarum/forum/app';
-import TagDiscussionModal from 'flarum/tags/components/TagDiscussionModal';
+import TagDiscussionModal from 'ext:flarum/tags/forum/components/TagDiscussionModal';
 
 export default class ByobuTagDiscussionModal extends TagDiscussionModal {
   static isDismissible = false;

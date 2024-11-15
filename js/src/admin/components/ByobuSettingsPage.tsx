@@ -1,7 +1,8 @@
+import Form from 'flarum/common/components/Form';
 import app from 'flarum/admin/app';
 import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Badge from 'flarum/common/components/Badge';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 import ItemList from 'flarum/common/utils/ItemList';
 
 import type Mithril from 'mithril';
@@ -15,10 +16,10 @@ export default class ByobuSettingsPage extends ExtensionPage {
       <div className="ByobuSettingsPage">
         <div className="container">
           <div className="ByobuSettingsTabPage ByobuSettingsPage--settings">
-            <div className="Form">
+            <Form>
               {this.settingsItems().toArray()}
               <div className="Form-group">{this.submitButton()}</div>
-            </div>
+            </Form>
           </div>
         </div>
       </div>
@@ -111,7 +112,7 @@ export default class ByobuSettingsPage extends ExtensionPage {
         label: app.translator.trans('fof-byobu.admin.settings.post-event-icon'),
         help: (
           <div>
-            {icon(this.setting('fof-byobu.icon-postAction').toJSON() || this.postActionDefault)} {this.helpText()}
+            <Icon name={this.setting('fof-byobu.icon-postAction').toJSON() || this.postActionDefault} /> {this.helpText()}
           </div>
         ),
         placeholder: this.postActionDefault,

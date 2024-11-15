@@ -9,20 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\Byobu\Gambits\Discussion;
+namespace FoF\Byobu\Filters\Discussion;
 
 use Flarum\Http\SlugManager;
-use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\SearchState;
+use Flarum\Search\ValidateFilterTrait;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
+use Flarum\Search\Filter\FilterInterface;
 
 /**
  * Filters results to discussions that include the given user as recipient. Used to show private discussions on a user profile.
  */
-class ByobuGambit extends AbstractRegexGambit
+class ByobuFilter implements FilterInterface
 {
     use RecipientsConstraint;
+    use ValidateFilterTrait;
 
     /**
      * @var SlugManager
@@ -37,17 +39,18 @@ class ByobuGambit extends AbstractRegexGambit
         $this->slugManager = $slugManager;
     }
 
-    protected function getGambitPattern(): string
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        return 'byobu:(.+)';
-    }
+        $value = $this->asString($value);
 
-    protected function conditions(SearchState $search, array $matches, $negate)
-    {
-        $user = $this->slugManager->forResource(User::class)->fromSlug(trim($matches[1], '"'), $search->getActor());
+        $user = $this->slugManager->forResource(User::class)->fromSlug(trim($value, '"'), $state->getActor());
 
-        $search->getQuery()->where(function ($query) use ($user) {
+        $state->getQuery()->where(function ($query) use ($user) {
             $this->forRecipient($query, [], $user->id);
         });
+    }
+    public function getFilterKey(): string
+    {
+        return 'byobu';
     }
 }

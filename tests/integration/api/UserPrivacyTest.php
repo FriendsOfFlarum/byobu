@@ -13,6 +13,8 @@ namespace FoF\Byobu\Tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Flarum\User\User;
 
 class UserPrivacyTest extends TestCase
 {
@@ -25,16 +27,14 @@ class UserPrivacyTest extends TestCase
         $this->extension('fof-byobu');
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'password' => 'too-obscure', 'blocks_byobu_pd' => true],
             ],
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function user_can_set_block_pd_setting()
     {
         $response = $this->send(
@@ -61,9 +61,7 @@ class UserPrivacyTest extends TestCase
         $this->assertTrue($json['data']['attributes']['blocksPd']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function user_can_disable_block_pd_setting()
     {
         $response = $this->send(

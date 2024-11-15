@@ -1,3 +1,4 @@
+import IndexSidebar from 'flarum/forum/components/IndexSidebar';
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import LinkButton from 'flarum/common/components/LinkButton';
@@ -6,7 +7,7 @@ import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import PrivateComposing from './PrivateComposing';
 
 export default () => {
-  extend(IndexPage.prototype, 'navItems', (items) => {
+  extend(IndexSidebar.prototype, 'navItems', (items) => {
     const user = app.session.user;
 
     if (user) {
@@ -32,14 +33,14 @@ export default () => {
 
   extend(DiscussionListState.prototype, 'requestParams', function (params) {
     if (app.current.get('routeName') === 'byobuPrivate') {
-      params.filter.q = (params.filter.q || '') + ' is:private';
+      params.filter.private = true;
 
       params.include.push('recipientUsers');
       params.include.push('recipientGroups');
     }
   });
 
-  extend(IndexPage.prototype, 'sidebarItems', function (items) {
+  extend(IndexSidebar.prototype, 'items', function (items) {
     if (app.current.get('routeName') === 'byobuPrivate') {
       let compose = new PrivateComposing();
 

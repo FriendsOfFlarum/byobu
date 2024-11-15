@@ -11,6 +11,7 @@
 
 namespace FoF\Byobu\Notifications;
 
+use Flarum\Notification\AlertableInterface;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
@@ -18,7 +19,7 @@ use Flarum\Post\Post;
 use Flarum\User\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterface
+class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
     /**
      * @var Post
@@ -35,12 +36,12 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
         $this->actor = $actor;
     }
 
-    public function getFromUser(): ?User
+    public function getFromUser(): ?\Flarum\User\User
     {
         return $this->actor;
     }
 
-    public function getSubject(): ?Discussion
+    public function getSubject(): ?\Flarum\Database\AbstractModel
     {
         return $this->post->discussion;
     }
@@ -50,7 +51,7 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
      *
      * @return array|null
      */
-    public function getData()
+    public function getData(): mixed
     {
         return ['postNumber' => $this->post->number];
     }
@@ -60,7 +61,7 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
      *
      * @return string
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'byobuPrivateDiscussionReplied';
     }
@@ -70,7 +71,7 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
      *
      * @return string
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Discussion::class;
     }
@@ -80,9 +81,9 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
      *
      * @return array
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
-        return ['text' => 'fof-byobu::emails.privateDiscussionReplied'];
+        return ['text' => 'fof-byobu::email.plain.privateDiscussionReplied', 'html' => 'fof-byobu::email.html.privateDiscussionReplied'];
     }
 
     /**
@@ -90,7 +91,7 @@ class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterfac
      *
      * @return string
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('fof-byobu.email.subject.private_discussion_replied', [
             '{display_name}'       => $this->actor->display_name,

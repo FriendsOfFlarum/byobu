@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class PrivateDiscussionsPage extends Index
 {
-    public function __invoke(Document $document, Request $request)
+    public function __invoke(Document $document, Request $request): Document
     {
         $queryParams = $request->getQueryParams();
         $q = Arr::pull($queryParams, 'q', '');

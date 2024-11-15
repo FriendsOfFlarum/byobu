@@ -11,10 +11,7 @@
 
 namespace FoF\Byobu;
 
-use Flarum\Api\Controller;
-use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
-use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Group\Group;
@@ -23,6 +20,11 @@ use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
 use FoF\Split\Events\DiscussionWasSplit;
+use Flarum\Api\Context;
+use Flarum\Api\Endpoint;
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
+use Illuminate\Support\Arr;
 
 return [
     (new Extend\Frontend('admin'))
@@ -33,7 +35,8 @@ return [
         ->route('/private', 'byobuPrivate', Content\PrivateDiscussionsPage::class)
         ->route('/private/composer', 'byobuPrivateComposer')
         ->css(__DIR__.'/resources/less/forum/extension.less')
-        ->js(__DIR__.'/js/dist/forum.js'),
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->jsDirectory(__DIR__ . '/js/dist/forum'),
 
     new Extend\Locales(__DIR__.'/resources/locale'),
 
@@ -69,41 +72,30 @@ return [
                 ->wherePivot('removed_at', null);
         }),
 
-    (new Extend\ApiController(Controller\ListDiscussionsController::class))
-        ->addInclude(['recipientUsers', 'recipientGroups'])
-        ->load(['recipientUsers', 'recipientGroups']),
-
-    (new Extend\ApiController(Controller\CreateDiscussionController::class))
-        ->addInclude(['recipientUsers', 'recipientGroups'])
-        ->load(['recipientUsers', 'recipientGroups']),
-
-    (new Extend\ApiController(Controller\ShowDiscussionController::class))
-        ->addOptionalInclude(['oldRecipientUsers', 'oldRecipientGroups'])
-        ->addInclude(['recipientUsers', 'recipientGroups'])
-        ->load(['recipientUsers', 'recipientGroups']),
-
-    (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
-        ->hasMany('recipientUsers', Serializer\BasicUserSerializer::class)
-        ->hasMany('recipientGroups', Serializer\GroupSerializer::class),
-
-    (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
-        ->hasMany('oldRecipientUsers', Serializer\BasicUserSerializer::class)
-        ->hasMany('oldRecipientGroups', Serializer\GroupSerializer::class),
-
-    (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
-      ->attributes(Api\DiscussionPermissionAttributes::class)
-      ->attributes(Api\DiscussionDataAttributes::class),
-
-    (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
-        ->attributes(Api\ForumPermissionAttributes::class),
-
-    (new Extend\ApiSerializer(Serializer\UserSerializer::class))
-        ->attribute('blocksPd', function ($serializer, $user) {
-            return (bool) $user->blocks_byobu_pd;
+    (new Extend\ApiResource(Resource\DiscussionResource::class))
+        ->fieldsBefore('tags', Api\DiscussionResourceFields::class)
+        ->field('tags', fn (Schema\Relationship\ToMany $field) => $field->writable(function (Discussion $discussion, Context $context) {
+            return empty(Arr::get($context->body(), 'data.relationships.recipientUsers.data'))
+                && empty(Arr::get($context->body(), 'data.relationships.recipientGroups.data'));
+        }))
+        ->endpoint([Endpoint\Show::class, Endpoint\Create::class, Endpoint\Index::class], function (Endpoint\Show|Endpoint\Create|Endpoint\Index $endpoint) {
+            return $endpoint
+                ->addDefaultInclude(['recipientUsers', 'recipientGroups'])
+                ->eagerLoad(['recipientUsers', 'recipientGroups']);
         }),
 
-    (new Extend\ApiSerializer(Serializer\CurrentUserSerializer::class))
-        ->hasMany('privateDiscussions', Serializer\DiscussionSerializer::class),
+    (new Extend\ApiResource(Resource\ForumResource::class))
+        ->fields(Api\ForumResourceFields::class),
+
+    (new Extend\ApiResource(Resource\UserResource::class))
+        ->fields(fn () => [
+            Schema\Boolean::make('blocksPd')
+                ->property('blocks_byobu_pd')
+                ->writable(fn (User $user, Context $context) => $context->getActor()->is($user)),
+            Schema\Relationship\ToMany::make('privateDiscussions')
+                ->type('discussions')
+                ->visible(fn (User $user, Context $context) => $context->getActor()->is($user))
+        ]),
 
     (new Extend\View())
         ->namespace('fof-byobu', __DIR__.'/resources/views'),
@@ -120,15 +112,14 @@ return [
         ->type(Posts\MadePublic::class),
 
     (new Extend\Notification())
-        ->type(Notifications\DiscussionCreatedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionRepliedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionRecipientRemovedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionAddedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionMadePublicBlueprint::class, Serializer\DiscussionSerializer::class, ['alert']),
+        ->type(Notifications\DiscussionCreatedBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionRepliedBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionRecipientRemovedBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionAddedBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionMadePublicBlueprint::class, ['alert']),
 
     (new Extend\Event())
         ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)
-        ->listen(UserSaving::class, Listeners\SaveUserPreferences::class)
         ->listen(DiscussionWasSplit::class, Listeners\AddRecipientsToSplitDiscussion::class)
         ->subscribe(Listeners\CreatePostWhenRecipientsChanged::class)
         ->subscribe(Listeners\QueueNotificationJobs::class)
@@ -140,16 +131,6 @@ return [
     (new Extend\ModelPrivate(Discussion::class))
         ->checker(Listeners\GetModelIsPrivate::class),
 
-    (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
-        ->addGambit(Gambits\Discussion\ByobuGambit::class)
-        ->addGambit(Gambits\Discussion\PrivacyGambit::class),
-
-    (new Extend\SimpleFlarumSearch(UserSearcher::class))
-        ->addGambit(Gambits\User\AllowsPdGambit::class),
-
-    (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilterMutator(Filters\Discussion\HidePrivateDiscussionsFromAllDiscussionsPage::class),
-
     (new Extend\Settings())
         // we have to use the callback here, else we risk returning empty values instead of the defaults.
         // see https://github.com/flarum/core/issues/3209
@@ -160,4 +141,10 @@ return [
             return empty($value) ? 'far fa-map' : $value;
         })
         ->default('fof-byobu.delete_on_last_recipient_left', false),
+
+    (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
+        ->addFilter(DiscussionSearcher::class, Filters\Discussion\ByobuFilter::class)
+        ->addFilter(DiscussionSearcher::class, Filters\Discussion\PrivacyFilter::class)
+        ->addMutator(DiscussionSearcher::class, Filters\Discussion\HidePrivateDiscussionsFromAllDiscussionsPage::class)
+        ->addFilter(UserSearcher::class, Filters\User\AllowsPdFilter::class),
 ];

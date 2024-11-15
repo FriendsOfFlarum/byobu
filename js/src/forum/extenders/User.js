@@ -1,7 +1,6 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import UserControls from 'flarum/forum/utils/UserControls';
-import PrivateDiscussionComposer from '../pages/discussions/PrivateDiscussionComposer';
 import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
 import UserPage from 'flarum/forum/components/UserPage';
@@ -24,20 +23,21 @@ function message() {
             onclick: (e) => {
               e.preventDefault();
 
-              return new Promise((resolve) => {
+              return new Promise(async (resolve) => {
                 let recipients = new ItemList();
                 recipients.add('users:' + app.session.user.id(), app.session.user);
                 recipients.add('users:' + user.id(), user);
 
-                PrivateDiscussionComposer.prototype.recipients = recipients;
-
-                app.composer.load(PrivateDiscussionComposer, {
+                const PrivateDiscussionComposer = await app.composer.load(() => import('../pages/discussions/PrivateDiscussionComposer'), {
                   user: app.session.user,
                   recipients: recipients,
                   recipientUsers: recipients,
                   titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
                   submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
                 });
+
+                PrivateDiscussionComposer.prototype.recipients = recipients;
+
                 app.composer.show();
 
                 return resolve(app.composer);

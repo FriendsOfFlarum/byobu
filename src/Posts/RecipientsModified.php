@@ -25,7 +25,7 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
     /**
      * {@inheritdoc}
      */
-    public static $type = 'recipientsModified';
+    public static string $type = 'recipientsModified';
 
     protected $states = ['new', 'old'];
     protected $types = ['users', 'groups'];
@@ -35,7 +35,7 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
      *
      * @return $this|RecipientsModified|Post
      */
-    public function saveAfter(Post $previous = null)
+    public function saveAfter(Post $previous = null): static
     {
         /** @var RecipientsModified $previous */
         if ($previous instanceof static) {

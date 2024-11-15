@@ -1,6 +1,5 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import NotificationGrid from 'flarum/forum/components/NotificationGrid';
 import PrivateDiscussionNotification from './PrivateDiscussionNotification';
 import PrivateDiscussionRepliedNotification from './PrivateDiscussionReplyNotification';
 import PrivateDiscussionUserLeftNotification from './PrivateDiscussionUserLeftNotification';
@@ -19,7 +18,7 @@ export default function () {
 
 function grid() {
   // Add notification preferences.
-  extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+  extend('flarum/forum/components/NotificationGrid', 'notificationTypes', function (items) {
     items.add('byobuPrivateDiscussionCreated', {
       name: 'byobuPrivateDiscussionCreated',
       icon: app.forum.data.attributes['byobu.icon-badge'],
