@@ -26,11 +26,11 @@ export default () => {
 const add = function (discussion, items, long) {
   let recipients = [];
 
-  if (discussion.recipientUsers().length) {
+  if (discussion.recipientUsers?.().length) {
     recipients = recipients.concat(discussion.recipientUsers());
   }
 
-  if (discussion.recipientGroups().length) {
+  if (discussion.recipientGroups?.().length) {
     recipients = recipients.concat(discussion.recipientGroups());
   }
 
@@ -125,7 +125,7 @@ function controls() {
         )
       );
     }
-    if (discussion && discussion.recipientUsers().find((user) => user?.id() === app.session.user?.id())) {
+    if (discussion && discussion.recipientUsers?.().find?.((user) => user?.id() === app.session.user?.id())) {
       items.add(
         'remove',
         Button.component(
