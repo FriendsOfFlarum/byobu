@@ -1,11 +1,12 @@
 import app from 'flarum/forum/app';
-import { extend } from 'flarum/common/extend';
+import { extend, override } from 'flarum/common/extend';
 import LinkButton from 'flarum/common/components/LinkButton';
 import IndexPage from 'flarum/forum/components/IndexPage';
 import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import PrivateComposing from './PrivateComposing';
+import PrivateHero from '../components/PrivateHero';
 
-export default () => {
+export default function PrivateDiscussionsPage() {
   extend(IndexPage.prototype, 'navItems', (items) => {
     const user = app.session.user;
 
@@ -46,4 +47,12 @@ export default () => {
       items.setContent('newDiscussion', compose.component());
     }
   });
-};
+
+  override(IndexPage.prototype, 'hero', function (original) {
+    if (app.current.get('routeName') === 'byobuPrivate') {
+      return <PrivateHero />;
+    }
+
+    return original();
+  });
+}
