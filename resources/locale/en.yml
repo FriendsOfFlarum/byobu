@@ -20,6 +20,9 @@ fof-byobu:
         confirm:
             make_public: Are you sure you want to remove the recipients and make this discussion visible to anyone who can view the assigned tag?
 
+        hero:
+            title: => fof-byobu.forum.nav.nav_item
+            
         labels:
             recipients: "{count, plural, one {{count} Recipient} other {{count} Recipients}}"
 

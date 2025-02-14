@@ -7,6 +7,7 @@ export * from './modals';
 export * from './pages/discussions';
 export * from './events';
 export * from './helpers';
+export * from './components';
 
 export { default as extend } from './extend';
 
