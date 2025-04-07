@@ -160,4 +160,7 @@ return [
             return empty($value) ? 'far fa-map' : $value;
         })
         ->default('fof-byobu.delete_on_last_recipient_left', false),
+
+    (new Extend\Middleware('forum'))
+        ->add(Middleware\GuestAccessToPrivateRoutePrevention::class),
 ];
