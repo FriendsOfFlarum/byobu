@@ -32,7 +32,7 @@ class MadePublic extends AbstractEventPost implements MergeableInterface
      *
      * @return $this|RecipientLeft|Post
      */
-    public function saveAfter(Post $previous = null)
+    public function saveAfter(?Post $previous = null)
     {
         /** @var MadePublic $previous */
         if ($previous instanceof static) {

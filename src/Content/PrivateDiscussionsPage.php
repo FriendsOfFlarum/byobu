@@ -13,6 +13,8 @@ namespace FoF\Byobu\Content;
 
 use Flarum\Forum\Content\Index;
 use Flarum\Frontend\Document;
+use Flarum\Http\RequestUtil;
+use Flarum\User\Exception\PermissionDeniedException;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -20,6 +22,12 @@ class PrivateDiscussionsPage extends Index
 {
     public function __invoke(Document $document, Request $request)
     {
+        $actor = RequestUtil::getActor($request);
+
+        if ($actor->isGuest()) {
+            throw new PermissionDeniedException();
+        }
+
         $queryParams = $request->getQueryParams();
         $q = Arr::pull($queryParams, 'q', '');
         Arr::set($queryParams, 'q', "$q is:private");
