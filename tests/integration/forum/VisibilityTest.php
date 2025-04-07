@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/byobu.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Byobu\Tests\integration\forum;
 
 use Flarum\Extend;
@@ -16,15 +25,15 @@ class VisibilityTest extends TestCase
         parent::setUp();
 
         $this->extend(
-            (new Extend\Csrf)->exemptRoute('login')
+            (new Extend\Csrf())->exemptRoute('login')
         );
 
         $this->extension('fof-byobu');
 
         $this->prepareDatabase([
             'users' => [
-                $this->normalUser()
-            ]
+                $this->normalUser(),
+            ],
         ]);
     }
 
@@ -34,8 +43,8 @@ class VisibilityTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => $username,
-                    'password' => $password
-                ]
+                    'password'       => $password,
+                ],
             ])
         );
     }
@@ -60,7 +69,7 @@ class VisibilityTest extends TestCase
 
         $response = $this->send(
             $this->request('GET', '/private', [
-                'cookiesFrom' => $login
+                'cookiesFrom' => $login,
             ])
         );
 

@@ -35,7 +35,7 @@ class RecipientsModified extends AbstractEventPost implements MergeableInterface
      *
      * @return $this|RecipientsModified|Post
      */
-    public function saveAfter(Post $previous = null)
+    public function saveAfter(?Post $previous = null)
     {
         /** @var RecipientsModified $previous */
         if ($previous instanceof static) {
