@@ -25,7 +25,10 @@ export default class PrivateComposerPage extends Page {
 
     recipients.add(`users:${app.session.user.id()}`, app.session.user);
 
-    m.route.set(app.route('byobuPrivate'));
+    const redirect = params.redirect;
+    const target = redirect ? (redirect.startsWith('/') ? redirect : app.route(redirect)) : app.route('byobuPrivate');
+
+    m.route.set(target);
 
     setTimeout(() => {
       const composerProps = {
