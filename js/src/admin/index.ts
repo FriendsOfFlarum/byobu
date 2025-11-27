@@ -10,7 +10,7 @@ export * from './components';
 app.initializers.add('fof-byobu', () => {
   app.store.models.recipients = User;
 
-  app.extensionData.for('fof-byobu').registerPage(ByobuSettingsPage);
+  app.registry.for('fof-byobu').registerPage(ByobuSettingsPage);
 
   addPrivateDiscussionPermission();
 });

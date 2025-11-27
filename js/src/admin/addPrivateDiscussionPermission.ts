@@ -1,7 +1,7 @@
 import app from 'flarum/admin/app';
 
 export default function () {
-  const byobuData = app.extensionData.for('fof-byobu');
+  const byobuData = app.registry.for('fof-byobu');
 
   byobuData
     .registerPermission(

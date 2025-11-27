@@ -1,3 +1,4 @@
+import IndexSidebar from 'flarum/forum/components/IndexSidebar';
 import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 import LinkButton from 'flarum/common/components/LinkButton';
@@ -7,7 +8,7 @@ import PrivateComposing from './PrivateComposing';
 import PrivateHero from '../components/PrivateHero';
 
 export default function PrivateDiscussionsPage() {
-  extend(IndexPage.prototype, 'navItems', (items) => {
+  extend(IndexSidebar.prototype, 'navItems', (items) => {
     const user = app.session.user;
 
     if (user) {
@@ -40,7 +41,7 @@ export default function PrivateDiscussionsPage() {
     }
   });
 
-  extend(IndexPage.prototype, 'sidebarItems', function (items) {
+  extend(IndexSidebar.prototype, 'items', function (items) {
     if (app.current.get('routeName') === 'byobuPrivate') {
       let compose = new PrivateComposing();
 

@@ -1,5 +1,5 @@
 import app from 'flarum/forum/app';
-import Modal from 'flarum/common/components/Modal';
+import FormModal from 'flarum/common/components/FormModal';
 import DiscussionPage from 'flarum/forum/components/DiscussionPage';
 import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
@@ -9,7 +9,7 @@ import RecipientSearch from '../search/RecipientSearch';
 import User from 'flarum/common/models/User';
 import Group from 'flarum/common/models/Group';
 
-export default class AddRecipientModal extends Modal {
+export default class AddRecipientModal extends FormModal {
   oninit(vnode) {
     super.oninit(vnode);
 
