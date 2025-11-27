@@ -34,8 +34,10 @@ export default function PrivateDiscussionsPage() {
 
   extend(DiscussionListState.prototype, 'requestParams', function (params) {
     if (app.current.get('routeName') === 'byobuPrivate') {
+      // Apply the private filter directly to the API request params
       params.filter.private = true;
 
+      // Include recipient relations
       params.include.push('recipientUsers');
       params.include.push('recipientGroups');
     }
