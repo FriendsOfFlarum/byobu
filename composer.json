@@ -101,5 +101,7 @@
         "psr-4": {
             "FoF\\Byobu\\Tests\\": "tests/"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
