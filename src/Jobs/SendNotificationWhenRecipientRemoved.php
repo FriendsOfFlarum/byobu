@@ -26,32 +26,11 @@ class SendNotificationWhenRecipientRemoved implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var User
-     */
-    protected $actor;
-
-    /**
-     * @var Discussion
-     */
-    protected $discussion;
-
-    /**
-     * @var Collection
-     */
-    protected $newUsers;
-
-    public function __construct(
-        User $actor,
-        Discussion $discussion,
-        Collection $newUsers
-    ) {
-        $this->actor = $actor;
-        $this->discussion = $discussion;
-        $this->newUsers = $newUsers;
+    public function __construct(protected User $actor, protected Discussion $discussion, protected Collection $newUsers)
+    {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         $recipients = $this->newUsers;
 

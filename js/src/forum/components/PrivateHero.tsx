@@ -1,6 +1,6 @@
 import app from 'flarum/forum/app';
 import Component from 'flarum/common/Component';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 import textContrastClass from 'flarum/common/helpers/textContrastClass';
 import classList from 'flarum/common/utils/classList';
 import ItemList from 'flarum/common/utils/ItemList';
@@ -34,7 +34,7 @@ export default class PrivateHero extends Component {
     items.add(
       'private-discussions-title',
       <h1 className="Hero-title">
-        {icon(this.heroIcon())} {app.translator.trans('fof-byobu.forum.hero.title')}
+        <Icon name={this.heroIcon()} /> {app.translator.trans('fof-byobu.forum.hero.title')}
       </h1>,
       100
     );

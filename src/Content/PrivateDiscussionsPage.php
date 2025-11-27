@@ -20,7 +20,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class PrivateDiscussionsPage extends Index
 {
-    public function __invoke(Document $document, Request $request)
+    public function __invoke(Document $document, Request $request): Document
     {
         $actor = RequestUtil::getActor($request);
 

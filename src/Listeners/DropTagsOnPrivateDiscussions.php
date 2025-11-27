@@ -17,17 +17,11 @@ use Illuminate\Support\Arr;
 
 class DropTagsOnPrivateDiscussions
 {
-    /**
-     * @var ExtensionManager
-     */
-    protected $extensions;
-
-    public function __construct(ExtensionManager $extensions)
+    public function __construct(protected ExtensionManager $extensions)
     {
-        $this->extensions = $extensions;
     }
 
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         $isByobu = Arr::exists($event->data, 'relationships.recipientUsers') || Arr::exists($event->data, 'relationships.recipientGroups');
         $hasTags = Arr::exists($event->data, 'relationships.tags.data');

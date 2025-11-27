@@ -12,38 +12,25 @@
 namespace FoF\Byobu\Notifications;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Notification\AlertableInterface;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\User\User;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInterface
+class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var User
-     *           The user that was removed from the private discussion.
-     */
-    public $actor;
+    protected User $sender;
 
-    /**
-     * @var Discussion
-     */
-    public $discussion;
-
-    protected $sender;
-
-    public function __construct(User $actor, Discussion $discussion)
+    public function __construct(public User $actor, public Discussion $discussion)
     {
-        $this->actor = $actor;
-        $this->discussion = $discussion;
     }
 
-    public function getFromUser(): ?User
+    public function getFromUser(): ?\Flarum\User\User
     {
         return $this->actor;
     }
 
-    public function getSubject(): ?Discussion
+    public function getSubject(): ?\Flarum\Database\AbstractModel
     {
         return $this->discussion;
     }
@@ -53,7 +40,7 @@ class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInter
      *
      * @return array|null
      */
-    public function getData()
+    public function getData(): mixed
     {
         // return [
         //     'user_left'  => $this->user->id,
@@ -67,7 +54,7 @@ class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInter
      *
      * @return string
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'byobuMadePublic';
     }
@@ -77,7 +64,7 @@ class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInter
      *
      * @return string
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Discussion::class;
     }
@@ -87,9 +74,9 @@ class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInter
      *
      * @return array
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
-        return ['text' => 'fof-byobu::emails.byobuMadePublic'];
+        return ['text' => 'fof-byobu::email.plain.byobuMadePublic', 'html' => 'fof-byobu::email.html.byobuMadePublic'];
     }
 
     /**
@@ -97,7 +84,7 @@ class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInter
      *
      * @return string
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('fof-byobu.email.subject.made_public', [
             '{display_name}'    => $this->actor->display_name,

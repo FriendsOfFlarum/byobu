@@ -25,7 +25,7 @@ trait RecipientsConstraint
      * @param Query|Eloquent $query
      * @param User           $user
      */
-    public function constraint($query, User $user, bool $includeFlagged = true)
+    public function constraint(Query|Eloquent $query, User $user, bool $includeFlagged = true): void
     {
         if ($user->isGuest()) {
             return;
@@ -56,7 +56,7 @@ trait RecipientsConstraint
      * @param array          $groupIds
      * @param int            $userId
      */
-    protected function forRecipient($query, array $groupIds, int $userId)
+    protected function forRecipient(Query|Eloquent $query, array $groupIds, int $userId): void
     {
         $query->whereIn('discussions.id', function ($query) use ($groupIds, $userId) {
             $query->select('recipients.discussion_id')
@@ -73,7 +73,7 @@ trait RecipientsConstraint
         });
     }
 
-    protected function whenFlagged($query)
+    protected function whenFlagged(Query|Eloquent $query): void
     {
         // In case posts have been flagged, open them up..
         $query->orWhere(function ($query) {

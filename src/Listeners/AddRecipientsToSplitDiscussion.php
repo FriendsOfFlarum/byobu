@@ -18,7 +18,7 @@ class AddRecipientsToSplitDiscussion
     /**
      * @param DiscussionWasSplit $event
      */
-    public function handle(DiscussionWasSplit $event)
+    public function handle(DiscussionWasSplit $event): void
     {
         /** @phpstan-ignore-next-line */
         $event->newDiscussion->recipientUsers()->sync(

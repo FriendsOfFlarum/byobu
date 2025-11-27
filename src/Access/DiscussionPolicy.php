@@ -26,9 +26,9 @@ class DiscussionPolicy extends AbstractPolicy
      * @param User       $actor
      * @param Discussion $discussion
      *
-     * @return bool|void
+     * @return string|null
      */
-    public function startWithoutApproval(User $actor, Discussion $discussion)
+    public function startWithoutApproval(User $actor, Discussion $discussion): ?string
     {
         return $this->approveIfPrivate($discussion);
     }
@@ -37,9 +37,9 @@ class DiscussionPolicy extends AbstractPolicy
      * @param User       $actor
      * @param Discussion $discussion
      *
-     * @return bool|void
+     * @return string|null
      */
-    public function replyWithoutApproval(User $actor, Discussion $discussion)
+    public function replyWithoutApproval(User $actor, Discussion $discussion): ?string
     {
         return $this->approveIfPrivate($discussion);
     }
@@ -47,9 +47,9 @@ class DiscussionPolicy extends AbstractPolicy
     /**
      * @param Discussion $discussion
      *
-     * @return bool|void
+     * @return string|null
      */
-    private function approveIfPrivate(Discussion $discussion)
+    private function approveIfPrivate(Discussion $discussion): ?string
     {
         return $this->isPrivate($discussion) ? $this->allow() : null;
     }
@@ -58,9 +58,9 @@ class DiscussionPolicy extends AbstractPolicy
      * @param User       $actor
      * @param Discussion $discussion
      *
-     * @return bool|void
+     * @return string|null
      */
-    public function bypassTagCounts(User $actor, Discussion $discussion)
+    public function bypassTagCounts(User $actor, Discussion $discussion): ?string
     {
         $isByobu = $discussion->isByobu;
 
@@ -73,11 +73,11 @@ class DiscussionPolicy extends AbstractPolicy
      * @param User       $actor
      * @param Discussion $discussion
      *
-     * @return bool|void
+     * @return string|null
      */
-    public function tag(User $actor, Discussion $discussion)
+    public function tag(User $actor, Discussion $discussion): ?string
     {
-        return $this->isPrivate($discussion) ? $this->deny() : null;
+        return $this->isPrivate($discussion) && empty($discussion->getAttribute('makingPublic')) ? $this->deny() : null;
     }
 
     /**
@@ -96,7 +96,7 @@ class DiscussionPolicy extends AbstractPolicy
         return $screener->isPrivate();
     }
 
-    public function transformToPublic(User $actor, Discussion $discussion)
+    public function transformToPublic(User $actor, Discussion $discussion): bool|string|null
     {
         /** @var SettingsRepositoryInterface $settings */
         $settings = resolve('flarum.settings');

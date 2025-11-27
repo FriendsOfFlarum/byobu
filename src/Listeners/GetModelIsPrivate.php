@@ -16,7 +16,7 @@ use FoF\Byobu\Discussion\Screener;
 
 class GetModelIsPrivate
 {
-    public function __invoke(Discussion $discussion)
+    public function __invoke(Discussion $discussion): bool
     {
         /** @var Screener $screener */
         $screener = resolve('byobu.screener');

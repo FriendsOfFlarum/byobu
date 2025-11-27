@@ -14,6 +14,8 @@ namespace FoF\Byobu\Tests\integration\forum;
 use Flarum\Extend;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use Flarum\User\User;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Message\ResponseInterface;
 
 class VisibilityTest extends TestCase
@@ -31,7 +33,7 @@ class VisibilityTest extends TestCase
         $this->extension('fof-byobu');
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
             ],
         ]);
@@ -49,7 +51,7 @@ class VisibilityTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function guestUserEncountersRedirectsToHomeWhenVisitingPrivateDiscussionsPage()
     {
         $response = $this->send(
@@ -60,7 +62,7 @@ class VisibilityTest extends TestCase
         $this->assertEquals('/', $response->getHeaderLine('Location'));
     }
 
-    /** @test */
+    #[Test]
     public function normalUserCanAccessPrivateDiscussionsPage()
     {
         $login = $this->login('normal', 'too-obscure');

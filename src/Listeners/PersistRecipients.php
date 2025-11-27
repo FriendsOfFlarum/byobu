@@ -33,20 +33,11 @@ class PersistRecipients
      */
     protected $screener;
 
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    /**
-     * @param Dispatcher $events
-     */
-    public function __construct(Dispatcher $events)
+    public function __construct(protected Dispatcher $events)
     {
-        $this->events = $events;
     }
 
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         if (!$this->eventSubmitsRelationships($event->data)) {
             return;
@@ -57,7 +48,7 @@ class PersistRecipients
         $this->screener = $screener->whenSavingDiscussions($event);
 
         if ($this->screener->nothingChanged()) {
-            return null;
+            return;
         }
 
         if ($event->actor->cannot('startPrivateDiscussionWithBlockers') && $this->screener->hasBlockingUsers()) {
@@ -141,7 +132,7 @@ class PersistRecipients
         ];
     }
 
-    protected function raiseEvent(Discussion $discussion)
+    protected function raiseEvent(Discussion $discussion): void
     {
         $args = $this->eventArguments($discussion);
 
@@ -158,7 +149,7 @@ class PersistRecipients
         $discussion->raise($event);
     }
 
-    protected function checkPermissionsForNewDiscussion(User $user)
+    protected function checkPermissionsForNewDiscussion(User $user): void
     {
         if ($this->screener->users->isNotEmpty() && $user->cannot('discussion.startPrivateDiscussionWithUsers')) {
             throw new PermissionDeniedException('Not allowed to add users to a private discussion');
@@ -168,7 +159,7 @@ class PersistRecipients
         }
     }
 
-    protected function checkPermissionsForExistingDiscussion(User $user, Discussion $discussion)
+    protected function checkPermissionsForExistingDiscussion(User $user, Discussion $discussion): void
     {
         // Actor should always be able to remove themself.
         if ($this->screener->onlyActorRemoved()) {

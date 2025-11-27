@@ -1,6 +1,6 @@
 import app from 'flarum/forum/app';
 import highlight from 'flarum/common/helpers/highlight';
-import avatar from 'flarum/common/helpers/avatar';
+import Avatar from 'flarum/common/components/Avatar';
 import username from 'flarum/common/helpers/username';
 
 export default class UserSearchSource {
@@ -19,22 +19,21 @@ export default class UserSearchSource {
       app.cache.byobuResults[this.query] = [];
       app.store
         .find('users', {
-          filter: { q: this.query + ' allows-pd' },
+          filter: { q: this.query, 'allows-pd': true },
           page: { limit: 5 },
         })
         .then(this.pushResults.bind(this));
     } else
       return [
-        <li className="Dropdown-header">{app.translator.trans('core.forum.search.users_heading')}</li>,
+        <li className="Dropdown-header">{app.translator.trans('core.lib.search_source.users.heading')}</li>,
         app.cache.byobuResults[this.query].map((user) => {
-          const name = username(user);
-          const children = [highlight(name.text, this.query)];
+          const name = username(user, (name) => highlight(name, query));
 
           return (
             <li className="SearchResult" data-index={'users:' + user.id()}>
               <a data-index={'users:' + user.id()}>
-                {avatar(user)}
-                {{ ...name, text: undefined, children }}
+                <Avatar user={user} />
+                {name}
               </a>
             </li>
           );

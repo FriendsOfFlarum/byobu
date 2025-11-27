@@ -89,11 +89,14 @@ class Screener extends Fluent
 
     protected function getRecipientsFromPayload(Saving $event, string $type): Collection
     {
-        $ids = collect(Arr::get(
+        $data = Arr::get(
             $event->data,
             'relationships.'.static::relationName($type).'.data',
             []
-        ))->pluck('id');
+        );
+
+        /** @phpstan-ignore-next-line */
+        $ids = collect($data)->pluck('id');
 
         if ($type === 'groups') {
             return Group::query()->whereIn('id', $ids)->get();
@@ -102,7 +105,7 @@ class Screener extends Fluent
         return User::query()->whereIn('id', $ids)->get();
     }
 
-    final public static function relationName(string $type)
+    final public static function relationName(string $type): string
     {
         return 'recipient'.Str::ucfirst($type);
     }
@@ -119,7 +122,7 @@ class Screener extends Fluent
             }) !== null;
     }
 
-    public function deleted(string $type)
+    public function deleted(string $type): Collection
     {
         if ($type === 'groups') {
             return $this->currentGroups->diff($this->groups);
@@ -128,7 +131,7 @@ class Screener extends Fluent
         return $this->currentUsers->diff($this->users);
     }
 
-    public function added(string $type)
+    public function added(string $type): Collection
     {
         if ($type === 'groups') {
             return $this->groups->diff($this->currentGroups);

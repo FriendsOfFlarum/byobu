@@ -25,39 +25,11 @@ class SendNotificationWhenRecipientAdded implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var User
-     */
-    protected $actor;
-
-    /**
-     * @var Discussion
-     */
-    protected $discussion;
-
-    /**
-     * @var Collection
-     */
-    protected $newUsers;
-
-    /**
-     * @var Collection
-     */
-    protected $oldUsers;
-
-    public function __construct(
-        User $actor,
-        Discussion $discussion,
-        Collection $newUsers,
-        Collection $oldUsers
-    ) {
-        $this->actor = $actor;
-        $this->discussion = $discussion;
-        $this->newUsers = $newUsers;
-        $this->oldUsers = $oldUsers;
+    public function __construct(protected User $actor, protected Discussion $discussion, protected Collection $newUsers, protected Collection $oldUsers)
+    {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         $recipients = $this->newUsers->diff($this->oldUsers);
 

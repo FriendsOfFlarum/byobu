@@ -11,20 +11,17 @@
 
 namespace FoF\Byobu\Filters\Discussion;
 
-use Flarum\Filter\FilterState;
-use Flarum\Query\QueryCriteria;
+use Flarum\Search\Database\DatabaseSearchState;
+use Flarum\Search\SearchCriteria;
 use Flarum\Settings\SettingsRepositoryInterface;
 
 class HidePrivateDiscussionsFromAllDiscussionsPage
 {
-    protected $settings;
-
-    public function __construct(SettingsRepositoryInterface $settings)
+    public function __construct(protected SettingsRepositoryInterface $settings)
     {
-        $this->settings = $settings;
     }
 
-    public function __invoke(FilterState $filter, QueryCriteria $queryCriteria)
+    public function __invoke(DatabaseSearchState $filter, SearchCriteria $queryCriteria): void
     {
         if (
             // If there are filters applied, we are no longer on "all discussions" page and don't want to restrict

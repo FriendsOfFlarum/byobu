@@ -19,7 +19,7 @@ class IgnoreApprovals
 {
     use ExtensionsDiscovery;
 
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         /** @var Screener $screener */
         $screener = resolve('byobu.screener');

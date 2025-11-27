@@ -24,27 +24,13 @@ class SendNotificationWhenPostedInPrivateDiscussion implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var post
-     */
-    protected $post;
+    protected mixed $settings;
 
-    /**
-     * @var User
-     */
-    protected $actor;
-
-    protected $settings;
-
-    public function __construct(
-        Post $post,
-        User $actor
-    ) {
-        $this->post = $post;
-        $this->actor = $actor;
+    public function __construct(protected Post $post, protected User $actor)
+    {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         /** @phpstan-ignore-next-line */
         $recipientUsers = $this->post->discussion->recipientUsers->reject(function ($user) {

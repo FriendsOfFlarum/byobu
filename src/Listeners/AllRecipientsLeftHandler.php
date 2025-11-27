@@ -21,26 +21,19 @@ class AllRecipientsLeftHandler
 {
     use DispatchEventsTrait;
 
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    public function __construct(SettingsRepositoryInterface $settings, Dispatcher $events)
+    public function __construct(protected SettingsRepositoryInterface $settings, protected Dispatcher $events)
     {
-        $this->settings = $settings;
-        $this->events = $events;
     }
 
     /**
      * @param Dispatcher $events
      */
-    public function subscribe(Dispatcher $events)
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen(AllRecipientsLeft::class, [$this, 'whenAllRecipientsHaveLeft']);
     }
 
-    public function whenAllRecipientsHaveLeft(AllRecipientsLeft $event)
+    public function whenAllRecipientsHaveLeft(AllRecipientsLeft $event): void
     {
         // Once the discussion is hidden, we should check if we're meant to
         // fully delete the PD. If so, hard delete it.
