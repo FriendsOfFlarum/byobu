@@ -1,8 +1,6 @@
 import app from 'flarum/forum/app';
 import Page from 'flarum/common/components/Page';
 import type Mithril from 'mithril';
-import LogInModal from 'flarum/forum/components/LogInModal';
-import PrivateDiscussionComposer from '../pages/discussions/PrivateDiscussionComposer';
 import ItemList from 'flarum/common/utils/ItemList';
 import Group from 'flarum/common/models/Group';
 import User from 'flarum/common/models/User';
@@ -16,7 +14,7 @@ export default class PrivateComposerPage extends Page {
 
   configComposer() {
     if (!app.session.user) {
-      setTimeout(() => app.modal.show(LogInModal), 500);
+      setTimeout(() => app.modal.show(() => import('flarum/forum/components/LogInModal')), 500);
       return m.route.set('/');
     }
 
@@ -57,9 +55,13 @@ export default class PrivateComposerPage extends Page {
         });
       }
 
-      app.composer.load(PrivateDiscussionComposer, composerProps);
-
-      app.composer.show();
+      // @TODO: Modify this to use lazy loading, checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
+      app.composer
+        .load(() => import('../pages/discussions/PrivateDiscussionComposer'), composerProps)
+        .then((PrivateDiscussionComposer) => {
+          // @TODO: Move all direct access to the module object here. Including subsequent calls to app.composer.show(), checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
+          app.composer.show();
+        });
 
       if (params.title) {
         // @ts-expect-error

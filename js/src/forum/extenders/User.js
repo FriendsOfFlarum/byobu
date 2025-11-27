@@ -1,7 +1,6 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import UserControls from 'flarum/forum/utils/UserControls';
-import PrivateDiscussionComposer from '../pages/discussions/PrivateDiscussionComposer';
 import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
 import UserPage from 'flarum/forum/components/UserPage';
@@ -29,16 +28,20 @@ function message() {
                 recipients.add('users:' + app.session.user.id(), app.session.user);
                 recipients.add('users:' + user.id(), user);
 
-                PrivateDiscussionComposer.prototype.recipients = recipients;
+                app.composer
+                  .load(() => import('../pages/discussions/PrivateDiscussionComposer'), {
+                    user: app.session.user,
+                    recipients: recipients,
+                    recipientUsers: recipients,
+                    titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                    submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
+                  })
+                  .then((PrivateDiscussionComposer) => {
+                    // @TODO: Move all direct access to the module object here. Including subsequent calls to app.composer.show(), checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
+                    PrivateDiscussionComposer.prototype.recipients = recipients;
 
-                app.composer.load(PrivateDiscussionComposer, {
-                  user: app.session.user,
-                  recipients: recipients,
-                  recipientUsers: recipients,
-                  titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                  submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
-                });
-                app.composer.show();
+                    app.composer.show();
+                  });
 
                 return resolve(app.composer);
               });

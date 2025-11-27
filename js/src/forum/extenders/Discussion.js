@@ -12,7 +12,6 @@ import recipientsLabel from '../pages/labels/recipientsLabels';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import ItemList from 'flarum/common/utils/ItemList';
 import AddRecipientModal from '../modals/AddRecipientModal';
-import ByobuTagDiscussionModal from '../modals/ByobuTagDiscussionModal';
 import DiscussionPage from 'flarum/components/DiscussionPage';
 
 export default () => {
@@ -179,7 +178,7 @@ function controls() {
 
                 if (flarum.extensions['flarum-tags']) {
                   new Promise((resolve, reject) => {
-                    app.modal.show(ByobuTagDiscussionModal, { discussion, resolve, reject });
+                    app.modal.show(() => import('../modals/ByobuTagDiscussionModal'), { discussion, resolve, reject });
                   }).then((tags) => {
                     discussion.save({ relationships: { recipientUsers, recipientGroups }, public: discussion.id() }).then(() => {
                       discussion.save({ relationships: { tags } }).then(() => {

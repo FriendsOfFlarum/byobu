@@ -1,8 +1,6 @@
 import app from 'flarum/forum/app';
 import Button from 'flarum/common/components/Button';
-import LogInModal from 'flarum/forum/components/LogInModal';
 import ItemList from 'flarum/common/utils/ItemList';
-import PrivateDiscussionComposer from './discussions/PrivateDiscussionComposer';
 
 export default class PrivateComposing {
   constructor(recipient) {
@@ -22,17 +20,21 @@ export default class PrivateComposing {
           recipients.add('users:' + this.recipient.id(), this.recipient);
         }
 
-        app.composer.load(PrivateDiscussionComposer, {
-          user: app.session.user,
-          recipients: recipients,
-          recipientUsers: recipients,
-        });
-
-        app.composer.show();
+        // @TODO: Modify this to use lazy loading, checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
+        app.composer
+          .load(() => import('./discussions/PrivateDiscussionComposer'), {
+            user: app.session.user,
+            recipients: recipients,
+            recipientUsers: recipients,
+          })
+          .then((PrivateDiscussionComposer) => {
+            // @TODO: Move all direct access to the module object here. Including subsequent calls to app.composer.show(), checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
+            app.composer.show();
+          });
 
         return resolve();
       } else {
-        app.modal.show(LogInModal);
+        app.modal.show(() => import('flarum/forum/components/LogInModal'));
 
         return reject();
       }
