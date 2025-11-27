@@ -14,9 +14,9 @@ namespace FoF\Byobu\Tests\integration\forum;
 use Flarum\Extend;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use PHPUnit\Framework\Attributes\Test;
 use Flarum\User\User;
+use PHPUnit\Framework\Attributes\Test;
+use Psr\Http\Message\ResponseInterface;
 
 class VisibilityTest extends TestCase
 {

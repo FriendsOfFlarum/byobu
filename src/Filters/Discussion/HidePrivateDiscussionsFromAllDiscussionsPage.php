@@ -12,7 +12,6 @@
 namespace FoF\Byobu\Filters\Discussion;
 
 use Flarum\Search\Database\DatabaseSearchState;
-use Flarum\Search\SearchState;
 use Flarum\Search\SearchCriteria;
 use Flarum\Settings\SettingsRepositoryInterface;
 

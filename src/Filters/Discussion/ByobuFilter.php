@@ -13,10 +13,10 @@ namespace FoF\Byobu\Filters\Discussion;
 
 use Flarum\Http\SlugManager;
 use Flarum\Search\Database\DatabaseSearchState;
+use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\User\User;
 use FoF\Byobu\Database\RecipientsConstraint;
-use Flarum\Search\Filter\FilterInterface;
 
 /**
  * Filters results to discussions that include the given user as recipient. Used to show private discussions on a user profile.
@@ -39,6 +39,7 @@ class ByobuFilter implements FilterInterface
             $this->forRecipient($query, [], $user->id);
         });
     }
+
     public function getFilterKey(): string
     {
         return 'byobu';

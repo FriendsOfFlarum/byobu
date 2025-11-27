@@ -11,12 +11,11 @@
 
 namespace FoF\Byobu\Notifications;
 
-use Flarum\Notification\AlertableInterface;
 use Flarum\Discussion\Discussion;
+use Flarum\Notification\AlertableInterface;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\User\User;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DiscussionCreatedBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {

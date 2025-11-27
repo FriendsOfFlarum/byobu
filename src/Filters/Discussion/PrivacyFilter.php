@@ -12,9 +12,9 @@
 namespace FoF\Byobu\Filters\Discussion;
 
 use Flarum\Search\Database\DatabaseSearchState;
+use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use FoF\Byobu\Database\RecipientsConstraint;
-use Flarum\Search\Filter\FilterInterface;
 
 /**
  * @implements FilterInterface<DatabaseSearchState>
@@ -35,6 +35,7 @@ class PrivacyFilter implements FilterInterface
             $this->constraint($query, $actor);
         });
     }
+
     public function getFilterKey(): string
     {
         return 'byobu';

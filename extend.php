@@ -11,10 +11,11 @@
 
 namespace FoF\Byobu;
 
-use Flarum\Api\Controller;
-use Flarum\Api\Serializer;
+use Flarum\Api\Context;
+use Flarum\Api\Endpoint;
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
-use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Group\Group;
@@ -23,10 +24,6 @@ use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
 use FoF\Split\Events\DiscussionWasSplit;
-use Flarum\Api\Context;
-use Flarum\Api\Endpoint;
-use Flarum\Api\Resource;
-use Flarum\Api\Schema;
 use Illuminate\Support\Arr;
 
 return [
@@ -39,7 +36,7 @@ return [
         ->route('/private/composer', 'byobuPrivateComposer')
         ->css(__DIR__.'/resources/less/forum/extension.less')
         ->js(__DIR__.'/js/dist/forum.js')
-        ->jsDirectory(__DIR__ . '/js/dist/forum'),
+        ->jsDirectory(__DIR__.'/js/dist/forum'),
 
     new Extend\Locales(__DIR__.'/resources/locale'),
 
@@ -97,7 +94,7 @@ return [
                 ->writable(fn (User $user, Context $context) => $context->getActor()->is($user)),
             Schema\Relationship\ToMany::make('privateDiscussions')
                 ->type('discussions')
-                ->visible(fn (User $user, Context $context) => $context->getActor()->is($user))
+                ->visible(fn (User $user, Context $context) => $context->getActor()->is($user)),
         ]),
 
     (new Extend\View())
