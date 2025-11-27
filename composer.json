@@ -37,6 +37,9 @@
         "flarum/core": "^2.0.0-beta"
     },
     "extra": {
+        "branch-alias": {
+            "2.x": "2.x-dev"
+        },
         "flarum-extension": {
             "title": "FoF Byōbu",
             "category": "feature",
