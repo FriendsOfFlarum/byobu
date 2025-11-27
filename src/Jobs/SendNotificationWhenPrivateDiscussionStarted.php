@@ -25,13 +25,13 @@ class SendNotificationWhenPrivateDiscussionStarted implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected $settings;
+    protected mixed $settings;
 
     public function __construct(protected Discussion $discussion, protected Collection $newUsers, protected Collection $newGroups)
     {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         $userRecipients = $this->newUsers->reject(function ($user) {
             return $user->id === $this->discussion->user->id;

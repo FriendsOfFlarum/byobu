@@ -11,10 +11,14 @@
 
 namespace FoF\Byobu\Filters\Discussion;
 
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\SearchState;
 use FoF\Byobu\Database\RecipientsConstraint;
 use Flarum\Search\Filter\FilterInterface;
 
+/**
+ * @implements FilterInterface<DatabaseSearchState>
+ */
 class PrivacyFilter implements FilterInterface
 {
     use RecipientsConstraint;

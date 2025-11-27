@@ -18,12 +18,17 @@ use FoF\Byobu\Events\DiscussionMadePublic;
 use FoF\Byobu\Events\RecipientsChanged;
 use FoF\Byobu\Events\RemovedSelf;
 use FoF\Byobu\Jobs;
+use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Events\Dispatcher;
 use s9e\TextFormatter\Utils;
 
 class QueueNotificationJobs
 {
-    public function subscribe(Dispatcher $events)
+    public function __construct(protected Queue $queue)
+    {
+    }
+
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen(Created::class, [$this, 'discussionMadePrivate']);
         $events->listen(Saving::class, [$this, 'postMadeInPrivateDiscussion']);
@@ -32,9 +37,9 @@ class QueueNotificationJobs
         $events->listen(DiscussionMadePublic::class, [$this, 'discussionMadePublic']);
     }
 
-    public function discussionMadePrivate(Created $event)
+    public function discussionMadePrivate(Created $event): void
     {
-        resolve('flarum.queue.connection')->push(
+        $this->queue->push(
             new Jobs\SendNotificationWhenPrivateDiscussionStarted(
                 $event->discussion,
                 $event->screener->users,
@@ -43,7 +48,7 @@ class QueueNotificationJobs
         );
     }
 
-    public function postMadeInPrivateDiscussion(Saving $event)
+    public function postMadeInPrivateDiscussion(Saving $event): void
     {
         // stop the notification from firing when events such as flarum/likes or fof/reactions re-save the post.
         if ($event->post->exists || !$event->post instanceof CommentPost) {
@@ -58,18 +63,19 @@ class QueueNotificationJobs
 
         $actor = $event->actor;
 
-        $event->post->afterSave(function ($post) use ($actor) {
+        $queue = $this->queue;
+        $event->post->afterSave(function ($post) use ($actor, $queue) {
             if ($post->discussion->recipientUsers->count() && $post->number !== 1) {
-                resolve('flarum.queue.connection')->push(
+                $queue->push(
                     new Jobs\SendNotificationWhenPostedInPrivateDiscussion($post, $actor)
                 );
             }
         });
     }
 
-    public function discussionRecipientRemovedSelf(RemovedSelf $event)
+    public function discussionRecipientRemovedSelf(RemovedSelf $event): void
     {
-        resolve('flarum.queue.connection')->push(
+        $this->queue->push(
             new Jobs\SendNotificationWhenRecipientRemoved(
                 $event->screener->actor(),
                 $event->discussion,
@@ -78,9 +84,9 @@ class QueueNotificationJobs
         );
     }
 
-    public function discussionRecipientsChanged(RecipientsChanged $event)
+    public function discussionRecipientsChanged(RecipientsChanged $event): void
     {
-        resolve('flarum.queue.connection')->push(
+        $this->queue->push(
             new Jobs\SendNotificationWhenRecipientAdded(
                 $event->screener->actor(),
                 $event->discussion,
@@ -90,9 +96,9 @@ class QueueNotificationJobs
         );
     }
 
-    public function discussionMadePublic(DiscussionMadePublic $event)
+    public function discussionMadePublic(DiscussionMadePublic $event): void
     {
-        resolve('flarum.queue.connection')->push(
+        $this->queue->push(
             new Jobs\SendNotificationWhenDiscussionMadePublic($event->actor, $event->discussion, $event->screener->users)
         );
     }

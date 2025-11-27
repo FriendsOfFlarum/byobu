@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DiscussionMadePublicBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    protected $sender;
+    protected User $sender;
 
     public function __construct(public User $actor, public Discussion $discussion)
     {

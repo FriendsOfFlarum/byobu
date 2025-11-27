@@ -4,7 +4,7 @@ import ByobuGambit from './gambits/ByobuGambit';
 import Extend from 'flarum/common/extenders';
 
 export default [
-  new Extend.Search()
+  new Extend.Search() //
     .gambit('discussions', ByobuGambit)
     .gambit('discussions', PrivacyGambit)
     .gambit('users', AllowsPdGambit),

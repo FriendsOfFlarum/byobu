@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    protected $sender;
+    protected User $sender;
 
     public function __construct(public User $user, public Discussion $discussion)
     {

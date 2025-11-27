@@ -13,11 +13,11 @@
     "authors": [
         {
             "name": "Daniël Klabbers",
-            "email": "daniel@blomstra.net"
+            "email": "daniel@flarum.org"
         },
         {
             "name": "IanM",
-            "email": "ian@blomstra.net",
+            "email": "ian@flarum.org",
             "role": "Developer"
         }
     ],
@@ -34,7 +34,6 @@
         }
     ],
     "require": {
-        "php": "^8.2",
         "flarum/core": "^2.0.0-beta"
     },
     "extra": {
@@ -66,17 +65,14 @@
             }
         }
     },
-    "replace": {
-        "flagrow/byobu": "*"
-    },
     "autoload": {
         "psr-4": {
             "FoF\\Byobu\\": "src/"
         }
     },
     "require-dev": {
-        "fof/split": "*",
-        "flarum/flags": "*",
+        "fof/split": "^2.0.0-beta",
+        "flarum/flags": "^2.0.0-beta",
         "flarum/phpstan": "^2.0.0-beta",
         "flarum/testing": "^2.0.0-beta"
     },

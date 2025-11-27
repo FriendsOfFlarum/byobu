@@ -21,7 +21,7 @@ class DropTagsOnPrivateDiscussions
     {
     }
 
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         $isByobu = Arr::exists($event->data, 'relationships.recipientUsers') || Arr::exists($event->data, 'relationships.recipientGroups');
         $hasTags = Arr::exists($event->data, 'relationships.tags.data');

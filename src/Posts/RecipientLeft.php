@@ -30,7 +30,7 @@ class RecipientLeft extends AbstractEventPost implements MergeableInterface
     /**
      * @param Post|null|RecipientLeft $previous
      *
-     * @return $this|RecipientLeft|Post
+     * @return static
      */
     public function saveAfter(?Post $previous = null): static
     {

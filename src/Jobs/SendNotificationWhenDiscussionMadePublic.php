@@ -34,7 +34,7 @@ class SendNotificationWhenDiscussionMadePublic implements ShouldQueue
     {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         $recipients = $this->oldUsers->reject(function ($user) {
             return $user->id === $this->actor->id;

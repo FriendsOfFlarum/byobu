@@ -29,7 +29,7 @@ class SendNotificationWhenRecipientAdded implements ShouldQueue
     {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         $recipients = $this->newUsers->diff($this->oldUsers);
 

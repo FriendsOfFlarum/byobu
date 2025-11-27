@@ -10,7 +10,7 @@ export default class PrivateComposing {
   action(e) {
     e.preventDefault();
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       if (app.session.user) {
         let recipients = new ItemList();
 
@@ -20,21 +20,23 @@ export default class PrivateComposing {
           recipients.add('users:' + this.recipient.id(), this.recipient);
         }
 
-        // @TODO: Modify this to use lazy loading, checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
-        app.composer
-          .load(() => import('./discussions/PrivateDiscussionComposer'), {
+        await app.composer.load(
+          () =>
+            import('flarum/forum/components/DiscussionComposer').then(async () => {
+              return await import('./discussions/PrivateDiscussionComposer');
+            }),
+          {
             user: app.session.user,
             recipients: recipients,
             recipientUsers: recipients,
-          })
-          .then((PrivateDiscussionComposer) => {
-            // @TODO: Move all direct access to the module object here. Including subsequent calls to app.composer.show(), checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
-            app.composer.show();
-          });
+          }
+        );
+
+        app.composer.show();
 
         return resolve();
       } else {
-        app.modal.show(() => import('flarum/forum/components/LogInModal'));
+        await app.modal.show(() => import('flarum/forum/components/LogInModal'));
 
         return reject();
       }

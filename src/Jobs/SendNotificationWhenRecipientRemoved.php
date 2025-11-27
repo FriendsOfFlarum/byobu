@@ -30,7 +30,7 @@ class SendNotificationWhenRecipientRemoved implements ShouldQueue
     {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         $recipients = $this->newUsers;
 

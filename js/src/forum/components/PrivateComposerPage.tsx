@@ -28,7 +28,7 @@ export default class PrivateComposerPage extends Page {
 
     m.route.set(target);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const composerProps = {
         user: app.session.user,
         recipients: recipients,
@@ -55,16 +55,17 @@ export default class PrivateComposerPage extends Page {
         });
       }
 
-      // @TODO: Modify this to use lazy loading, checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
-      app.composer
-        .load(() => import('../pages/discussions/PrivateDiscussionComposer'), composerProps)
-        .then((PrivateDiscussionComposer) => {
-          // @TODO: Move all direct access to the module object here. Including subsequent calls to app.composer.show(), checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
-          app.composer.show();
-        });
+      await app.composer.load(
+        () =>
+          import('flarum/forum/components/DiscussionComposer').then(() => {
+            return import('../pages/discussions/PrivateDiscussionComposer');
+          }),
+        composerProps
+      );
+
+      app.composer.show();
 
       if (params.title) {
-        // @ts-expect-error
         app.composer.fields?.title(params.title);
       }
     }, 0);

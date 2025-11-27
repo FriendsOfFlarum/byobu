@@ -26,7 +26,7 @@ class CreatePostWhenRecipientsChanged
     /**
      * @param Dispatcher $events
      */
-    public function subscribe(Dispatcher $events)
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen(Created::class, [$this, 'whenDiscussionWasTagged']);
         $events->listen(DiscussionMadePublic::class, [$this, 'whenMadePublic']);
@@ -37,7 +37,7 @@ class CreatePostWhenRecipientsChanged
     /**
      * @param AbstractRecipientsEvent $event
      */
-    public function whenDiscussionWasTagged(AbstractRecipientsEvent $event)
+    public function whenDiscussionWasTagged(AbstractRecipientsEvent $event): void
     {
         $post = RecipientsModified::reply($event);
 
@@ -48,7 +48,7 @@ class CreatePostWhenRecipientsChanged
         $event->discussion->mergePost($post);
     }
 
-    public function whenActorRemovedSelf(RemovedSelf $event)
+    public function whenActorRemovedSelf(RemovedSelf $event): void
     {
         $post = RecipientLeft::reply($event);
 
@@ -59,7 +59,7 @@ class CreatePostWhenRecipientsChanged
         $event->discussion->mergePost($post);
     }
 
-    public function whenMadePublic(DiscussionMadePublic $event)
+    public function whenMadePublic(DiscussionMadePublic $event): void
     {
         $post = MadePublic::reply($event);
 

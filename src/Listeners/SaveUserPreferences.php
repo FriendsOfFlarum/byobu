@@ -16,7 +16,7 @@ use Illuminate\Support\Arr;
 
 class SaveUserPreferences
 {
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         $actor = $event->actor;
         $user = $event->user;

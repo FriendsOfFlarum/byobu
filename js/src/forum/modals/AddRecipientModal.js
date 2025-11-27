@@ -4,7 +4,7 @@ import DiscussionPage from 'flarum/forum/components/DiscussionPage';
 import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
 import Stream from 'flarum/common/utils/Stream';
-import SearchState from 'flarum/forum/states/SearchState';
+import SearchState from 'flarum/common/states/SearchState';
 import RecipientSearch from '../search/RecipientSearch';
 import User from 'flarum/common/models/User';
 import Group from 'flarum/common/models/Group';

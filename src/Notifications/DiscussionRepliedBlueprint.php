@@ -21,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DiscussionRepliedBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    protected $sender;
+    protected User $sender;
 
     public function __construct(public Post $post, protected User $actor)
     {

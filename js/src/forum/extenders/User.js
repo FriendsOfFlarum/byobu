@@ -23,25 +23,22 @@ function message() {
             onclick: (e) => {
               e.preventDefault();
 
-              return new Promise((resolve) => {
+              return new Promise(async (resolve) => {
                 let recipients = new ItemList();
                 recipients.add('users:' + app.session.user.id(), app.session.user);
                 recipients.add('users:' + user.id(), user);
 
-                app.composer
-                  .load(() => import('../pages/discussions/PrivateDiscussionComposer'), {
-                    user: app.session.user,
-                    recipients: recipients,
-                    recipientUsers: recipients,
-                    titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-                    submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
-                  })
-                  .then((PrivateDiscussionComposer) => {
-                    // @TODO: Move all direct access to the module object here. Including subsequent calls to app.composer.show(), checkout https://docs.flarum.org/2.x/extend/code-splitting#async-composers
-                    PrivateDiscussionComposer.prototype.recipients = recipients;
+                const PrivateDiscussionComposer = await app.composer.load(() => import('../pages/discussions/PrivateDiscussionComposer'), {
+                  user: app.session.user,
+                  recipients: recipients,
+                  recipientUsers: recipients,
+                  titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                  submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
+                });
 
-                    app.composer.show();
-                  });
+                PrivateDiscussionComposer.prototype.recipients = recipients;
+
+                app.composer.show();
 
                 return resolve(app.composer);
               });

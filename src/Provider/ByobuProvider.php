@@ -20,12 +20,12 @@ use Illuminate\Events\Dispatcher;
 
 class ByobuProvider extends AbstractServiceProvider
 {
-    public function register()
+    public function register(): void
     {
         $this->container->bind('byobu.screener', Screener::class);
     }
 
-    public function boot()
+    public function boot(): void
     {
         /** @var Dispatcher */
         $events = resolve(Dispatcher::class);

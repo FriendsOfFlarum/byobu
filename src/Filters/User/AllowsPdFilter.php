@@ -12,11 +12,15 @@
 namespace FoF\Byobu\Filters\User;
 
 use Flarum\Extension\ExtensionManager;
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\SearchState;
 use FoF\Byobu\Events\SearchingRecipient;
 use Illuminate\Contracts\Events\Dispatcher;
 use Flarum\Search\Filter\FilterInterface;
 
+/**
+ * @implements FilterInterface<DatabaseSearchState>
+ */
 class AllowsPdFilter implements FilterInterface
 {
     public function __construct(public Dispatcher $dispatcher, public ExtensionManager $manager)

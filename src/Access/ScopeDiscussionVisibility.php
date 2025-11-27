@@ -23,7 +23,7 @@ class ScopeDiscussionVisibility
      * @param User            $actor
      * @param EloquentBuilder $query
      */
-    public function __invoke(User $actor, EloquentBuilder $query)
+    public function __invoke(User $actor, EloquentBuilder $query): void
     {
         $this->constraint($query, $actor);
     }
