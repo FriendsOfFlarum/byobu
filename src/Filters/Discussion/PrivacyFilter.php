@@ -9,31 +9,30 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\Byobu\Gambits\Discussion;
+namespace FoF\Byobu\Filters\Discussion;
 
-use Flarum\Search\AbstractRegexGambit;
 use Flarum\Search\SearchState;
 use FoF\Byobu\Database\RecipientsConstraint;
+use Flarum\Search\Filter\FilterInterface;
 
-class PrivacyGambit extends AbstractRegexGambit
+class PrivacyFilter implements FilterInterface
 {
     use RecipientsConstraint;
 
-    public function getGambitPattern()
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        return 'is:private';
-    }
-
-    protected function conditions(SearchState $search, array $matches, $negate)
-    {
-        $actor = $search->getActor();
+        $actor = $state->getActor();
 
         if ($actor->isGuest()) {
             return;
         }
 
-        $search->getQuery()->where(function ($query) use ($actor) {
+        $state->getQuery()->where(function ($query) use ($actor) {
             $this->constraint($query, $actor);
         });
+    }
+    public function getFilterKey(): string
+    {
+        return 'byobu';
     }
 }
