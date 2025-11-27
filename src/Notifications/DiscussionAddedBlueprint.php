@@ -11,41 +11,30 @@
 
 namespace FoF\Byobu\Notifications;
 
+use Flarum\Notification\AlertableInterface;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\User\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
+class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var Discussion
-     */
-    public $discussion;
-
-    /**
-     * @var User
-     */
-    public $actor;
-
-    public function __construct(User $actor, Discussion $discussion)
+    public function __construct(public User $actor, public Discussion $discussion)
     {
-        $this->actor = $actor;
-        $this->discussion = $discussion;
     }
 
-    public function getFromUser(): ?User
+    public function getFromUser(): ?\Flarum\User\User
     {
         return $this->actor;
     }
 
-    public function getSubject(): ?Discussion
+    public function getSubject(): ?\Flarum\Database\AbstractModel
     {
         return $this->discussion;
     }
 
-    public function getData()
+    public function getData(): mixed
     {
         return [];
     }
@@ -55,7 +44,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
      *
      * @return string
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'byobuPrivateDiscussionAdded';
     }
@@ -65,7 +54,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
      *
      * @return string
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Discussion::class;
     }
@@ -75,7 +64,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
      *
      * @return array
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
         return ['text' => 'fof-byobu::emails.privateDiscussionAdded'];
     }
@@ -85,7 +74,7 @@ class DiscussionAddedBlueprint implements BlueprintInterface, MailableInterface
      *
      * @return string
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('fof-byobu.email.subject.private_discussion_added', [
             '{display_name}'       => $this->actor->display_name,

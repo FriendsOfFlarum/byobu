@@ -24,17 +24,8 @@ class ByobuGambit extends AbstractRegexGambit
 {
     use RecipientsConstraint;
 
-    /**
-     * @var SlugManager
-     */
-    protected $slugManager;
-
-    /**
-     * @param SlugManager $slugManager
-     */
-    public function __construct(SlugManager $slugManager)
+    public function __construct(protected SlugManager $slugManager)
     {
-        $this->slugManager = $slugManager;
     }
 
     protected function getGambitPattern(): string

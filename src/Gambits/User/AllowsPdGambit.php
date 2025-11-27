@@ -19,20 +19,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class AllowsPdGambit extends AbstractRegexGambit
 {
-    /**
-     * @var Dispatcher
-     */
-    public $dispatcher;
-
-    /**
-     * @var ExtensionManager
-     */
-    public $manager;
-
-    public function __construct(Dispatcher $dispatcher, ExtensionManager $manager)
+    public function __construct(public Dispatcher $dispatcher, public ExtensionManager $manager)
     {
-        $this->dispatcher = $dispatcher;
-        $this->manager = $manager;
     }
 
     public function getGambitPattern()

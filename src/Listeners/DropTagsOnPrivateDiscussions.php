@@ -17,14 +17,8 @@ use Illuminate\Support\Arr;
 
 class DropTagsOnPrivateDiscussions
 {
-    /**
-     * @var ExtensionManager
-     */
-    protected $extensions;
-
-    public function __construct(ExtensionManager $extensions)
+    public function __construct(protected ExtensionManager $extensions)
     {
-        $this->extensions = $extensions;
     }
 
     public function handle(Saving $event)

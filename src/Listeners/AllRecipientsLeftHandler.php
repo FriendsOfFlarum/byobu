@@ -21,14 +21,8 @@ class AllRecipientsLeftHandler
 {
     use DispatchEventsTrait;
 
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    public function __construct(SettingsRepositoryInterface $settings, Dispatcher $events)
+    public function __construct(protected SettingsRepositoryInterface $settings, Dispatcher $events)
     {
-        $this->settings = $settings;
         $this->events = $events;
     }
 

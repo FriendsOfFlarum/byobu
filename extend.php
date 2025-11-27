@@ -121,11 +121,11 @@ return [
         ->type(Posts\MadePublic::class),
 
     (new Extend\Notification())
-        ->type(Notifications\DiscussionCreatedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionRepliedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionRecipientRemovedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionAddedBlueprint::class, Serializer\DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\DiscussionMadePublicBlueprint::class, Serializer\DiscussionSerializer::class, ['alert']),
+        ->type(Notifications\DiscussionCreatedBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionRepliedBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionRecipientRemovedBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionAddedBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\DiscussionMadePublicBlueprint::class, ['alert']),
 
     (new Extend\Event())
         ->listen(PostSaving::class, Listeners\IgnoreApprovals::class)

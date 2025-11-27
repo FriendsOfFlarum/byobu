@@ -26,33 +26,12 @@ class SendNotificationWhenDiscussionMadePublic implements ShouldQueue
     use SerializesModels;
 
     /**
-     * @var User
-     */
-    protected $actor;
-
-    /**
-     * @var Discussion
-     */
-    protected $discussion;
-
-    /**
      * @var Collection
      */
     protected $newUsers;
 
-    /**
-     * @var Collection
-     */
-    protected $oldUsers;
-
-    public function __construct(
-        User $actor,
-        Discussion $discussion,
-        Collection $oldUsers
-    ) {
-        $this->actor = $actor;
-        $this->discussion = $discussion;
-        $this->oldUsers = $oldUsers;
+    public function __construct(protected User $actor, protected Discussion $discussion, protected Collection $oldUsers)
+    {
     }
 
     public function handle(NotificationSyncer $notifications)

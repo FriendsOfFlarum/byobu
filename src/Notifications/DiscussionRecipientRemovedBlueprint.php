@@ -11,39 +11,27 @@
 
 namespace FoF\Byobu\Notifications;
 
+use Flarum\Notification\AlertableInterface;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\User\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, MailableInterface
+class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var User
-     *           The user that was removed from the private discussion.
-     */
-    public $user;
-
-    /**
-     * @var Discussion
-     */
-    public $discussion;
-
     protected $sender;
 
-    public function __construct(User $user, Discussion $discussion)
+    public function __construct(public User $user, public Discussion $discussion)
     {
-        $this->user = $user;
-        $this->discussion = $discussion;
     }
 
-    public function getFromUser(): ?User
+    public function getFromUser(): ?\Flarum\User\User
     {
         return $this->user;
     }
 
-    public function getSubject(): ?Discussion
+    public function getSubject(): ?\Flarum\Database\AbstractModel
     {
         return $this->discussion;
     }
@@ -53,7 +41,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      *
      * @return array|null
      */
-    public function getData()
+    public function getData(): mixed
     {
         return [
             'user_left'  => $this->user->id,
@@ -66,7 +54,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      *
      * @return string
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'byobuRecipientRemoved';
     }
@@ -76,7 +64,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      *
      * @return string
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Discussion::class;
     }
@@ -86,7 +74,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      *
      * @return array
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
         return ['text' => 'fof-byobu::emails.byobuRecipientRemoved'];
     }
@@ -96,7 +84,7 @@ class DiscussionRecipientRemovedBlueprint implements BlueprintInterface, Mailabl
      *
      * @return string
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('fof-byobu.email.subject.recipient_removed', [
             '{display_name}'       => $this->user->display_name,
