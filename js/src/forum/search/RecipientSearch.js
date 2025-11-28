@@ -10,6 +10,7 @@ import RecipientLabel from '../pages/labels/RecipientLabel';
 import User from 'flarum/common/models/User';
 import Group from 'flarum/common/models/Group';
 import Tooltip from 'flarum/common/components/Tooltip';
+import Icon from 'flarum/common/components/Icon';
 
 export default class RecipientSearch extends Search {
   /**
@@ -64,6 +65,7 @@ export default class RecipientSearch extends Search {
     }
 
     const loading = this.searchState.getValue() && this.searchState.getValue().length >= 3;
+    const shouldShowClearButton = !!(this.searchState.getValue() && !this.loadingSources);
 
     if (!this.sources) {
       this.sources = this.sourceItems().toArray();
@@ -90,23 +92,44 @@ export default class RecipientSearch extends Search {
         <div className="Form-group">
           <label for={`byobu-addrecipient-search-input-${this.inputUuid}`}>{app.translator.trans('fof-byobu.forum.modal.labels.search_field')}</label>
 
-          <div className="AddRecipientModal-form-input Search-input">
-            <input
-              id={`byobu-addrecipient-search-input-${this.inputUuid}`}
-              className={classList('RecipientsInput', 'FormControl', {
-                open: !!this.searchState.getValue(),
-                focused: !!this.searchState.getValue(),
-                active: !!this.searchState.getValue(),
-                loading: !!this.loadingSources,
+          <div className="AddRecipientModal-form-input">
+            <div
+              className={classList('Input', {
+                'Input--withPrefix': true,
+                'Input--withClear': shouldShowClearButton,
               })}
-              oncreate={(vnode) => vnode.dom.focus()}
-              type="search"
-              placeholder={extractText(app.translator.trans('fof-byobu.forum.input.search_recipients'))}
-              value={this.searchState.getValue()}
-              oninput={(e) => this.searchState.setValue(e.target.value)}
-              onfocus={() => (this.hasFocus = true)}
-              onblur={() => (this.hasFocus = false)}
-            />
+            >
+              <Icon name="fas fa-search" className="Input-prefix-icon" />
+              <div className="Search-input">
+                <input
+                  id={`byobu-addrecipient-search-input-${this.inputUuid}`}
+                  className={classList('RecipientsInput', 'FormControl', {
+                    open: !!this.searchState.getValue(),
+                    focused: !!this.searchState.getValue(),
+                    active: !!this.searchState.getValue(),
+                    loading: !!this.loadingSources,
+                  })}
+                  oncreate={(vnode) => vnode.dom.focus()}
+                  type="search"
+                  placeholder={extractText(app.translator.trans('fof-byobu.forum.input.search_recipients'))}
+                  value={this.searchState.getValue()}
+                  oninput={(e) => this.searchState.setValue(e.target.value)}
+                  onfocus={() => (this.hasFocus = true)}
+                  onblur={() => (this.hasFocus = false)}
+                />
+              </div>
+              {!!this.loadingSources && <LoadingIndicator size="small" display="inline" containerClassName="Button Button--icon Button--link" />}
+              {shouldShowClearButton && (
+                <button
+                  className="Search-clear Button Button--icon Button--link"
+                  onclick={this.clear.bind(this)}
+                  aria-label={app.translator.trans('core.forum.header.search_clear_button_accessible_label')}
+                  type="button"
+                >
+                  <Icon name="fas fa-times-circle" />
+                </button>
+              )}
+            </div>
             <ul
               className={classList('Dropdown-menu', 'Search-results', 'fade', {
                 in: !!loading,
