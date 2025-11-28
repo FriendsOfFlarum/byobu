@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkmodule_exports=self.webpackChunkmodule_exports||[]).push([[900],{790:(s,e,t)=>{t.r(e),t.d(e,{default:()=>a});var o=t(192),l=(t(488),t(219)),u=t.n(l);class a extends(u()){onsubmit(s){s.preventDefault();const e=this.selected;this.attrs.resolve&&this.attrs.resolve(e),this.hide()}}(0,o.A)(a,"isDismissible",!1),flarum.reg.add("fof-byobu","forum/modals/ByobuTagDiscussionModal",a)}}]);
+//# sourceMappingURL=ByobuTagDiscussionModal.js.map
