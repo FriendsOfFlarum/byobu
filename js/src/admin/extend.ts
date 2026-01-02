@@ -2,7 +2,6 @@ import app from 'flarum/admin/app';
 import Extend from 'flarum/common/extenders';
 import commonExtend from '../common/extend';
 import ByobuSettingsPage from './components/ByobuSettingsPage';
-import User from 'flarum/common/models/User';
 
 export default [
   ...commonExtend,
@@ -95,7 +94,4 @@ export default [
       'reply',
       95
     ),
-
-  new Extend.Store() //
-    .add('recipients', User),
 ];

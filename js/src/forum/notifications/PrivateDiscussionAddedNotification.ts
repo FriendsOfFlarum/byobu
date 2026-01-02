@@ -1,14 +1,15 @@
+import Discussion from 'flarum/common/models/Discussion';
 import app from 'flarum/forum/app';
 import Notification from 'flarum/forum/components/Notification';
 
 export default class PrivateDiscussionAddedNotification extends Notification {
   icon() {
-    return app.forum.attribute('byobu.icon-badge');
+    return app.forum.attribute('byobu.icon-badge') as string;
   }
 
   href() {
     const notification = this.attrs.notification;
-    const discussion = notification.subject();
+    const discussion = notification.subject() as Discussion;
 
     return app.route.discussion(discussion);
   }

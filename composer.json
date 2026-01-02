@@ -34,7 +34,7 @@
         }
     ],
     "require": {
-        "flarum/core": "^2.0.0-beta"
+        "flarum/core": "^2.0.0"
     },
     "extra": {
         "branch-alias": {
@@ -74,10 +74,10 @@
         }
     },
     "require-dev": {
-        "fof/split": "^2.0.0-beta",
-        "flarum/flags": "^2.0.0-beta",
-        "flarum/phpstan": "^2.0.0-beta",
-        "flarum/testing": "^2.0.0-beta"
+        "fof/split": "^2.0.0",
+        "flarum/flags": "^2.0.0",
+        "flarum/phpstan": "^2.0.0",
+        "flarum/testing": "^2.0.0"
     },
     "scripts": {
         "analyse:phpstan": "phpstan analyse",
