@@ -40,6 +40,7 @@ class ByobuFilter implements FilterInterface
 
         if (empty($username)) {
             $state->getQuery()->whereRaw('1 = 0');
+
             return;
         }
 
@@ -48,6 +49,7 @@ class ByobuFilter implements FilterInterface
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // If the user doesn't exist, return no results by adding an impossible condition
             $state->getQuery()->whereRaw('1 = 0');
+
             return;
         }
 
