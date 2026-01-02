@@ -1,7 +1,7 @@
-export default class PrivateDiscussionAddedNotification extends Notification<import("flarum/forum/components/Notification").INotificationAttrs> {
-    constructor();
-    icon(): unknown;
+import Notification from 'flarum/forum/components/Notification';
+export default class PrivateDiscussionAddedNotification extends Notification {
+    icon(): string;
+    href(): string;
     content(): any[];
     excerpt(): null;
 }
-import Notification from "flarum/forum/components/Notification";
