@@ -1,6 +1,5 @@
 import app from 'flarum/forum/app';
 import DiscussionComposer from 'flarum/forum/components/DiscussionComposer';
-import AddRecipientModal from '../../modals/AddRecipientModal';
 import ItemList from 'flarum/common/utils/ItemList';
 import recipientCountLabel from '../labels/recipientCountLabel';
 import User from 'flarum/common/models/User';
@@ -68,7 +67,7 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
   }
 
   chooseRecipients() {
-    app.modal.show(AddRecipientModal, {
+    app.modal.show(() => import('../../modals/AddRecipientModal'), {
       selectedRecipients: this.composer.fields.recipients,
       onsubmit: (recipients) => {
         this.composer.fields.recipients = recipients;

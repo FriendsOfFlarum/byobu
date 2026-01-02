@@ -11,7 +11,6 @@ import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import recipientsLabel from '../pages/labels/recipientsLabels';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import ItemList from 'flarum/common/utils/ItemList';
-import AddRecipientModal from '../modals/AddRecipientModal';
 import DiscussionPage from 'flarum/forum/components/DiscussionPage';
 
 export default () => {
@@ -90,7 +89,7 @@ function controls() {
           {
             icon: app.forum.data.attributes['byobu.icon-badge'],
             onclick: () =>
-              app.modal.show(AddRecipientModal, {
+              app.modal.show(() => import('../modals/AddRecipientModal'), {
                 discussion,
                 /**
                  * @param {ItemList<User | Group>} recipients

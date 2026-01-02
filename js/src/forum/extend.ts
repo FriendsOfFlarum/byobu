@@ -6,9 +6,12 @@ import IndexPage from 'flarum/forum/components/IndexPage';
 import MadePublic from './events/MadePublic';
 import RecipientLeft from './events/RecipientLeft';
 import RecipientsModified from './events/RecipientsModified';
-import PrivateDiscussionsUserPage from './pages/PrivateDiscussionsUserPage';
 import commonExtend from '../common/extend';
-import PrivateComposerPage from './components/PrivateComposerPage';
+import PrivateDiscussionNotification from './notifications/PrivateDiscussionNotification';
+import PrivateDiscussionReplyNotification from './notifications/PrivateDiscussionReplyNotification';
+import PrivateDiscussionUserLeftNotification from './notifications/PrivateDiscussionUserLeftNotification';
+import PrivateDiscussionAddedNotification from './notifications/PrivateDiscussionAddedNotification';
+import PrivateDiscussionMadePublicNotification from './notifications/PrivateDiscussionMadePublicNotification';
 
 export default [
   ...commonExtend,
@@ -18,9 +21,9 @@ export default [
     .add('madePublic', MadePublic),
 
   new Extend.Routes() //
-    .add('byobuUserPrivate', '/u/:username/private', PrivateDiscussionsUserPage)
+    .add('byobuUserPrivate', '/u/:username/private', () => import('./pages/PrivateDiscussionsUserPage'))
     .add('byobuPrivate', '/private', IndexPage)
-    .add('byobuComposer', '/private/composer', PrivateComposerPage),
+    .add('byobuComposer', '/private/composer', () => import('./components/PrivateComposerPage')),
 
   new Extend.Model(Discussion)
     .hasMany<User>('recipientUsers')
@@ -36,4 +39,11 @@ export default [
   new Extend.Model(User) //
     .attribute<boolean>('blocksPd')
     .attribute<number>('unreadPrivateMessagesCount'),
+
+  new Extend.Notification() //
+    .add('byobuPrivateDiscussionCreated', PrivateDiscussionNotification)
+    .add('byobuPrivateDiscussionReplied', PrivateDiscussionReplyNotification)
+    .add('byobuRecipientRemoved', PrivateDiscussionUserLeftNotification)
+    .add('byobuPrivateDiscussionAdded', PrivateDiscussionAddedNotification)
+    .add('byobuPrivateDiscussionMadePubic', PrivateDiscussionMadePublicNotification),
 ];

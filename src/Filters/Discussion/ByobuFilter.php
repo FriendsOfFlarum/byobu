@@ -33,7 +33,23 @@ class ByobuFilter implements FilterInterface
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        $user = $this->slugManager->forResource(User::class)->fromSlug(trim($value[1], '"'), $state->getActor());
+        // Handle both array and string formats
+        // If array: ['byobu', 'username'] -> use $value[1]
+        // If string: 'username' -> use $value directly
+        $username = is_array($value) ? trim($value[1] ?? $value[0] ?? '', '"') : trim($value, '"');
+
+        if (empty($username)) {
+            $state->getQuery()->whereRaw('1 = 0');
+            return;
+        }
+
+        try {
+            $user = $this->slugManager->forResource(User::class)->fromSlug($username, $state->getActor());
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // If the user doesn't exist, return no results by adding an impossible condition
+            $state->getQuery()->whereRaw('1 = 0');
+            return;
+        }
 
         $state->getQuery()->where(function ($query) use ($user) {
             $this->forRecipient($query, [], $user->id);
