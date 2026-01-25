@@ -24,13 +24,19 @@ export default function extendUserComponents() {
             recipients.add('users:' + app.session.user!.id(), app.session.user!);
             recipients.add('users:' + user.id(), user);
 
-            await app.composer.load(() => import('../pages/discussions/PrivateDiscussionComposer'), {
-              user: app.session.user,
-              recipients: recipients,
-              recipientUsers: recipients,
-              titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
-              submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
-            });
+            await app.composer.load(
+              () =>
+                import('flarum/forum/components/DiscussionComposer').then(async () => {
+                  return await import('../pages/discussions/PrivateDiscussionComposer');
+                }),
+              {
+                user: app.session.user,
+                recipients: recipients,
+                recipientUsers: recipients,
+                titlePlaceholder: app.translator.trans('fof-byobu.forum.composer_private_discussion.title_placeholder'),
+                submitLabel: app.translator.trans('fof-byobu.forum.composer_private_discussion.submit_button'),
+              }
+            );
 
             app.composer.show();
           }}
