@@ -34,9 +34,9 @@ class Screener extends Fluent
         $screener = new self();
 
         /** @phpstan-ignore-next-line */
-        $screener->users = $screener->currentUsers = $discussion->recipientUsers()->get();
+        $screener->users = $screener->currentUsers = $discussion->recipientUsers;
         /** @phpstan-ignore-next-line */
-        $screener->groups = $screener->currentGroups = $discussion->recipientGroups()->get();
+        $screener->groups = $screener->currentGroups = $discussion->recipientGroups;
 
         return $screener;
     }
