@@ -41,9 +41,12 @@ class ByobuProvider extends AbstractServiceProvider
         $events->listen(Saving::class, DropTagsOnPrivateDiscussions::class);
 
         // then re-add everything else
+        // $listeners contains already-resolved closures from getListeners(), with signature
+        // ($eventName, $payload). makeListener() will call our wrapper as $wrapper($eventObject),
+        // so we restore the expected signature by hardcoding the event name string.
         foreach ($listeners as $listener) {
-            $callable = function ($event, $payload = []) use ($listener) {
-                return $listener($event, [$event, $payload]);
+            $callable = function ($event) use ($listener) {
+                return $listener(Saving::class, [$event]);
             };
             $events->listen(Saving::class, $callable);
         }

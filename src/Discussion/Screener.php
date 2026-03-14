@@ -34,9 +34,9 @@ class Screener extends Fluent
         $screener = new self();
 
         /** @phpstan-ignore-next-line */
-        $screener->users = $screener->currentUsers = $discussion->recipientUsers()->get();
+        $screener->users = $screener->currentUsers = $discussion->recipientUsers;
         /** @phpstan-ignore-next-line */
-        $screener->groups = $screener->currentGroups = $discussion->recipientGroups()->get();
+        $screener->groups = $screener->currentGroups = $discussion->recipientGroups;
 
         return $screener;
     }
@@ -45,9 +45,9 @@ class Screener extends Fluent
     {
         $screener = new self();
         /** @phpstan-ignore-next-line */
-        $screener->currentUsers = $event->discussion->recipientUsers()->get();
+        $screener->currentUsers = $event->discussion->recipientUsers;
         /** @phpstan-ignore-next-line */
-        $screener->currentGroups = $event->discussion->recipientGroups()->get();
+        $screener->currentGroups = $event->discussion->recipientGroups;
 
         $screener->users = static::getRecipientsFromPayload($event, 'users');
         $screener->groups = static::getRecipientsFromPayload($event, 'groups');
@@ -115,7 +115,7 @@ class Screener extends Fluent
         return $this->users
             ->reject(function (User $user) {
                 // Reject currentUsers and allow the actor to create PDs even if they block incoming new PDs
-                return $this->currentUsers->contains($user) || ($user->id === ($this->actor()?->id ?? false));
+                return $this->currentUsers->contains($user) || ($user->id === $this->actor()?->id);
             })
             ->first(function (User $user) {
                 return boolval($user->blocks_byobu_pd);
