@@ -73,7 +73,7 @@ return [
         }),
 
     (new Extend\ApiResource(Resource\DiscussionResource::class))
-        ->fieldsBefore('tags', Api\DiscussionResourceFields::class)
+        ->fields(Api\DiscussionResourceFields::class)
         ->field('tags', fn (Schema\Relationship\ToMany $field) => $field->writable(function (Discussion $discussion, Context $context) {
             return empty(Arr::get($context->body(), 'data.relationships.recipientUsers.data'))
                 && empty(Arr::get($context->body(), 'data.relationships.recipientGroups.data'));
