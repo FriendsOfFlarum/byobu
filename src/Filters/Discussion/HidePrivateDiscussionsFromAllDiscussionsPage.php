@@ -33,10 +33,15 @@ class HidePrivateDiscussionsFromAllDiscussionsPage
             return;
         }
 
-        // Use a JOIN instead of a subquery because we don't want to extract the list of all PD IDs from the entire forum
-        // Use an alias for the recipients table to avoir errors with other features or extension that might also join the table
+        // Use NOT EXISTS rather than LEFT JOIN + whereNull to avoid making bare column references
+        // in other extensions' SELECT expressions ambiguous when MySQL resolves them across
+        // multiple joined tables (e.g. flarum/sticky's is_unread_sticky expression). The
+        // optimizer treats these patterns equivalently so there is no performance trade-off.
         $filter->getQuery()
-            ->leftJoin('recipients as adp_recipients', 'adp_recipients.discussion_id', '=', 'discussions.id')
-            ->whereNull('adp_recipients.discussion_id');
+            ->whereNotExists(function ($query) {
+                $query->selectRaw('1')
+                    ->from('recipients')
+                    ->whereColumn('recipients.discussion_id', 'discussions.id');
+            });
     }
 }
