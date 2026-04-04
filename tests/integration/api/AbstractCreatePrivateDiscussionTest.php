@@ -77,9 +77,9 @@ abstract class AbstractCreatePrivateDiscussionTest extends TestCase
         $response = $this->send(
             $this->request('POST', '/api/discussions', [
                 'authenticatedAs' => $actorId,
-                'json' => [
+                'json'            => [
                     'data' => [
-                        'type' => 'discussions',
+                        'type'       => 'discussions',
                         'attributes' => array_merge([
                             'title'   => 'Private discussion',
                             'content' => 'Secret content.',
@@ -208,7 +208,7 @@ abstract class AbstractCreatePrivateDiscussionTest extends TestCase
         $this->assertEquals(200, $this->getDiscussion($discussionId, 2), 'Actor (id=2) cannot read own private discussion.');
         $this->assertEquals(200, $this->getDiscussion($discussionId, 3), 'Recipient alice (id=3) cannot read the private discussion.');
         $this->assertEquals(404, $this->getDiscussion($discussionId, 5), 'Outsider (id=5) can read the private discussion.');
-        $this->assertEquals(404, $this->getDiscussion($discussionId),    'Guest can read the private discussion.');
+        $this->assertEquals(404, $this->getDiscussion($discussionId), 'Guest can read the private discussion.');
     }
 
     // -------------------------------------------------------------------------
@@ -231,7 +231,7 @@ abstract class AbstractCreatePrivateDiscussionTest extends TestCase
         $this->assertEquals(200, $this->getDiscussion($discussionId, 3), 'alice (id=3, Staff member) cannot read the group-private discussion.');
         $this->assertEquals(200, $this->getDiscussion($discussionId, 4), 'bob (id=4, Staff member) cannot read the group-private discussion.');
         $this->assertEquals(404, $this->getDiscussion($discussionId, 5), 'Outsider (id=5) can read the group-private discussion.');
-        $this->assertEquals(404, $this->getDiscussion($discussionId),    'Guest can read the group-private discussion.');
+        $this->assertEquals(404, $this->getDiscussion($discussionId), 'Guest can read the group-private discussion.');
     }
 
     // -------------------------------------------------------------------------
@@ -258,7 +258,7 @@ abstract class AbstractCreatePrivateDiscussionTest extends TestCase
         $this->assertEquals(200, $this->getDiscussion($discussionId, 3), 'alice (id=3) cannot read the discussion (via group).');
         $this->assertEquals(200, $this->getDiscussion($discussionId, 4), 'bob (id=4) cannot read the discussion (via group).');
         $this->assertEquals(404, $this->getDiscussion($discussionId, 5), 'Outsider (id=5) can read the discussion.');
-        $this->assertEquals(404, $this->getDiscussion($discussionId),    'Guest can read the discussion.');
+        $this->assertEquals(404, $this->getDiscussion($discussionId), 'Guest can read the discussion.');
     }
 
     // -------------------------------------------------------------------------
