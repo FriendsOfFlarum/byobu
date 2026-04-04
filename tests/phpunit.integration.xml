@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
-    backupGlobals="false"
-    backupStaticAttributes="false"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
     colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
     processIsolation="true"
     stopOnFailure="false"
 >
@@ -20,6 +15,7 @@
         <testsuite name="Flarum Integration Tests">
             <directory suffix="Test.php">./integration</directory>
              <exclude>./integration/tmp</exclude>
+             <exclude>./integration/api/AbstractCreatePrivateDiscussionTest.php</exclude>
         </testsuite>
     </testsuites>
 </phpunit>

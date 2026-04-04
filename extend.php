@@ -74,14 +74,28 @@ return [
 
     (new Extend\ApiResource(Resource\DiscussionResource::class))
         ->fields(Api\DiscussionResourceFields::class)
-        ->field('tags', fn (Schema\Relationship\ToMany $field) => $field->writable(function (Discussion $discussion, Context $context) {
-            return empty(Arr::get($context->body(), 'data.relationships.recipientUsers.data'))
-                && empty(Arr::get($context->body(), 'data.relationships.recipientGroups.data'));
-        }))
         ->endpoint([Endpoint\Show::class, Endpoint\Create::class, Endpoint\Index::class], function (Endpoint\Show|Endpoint\Create|Endpoint\Index $endpoint) {
             return $endpoint
                 ->addDefaultInclude(['recipientUsers', 'recipientGroups'])
                 ->eagerLoad(['recipientUsers', 'recipientGroups']);
+        })
+        ->endpoint(Endpoint\Create::class, function (Endpoint\Create $endpoint) {
+            // Strip the tags relationship from the request body before field validation runs,
+            // when the request includes byobu recipient relationships. This prevents
+            // flarum/tags from requiring a tag on private discussion creation, and avoids
+            // a 403 from assertFieldsWritable (tags is made non-writable for byobu requests,
+            // so sending tags in the payload would be rejected).
+            return $endpoint->before(function (Context $context) {
+                $parsedBody = $context->request->getParsedBody();
+
+                $hasRecipients = !empty(Arr::get($parsedBody, 'data.relationships.recipientUsers.data'))
+                    || !empty(Arr::get($parsedBody, 'data.relationships.recipientGroups.data'));
+
+                if ($hasRecipients && isset($parsedBody['data']['relationships']['tags'])) {
+                    unset($parsedBody['data']['relationships']['tags']);
+                    $context->request = $context->request->withParsedBody($parsedBody);
+                }
+            });
         }),
 
     (new Extend\ApiResource(Resource\ForumResource::class))
@@ -136,7 +150,7 @@ return [
         // we have to use the callback here, else we risk returning empty values instead of the defaults.
         // see https://github.com/flarum/core/issues/3209
         ->serializeToForum('byobu.icon-badge', 'fof-byobu.icon-badge', function ($value): string {
-            return empty($value) ? 'fas fa-map' : $value;
+            return empty($value) ? 'far fa-map' : $value;
         })
         ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value): string {
             return empty($value) ? 'far fa-map' : $value;
