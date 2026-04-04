@@ -68,38 +68,36 @@ class PersistRecipients
             throw new PermissionDeniedException('Not allowed to convert to a public discussion');
         }
 
-        if ($event->actor->cannot('addMoreThanTwoUserRecipients', $event->discussion) && $this->screener->users->count() > 2) {
-            throw new PermissionDeniedException('Not allowed to add more than 2 user recipients');
-        }
-
         if (!$event->discussion->exists) {
             $this->checkPermissionsForNewDiscussion($event->actor);
             $event->discussion->isByobu = true;
 
-            // Set is_private immediately so the first INSERT writes is_private=1,
-            // closing the race window where the discussion is briefly visible to
-            // non-recipients (issue #239).
-            //
-            // Also pre-populate the relation cache on this $discussion object so
-            // all subsequent saves on the same stale instance (e.g. the final save
-            // in StartDiscussionHandler) also see non-empty recipients and keep
-            // is_private=1 rather than resetting it to 0.
-            //
             // Ensure the actor is always included as a user recipient (issue #168).
-            // This is required both so they can read their own discussion and so that
-            // core's PostReplyHandler can find the discussion via scoped visibility
-            // between the INSERT and the afterSave that writes recipient rows.
-            if ($this->screener->isPrivate()) {
-                if (!$this->screener->users->contains($event->actor)) {
-                    $this->screener->users = $this->screener->users->concat([$event->actor]);
-                }
-
-                $event->discussion->is_private = true;
-                $event->discussion->setRelation('recipientUsers', $this->screener->users);
-                $event->discussion->setRelation('recipientGroups', $this->screener->groups);
+            // Must happen before the addMoreThanTwoUserRecipients check so that
+            // the limit is evaluated against the true final recipient count.
+            if ($this->screener->isPrivate() && !$this->screener->users->contains($event->actor)) {
+                $this->screener->users = $this->screener->users->concat([$event->actor]);
             }
         } else {
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
+        }
+
+        if ($event->actor->cannot('addMoreThanTwoUserRecipients', $event->discussion) && $this->screener->users->count() > 2) {
+            throw new PermissionDeniedException('Not allowed to add more than 2 user recipients');
+        }
+
+        // Set is_private immediately on new discussions so the first INSERT writes
+        // is_private=1, closing the race window where the discussion is briefly
+        // visible to non-recipients (issue #239).
+        //
+        // Also pre-populate the relation cache on this $discussion object so all
+        // subsequent saves on the same stale instance (e.g. the final save in
+        // StartDiscussionHandler) also see non-empty recipients and keep is_private=1
+        // rather than resetting it to 0.
+        if (!$event->discussion->exists && $this->screener->isPrivate()) {
+            $event->discussion->is_private = true;
+            $event->discussion->setRelation('recipientUsers', $this->screener->users);
+            $event->discussion->setRelation('recipientGroups', $this->screener->groups);
         }
 
         // When discussions need approval and this is a private disucussion, ignore approvals.
