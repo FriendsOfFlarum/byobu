@@ -60,7 +60,7 @@ class PersistRecipients
             return null;
         }
 
-        if ($event->actor->cannot('startPrivateDiscussionWithBlockers') && $this->screener->hasBlockingUsers()) {
+        if ($event->actor->cannot('discussion.startPrivateDiscussionWithBlockers') && $this->screener->hasBlockingUsers()) {
             throw new PermissionDeniedException('Not allowed to add users that blocked receiving private discussions');
         }
 
@@ -75,6 +75,29 @@ class PersistRecipients
         if (!$event->discussion->exists) {
             $this->checkPermissionsForNewDiscussion($event->actor);
             $event->discussion->isByobu = true;
+
+            // Set is_private immediately so the first INSERT writes is_private=1,
+            // closing the race window where the discussion is briefly visible to
+            // non-recipients (issue #239).
+            //
+            // Also pre-populate the relation cache on this $discussion object so
+            // all subsequent saves on the same stale instance (e.g. the final save
+            // in StartDiscussionHandler) also see non-empty recipients and keep
+            // is_private=1 rather than resetting it to 0.
+            //
+            // Ensure the actor is always included as a user recipient (issue #168).
+            // This is required both so they can read their own discussion and so that
+            // core's PostReplyHandler can find the discussion via scoped visibility
+            // between the INSERT and the afterSave that writes recipient rows.
+            if ($this->screener->isPrivate()) {
+                if (!$this->screener->users->contains($event->actor)) {
+                    $this->screener->users = $this->screener->users->concat([$event->actor]);
+                }
+
+                $event->discussion->is_private = true;
+                $event->discussion->setRelation('recipientUsers', $this->screener->users);
+                $event->discussion->setRelation('recipientGroups', $this->screener->groups);
+            }
         } else {
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
         }
