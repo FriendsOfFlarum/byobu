@@ -11,12 +11,14 @@
 
 namespace FoF\Byobu\Provider;
 
+use Flarum\Api\Resource;
 use Flarum\Discussion\Event\Saving;
 use Flarum\Foundation\AbstractServiceProvider;
 use FoF\Byobu\Discussion\Screener;
 use FoF\Byobu\Listeners\DropTagsOnPrivateDiscussions;
 use FoF\Byobu\Listeners\PersistRecipients;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Arr;
 
 class ByobuProvider extends AbstractServiceProvider
 {
@@ -27,6 +29,24 @@ class ByobuProvider extends AbstractServiceProvider
 
     public function boot(): void
     {
+        // Registered at boot time (after all extension extenders have run) so that
+        // flarum/tags has already added its 'tags' field to DiscussionResource.
+        // Using ->field() in extend.php is too early — byobu loads before flarum/tags
+        // alphabetically, so the tags field doesn't exist yet when the extender mutator runs.
+        Resource\DiscussionResource::mutateFields(function (array $fields): array {
+            foreach ($fields as $key => $field) {
+                if ($field->name === 'tags') {
+                    $fields[$key] = $field->writable(function ($discussion, $context) {
+                        return empty(Arr::get($context->body(), 'data.relationships.recipientUsers.data'))
+                            && empty(Arr::get($context->body(), 'data.relationships.recipientGroups.data'));
+                    });
+                    break;
+                }
+            }
+
+            return $fields;
+        });
+
         /** @var Dispatcher */
         $events = resolve(Dispatcher::class);
 
