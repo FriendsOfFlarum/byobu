@@ -13,11 +13,11 @@
     "authors": [
         {
             "name": "Daniël Klabbers",
-            "email": "daniel@blomstra.net"
+            "role": "Developer"
         },
         {
             "name": "IanM",
-            "email": "ian@blomstra.net",
+            "email": "ian@flarum.org",
             "role": "Developer"
         }
     ],
@@ -78,7 +78,8 @@
         "fof/split": "*",
         "flarum/flags": "*",
         "flarum/phpstan": "*",
-        "flarum/testing": "^1.0.0"
+        "flarum/testing": "^1.0.0",
+        "flarum/tags": "^1.8"
     },
     "scripts": {
         "analyse:phpstan": "phpstan analyse",

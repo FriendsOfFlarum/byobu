@@ -46,7 +46,7 @@ class AllowsPdGambit extends AbstractRegexGambit
 
         $this->dispatcher->dispatch(new SearchingRecipient($search, $matches, $negate));
 
-        if ($actor->can('startPrivateDiscussionWithBlockers')) {
+        if ($actor->can('discussion.startPrivateDiscussionWithBlockers')) {
             return;
         }
 
