@@ -7,6 +7,13 @@ import PrivateComposing from './PrivateComposing';
 import PrivateHero from '../components/PrivateHero';
 
 export default function PrivateDiscussionsPage() {
+  extend(IndexPage.prototype, 'oninit', function () {
+    if (app.current.get('routeName') === 'byobuPrivate' && !app.previous.matches(IndexPage)) {
+      app.discussions.clear();
+      app.discussions.refresh();
+    }
+  });
+
   extend(IndexPage.prototype, 'navItems', (items) => {
     const user = app.session.user;
 
