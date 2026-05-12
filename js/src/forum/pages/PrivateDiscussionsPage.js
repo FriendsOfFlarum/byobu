@@ -6,10 +6,18 @@ import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 import PrivateComposing from './PrivateComposing';
 import PrivateHero from '../components/PrivateHero';
 
+let lastIndexPageRouteName = null;
+
 export default function PrivateDiscussionsPage() {
   extend(IndexPage.prototype, 'oninit', function () {
-    if (app.current.get('routeName') === 'byobuPrivate' && !app.previous.matches(IndexPage)) {
+    const routeName = app.current.get('routeName');
+    const prevIndexPageRoute = lastIndexPageRouteName;
+    lastIndexPageRouteName = routeName;
+
+    if (routeName === 'byobuPrivate' && !app.previous.matches(IndexPage)) {
       app.discussions.clear();
+      app.discussions.refresh();
+    } else if (routeName !== 'byobuPrivate' && prevIndexPageRoute === 'byobuPrivate' && !app.previous.matches(IndexPage)) {
       app.discussions.refresh();
     }
   });
