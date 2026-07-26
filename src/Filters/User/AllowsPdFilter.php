@@ -60,6 +60,6 @@ class AllowsPdFilter implements FilterInterface
 
     public function getFilterKey(): string
     {
-        return 'byobu';
+        return 'allows-pd';
     }
 }
