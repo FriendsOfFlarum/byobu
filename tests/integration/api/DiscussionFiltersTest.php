@@ -146,6 +146,25 @@ class DiscussionFiltersTest extends TestCase
     }
 
     #[Test]
+    public function byobuFilterAcceptsAUsernameUnderTheIdWithDisplayNameSlugDriver()
+    {
+        // Under this driver the slug is "3-alice", so a bare username does not
+        // resolve through the slug manager and must fall back to a username
+        // lookup. Regression test: previously returned zero results.
+        $this->setting('slug_driver_Flarum\User\User', 'id_with_display_name');
+
+        $this->assertContains(2, $this->filterIds(['byobu' => 'alice'], 3));
+    }
+
+    #[Test]
+    public function byobuFilterStillAcceptsASlugUnderTheIdWithDisplayNameSlugDriver()
+    {
+        $this->setting('slug_driver_Flarum\User\User', 'id_with_display_name');
+
+        $this->assertContains(2, $this->filterIds(['byobu' => '3-alice'], 3));
+    }
+
+    #[Test]
     public function byobuFilterDoesNotLeakDiscussionsTheActorCannotSee()
     {
         // Outsider receives none of the private discussions. Filtering by bob's
