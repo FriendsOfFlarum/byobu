@@ -12,8 +12,6 @@ import PrivateDiscussionReplyNotification from './notifications/PrivateDiscussio
 import PrivateDiscussionUserLeftNotification from './notifications/PrivateDiscussionUserLeftNotification';
 import PrivateDiscussionAddedNotification from './notifications/PrivateDiscussionAddedNotification';
 import PrivateDiscussionMadePublicNotification from './notifications/PrivateDiscussionMadePublicNotification';
-import PrivateComposerPage from './components/PrivateComposerPage';
-import PrivateDiscussionsUserPage from './pages/PrivateDiscussionsUserPage';
 
 export default [
   ...commonExtend,
@@ -23,9 +21,9 @@ export default [
     .add('madePublic', MadePublic),
 
   new Extend.Routes() //
-    .add('byobuUserPrivate', '/u/:username/private', PrivateDiscussionsUserPage)
+    .add('byobuUserPrivate', '/u/:username/private', () => import('./pages/PrivateDiscussionsUserPage'))
     .add('byobuPrivate', '/private', IndexPage)
-    .add('byobuComposer', '/private/composer', PrivateComposerPage),
+    .add('byobuComposer', '/private/composer', () => import('./components/PrivateComposerPage')),
 
   new Extend.Model(Discussion)
     .hasMany<User>('recipientUsers')
