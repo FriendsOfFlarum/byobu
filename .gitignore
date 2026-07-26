@@ -3,3 +3,5 @@ vendor/
 composer.lock
 .phpunit.result.cache
 .phpunit.cache
+js/dist
+js/dist-typings
