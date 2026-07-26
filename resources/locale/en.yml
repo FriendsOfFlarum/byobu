@@ -154,7 +154,9 @@ fof-byobu:
     gambits:
       byobu:
         key: byobu
+        hint: username of a recipient
       private:
         key: private
       allows-pd:
         key: allows-pd
+        hint: "yes"
