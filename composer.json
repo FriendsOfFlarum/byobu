@@ -76,6 +76,7 @@
     "require-dev": {
         "fof/split": "^2.0.0",
         "flarum/flags": "^2.0.0",
+        "flarum/nicknames": "^2.0.0",
         "flarum/phpstan": "^2.0.0",
         "flarum/testing": "^2.0.0"
     },

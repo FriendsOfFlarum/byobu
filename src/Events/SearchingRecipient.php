@@ -15,7 +15,7 @@ use Flarum\Search\SearchState;
 
 class SearchingRecipient
 {
-    public function __construct(public SearchState $search, public array $matches, public bool $negate)
+    public function __construct(public SearchState $search, public array|string $matches, public bool $negate)
     {
     }
 }
