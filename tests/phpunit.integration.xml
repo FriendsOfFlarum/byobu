@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
+    backupGlobals="false"
+    cacheDirectory=".phpunit.cache"
+    backupStaticProperties="false"
     colors="true"
     processIsolation="true"
     stopOnFailure="false"
 >
-    <coverage processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">../src/</directory>
         </include>
-    </coverage>
+    </source>
     <testsuites>
         <testsuite name="Flarum Integration Tests">
             <directory suffix="Test.php">./integration</directory>
-             <exclude>./integration/tmp</exclude>
-             <exclude>./integration/api/AbstractCreatePrivateDiscussionTest.php</exclude>
+            <exclude>./integration/tmp</exclude>
+            <exclude>./integration/api/AbstractCreatePrivateDiscussionTest.php</exclude>
         </testsuite>
     </testsuites>
 </phpunit>
