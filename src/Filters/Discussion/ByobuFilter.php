@@ -15,6 +15,7 @@ use Flarum\Http\SlugManager;
 use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
+use Flarum\User\IdWithDisplayNameSlugDriver;
 use Flarum\User\User;
 use Flarum\User\UserRepository;
 use FoF\Byobu\Database\RecipientsConstraint;
@@ -65,13 +66,20 @@ class ByobuFilter implements FilterInterface
      * Three lookups are needed, because what a person types is whatever the
      * forum shows them, which depends on configuration:
      *
-     *  1. The slug driver. Under the default utf8_username driver a username
-     *     *is* the slug, but id_with_display_name expects "133-karaok" and a
-     *     third-party driver may produce any shape at all.
-     *  2. The username, for when the slug driver doesn't accept a bare one.
-     *  3. The nickname, when a display-name driver backed by that column is in
+     *  1. The username, which is what the gambit documents and what the default
+     *     utf8_username slug driver would resolve anyway.
+     *  2. The nickname, when a display-name driver backed by that column is in
      *     use (flarum/nicknames), since the nickname is what the UI displays
      *     and therefore what gets typed.
+     *  3. The slug driver, for an actual slug such as "133-karaok" under
+     *     id_with_display_name, or whatever shape a third-party driver uses.
+     *
+     * The column lookups deliberately come first, and IdWithDisplayNameSlugDriver
+     * is skipped for non-numeric values. That driver passes the leading segment
+     * straight to findOrFail(), so on PostgreSQL a bare name is compared against
+     * the integer id column, which raises — and inside a transaction it poisons
+     * every later statement. MySQL and SQLite silently coerce, so the difference
+     * is invisible there.
      *
      * Display names themselves can't be matched directly: DriverInterface only
      * maps user -> string, with no reverse lookup, and drivers may transform
@@ -80,12 +88,6 @@ class ByobuFilter implements FilterInterface
      */
     protected function resolveUser(string $username, User $actor): ?User
     {
-        try {
-            return $this->slugManager->forResource(User::class)->fromSlug($username, $actor);
-        } catch (\Throwable) {
-            // Not a valid slug for the configured driver; fall through.
-        }
-
         $id = $this->users->getIdForUsername($username, $actor);
 
         if ($id !== null) {
@@ -94,13 +96,28 @@ class ByobuFilter implements FilterInterface
 
         // Only when a nickname column is actually present, so this keeps working
         // whether or not flarum/nicknames is installed.
-        $query = $this->users->query();
+        if ($this->users->query()->getConnection()->getSchemaBuilder()->hasColumn('users', 'nickname')) {
+            $user = $this->users->query()->where('nickname', $username)->first();
 
-        if ($query->getConnection()->getSchemaBuilder()->hasColumn('users', 'nickname')) {
-            return $query->where('nickname', $username)->first();
+            if ($user !== null) {
+                return $user;
+            }
         }
 
-        return null;
+        $driver = $this->slugManager->forResource(User::class);
+
+        // IdWithDisplayNameSlugDriver treats the leading segment as an id, so a
+        // non-numeric value would be compared against the integer id column.
+        // Skip it rather than let the driver issue a query that errors.
+        if ($driver instanceof IdWithDisplayNameSlugDriver && !preg_match('/^\d+(-|$)/', $username)) {
+            return null;
+        }
+
+        try {
+            return $driver->fromSlug($username, $actor);
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     public function getFilterKey(): string
