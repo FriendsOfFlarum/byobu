@@ -31,6 +31,17 @@ abstract class AbstractCreatePrivateDiscussionTest extends TestCase
 {
     use RetrievesAuthorizedUsers;
 
+    /**
+     * Writing `recipientUsers` resolves each user named in the request through
+     * the API, one query per recipient (json-api-server's ToMany linkage calls
+     * findOrFail for each identifier). It is bounded by the recipients the
+     * author picked, not by the data, and batching it is core's to do.
+     */
+    protected function allowedRepeatedQueries(): array
+    {
+        return ['users`.`id` = ? limit ?', 'users"."id" = ? limit ?'];
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
