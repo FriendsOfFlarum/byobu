@@ -97,6 +97,16 @@ return [
             });
         }),
 
+    // Discussions included on posts (a user's posts, search results) are
+    // asked whether they are private, which reads their recipients. Load them
+    // with the discussions, or each costs two queries.
+    (new Extend\ApiResource(Resource\PostResource::class))
+        ->endpoint([Endpoint\Index::class, Endpoint\Show::class], function (Endpoint\Index|Endpoint\Show $endpoint) {
+            return $endpoint->eagerLoadWhenIncluded([
+                'discussion' => ['discussion.recipientUsers', 'discussion.recipientGroups'],
+            ]);
+        }),
+
     (new Extend\ApiResource(Resource\ForumResource::class))
         ->fields(Api\ForumResourceFields::class),
 
