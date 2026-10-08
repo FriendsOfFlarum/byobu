@@ -32,10 +32,17 @@ abstract class AbstractCreatePrivateDiscussionTest extends TestCase
     use RetrievesAuthorizedUsers;
 
     /**
-     * Writing `recipientUsers` resolves each user named in the request through
-     * the API, one query per recipient (json-api-server's ToMany linkage calls
-     * findOrFail for each identifier). It is bounded by the recipients the
-     * author picked, not by the data, and batching it is core's to do.
+     * Creating a private discussion loads users by id several times, none of
+     * it byobu's own query:
+     * - the session loads the actor;
+     * - writing `recipientUsers` resolves each named user through the API
+     *   (json-api-server's ToMany linkage calls findOrFail per identifier);
+     * - core's UserMetadataUpdater reloads the author;
+     * - each recipient's email notification (byobu's "private discussion
+     *   started") is a job that, on the sync queue tests run with, reloads its
+     *   recipient straight away. On a real queue that happens in the worker.
+     * All of it grows with the recipients the author picked, not with the
+     * forum's data.
      */
     protected function allowedRepeatedQueries(): array
     {
