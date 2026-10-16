@@ -34,6 +34,7 @@ Make sure you configure the private discussions permission on the Admin Permissi
 - Create private discussions with groups
 - Create private discussions with blockers
 - Edit recipient users of private discussions
+- Edit recipient users of private discussions they started
 - Edit recipient groups of private discussions
 
 ## Notifications
