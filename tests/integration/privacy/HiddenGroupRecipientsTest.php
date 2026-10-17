@@ -117,6 +117,41 @@ class HiddenGroupRecipientsTest extends TestCase
     }
 
     #[Test]
+    public function editing_recipients_keeps_hidden_groups_the_editor_cannot_see(): void
+    {
+        // Alice adds carol, sending back the groups the API showed her.
+        $shown = array_map(
+            fn (array $group) => ['type' => 'groups', 'id' => $group['id']],
+            $this->show(2, 3)['data']['relationships']['recipientGroups']['data'] ?? []
+        );
+
+        $this->saveRecipients(3, ['3', '5', '6'], array_column($shown, 'id'));
+
+        $this->assertTrue($this->isRecipient(13), 'Editing the recipients removed a hidden group the editor could not see.');
+        $this->assertTrue($this->isRecipient(5, 'user_id'), 'The user the editor added is not a recipient.');
+        $this->assertSame(200, $this->send($this->request('GET', '/api/discussions/2', ['authenticatedAs' => 4]))->getStatusCode(), "The hidden group's other member lost access.");
+    }
+
+    #[Test]
+    public function someone_who_can_see_a_hidden_group_can_still_remove_it(): void
+    {
+        $shown = array_column($this->show(2, 6)['data']['relationships']['recipientGroups']['data'] ?? [], 'id');
+        $this->assertSame(['13'], $shown, 'Someone allowed to see hidden groups is not shown the hidden recipient group.');
+
+        $this->saveRecipients(6, ['3', '6'], []);
+
+        $this->assertFalse($this->isRecipient(13), 'The hidden group could not be removed by someone who can see it.');
+    }
+
+    #[Test]
+    public function making_a_discussion_public_removes_hidden_groups_too(): void
+    {
+        $this->saveRecipients(3, [], [], ['public' => 2]);
+
+        $this->assertSame(0, $this->database()->table('recipients')->where('discussion_id', 2)->whereNull('removed_at')->count(), 'A recipient is left on a discussion made public.');
+    }
+
+    #[Test]
     public function a_user_who_cannot_see_a_hidden_group_cannot_address_it(): void
     {
         $response = $this->send(
@@ -130,6 +165,32 @@ class HiddenGroupRecipientsTest extends TestCase
 
         $this->assertSame(404, $response->getStatusCode(), 'A hidden group could be addressed by someone who cannot see it.');
         $this->assertSame(0, $this->database()->table('recipients')->where('group_id', 13)->whereNotIn('discussion_id', [1, 2])->count());
+    }
+
+    /**
+     * Save a discussion 2's recipients as the actor, as byobu's recipient
+     * modal does.
+     */
+    private function saveRecipients(int $actorId, array $userIds, array $groupIds, array $attributes = []): void
+    {
+        $linkage = fn (string $type, array $ids) => ['data' => array_map(fn ($id) => ['type' => $type, 'id' => (string) $id], $ids)];
+
+        $response = $this->send(
+            $this->request('PATCH', '/api/discussions/2', [
+                'authenticatedAs' => $actorId,
+                'json'            => ['data' => array_filter(['type' => 'discussions', 'id' => '2', 'attributes' => $attributes, 'relationships' => [
+                    'recipientUsers'  => $linkage('users', $userIds),
+                    'recipientGroups' => $linkage('groups', $groupIds),
+                ]])],
+            ])
+        );
+
+        $this->assertSame(200, $response->getStatusCode(), (string) $response->getBody());
+    }
+
+    private function isRecipient(int $id, string $column = 'group_id'): bool
+    {
+        return $this->database()->table('recipients')->where('discussion_id', 2)->where($column, $id)->whereNull('removed_at')->exists();
     }
 
     private function show(int $discussionId, int $actorId): array

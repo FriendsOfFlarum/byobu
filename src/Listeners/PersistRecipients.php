@@ -190,10 +190,11 @@ class PersistRecipients
             return;
         }
 
-        if ($this->screener->users->isNotEmpty() && $user->cannot('discussion.editUserRecipients', $discussion)) {
+        // What the actor sent: recipients kept because they can't see them aren't theirs to change.
+        if ($this->screener->sentUsers->isNotEmpty() && $user->cannot('discussion.editUserRecipients', $discussion)) {
             throw new PermissionDeniedException('Not allowed to change users in a private discussion');
         }
-        if ($this->screener->groups->isNotEmpty() && $user->cannot('discussion.editGroupRecipients')) {
+        if ($this->screener->sentGroups->isNotEmpty() && $user->cannot('discussion.editGroupRecipients')) {
             throw new PermissionDeniedException('Not allowed to change groups in a private discussion');
         }
     }
