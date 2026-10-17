@@ -77,7 +77,8 @@ return [
         ->endpoint([Endpoint\Show::class, Endpoint\Create::class, Endpoint\Index::class], function (Endpoint\Show|Endpoint\Create|Endpoint\Index $endpoint) {
             return $endpoint
                 ->addDefaultInclude(['recipientUsers', 'recipientGroups'])
-                ->eagerLoad(['recipientUsers', 'recipientGroups']);
+                // Serialising a user can ask whether it is an admin, which reads its groups.
+                ->eagerLoad(['recipientUsers', 'recipientUsers.groups', 'recipientGroups']);
         })
         ->endpoint(Endpoint\Create::class, function (Endpoint\Create $endpoint) {
             // Strip the tags relationship from the request body before field validation runs,
