@@ -135,16 +135,16 @@ class PrivateDiscussionVisibilityTest extends TestCase
     public static function actors(): array
     {
         return [
-            'guest'                                 => [null, [1]],
-            'outsider'                              => [5, [1]],
-            'admin (sees only the flagged one)'     => [1, [1, 3]],
-            'moderator who may view flagged PDs'    => [6, [1, 3]],
-            'moderator who may only view flags'     => [7, [1]],
+            'guest'                                     => [null, [1]],
+            'outsider'                                  => [5, [1]],
+            'admin (sees only the flagged one)'         => [1, [1, 3]],
+            'moderator who may view flagged PDs'        => [6, [1, 3]],
+            'moderator who may only view flags'         => [7, [1]],
             'Moderator group member, not a participant' => [10, [1, 3]],
-            'recipient removed from discussion 5'   => [8, [1]],
-            'recipient alice'                       => [3, [1, 2, 3, 5]],
-            'recipient bob'                         => [4, [1, 2, 3]],
-            'member of recipient group Staff'       => [9, [1, 4]],
+            'recipient removed from discussion 5'       => [8, [1]],
+            'recipient alice'                           => [3, [1, 2, 3, 5]],
+            'recipient bob'                             => [4, [1, 2, 3]],
+            'member of recipient group Staff'           => [9, [1, 4]],
         ];
     }
 
