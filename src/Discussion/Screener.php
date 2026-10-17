@@ -24,8 +24,10 @@ use Illuminate\Support\Str;
  * @property Saving|null        $event
  * @property Collection|User[]  $currentUsers
  * @property Collection|Group[] $currentGroups
- * @property Collection|User[]  $users
- * @property Collection|Group[] $groups
+ * @property Collection|User[]  $users         The recipients once saved.
+ * @property Collection|Group[] $groups        The recipients once saved.
+ * @property Collection|User[]  $sentUsers     The recipients the actor sent.
+ * @property Collection|Group[] $sentGroups    The recipients the actor sent.
  */
 class Screener extends Fluent
 {
@@ -56,13 +58,20 @@ class Screener extends Fluent
      */
     public function isPrivateDiscussion(Discussion $discussion): bool
     {
+        if (!$discussion->exists) {
+            return $this->fromDiscussion($discussion)->isPrivate();
+        }
+
         // Strictly false: a discussion loaded without the column is checked
         // by its recipients.
-        if ($discussion->exists && $discussion->is_private === false) {
+        if ($discussion->is_private === false) {
             return false;
         }
 
-        return $this->fromDiscussion($discussion)->isPrivate();
+        // Not recipientUsers and recipientGroups: the API loads those scoped
+        // to what the actor may see, so a hidden recipient group is missing.
+        /** @phpstan-ignore-next-line */
+        return $discussion->activeRecipients->isNotEmpty();
     }
 
     public function whenSavingDiscussions(Saving $event): Screener
@@ -73,12 +82,42 @@ class Screener extends Fluent
         /** @phpstan-ignore-next-line */
         $screener->currentGroups = $event->discussion->recipientGroups;
 
-        $screener->users = static::getRecipientsFromPayload($event, 'users');
-        $screener->groups = static::getRecipientsFromPayload($event, 'groups');
-
         $screener->event = $event;
 
+        $screener->sentUsers = $screener->users = static::getRecipientsFromPayload($event, 'users');
+        $screener->sentGroups = $screener->groups = static::getRecipientsFromPayload($event, 'groups');
+
+        // The API never shows an actor the recipients they may not see (hidden
+        // groups), so their absence from what the actor sends back doesn't
+        // remove them. Making the discussion public removes everyone.
+        if (!$screener->makingPublic()) {
+            $screener->users = $screener->users->merge(static::unseen($screener->currentUsers, $event->actor));
+            $screener->groups = $screener->groups->merge(static::unseen($screener->currentGroups, $event->actor));
+        }
+
         return $screener;
+    }
+
+    /**
+     * @param Collection<int, User|Group> $recipients
+     *
+     * @return Collection<int, User|Group>
+     */
+    protected static function unseen(Collection $recipients, User $actor): Collection
+    {
+        if ($recipients->isEmpty()) {
+            return $recipients;
+        }
+
+        $model = $recipients->first();
+
+        $seen = $model->newQuery()
+            ->whereVisibleTo($actor)
+            ->whereKey($recipients->modelKeys())
+            ->pluck($model->getKeyName())
+            ->all();
+
+        return $recipients->reject(fn ($recipient) => in_array($recipient->getKey(), $seen));
     }
 
     public function actor(): ?User
