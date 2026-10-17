@@ -164,6 +164,11 @@ class Screener extends Fluent
         return $this->users->diff($this->currentUsers);
     }
 
+    public function changed(string $type): bool
+    {
+        return $this->added($type)->isNotEmpty() || $this->deleted($type)->isNotEmpty();
+    }
+
     public function actorRemoved(): bool
     {
         return $this->deleted('users')->find($this->actor()) !== null;

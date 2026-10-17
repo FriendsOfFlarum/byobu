@@ -187,10 +187,10 @@ class PersistRecipients
             return;
         }
 
-        if ($this->screener->users->isNotEmpty() && $user->cannot('discussion.editUserRecipients', $discussion)) {
+        if ($this->screener->changed('users') && $user->cannot('editUserRecipients', $discussion)) {
             throw new PermissionDeniedException('Not allowed to change users in a private discussion');
         }
-        if ($this->screener->groups->isNotEmpty() && $user->cannot('discussion.editGroupRecipients')) {
+        if ($this->screener->changed('groups') && $user->cannot('discussion.editGroupRecipients')) {
             throw new PermissionDeniedException('Not allowed to change groups in a private discussion');
         }
     }
