@@ -48,13 +48,6 @@ class LoadNotificationSubjectRecipients
             }
         }
 
-        $actor = $context->getActor();
-
-        // Scoped to what the actor can see, as core scopes the relations it
-        // eager loads, since these are serialised if included.
-        (new Collection(array_values($discussions)))->loadMissing([
-            'recipientUsers'  => fn ($query) => $query->whereVisibleTo($actor),
-            'recipientGroups' => fn ($query) => $query->whereVisibleTo($actor),
-        ]);
+        (new Collection(array_values($discussions)))->loadMissing('activeRecipients');
     }
 }

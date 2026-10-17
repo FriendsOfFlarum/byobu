@@ -56,13 +56,20 @@ class Screener extends Fluent
      */
     public function isPrivateDiscussion(Discussion $discussion): bool
     {
+        if (!$discussion->exists) {
+            return $this->fromDiscussion($discussion)->isPrivate();
+        }
+
         // Strictly false: a discussion loaded without the column is checked
         // by its recipients.
-        if ($discussion->exists && $discussion->is_private === false) {
+        if ($discussion->is_private === false) {
             return false;
         }
 
-        return $this->fromDiscussion($discussion)->isPrivate();
+        // Not recipientUsers and recipientGroups: the API loads those scoped
+        // to what the actor may see, so a hidden recipient group is missing.
+        /** @phpstan-ignore-next-line */
+        return $discussion->activeRecipients->isNotEmpty();
     }
 
     public function whenSavingDiscussions(Saving $event): Screener

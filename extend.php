@@ -57,6 +57,12 @@ return [
         ->relationship('oldRecipientGroups', function ($discussion) {
             return $discussion->belongsToMany(Group::class, 'recipients')
                 ->wherePivot('removed_at', '!=', null);
+        })
+        // Whether a discussion has recipients at all. Not an API relationship,
+        // so the API loads it whole: recipientUsers and recipientGroups are
+        // loaded scoped to what the actor may see, which leaves out hidden groups.
+        ->relationship('activeRecipients', function ($discussion) {
+            return $discussion->hasMany(Recipient::class)->whereNull('removed_at');
         }),
 
     (new Extend\Model(User::class))
@@ -78,7 +84,7 @@ return [
             return $endpoint
                 ->addDefaultInclude(['recipientUsers', 'recipientGroups'])
                 // Serialising a user can ask whether it is an admin, which reads its groups.
-                ->eagerLoad(['recipientUsers', 'recipientUsers.groups', 'recipientGroups']);
+                ->eagerLoad(['recipientUsers', 'recipientUsers.groups', 'recipientGroups', 'activeRecipients']);
         })
         ->endpoint(Endpoint\Create::class, function (Endpoint\Create $endpoint) {
             // Strip the tags relationship from the request body before field validation runs,
@@ -103,7 +109,7 @@ return [
     // whether they are private, like those the endpoints above list.
     (new Extend\ApiResource(Resource\PostResource::class))
         ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
-            return $endpoint->eagerLoadWhenIncluded(['discussion' => ['discussion.recipientUsers', 'discussion.recipientGroups']]);
+            return $endpoint->eagerLoadWhenIncluded(['discussion' => ['discussion.activeRecipients']]);
         }),
 
     (new Extend\ApiResource(Resource\NotificationResource::class))
@@ -115,7 +121,7 @@ return [
         ->whenExtensionEnabled('flarum-flags', fn () => [
             (new Extend\ApiResource(FlagResource::class))
                 ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
-                    return $endpoint->eagerLoadWhenIncluded(['post.discussion' => ['post.discussion.recipientUsers', 'post.discussion.recipientGroups']]);
+                    return $endpoint->eagerLoadWhenIncluded(['post.discussion' => ['post.discussion.activeRecipients']]);
                 }),
         ]),
 

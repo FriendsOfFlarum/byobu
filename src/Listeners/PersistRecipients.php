@@ -135,6 +135,9 @@ class PersistRecipients
                     );
                 });
             }
+
+            // Read afresh whether the discussion is still private.
+            $discussion->unsetRelation('activeRecipients');
         });
 
         if ($allRecipientsLeftAndHidden) {
