@@ -24,10 +24,10 @@ use Illuminate\Support\Str;
  * @property Saving|null        $event
  * @property Collection|User[]  $currentUsers
  * @property Collection|Group[] $currentGroups
- * @property Collection|User[]  $users      The recipients once saved.
- * @property Collection|Group[] $groups     The recipients once saved.
- * @property Collection|User[]  $sentUsers  The recipients the actor sent.
- * @property Collection|Group[] $sentGroups The recipients the actor sent.
+ * @property Collection|User[]  $users         The recipients once saved.
+ * @property Collection|Group[] $groups        The recipients once saved.
+ * @property Collection|User[]  $sentUsers     The recipients the actor sent.
+ * @property Collection|Group[] $sentGroups    The recipients the actor sent.
  */
 class Screener extends Fluent
 {
