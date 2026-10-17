@@ -27,7 +27,7 @@ class DiscussionResourceFields
     {
         return [
             Schema\Boolean::make('isPrivateDiscussion')
-                ->get(fn (Discussion $discussion) => $this->screener->fromDiscussion($discussion)->isPrivate()),
+                ->get(fn (Discussion $discussion) => $this->screener->isPrivateDiscussion($discussion)),
 
             Schema\Boolean::make('canEditRecipients')
                 ->get(function (Discussion $discussion, Context $context) {
@@ -43,12 +43,12 @@ class DiscussionResourceFields
                 ->get(fn (Discussion $discussion, Context $context) => $context->getActor()->can('editGroupRecipients', $discussion)),
             Schema\Boolean::make('canMakePublic')
                 ->get(function (Discussion $discussion, Context $context) {
-                    return $this->screener->fromDiscussion($discussion)->isPrivate()
+                    return $this->screener->isPrivateDiscussion($discussion)
                         && $context->getActor()->can('transformToPublic', $discussion);
                 }),
             Schema\Number::make('public')
                 ->writable(function (Discussion $discussion, Context $context) {
-                    return $this->screener->fromDiscussion($discussion)->isPrivate()
+                    return $this->screener->isPrivateDiscussion($discussion)
                         && $context->getActor()->can('transformToPublic', $discussion)
                         && $context->updating();
                 })

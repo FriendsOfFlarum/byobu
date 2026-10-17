@@ -41,6 +41,30 @@ class Screener extends Fluent
         return $screener;
     }
 
+    /**
+     * Whether the discussion is a byobu private discussion, without loading
+     * its recipients when it can't be one.
+     *
+     * is_private alone doesn't identify one: flarum/approval and others set it
+     * too. But GetModelIsPrivate sets it on every save of a discussion that has
+     * recipients, so a stored discussion that isn't private has none. Policies
+     * and serialised fields ask this of every discussion in a response,
+     * including those reached through another resource's include, which aren't
+     * eager loaded with their recipients.
+     *
+     * Not for computing is_private itself: that's GetModelIsPrivate.
+     */
+    public function isPrivateDiscussion(Discussion $discussion): bool
+    {
+        // Strictly false: a discussion loaded without the column is checked
+        // by its recipients.
+        if ($discussion->exists && $discussion->is_private === false) {
+            return false;
+        }
+
+        return $this->fromDiscussion($discussion)->isPrivate();
+    }
+
     public function whenSavingDiscussions(Saving $event): Screener
     {
         $screener = new self();

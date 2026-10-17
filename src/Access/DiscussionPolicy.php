@@ -91,9 +91,8 @@ class DiscussionPolicy extends AbstractPolicy
     {
         /** @var Screener $screener */
         $screener = resolve('byobu.screener');
-        $screener = $screener->fromDiscussion($discussion);
 
-        return $screener->isPrivate();
+        return $screener->isPrivateDiscussion($discussion);
     }
 
     public function transformToPublic(User $actor, Discussion $discussion): bool|string|null
