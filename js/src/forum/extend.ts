@@ -45,5 +45,5 @@ export default [
     .add('byobuPrivateDiscussionReplied', PrivateDiscussionReplyNotification)
     .add('byobuRecipientRemoved', PrivateDiscussionUserLeftNotification)
     .add('byobuPrivateDiscussionAdded', PrivateDiscussionAddedNotification)
-    .add('byobuPrivateDiscussionMadePubic', PrivateDiscussionMadePublicNotification),
+    .add('byobuMadePublic', PrivateDiscussionMadePublicNotification),
 ];
