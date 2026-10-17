@@ -18,6 +18,7 @@ use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
+use Flarum\Flags\Api\Resource\FlagResource;
 use Flarum\Group\Group;
 use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\User\Event\Saving as UserSaving;
@@ -96,6 +97,26 @@ return [
                 }
             });
         }),
+
+    // Discussions included by other resources need their recipients to tell
+    // whether they are private, like those the endpoints above list.
+    (new Extend\ApiResource(Resource\PostResource::class))
+        ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
+            return $endpoint->eagerLoadWhenIncluded(['discussion' => ['discussion.recipientUsers', 'discussion.recipientGroups']]);
+        }),
+
+    (new Extend\ApiResource(Resource\NotificationResource::class))
+        ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
+            return $endpoint->beforeSerialization(resolve(Api\LoadNotificationSubjectRecipients::class)(...));
+        }),
+
+    (new Extend\Conditional())
+        ->whenExtensionEnabled('flarum-flags', fn () => [
+            (new Extend\ApiResource(FlagResource::class))
+                ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
+                    return $endpoint->eagerLoadWhenIncluded(['post.discussion' => ['post.discussion.recipientUsers', 'post.discussion.recipientGroups']]);
+                }),
+        ]),
 
     (new Extend\ApiResource(Resource\ForumResource::class))
         ->fields(Api\ForumResourceFields::class),

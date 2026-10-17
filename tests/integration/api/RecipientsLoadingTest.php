@@ -22,28 +22,31 @@ use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Test;
 
 /**
- * Discussions reached through another resource's include (here a user's posts
- * with `include=discussion`, as on a profile) aren't eager loaded with their
- * recipients. Every serialised discussion asks whether it is private, through
- * the isPrivateDiscussion field and the `tag` policy behind flarum/tags'
- * canTag, so that must not load recipients one discussion at a time.
+ * Discussions reached through another resource's include (a user's posts with
+ * `include=discussion`, as on a profile; notification subjects; flagged posts)
+ * aren't loaded by the discussion endpoints that eager load their recipients.
+ * Every serialised discussion asks whether it is private, through the
+ * isPrivateDiscussion field and the `tag` policy behind flarum/tags' canTag,
+ * so that must not load recipients one discussion at a time.
  *
  * Fixtures (every post is bob's):
  *   1 admin, 3 alice, 4 bob. Staff group (10) contains alice.
  *
  *   Discussions 1–6 — public, no recipients
- *   Discussion 7    — private, recipient users alice + bob
- *   Discussion 8    — private, recipient group Staff
+ *   Discussion 7    — private, recipient users alice + bob; post 7 is flagged
+ *   Discussion 8    — private, recipient group Staff; post 8 is flagged
  *   Discussion 9    — is_private but no recipients: made private by another
  *                     extension (as flarum/approval does), visible to everyone
  *                     through the viewPrivate scope registered below
+ *
+ *   Alice has a byobu notification for each of discussions 7 and 8.
  */
 class RecipientsLoadingTest extends TestCase
 {
     private const PUBLIC_DISCUSSIONS = [1, 2, 3, 4, 5, 6];
 
     /**
-     * The decoded body of the last {@see bobsPosts()} response.
+     * The decoded body of the last {@see get()} response.
      */
     private array $lastBody = [];
 
@@ -51,7 +54,7 @@ class RecipientsLoadingTest extends TestCase
     {
         parent::setUp();
 
-        $this->extension('flarum-tags', 'fof-byobu');
+        $this->extension('flarum-tags', 'flarum-flags', 'fof-byobu');
 
         $this->extend(
             (new Extend\ModelVisibility(Discussion::class))
@@ -82,11 +85,19 @@ class RecipientsLoadingTest extends TestCase
                 ['user_id' => 3, 'group_id' => 10],
             ],
             Discussion::class => $discussions,
-            Post::class => $posts,
-            'recipients' => [
+            Post::class       => $posts,
+            'recipients'      => [
                 ['discussion_id' => 7, 'user_id' => 3, 'group_id' => null, 'removed_at' => null, 'created_at' => $now, 'updated_at' => $now],
                 ['discussion_id' => 7, 'user_id' => 4, 'group_id' => null, 'removed_at' => null, 'created_at' => $now, 'updated_at' => $now],
                 ['discussion_id' => 8, 'user_id' => null, 'group_id' => 10, 'removed_at' => null, 'created_at' => $now, 'updated_at' => $now],
+            ],
+            'notifications' => [
+                ['id' => 1, 'user_id' => 3, 'from_user_id' => 4, 'type' => 'byobuPrivateDiscussionCreated', 'subject_id' => 7, 'created_at' => $now],
+                ['id' => 2, 'user_id' => 3, 'from_user_id' => 4, 'type' => 'byobuPrivateDiscussionCreated', 'subject_id' => 8, 'created_at' => $now],
+            ],
+            'flags' => [
+                ['id' => 1, 'post_id' => 7, 'type' => 'user', 'user_id' => 4, 'created_at' => $now],
+                ['id' => 2, 'post_id' => 8, 'type' => 'user', 'user_id' => 4, 'created_at' => $now],
             ],
         ]);
     }
@@ -104,15 +115,30 @@ class RecipientsLoadingTest extends TestCase
     }
 
     #[Test]
-    public function public_discussions_do_not_load_recipients_alongside_private_ones(): void
+    public function discussions_of_posts_do_not_load_recipients_one_at_a_time(): void
     {
         $loaded = $this->discussionsWithRecipientsLoadedSingly($this->bobsPosts(3));
 
-        $this->assertSame(
-            [],
-            array_values(array_intersect($loaded, self::PUBLIC_DISCUSSIONS)),
-            'Recipients were loaded one public discussion at a time.'
-        );
+        $this->assertSame([7 => true, 8 => true], array_intersect_key($this->isPrivateDiscussion(), [7 => 0, 8 => 0]));
+        $this->assertSame([], $loaded, 'Recipients were loaded one discussion at a time.');
+    }
+
+    #[Test]
+    public function notification_subjects_do_not_load_recipients_one_at_a_time(): void
+    {
+        $loaded = $this->discussionsWithRecipientsLoadedSingly($this->get('/api/notifications', 3));
+
+        $this->assertSame([7 => true, 8 => true], $this->isPrivateDiscussion());
+        $this->assertSame([], $loaded, 'Recipients were loaded one discussion at a time.');
+    }
+
+    #[Test]
+    public function discussions_of_flagged_posts_do_not_load_recipients_one_at_a_time(): void
+    {
+        $loaded = $this->discussionsWithRecipientsLoadedSingly($this->get('/api/flags', 1));
+
+        $this->assertSame([7 => true, 8 => true], $this->isPrivateDiscussion());
+        $this->assertSame([], $loaded, 'Recipients were loaded one discussion at a time.');
     }
 
     #[Test]
@@ -120,23 +146,13 @@ class RecipientsLoadingTest extends TestCase
     {
         $this->bobsPosts(3);
 
-        $isPrivate = [];
-
-        foreach ($this->lastBody['included'] ?? [] as $resource) {
-            if ($resource['type'] === 'discussions') {
-                $isPrivate[(int) $resource['id']] = $resource['attributes']['isPrivateDiscussion'];
-            }
-        }
-
-        ksort($isPrivate);
-
         $this->assertSame([
             1 => false, 2 => false, 3 => false, 4 => false, 5 => false, 6 => false,
             7 => true,
             8 => true,
             // is_private alone doesn't make a byobu discussion.
             9 => false,
-        ], $isPrivate);
+        ], $this->isPrivateDiscussion());
     }
 
     /**
@@ -147,18 +163,28 @@ class RecipientsLoadingTest extends TestCase
      */
     private function bobsPosts(?int $actorId): array
     {
+        return $this->get('/api/posts', $actorId, [
+            'filter'  => ['author' => 'bob', 'type' => 'comment'],
+            'sort'    => '-createdAt',
+            'page'    => ['limit' => 20],
+            'include' => 'discussion',
+        ]);
+    }
+
+    /**
+     * GET an API path, returning the queries the request ran.
+     *
+     * @return array<array{query: string, bindings: array}>
+     */
+    private function get(string $path, ?int $actorId, array $queryParams = []): array
+    {
         $database = $this->database();
         $database->enableQueryLog();
         $database->flushQueryLog();
 
         $response = $this->send(
-            $this->request('GET', '/api/posts', array_filter(['authenticatedAs' => $actorId]))
-                ->withQueryParams([
-                    'filter'  => ['author' => 'bob', 'type' => 'comment'],
-                    'sort'    => '-createdAt',
-                    'page'    => ['limit' => 20],
-                    'include' => 'discussion',
-                ])
+            $this->request('GET', $path, array_filter(['authenticatedAs' => $actorId]))
+                ->withQueryParams($queryParams)
         );
 
         $queries = $database->getQueryLog();
@@ -171,6 +197,27 @@ class RecipientsLoadingTest extends TestCase
         $this->lastBody = json_decode($body, true);
 
         return $queries;
+    }
+
+    /**
+     * The isPrivateDiscussion attribute of each discussion in the last
+     * response, by id.
+     *
+     * @return array<int, bool>
+     */
+    private function isPrivateDiscussion(): array
+    {
+        $isPrivate = [];
+
+        foreach ($this->lastBody['included'] ?? [] as $resource) {
+            if ($resource['type'] === 'discussions') {
+                $isPrivate[(int) $resource['id']] = $resource['attributes']['isPrivateDiscussion'];
+            }
+        }
+
+        ksort($isPrivate);
+
+        return $isPrivate;
     }
 
     /**
