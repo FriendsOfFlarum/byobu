@@ -8,7 +8,6 @@ export default class RecipientSearch extends Search<import("flarum/forum/compone
     oncreate(vnode: any): void;
     doSearch: boolean | undefined;
     typingTimer: NodeJS.Timeout | undefined;
-    sources: import("flarum/forum/components/Search").SearchSource[] | undefined;
     /**
      * Build an item list of SearchSources.
      *
@@ -36,5 +35,5 @@ export default class RecipientSearch extends Search<import("flarum/forum/compone
      */
     findRecipient(store: any, id: any): Model;
 }
-import Search from "flarum/forum/components/Search";
-import ItemList from "flarum/common/utils/ItemList";
+import Search from 'flarum/forum/components/Search';
+import ItemList from 'flarum/common/utils/ItemList';

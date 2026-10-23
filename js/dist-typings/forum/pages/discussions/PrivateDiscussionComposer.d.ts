@@ -8,4 +8,4 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
     chooseRecipients(): void;
     addDefaultRecipients(username: any): void;
 }
-import DiscussionComposer from "flarum/forum/components/DiscussionComposer";
+import DiscussionComposer from 'flarum/forum/components/DiscussionComposer';

@@ -6,4 +6,4 @@ export default class RecipientsModified extends EventPost {
         removed: JSX.Element;
     };
 }
-import EventPost from "flarum/forum/components/EventPost";
+import EventPost from 'flarum/forum/components/EventPost';

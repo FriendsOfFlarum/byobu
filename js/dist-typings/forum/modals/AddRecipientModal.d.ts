@@ -11,5 +11,5 @@ export default class AddRecipientModal extends FormModal<import("flarum/common/c
     select(e: any): void;
     onsubmit(e: any): void;
 }
-import FormModal from "flarum/common/components/FormModal";
-import SearchState from "flarum/common/states/SearchState";
+import FormModal from 'flarum/common/components/FormModal';
+import SearchState from 'flarum/common/states/SearchState';

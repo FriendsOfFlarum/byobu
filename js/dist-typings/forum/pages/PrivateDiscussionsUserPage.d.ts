@@ -10,6 +10,6 @@ export default class PrivateDiscussionsUserPage extends UserPage<import("flarum/
     actionItems(): ItemList<any>;
     viewItems(): ItemList<any>;
 }
-import UserPage from "flarum/forum/components/UserPage";
-import PrivateDiscussionListState from "../states/PrivateDiscussionListState";
-import ItemList from "flarum/common/utils/ItemList";
+import UserPage from 'flarum/forum/components/UserPage';
+import PrivateDiscussionListState from '../states/PrivateDiscussionListState';
+import ItemList from 'flarum/common/utils/ItemList';
