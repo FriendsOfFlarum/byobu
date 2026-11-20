@@ -99,6 +99,16 @@ export default [
     .permission(
       () => ({
         icon: 'far fa-map',
+        label: app.translator.trans('fof-byobu.admin.permission.edit_own_user_recipients'),
+        permission: 'discussion.editOwnUserRecipients',
+        tagScoped: false,
+      }),
+      'start',
+      95
+    )
+    .permission(
+      () => ({
+        icon: 'far fa-map',
         label: app.translator.trans('fof-byobu.admin.permission.create_private_discussions_with_blocking_users'),
         permission: 'discussion.startPrivateDiscussionWithBlockers',
         tagScoped: false,
