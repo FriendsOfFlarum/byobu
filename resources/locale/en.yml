@@ -154,3 +154,13 @@ fof-byobu:
       allows-pd:
         key: allows-pd
         hint: "yes"
+
+core:
+  email:
+    notification:
+      types:
+        byobuMadePublic: Private discussions you're part of being made public
+        byobuPrivateDiscussionAdded: Being added to private discussions
+        byobuPrivateDiscussionCreated: New private discussions you're included in
+        byobuPrivateDiscussionReplied: New posts in private discussions you're part of
+        byobuRecipientRemoved: Recipients leaving private discussions you're part of
