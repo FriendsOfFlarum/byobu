@@ -10,6 +10,10 @@ export default class AllowsPdGambit extends KeyValueGambit {
     return app.translator.trans('fof-byobu.lib.gambits.allows-pd.hint', {}, true);
   }
 
+  canonicalKey() {
+    return 'allows-pd';
+  }
+
   filterKey() {
     return 'allows-pd';
   }

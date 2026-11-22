@@ -6,6 +6,10 @@ export default class PrivacyGambit extends BooleanGambit {
     return app.translator.trans('fof-byobu.lib.gambits.private.key', {}, true);
   }
 
+  canonicalKey() {
+    return 'private';
+  }
+
   filterKey() {
     return 'private';
   }
