@@ -18,8 +18,11 @@ export default class PrivateDiscussionsUserPage extends UserPage {
 
   show(user) {
     // We can not create the list in init because the user will not be available if it has to be loaded asynchronously
+    // Use filters rather than a gambit query: gambit keywords are translated,
+    // so `byobu:… is:private` is not recognised in other locales and would be
+    // sent as a fulltext search instead.
     this.list = new PrivateDiscussionListState({
-      q: `byobu:${user.slug()} is:private`,
+      filter: { byobu: user.slug(), private: true },
       sort: this.sort,
     });
 

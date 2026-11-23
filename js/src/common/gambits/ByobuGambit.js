@@ -10,6 +10,10 @@ export default class ByobuGambit extends KeyValueGambit {
     return app.translator.trans('fof-byobu.lib.gambits.byobu.hint', {}, true);
   }
 
+  canonicalKey() {
+    return 'byobu';
+  }
+
   filterKey() {
     return 'byobu';
   }
