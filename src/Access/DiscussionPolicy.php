@@ -95,6 +95,34 @@ class DiscussionPolicy extends AbstractPolicy
         return $screener->isPrivateDiscussion($discussion);
     }
 
+    /**
+     * Lets the user who started a private discussion add or remove user
+     * recipients, when they hold the "own" permission and are still a recipient.
+     * Holders of the global `discussion.editUserRecipients` permission are
+     * allowed by core's DiscussionPolicy::can() fallback.
+     *
+     * @param User       $actor
+     * @param Discussion $discussion
+     *
+     * @return string|null
+     */
+    public function editUserRecipients(User $actor, Discussion $discussion): ?string
+    {
+        if (
+            $actor->isGuest()
+            || (int) $discussion->user_id !== (int) $actor->id
+            || !$actor->hasPermission('discussion.editOwnUserRecipients')
+        ) {
+            return null;
+        }
+
+        /** @var Screener $screener */
+        $screener = resolve('byobu.screener');
+        $screener = $screener->fromDiscussion($discussion);
+
+        return $screener->isPrivate() && $screener->users->contains($actor) ? $this->allow() : null;
+    }
+
     public function transformToPublic(User $actor, Discussion $discussion): bool|string|null
     {
         /** @var SettingsRepositoryInterface $settings */

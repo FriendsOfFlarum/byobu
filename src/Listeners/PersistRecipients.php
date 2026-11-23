@@ -190,13 +190,27 @@ class PersistRecipients
             return;
         }
 
-        // What the actor sent: recipients kept because they can't see them aren't theirs to change.
-        if ($this->screener->sentUsers->isNotEmpty() && $user->cannot('discussion.editUserRecipients', $discussion)) {
+        if ($this->edits('users') && $user->cannot('editUserRecipients', $discussion)) {
             throw new PermissionDeniedException('Not allowed to change users in a private discussion');
         }
-        if ($this->screener->sentGroups->isNotEmpty() && $user->cannot('discussion.editGroupRecipients')) {
+        if ($this->edits('groups') && $user->cannot('discussion.editGroupRecipients')) {
             throw new PermissionDeniedException('Not allowed to change groups in a private discussion');
         }
+    }
+
+    /**
+     * Whether the actor is changing this type of recipient. Recipients they
+     * can't see are kept in the list being saved, so they never count. Making
+     * the discussion public removes everyone, which transformToPublic already
+     * allowed, so then only additions count.
+     */
+    protected function edits(string $type): bool
+    {
+        if ($this->screener->makingPublic()) {
+            return $this->screener->added($type)->isNotEmpty();
+        }
+
+        return $this->screener->changed($type);
     }
 
     protected function eventSubmitsRelationships(array $data): bool
