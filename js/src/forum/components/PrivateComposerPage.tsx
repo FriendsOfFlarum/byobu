@@ -33,6 +33,7 @@ export default class PrivateComposerPage extends Page {
         user: app.session.user,
         recipients: recipients,
         originalContent: null,
+        originalTitle: params.title,
       };
 
       if (params.content) {
@@ -64,10 +65,6 @@ export default class PrivateComposerPage extends Page {
       );
 
       app.composer.show();
-
-      if (params.title) {
-        app.composer.fields?.title(params.title);
-      }
     }, 0);
   }
 

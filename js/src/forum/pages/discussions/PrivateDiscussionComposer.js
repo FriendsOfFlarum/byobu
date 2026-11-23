@@ -21,6 +21,11 @@ export default class PrivateDiscussionComposer extends DiscussionComposer {
   oninit(vnode) {
     super.oninit(vnode);
 
+    // The route's query parser turns a title such as "true" into a boolean.
+    if (this.attrs.originalTitle != null) {
+      this.title(String(this.attrs.originalTitle));
+    }
+
     this.composer.fields.recipients = this.attrs.recipients || new ItemList();
 
     this.composer.fields.recipientUsers = this.attrs.recipientUsers || [];
