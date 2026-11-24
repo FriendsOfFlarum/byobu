@@ -22,8 +22,6 @@ use Psr\Http\Message\ResponseInterface;
  *   - User 2 (normal): a recipient of discussion 2 (the private one)
  *   - Discussion 1: public (is_private = 0, no recipients row)
  *   - Discussion 2: private (is_private = 1, user 2 is a recipient)
- *
- * HideFromAllDiscussionsPageEnabledTest covers the setting turned on.
  */
 
 /**
