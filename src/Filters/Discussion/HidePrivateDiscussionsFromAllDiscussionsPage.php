@@ -24,7 +24,6 @@ class HidePrivateDiscussionsFromAllDiscussionsPage
     public function __invoke(DatabaseSearchState $filter, SearchCriteria $queryCriteria): void
     {
         if (
-            // A filter that picks another list means we are no longer on the "all discussions" page.
             // Refine and window filters (a language, deck's activity check) keep it the same list.
             count($filter->getListFilters()) > 0 ||
             // If the user is logged out, they can't have private discussions anyway so we can skip the costly computations that follow
@@ -38,11 +37,20 @@ class HidePrivateDiscussionsFromAllDiscussionsPage
         // in other extensions' SELECT expressions ambiguous when MySQL resolves them across
         // multiple joined tables (e.g. flarum/sticky's is_unread_sticky expression). The
         // optimizer treats these patterns equivalently so there is no performance trade-off.
-        $filter->getQuery()
-            ->whereNotExists(function ($query) {
+        $hidePrivate = function ($query) {
+            $query->whereNotExists(function ($query) {
                 $query->selectRaw('1')
                     ->from('recipients')
                     ->whereColumn('recipients.discussion_id', 'discussions.id');
             });
+        };
+
+        $hidePrivate($filter->getQuery());
+
+        // flarum/sticky's union is a copy of the query taken when its mutator ran,
+        // which may be before this one, depending on extension boot order.
+        foreach ($filter->getQuery()->getQuery()->unions ?? [] as $union) {
+            $hidePrivate($union['query']);
+        }
     }
 }
