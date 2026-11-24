@@ -112,7 +112,9 @@ export default class RecipientSearch extends Search {
                   })}
                   oncreate={(vnode) => vnode.dom.focus()}
                   type="search"
-                  placeholder={extractText(app.translator.trans('fof-byobu.forum.input.search_recipients'))}
+                  placeholder={extractText(
+                    app.translator.trans('fof-byobu.forum.input.search_recipients', { count: this.constructor.minSearchLength() })
+                  )}
                   value={this.searchState.getValue()}
                   oninput={(e) => this.searchState.setValue(e.target.value)}
                   onfocus={() => (this.hasFocus = true)}

@@ -17,7 +17,7 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  app.cache.byobuResults = [];
+  app.cache.byobuResults = undefined;
   app.store.find = jest.fn(() => new Promise(() => {}));
 });
 
@@ -42,6 +42,18 @@ describe('UserSearchSource', () => {
     setMinSearchLength(2);
 
     expect(searchesUsers('a')).toBe(false);
+  });
+
+  test('does not search a query shorter than a minimum above three', () => {
+    setMinSearchLength(5);
+
+    expect(searchesUsers('abcd')).toBe(false);
+  });
+
+  test.each(['at', 'map', 'constructor'])('searches %s, which names a property of the results cache', (query) => {
+    setMinSearchLength(2);
+
+    expect(searchesUsers(query)).toBe(true);
   });
 
   test('counts a character outside the Basic Multilingual Plane once', () => {
@@ -72,5 +84,11 @@ describe('RecipientSearch', () => {
     setMinSearchLength(2);
 
     expect(render('a').find('.Search-results.in')).toHaveLength(0);
+  });
+
+  test('keeps the results hidden below a minimum above three', () => {
+    setMinSearchLength(5);
+
+    expect(render('abcd').find('.Search-results.in')).toHaveLength(0);
   });
 });
