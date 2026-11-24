@@ -41,7 +41,8 @@ class HidePrivateDiscussionsFromAllDiscussionsPage
             $query->whereNotExists(function ($query) {
                 $query->selectRaw('1')
                     ->from('recipients')
-                    ->whereColumn('recipients.discussion_id', 'discussions.id');
+                    ->whereColumn('recipients.discussion_id', 'discussions.id')
+                    ->whereNull('recipients.removed_at');
             });
         };
 

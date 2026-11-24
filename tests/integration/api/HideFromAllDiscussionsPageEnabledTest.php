@@ -25,8 +25,6 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Setting ENABLED — private discussions should be hidden from the list.
- *
- * Fixtures as in HideFromAllDiscussionsPageDisabledTest.
  */
 class HideFromAllDiscussionsPageEnabledTest extends TestCase
 {
@@ -53,9 +51,11 @@ class HideFromAllDiscussionsPageEnabledTest extends TestCase
             'discussions' => [
                 ['id' => 1, 'title' => 'Public Discussion', 'slug' => 'public-discussion', 'comment_count' => 1, 'participant_count' => 1, 'created_at' => '2024-01-01 00:00:00', 'last_posted_at' => '2024-01-01 00:00:00', 'is_private' => 0, 'user_id' => 1],
                 ['id' => 2, 'title' => 'Private Discussion', 'slug' => 'private-discussion', 'comment_count' => 1, 'participant_count' => 1, 'created_at' => '2024-01-01 00:00:00', 'last_posted_at' => '2024-01-01 00:00:00', 'is_private' => 1, 'user_id' => 1],
+                ['id' => 3, 'title' => 'Made Public', 'slug' => 'made-public', 'comment_count' => 1, 'participant_count' => 1, 'created_at' => '2024-01-01 00:00:00', 'last_posted_at' => '2024-01-01 00:00:00', 'is_private' => 0, 'user_id' => 1],
             ],
             'recipients' => [
                 ['id' => 1, 'discussion_id' => 2, 'user_id' => 2, 'group_id' => null, 'created_at' => '2024-01-01 00:00:00', 'updated_at' => '2024-01-01 00:00:00', 'removed_at' => null],
+                ['id' => 2, 'discussion_id' => 3, 'user_id' => 2, 'group_id' => null, 'created_at' => '2024-01-01 00:00:00', 'updated_at' => '2024-01-01 00:00:00', 'removed_at' => '2024-01-02 00:00:00'],
             ],
         ]);
     }
@@ -75,13 +75,10 @@ class HideFromAllDiscussionsPageEnabledTest extends TestCase
 
         $this->assertNotContains(2, $ids, 'Private discussion should be hidden when setting is on');
         $this->assertContains(1, $ids, 'Public discussion should still be visible when setting is on');
+        $this->assertContains(3, $ids, 'A discussion made public should be visible when setting is on');
     }
 
-    /**
-     * A refine filter (such as a language picked on All Discussions) or a
-     * window filter (such as deck's activity check) leaves the list as All
-     * Discussions, so private discussions stay hidden.
-     */
+    /** Refine and window filters don't pick a different list. */
     #[Test]
     #[DataProvider('filtersThatKeepTheList')]
     public function private_discussion_stays_hidden_with_a_filter_that_keeps_the_list(string $filter): void
@@ -98,6 +95,7 @@ class HideFromAllDiscussionsPageEnabledTest extends TestCase
 
         $this->assertNotContains(2, $ids);
         $this->assertContains(1, $ids);
+        $this->assertContains(3, $ids);
     }
 
     public static function filtersThatKeepTheList(): array
