@@ -24,8 +24,9 @@ class HidePrivateDiscussionsFromAllDiscussionsPage
     public function __invoke(DatabaseSearchState $filter, SearchCriteria $queryCriteria): void
     {
         if (
-            // If there are filters applied, we are no longer on "all discussions" page and don't want to restrict
-            count($filter->getActiveFilters()) > 0 ||
+            // A filter that picks another list means we are no longer on the "all discussions" page.
+            // Refine and window filters (a language, deck's activity check) keep it the same list.
+            count($filter->getListFilters()) > 0 ||
             // If the user is logged out, they can't have private discussions anyway so we can skip the costly computations that follow
             $filter->getActor()->isGuest() ||
             // Finally, check if this feature is enabled
