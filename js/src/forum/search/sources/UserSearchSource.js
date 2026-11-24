@@ -1,11 +1,12 @@
 import app from 'flarum/forum/app';
+import SearchManager from 'flarum/common/SearchManager';
 import highlight from 'flarum/common/helpers/highlight';
 import Avatar from 'flarum/common/components/Avatar';
 import username from 'flarum/common/helpers/username';
 
 export default class UserSearchSource {
   view(query) {
-    if (query.length < 3 || this.loading) return;
+    if (SearchManager.queryLength(query) < SearchManager.minSearchLength() || this.loading) return;
 
     if (!app.cache.byobuResults) {
       app.cache.byobuResults = [];

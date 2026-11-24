@@ -1,5 +1,6 @@
 import app from 'flarum/forum/app';
 import Search from 'flarum/forum/components/Search';
+import SearchManager from 'flarum/common/SearchManager';
 import UserSearchSource from './sources/UserSearchSource';
 import GroupSearchSource from './sources/GroupSearchSource';
 import ItemList from 'flarum/common/utils/ItemList';
@@ -64,7 +65,7 @@ export default class RecipientSearch extends Search {
       this.searchState.setValue('');
     }
 
-    const loading = this.searchState.getValue() && this.searchState.getValue().length >= 3;
+    const loading = this.searchState.getValue() && SearchManager.queryLength(this.searchState.getValue()) >= this.constructor.minSearchLength();
     const shouldShowClearButton = !!(this.searchState.getValue() && !this.loadingSources);
 
     if (!this.sources) {
