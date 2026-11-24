@@ -182,7 +182,11 @@ return [
         ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value): string {
             return empty($value) ? 'far fa-map' : $value;
         })
-        ->default('fof-byobu.delete_on_last_recipient_left', false),
+        ->default('fof-byobu.delete_on_last_recipient_left', false)
+        ->default('fof-byobu.makePublic', false)
+        ->default('fof-byobu.hide_from_all_discussions_page', false)
+        ->default('fof-byobu.icon-badge', 'far fa-map')
+        ->default('fof-byobu.icon-postAction', 'far fa-map'),
 
     (new Extend\Middleware('forum'))
         ->add(Middleware\GuestAccessToPrivateRoutePrevention::class),
