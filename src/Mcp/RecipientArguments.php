@@ -91,7 +91,7 @@ class RecipientArguments
     {
         $schema['properties']['private'] = [
             'type'        => 'boolean',
-            'description' => 'Only the private discussions you can read.',
+            'description' => 'Only the private discussions you can read. Other results don\'t mark which are private: never reveal a private discussion\'s content outside it.',
         ];
 
         return $schema;

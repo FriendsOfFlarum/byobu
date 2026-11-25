@@ -137,15 +137,11 @@ return [
                     handler: fn (array $arguments, array $body, McpContext $context) => resolve(RecipientArguments::class)->startHandler($arguments, $body, $context)
                 )
                 ->extendTool('search_discussions', schema: RecipientArguments::searchSchema(...), handler: RecipientArguments::searchHandler(...))
-                // Making a discussion public or adding recipients shows its whole history
-                // and can't be undone: content an assistant reads must not be able to trigger it.
-                // start_discussion still sets the recipients of a new one.
+                // Both show a private discussion's whole history: content an assistant reads must not trigger that.
                 ->denyWriteFields('discussions', ['public'], ['recipientUsers', 'recipientGroups'])
                 ->instructions(fn (McpContext $context) => resolve(PrivateDiscussionInstructions::class)($context))
                 ->ability('discussion.startPrivateDiscussionWithUsers', 'Start private discussions with members')
-                ->ability('discussion.startPrivateDiscussionWithGroups', 'Start private discussions with groups')
-                ->ability('discussion.editUserRecipients', 'Change the members of private discussions')
-                ->ability('discussion.editGroupRecipients', 'Change the groups of private discussions'),
+                ->ability('discussion.startPrivateDiscussionWithGroups', 'Start private discussions with groups'),
         ])
         ->when(fn (ExtensionManager $extensions) => $extensions->isEnabled('flarum-mcp') && $extensions->isEnabled('flarum-flags'), fn () => [
             (new Mcp())
