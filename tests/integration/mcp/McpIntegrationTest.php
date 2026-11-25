@@ -181,6 +181,19 @@ class McpIntegrationTest extends McpTestCase
     }
 
     #[Test]
+    public function an_assistant_cannot_change_who_is_in_a_private_discussion(): void
+    {
+        $error = $this->toolOutput($this->callTool('update_resource', [
+            'type' => 'discussions',
+            'id' => '2',
+            'relationships' => ['recipientUsers' => [['type' => 'users', 'id' => '1'], ['type' => 'users', 'id' => '2'], ['type' => 'users', 'id' => '4']]],
+        ], $this->bearer($this->developerToken(1))), expectError: true);
+
+        $this->assertStringContainsString('recipientUsers', $error['error']);
+        $this->assertSame(0, $this->database()->table('recipients')->where('discussion_id', 2)->where('user_id', 4)->count());
+    }
+
+    #[Test]
     public function the_overview_explains_private_discussions(): void
     {
         $overview = $this->overview(2);

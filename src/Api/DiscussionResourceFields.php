@@ -76,13 +76,13 @@ class DiscussionResourceFields
             // PersistRecipients::afterSave inserts — losing the actor-injection fix for #168
             // and any other recipient-count adjustments made during the Saving event.
             Schema\Relationship\ToMany::make('recipientUsers')
-                ->description('The members who can read this private discussion. Writing it replaces the list, where canEditUserRecipients allows. Anyone added can read the whole discussion: confirm with the user first.')
+                ->description('The members who can read this private discussion.')
                 ->includable()
                 ->writable()
                 ->type('users')
                 ->save(fn () => null),
             Schema\Relationship\ToMany::make('recipientGroups')
-                ->description('The groups whose members can read this private discussion. Writing it replaces the list, where canEditGroupRecipients allows. Anyone added can read the whole discussion: confirm with the user first.')
+                ->description('The groups whose members can read this private discussion.')
                 ->includable()
                 ->writable()
                 ->type('groups')
