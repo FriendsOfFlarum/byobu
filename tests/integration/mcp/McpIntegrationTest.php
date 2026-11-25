@@ -15,6 +15,7 @@ use Flarum\Discussion\Discussion;
 use Flarum\Group\Group;
 use Flarum\Mcp\Testing\McpTestCase;
 use Flarum\User\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
 class McpIntegrationTest extends McpTestCase
@@ -97,6 +98,30 @@ class McpIntegrationTest extends McpTestCase
         $this->assertSame(2, $this->database()->table('discussions')->count());
     }
 
+    /**
+     * @return array<string, array{0: array<string, mixed>}>
+     */
+    public static function emptyRecipients(): array
+    {
+        return [
+            'no usernames' => [['recipients' => []]],
+            'blank usernames' => [['recipients' => [' ', '']]],
+            'no groups' => [['recipientGroups' => []]],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('emptyRecipients')]
+    public function start_discussion_refuses_recipients_that_name_nobody(array $recipients): void
+    {
+        $this->toolOutput($this->callTool('start_discussion', [
+            'title' => 'Just us',
+            'content' => 'Secret content.',
+        ] + $recipients, $this->bearer($this->developerToken(2))), expectError: true);
+
+        $this->assertSame(2, $this->database()->table('discussions')->count());
+    }
+
     #[Test]
     public function start_discussion_without_recipients_stays_public(): void
     {
@@ -121,16 +146,37 @@ class McpIntegrationTest extends McpTestCase
     }
 
     #[Test]
+    public function search_discussions_lists_no_private_discussions_for_a_non_recipient(): void
+    {
+        $private = $this->toolOutput($this->callTool('search_discussions', ['private' => true], $this->bearer($this->developerToken(4))));
+
+        $this->assertSame([], $private['data']);
+    }
+
+    #[Test]
+    public function search_discussions_refuses_private_for_a_guest(): void
+    {
+        $this->prepareDatabase([
+            'group_permission' => [['group_id' => Group::GUEST_ID, 'permission' => 'mcp.use']],
+        ]);
+
+        $this->toolOutput($this->callTool('search_discussions', ['private' => true]), expectError: true);
+    }
+
+    #[Test]
     public function an_assistant_cannot_make_a_private_discussion_public(): void
     {
         $this->setting('fof-byobu.makePublic', true);
 
-        $this->toolOutput($this->callTool('update_resource', [
+        // What the forum sends to make a discussion public.
+        $error = $this->toolOutput($this->callTool('update_resource', [
             'type' => 'discussions',
             'id' => '2',
-            'attributes' => ['public' => 1],
+            'attributes' => ['public' => '2'],
+            'relationships' => ['recipientUsers' => [], 'recipientGroups' => []],
         ], $this->bearer($this->developerToken(1))), expectError: true);
 
+        $this->assertStringContainsString('public', $error['error']);
         $this->assertSame(1, (int) $this->database()->table('discussions')->where('id', 2)->value('is_private'));
     }
 
@@ -140,8 +186,8 @@ class McpIntegrationTest extends McpTestCase
         $overview = $this->overview(2);
         $instructions = array_column($overview['extensions'], 'instructions', 'id')['fof-byobu'];
 
-        $this->assertStringContainsString('recipientUsers', $instructions);
-        $this->assertStringContainsString('start_discussion', $instructions);
+        $this->assertStringContainsString('isPrivateDiscussion', $instructions);
+        $this->assertStringContainsString('get_resource', $instructions);
         $this->assertStringNotContainsString('send_message', $instructions);
         $this->assertContains('discussion.startPrivateDiscussionWithUsers', array_column($overview['you']['can'], 'ability'));
     }

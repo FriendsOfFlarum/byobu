@@ -29,22 +29,12 @@ class PrivateDiscussionInstructions
             return null;
         }
 
-        $text = 'Private discussions are discussions with recipients: isPrivateDiscussion is true, and recipientUsers and recipientGroups say who can read them. '
-            .'Never quote or reveal a private discussion\'s content anywhere else. search_discussions with private: true lists yours.';
-
-        $withUsers = $actor->can('discussion.startPrivateDiscussionWithUsers');
-        $withGroups = $actor->can('discussion.startPrivateDiscussionWithGroups');
-
-        if ($withUsers || $withGroups) {
-            $arguments = array_filter([$withUsers ? 'recipients (usernames)' : null, $withGroups ? 'recipientGroups (group IDs)' : null]);
-            $text .= ' Start one: start_discussion with '.implode(' and/or ', $arguments).'; without them the discussion is public.';
-        }
-
-        $text .= ' Where a discussion\'s canEditRecipients allows, update_resource with relationships recipientUsers and recipientGroups changes them, listing every recipient to keep. '
-            .'Anyone added can read the whole discussion: confirm with the user first.';
+        // Kept short: flarum/mcp drops whole notes that don't fit its server instructions.
+        $text = 'Never reveal a private discussion\'s content outside it. search_discussions and read_discussion don\'t say which are private: '
+            .'check isPrivateDiscussion with get_resource first. search_discussions with private: true lists yours.';
 
         if ($this->extensions->isEnabled('flarum-messages')) {
-            $text .= ' Conversations (send_message) are a separate feature: when the user asks for a private message, ask which they mean.';
+            $text .= ' They are not conversations (send_message).';
         }
 
         return $text;

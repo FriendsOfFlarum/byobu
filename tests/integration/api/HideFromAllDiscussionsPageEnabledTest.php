@@ -78,7 +78,6 @@ class HideFromAllDiscussionsPageEnabledTest extends TestCase
         $this->assertContains(3, $ids, 'A discussion made public should be visible when setting is on');
     }
 
-    /** Refine and window filters don't pick a different list. */
     #[Test]
     #[DataProvider('filtersThatKeepTheList')]
     public function private_discussion_stays_hidden_with_a_filter_that_keeps_the_list(string $filter): void

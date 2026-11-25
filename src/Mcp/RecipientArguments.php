@@ -15,10 +15,6 @@ use Flarum\Mcp\Capability\McpContext;
 use Flarum\Mcp\Exception\ToolError;
 use Flarum\User\UserRepository;
 
-/**
- * The arguments byobu adds to flarum/mcp's `start_discussion` (`recipients`,
- * `recipientGroups`) and `search_discussions` (`private`).
- */
 class RecipientArguments
 {
     public function __construct(
@@ -36,7 +32,7 @@ class RecipientArguments
         $schema['properties']['recipients'] = [
             'type'        => 'array',
             'items'       => ['type' => 'string'],
-            'description' => 'Usernames to start a private discussion with. Only they (and you) can read it. Leave out for a public discussion.',
+            'description' => 'Usernames to start a private discussion with, instead of a public one. You and they can read it, as can the members of any recipientGroups.',
         ];
         $schema['properties']['recipientGroups'] = [
             'type'        => 'array',
@@ -57,6 +53,11 @@ class RecipientArguments
     {
         $usernames = $this->strings($arguments['recipients'] ?? []);
         $groupIds = $this->strings($arguments['recipientGroups'] ?? []);
+
+        // Without this, a list that names nobody would post the content publicly.
+        if ((isset($arguments['recipients']) || isset($arguments['recipientGroups'])) && !$usernames && !$groupIds) {
+            throw new ToolError('recipients and recipientGroups name nobody. Leave both out to start a public discussion.');
+        }
 
         if ($usernames) {
             $ids = $this->users->getIdsForUsernames($usernames, $context->actor);
@@ -105,6 +106,10 @@ class RecipientArguments
     public static function searchHandler(array $arguments, array $query, McpContext $context): array
     {
         if (!empty($arguments['private'])) {
+            if ($context->actor->isGuest()) {
+                throw new ToolError('Guests have no private discussions.');
+            }
+
             $query['filter']['private'] = true;
         }
 

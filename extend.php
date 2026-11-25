@@ -18,6 +18,7 @@ use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
+use Flarum\Extension\ExtensionManager;
 use Flarum\Flags\Api\Resource\FlagResource;
 use Flarum\Group\Group;
 use Flarum\Mcp\Capability\McpContext;
@@ -127,9 +128,7 @@ return [
                 ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
                     return $endpoint->eagerLoadWhenIncluded(['post.discussion' => ['post.discussion.activeRecipients']]);
                 }),
-        ]),
-
-    (new Extend\Conditional())
+        ])
         ->whenExtensionEnabled('flarum-mcp', fn () => [
             (new Mcp())
                 ->extendTool(
@@ -145,7 +144,10 @@ return [
                 ->ability('discussion.startPrivateDiscussionWithUsers', 'Start private discussions with members')
                 ->ability('discussion.startPrivateDiscussionWithGroups', 'Start private discussions with groups')
                 ->ability('discussion.editUserRecipients', 'Change the members of private discussions')
-                ->ability('discussion.editGroupRecipients', 'Change the groups of private discussions')
+                ->ability('discussion.editGroupRecipients', 'Change the groups of private discussions'),
+        ])
+        ->when(fn (ExtensionManager $extensions) => $extensions->isEnabled('flarum-mcp') && $extensions->isEnabled('flarum-flags'), fn () => [
+            (new Mcp())
                 ->ability('user.viewPrivateDiscussionsWhenFlagged', 'See private discussions with flagged posts'),
         ]),
 
