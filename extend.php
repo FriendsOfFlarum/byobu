@@ -20,10 +20,14 @@ use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Flags\Api\Resource\FlagResource;
 use Flarum\Group\Group;
+use Flarum\Mcp\Capability\McpContext;
+use Flarum\Mcp\Extend\Mcp;
 use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
+use FoF\Byobu\Mcp\PrivateDiscussionInstructions;
+use FoF\Byobu\Mcp\RecipientArguments;
 use FoF\Split\Events\DiscussionWasSplit;
 use Illuminate\Support\Arr;
 
@@ -125,6 +129,26 @@ return [
                 }),
         ]),
 
+    (new Extend\Conditional())
+        ->whenExtensionEnabled('flarum-mcp', fn () => [
+            (new Mcp())
+                ->extendTool(
+                    'start_discussion',
+                    schema: RecipientArguments::startSchema(...),
+                    handler: fn (array $arguments, array $body, McpContext $context) => resolve(RecipientArguments::class)->startHandler($arguments, $body, $context)
+                )
+                ->extendTool('search_discussions', schema: RecipientArguments::searchSchema(...), handler: RecipientArguments::searchHandler(...))
+                // Making a discussion public shows its whole history to everyone and
+                // can't be undone: content an assistant reads must not be able to trigger it.
+                ->denyWriteFields('discussions', ['public'])
+                ->instructions(fn (McpContext $context) => resolve(PrivateDiscussionInstructions::class)($context))
+                ->ability('discussion.startPrivateDiscussionWithUsers', 'Start private discussions with members')
+                ->ability('discussion.startPrivateDiscussionWithGroups', 'Start private discussions with groups')
+                ->ability('discussion.editUserRecipients', 'Change the members of private discussions')
+                ->ability('discussion.editGroupRecipients', 'Change the groups of private discussions')
+                ->ability('user.viewPrivateDiscussionsWhenFlagged', 'See private discussions with flagged posts'),
+        ]),
+
     (new Extend\ApiResource(Resource\ForumResource::class))
         ->fields(Api\ForumResourceFields::class),
 
@@ -132,6 +156,7 @@ return [
         ->fields(fn () => [
             Schema\Boolean::make('blocksPd')
                 ->property('blocks_byobu_pd')
+                ->description('Whether this member refuses private discussions from those not allowed to override it.')
                 ->writable(fn (User $user, Context $context) => $context->getActor()->is($user)),
             Schema\Relationship\ToMany::make('privateDiscussions')
                 ->type('discussions')
