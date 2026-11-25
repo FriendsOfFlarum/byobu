@@ -72,11 +72,6 @@ class DiscussionResourceFields
             // would otherwise call from saveFields(), because sync() would overwrite what
             // PersistRecipients::afterSave inserts — losing the actor-injection fix for #168
             // and any other recipient-count adjustments made during the Saving event.
-            // Recipients are managed entirely by PersistRecipients (a Saving event listener).
-            // We suppress the default BelongsToMany::sync() that Flarum's AbstractDatabaseResource
-            // would otherwise call from saveFields(), because sync() would overwrite what
-            // PersistRecipients::afterSave inserts — losing the actor-injection fix for #168
-            // and any other recipient-count adjustments made during the Saving event.
             Schema\Relationship\ToMany::make('recipientUsers')
                 ->includable()
                 ->writable()

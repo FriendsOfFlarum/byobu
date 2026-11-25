@@ -58,9 +58,6 @@
                 "v17development/flarum-support"
             ]
         },
-        "extiverse": {
-            "discuss": "https://discuss.flarum.org/d/4762"
-        },
         "flarum-cli": {
             "modules": {
                 "githubActions": true,
