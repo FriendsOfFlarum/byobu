@@ -73,7 +73,10 @@ class PersistRecipients
             $this->checkPermissionsForExistingDiscussion($event->actor, $event->discussion);
         }
 
-        if ($event->actor->cannot('addMoreThanTwoUserRecipients', $event->discussion) && $this->screener->users->count() > 2) {
+        // On an update, only adding members counts: the members already there were allowed.
+        $addsUsers = !$event->discussion->exists || $this->screener->added('users')->isNotEmpty();
+
+        if ($addsUsers && $event->actor->cannot('addMoreThanTwoUserRecipients', $event->discussion) && $this->screener->users->count() > 2) {
             throw new PermissionDeniedException('Not allowed to add more than 2 user recipients');
         }
 
@@ -185,18 +188,23 @@ class PersistRecipients
 
     protected function checkPermissionsForExistingDiscussion(User $user, Discussion $discussion): void
     {
-        // Actor should always be able to remove themself.
-        if ($this->screener->onlyActorRemoved()) {
+        // Actor should always be able to remove themself. Making a discussion
+        // public removes everyone, under its own permission.
+        if ($this->screener->onlyActorRemoved() || $this->screener->makingPublic()) {
             return;
         }
 
-        // What the actor sent: recipients kept because they can't see them aren't theirs to change.
-        if ($this->screener->sentUsers->isNotEmpty() && $user->cannot('discussion.editUserRecipients', $discussion)) {
+        if ($this->changes('users') && $user->cannot('discussion.editUserRecipients', $discussion)) {
             throw new PermissionDeniedException('Not allowed to change users in a private discussion');
         }
-        if ($this->screener->sentGroups->isNotEmpty() && $user->cannot('discussion.editGroupRecipients')) {
+        if ($this->changes('groups') && $user->cannot('discussion.editGroupRecipients')) {
             throw new PermissionDeniedException('Not allowed to change groups in a private discussion');
         }
+    }
+
+    protected function changes(string $type): bool
+    {
+        return $this->screener->added($type)->isNotEmpty() || $this->screener->deleted($type)->isNotEmpty();
     }
 
     protected function eventSubmitsRelationships(array $data): bool

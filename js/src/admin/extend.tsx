@@ -6,7 +6,7 @@ import commonExtend from '../common/extend';
 
 import type Mithril from 'mithril';
 
-const BADGE_ICON_DEFAULT = 'fas fa-map';
+const BADGE_ICON_DEFAULT = 'far fa-map';
 const POST_ACTION_ICON_DEFAULT = 'far fa-map';
 
 /**

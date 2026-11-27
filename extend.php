@@ -18,12 +18,17 @@ use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
+use Flarum\Extension\ExtensionManager;
 use Flarum\Flags\Api\Resource\FlagResource;
 use Flarum\Group\Group;
+use Flarum\Mcp\Capability\McpContext;
+use Flarum\Mcp\Extend\Mcp;
 use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
+use FoF\Byobu\Mcp\PrivateDiscussionInstructions;
+use FoF\Byobu\Mcp\RecipientArguments;
 use FoF\Split\Events\DiscussionWasSplit;
 use Illuminate\Support\Arr;
 
@@ -123,6 +128,24 @@ return [
                 ->endpoint(Endpoint\Index::class, function (Endpoint\Index $endpoint) {
                     return $endpoint->eagerLoadWhenIncluded(['post.discussion' => ['post.discussion.activeRecipients']]);
                 }),
+        ])
+        ->whenExtensionEnabled('flarum-mcp', fn () => [
+            (new Mcp())
+                ->extendTool(
+                    'start_discussion',
+                    schema: RecipientArguments::startSchema(...),
+                    handler: fn (array $arguments, array $body, McpContext $context) => resolve(RecipientArguments::class)->startHandler($arguments, $body, $context)
+                )
+                ->extendTool('search_discussions', schema: RecipientArguments::searchSchema(...), handler: RecipientArguments::searchHandler(...))
+                // Both show a private discussion's whole history: content an assistant reads must not trigger that.
+                ->denyWriteFields('discussions', ['public'], ['recipientUsers', 'recipientGroups'])
+                ->instructions(fn (McpContext $context) => resolve(PrivateDiscussionInstructions::class)($context))
+                ->ability('discussion.startPrivateDiscussionWithUsers', 'Start private discussions with members')
+                ->ability('discussion.startPrivateDiscussionWithGroups', 'Start private discussions with groups'),
+        ])
+        ->when(fn (ExtensionManager $extensions) => $extensions->isEnabled('flarum-mcp') && $extensions->isEnabled('flarum-flags'), fn () => [
+            (new Mcp())
+                ->ability('user.viewPrivateDiscussionsWhenFlagged', 'See private discussions with flagged posts'),
         ]),
 
     (new Extend\ApiResource(Resource\ForumResource::class))
@@ -132,6 +155,7 @@ return [
         ->fields(fn () => [
             Schema\Boolean::make('blocksPd')
                 ->property('blocks_byobu_pd')
+                ->description('Whether this member refuses private discussions from those not allowed to override it.')
                 ->writable(fn (User $user, Context $context) => $context->getActor()->is($user)),
             Schema\Relationship\ToMany::make('privateDiscussions')
                 ->type('discussions')
@@ -182,7 +206,11 @@ return [
         ->serializeToForum('byobu.icon-postAction', 'fof-byobu.icon-postAction', function ($value): string {
             return empty($value) ? 'far fa-map' : $value;
         })
-        ->default('fof-byobu.delete_on_last_recipient_left', false),
+        ->default('fof-byobu.delete_on_last_recipient_left', false)
+        ->default('fof-byobu.makePublic', false)
+        ->default('fof-byobu.hide_from_all_discussions_page', false)
+        ->default('fof-byobu.icon-badge', 'far fa-map')
+        ->default('fof-byobu.icon-postAction', 'far fa-map'),
 
     (new Extend\Middleware('forum'))
         ->add(Middleware\GuestAccessToPrivateRoutePrevention::class),

@@ -37,8 +37,7 @@ export default [
     .attribute<boolean>('isPrivateDiscussion'),
 
   new Extend.Model(User) //
-    .attribute<boolean>('blocksPd')
-    .attribute<number>('unreadPrivateMessagesCount'),
+    .attribute<boolean>('blocksPd'),
 
   new Extend.Notification() //
     .add('byobuPrivateDiscussionCreated', PrivateDiscussionNotification)

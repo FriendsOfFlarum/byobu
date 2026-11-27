@@ -26,8 +26,6 @@ use Illuminate\Support\Str;
  * @property Collection|Group[] $currentGroups
  * @property Collection|User[]  $users         The recipients once saved.
  * @property Collection|Group[] $groups        The recipients once saved.
- * @property Collection|User[]  $sentUsers     The recipients the actor sent.
- * @property Collection|Group[] $sentGroups    The recipients the actor sent.
  */
 class Screener extends Fluent
 {
@@ -84,13 +82,21 @@ class Screener extends Fluent
 
         $screener->event = $event;
 
-        $screener->sentUsers = $screener->users = static::getRecipientsFromPayload($event, 'users');
-        $screener->sentGroups = $screener->groups = static::getRecipientsFromPayload($event, 'groups');
+        $screener->users = static::getRecipientsFromPayload($event, 'users');
+        $screener->groups = static::getRecipientsFromPayload($event, 'groups');
 
         // The API never shows an actor the recipients they may not see (hidden
         // groups), so their absence from what the actor sends back doesn't
         // remove them. Making the discussion public removes everyone.
         if (!$screener->makingPublic()) {
+            // A relationship the request leaves out is unchanged, as in JSON:API.
+            if (!Arr::has($event->data, 'relationships.'.static::relationName('users'))) {
+                $screener->users = $screener->currentUsers;
+            }
+            if (!Arr::has($event->data, 'relationships.'.static::relationName('groups'))) {
+                $screener->groups = $screener->currentGroups;
+            }
+
             $screener->users = $screener->users->merge(static::unseen($screener->currentUsers, $event->actor));
             $screener->groups = $screener->groups->merge(static::unseen($screener->currentGroups, $event->actor));
         }

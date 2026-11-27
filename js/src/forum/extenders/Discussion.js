@@ -131,30 +131,13 @@ function controls() {
             icon: 'fas fa-user-slash',
             onclick: () => {
               if (discussion) {
-                let recipients = new ItemList();
-                discussion.recipientUsers().map((user) => {
-                  if (app.session.user.id() !== user.id()) {
-                    recipients.add('users:' + user.id(), user);
-                  }
-                });
+                const recipientUsers = discussion.recipientUsers().filter((user) => app.session.user.id() !== user.id());
 
-                let recipientGroups = [];
-                let recipientUsers = [];
-
-                recipients.toArray().forEach((recipient) => {
-                  if (recipient instanceof User) {
-                    recipientUsers.push(recipient);
-                  }
-                  if (recipient instanceof Group) {
-                    recipientGroups.push(recipient);
-                  }
-                });
-
+                // Groups left out stay as they are, so leaving needs no permission to change them.
                 discussion
                   .save({
                     relationships: {
                       recipientUsers,
-                      recipientGroups,
                     },
                   })
                   .then(() => app.history.back());

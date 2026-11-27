@@ -27,6 +27,7 @@ class DiscussionResourceFields
     {
         return [
             Schema\Boolean::make('isPrivateDiscussion')
+                ->description('Whether this is a private discussion. Only its recipients can read it, and moderators where a post in it is flagged and they are allowed to.')
                 ->get(fn (Discussion $discussion) => $this->screener->isPrivateDiscussion($discussion)),
 
             Schema\Boolean::make('canEditRecipients')
@@ -62,9 +63,11 @@ class DiscussionResourceFields
                 }),
 
             Schema\Relationship\ToMany::make('oldRecipientUsers')
+                ->description('Members who left or were removed from this private discussion.')
                 ->includable()
                 ->type('users'),
             Schema\Relationship\ToMany::make('oldRecipientGroups')
+                ->description('Groups removed from this private discussion.')
                 ->includable()
                 ->type('groups'),
             // Recipients are managed entirely by PersistRecipients (a Saving event listener).
@@ -72,17 +75,14 @@ class DiscussionResourceFields
             // would otherwise call from saveFields(), because sync() would overwrite what
             // PersistRecipients::afterSave inserts — losing the actor-injection fix for #168
             // and any other recipient-count adjustments made during the Saving event.
-            // Recipients are managed entirely by PersistRecipients (a Saving event listener).
-            // We suppress the default BelongsToMany::sync() that Flarum's AbstractDatabaseResource
-            // would otherwise call from saveFields(), because sync() would overwrite what
-            // PersistRecipients::afterSave inserts — losing the actor-injection fix for #168
-            // and any other recipient-count adjustments made during the Saving event.
             Schema\Relationship\ToMany::make('recipientUsers')
+                ->description('The members who can read this private discussion.')
                 ->includable()
                 ->writable()
                 ->type('users')
                 ->save(fn () => null),
             Schema\Relationship\ToMany::make('recipientGroups')
+                ->description('The groups whose members can read this private discussion.')
                 ->includable()
                 ->writable()
                 ->type('groups')
