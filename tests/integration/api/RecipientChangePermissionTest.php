@@ -94,7 +94,7 @@ class RecipientChangePermissionTest extends TestCase
     public function sending_the_groups_unchanged_needs_no_permission_for_groups(): void
     {
         $this->assertSame(200, $this->patch(2, [
-            'recipientUsers' => $this->users(2, 4, 5, 3),
+            'recipientUsers'  => $this->users(2, 4, 5, 3),
             'recipientGroups' => ['data' => [['type' => 'groups', 'id' => '10']]],
         ]));
 
@@ -136,8 +136,8 @@ class RecipientChangePermissionTest extends TestCase
 
         $response = $this->send($this->request('PATCH', '/api/discussions/1', [
             'authenticatedAs' => 4,
-            'json' => ['data' => ['type' => 'discussions', 'id' => '1', 'attributes' => ['public' => '1'], 'relationships' => [
-                'recipientUsers' => ['data' => []],
+            'json'            => ['data' => ['type' => 'discussions', 'id' => '1', 'attributes' => ['public' => '1'], 'relationships' => [
+                'recipientUsers'  => ['data' => []],
                 'recipientGroups' => ['data' => []],
             ]]],
         ]));
@@ -151,7 +151,7 @@ class RecipientChangePermissionTest extends TestCase
     {
         return $this->send($this->request('PATCH', '/api/discussions/1', [
             'authenticatedAs' => $actorId,
-            'json' => ['data' => ['type' => 'discussions', 'id' => '1', 'relationships' => $relationships]],
+            'json'            => ['data' => ['type' => 'discussions', 'id' => '1', 'relationships' => $relationships]],
         ]))->getStatusCode();
     }
 

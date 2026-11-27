@@ -44,7 +44,7 @@ class RecipientArguments
     }
 
     /**
-     * @param array<string, mixed>                                                            $arguments
+     * @param array<string, mixed>                                                           $arguments
      * @param array{attributes?: array<string, mixed>, relationships?: array<string, mixed>} $body
      *
      * @return array<string, mixed>

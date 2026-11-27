@@ -53,8 +53,8 @@ class McpIntegrationTest extends McpTestCase
     public function start_discussion_takes_recipients_by_username(): void
     {
         $created = $this->toolOutput($this->callTool('start_discussion', [
-            'title' => 'Just us',
-            'content' => 'Secret content.',
+            'title'      => 'Just us',
+            'content'    => 'Secret content.',
             'recipients' => ['alice'],
         ], $this->bearer($this->developerToken(2))));
 
@@ -74,8 +74,8 @@ class McpIntegrationTest extends McpTestCase
         ]);
 
         $created = $this->toolOutput($this->callTool('start_discussion', [
-            'title' => 'Staff only',
-            'content' => 'Secret content.',
+            'title'           => 'Staff only',
+            'content'         => 'Secret content.',
             'recipientGroups' => ['10'],
         ], $this->bearer($this->developerToken(2))));
 
@@ -89,8 +89,8 @@ class McpIntegrationTest extends McpTestCase
     public function start_discussion_refuses_an_unknown_recipient(): void
     {
         $error = $this->toolOutput($this->callTool('start_discussion', [
-            'title' => 'Just us',
-            'content' => 'Secret content.',
+            'title'      => 'Just us',
+            'content'    => 'Secret content.',
             'recipients' => ['nobody'],
         ], $this->bearer($this->developerToken(2))), expectError: true);
 
@@ -104,9 +104,9 @@ class McpIntegrationTest extends McpTestCase
     public static function emptyRecipients(): array
     {
         return [
-            'no usernames' => [['recipients' => []]],
+            'no usernames'    => [['recipients' => []]],
             'blank usernames' => [['recipients' => [' ', '']]],
-            'no groups' => [['recipientGroups' => []]],
+            'no groups'       => [['recipientGroups' => []]],
         ];
     }
 
@@ -115,7 +115,7 @@ class McpIntegrationTest extends McpTestCase
     public function start_discussion_refuses_recipients_that_name_nobody(array $recipients): void
     {
         $this->toolOutput($this->callTool('start_discussion', [
-            'title' => 'Just us',
+            'title'   => 'Just us',
             'content' => 'Secret content.',
         ] + $recipients, $this->bearer($this->developerToken(2))), expectError: true);
 
@@ -126,7 +126,7 @@ class McpIntegrationTest extends McpTestCase
     public function start_discussion_without_recipients_stays_public(): void
     {
         $created = $this->toolOutput($this->callTool('start_discussion', [
-            'title' => 'Hello everyone',
+            'title'   => 'Hello everyone',
             'content' => 'Public content.',
         ], $this->bearer($this->developerToken(2))));
 
@@ -170,9 +170,9 @@ class McpIntegrationTest extends McpTestCase
 
         // What the forum sends to make a discussion public.
         $error = $this->toolOutput($this->callTool('update_resource', [
-            'type' => 'discussions',
-            'id' => '2',
-            'attributes' => ['public' => '2'],
+            'type'          => 'discussions',
+            'id'            => '2',
+            'attributes'    => ['public' => '2'],
             'relationships' => ['recipientUsers' => [], 'recipientGroups' => []],
         ], $this->bearer($this->developerToken(1))), expectError: true);
 
@@ -184,8 +184,8 @@ class McpIntegrationTest extends McpTestCase
     public function an_assistant_cannot_change_who_is_in_a_private_discussion(): void
     {
         $error = $this->toolOutput($this->callTool('update_resource', [
-            'type' => 'discussions',
-            'id' => '2',
+            'type'          => 'discussions',
+            'id'            => '2',
             'relationships' => ['recipientUsers' => [['type' => 'users', 'id' => '1'], ['type' => 'users', 'id' => '2'], ['type' => 'users', 'id' => '4']]],
         ], $this->bearer($this->developerToken(1))), expectError: true);
 
